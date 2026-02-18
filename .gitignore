@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Testing & Development
+test-results/
+tests/
+*.log
+
+# System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary Files
+*.tmp
+*.swp
+*.bak
+*.cache
+
+# Screenshots & Images (temporary test artifacts)
+*.png
+*.jpg
+*.jpeg
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Claude Code (local configuration)
+.claude/
+
+# Playwright MCP
+.playwright-mcp/
+playwright-report/
+*.backup
+*.tmp*

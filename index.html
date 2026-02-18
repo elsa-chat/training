@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEMOSS Training - Spain 2026</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">S</span>
+                <div class="logo-text">
+                    <span class="logo-title">SEMOSS Training</span>
+                    <span class="logo-subtitle">Spain 2026</span>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-nav" id="sidebarNav">
+            <!-- Populated by JS -->
+        </div>
+        <div class="sidebar-footer">
+            <div class="schedule-link" onclick="toggleSchedule()">Schedule</div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Toggle -->
+    <button id="sidebarToggle" class="sidebar-toggle" onclick="toggleSidebar()">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect y="3" width="20" height="2" rx="1" fill="currentColor"/>
+            <rect y="9" width="20" height="2" rx="1" fill="currentColor"/>
+            <rect y="15" width="20" height="2" rx="1" fill="currentColor"/>
+        </svg>
+    </button>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="main-content">
+        <div class="slide-container">
+            <div class="slide-label" id="slideLabel"></div>
+            <div class="slide-content" id="slideContent">
+                <!-- Slide content rendered here -->
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-bar">
+            <div class="slide-counter" id="slideCounter"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn" id="prevBtn" onclick="prevSlide()">Prev</button>
+                <button class="nav-btn nav-btn-primary" id="nextBtn" onclick="nextSlide()">Next</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Schedule Modal -->
+    <div id="scheduleModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Week Schedule</h2>
+                <button class="modal-close" onclick="toggleSchedule()">&times;</button>
+            </div>
+            <div class="modal-body" id="scheduleBody">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Component library (must load before data files) -->
+    <script src="js/components.js"></script>
+
+    <!-- Day 1: chapters then index -->
+    <script src="data/day1/ch01-welcome.js"></script>
+    <script src="data/day1/ch02-fundamentals.js"></script>
+    <script src="data/day1/ch03-engines.js"></script>
+    <script src="data/day1/ch04-pixel-reactors.js"></script>
+    <script src="data/day1/index.js"></script>
+
+    <!-- Day 2-5: add chapter + index scripts here as they're created -->
+    <script src="data/day2/ch01-app-fundamentals.js"></script>
+    <script src="data/day2/ch02-pro-code-apps.js"></script>
+    <script src="data/day2/ch03-custom-reactors.js"></script>
+    <script src="data/day2/ch04-custom-python.js"></script>
+    <script src="data/day2/index.js"></script>
+
+    <script src="data/day3/ch01-insight-room-session.js"></script>
+    <script src="data/day3/ch02-message-structure.js"></script>
+    <script src="data/day3/ch03-model-logs.js"></script>
+    <script src="data/day3/ch04-api-endpoints.js"></script>
+    <script src="data/day3/index.js"></script>
+
+    <script src="data/day4/ch01-playground.js"></script>
+    <script src="data/day4/ch02-frontend-blocks-cells.js"></script>
+    <script src="data/day4/ch03-app-building.js"></script>
+    <script src="data/day4/ch04-notebooks-insights.js"></script>
+    <script src="data/day4/index.js"></script>
+
+    <script src="data/day5/ch01-docker.js"></script>
+    <script src="data/day5/ch02-security-auth.js"></script>
+    <script src="data/day5/ch03-admin.js"></script>
+    <script src="data/day5/ch04-capstone-project.js"></script>
+    <script src="data/day5/index.js"></script>
+
+    <!-- App controller (must load last) -->
+    <script src="js/app.js"></script>
+</body>
+</html>
