@@ -53,13 +53,20 @@ const C = {
             const rightPct = (right / (actors.length - 1)) * 100;
             const isReverse = m.from > m.to;
             const type = m.type || 'request';
-            return `<div class="c-seq-msg ${type}${isReverse ? ' reverse' : ''}" style="top:${(i + 1) * 48}px; left:${leftPct}%; width:${rightPct - leftPct}%">
+
+            // Fix: Handle self-messages (when from === to)
+            const isSelfMessage = m.from === m.to;
+            const width = isSelfMessage ? 15 : (rightPct - leftPct);  // 15% for self-messages
+            const leftPos = isSelfMessage ? (leftPct - 7.5) : leftPct;  // Center the 15% width
+
+            return `<div class="c-seq-msg ${type}${isReverse ? ' reverse' : ''}${isSelfMessage ? ' self' : ''}" style="top:${(i + 1) * 48}px; left:${leftPos}%; width:${width}%">
                 <div class="c-seq-msg-label">${m.label}</div>
                 <div class="c-seq-msg-line"></div>
             </div>`;
         }).join('');
 
-        const height = (messages.length + 1) * 100 + 100;
+        // Fix: Better height calculation - messages are 48px apart, not 100px
+        const height = (messages.length + 1) * 48 + 100;
         return `<div class="c-seq" style="height:${height}px">
             <div class="c-seq-actors">${actorHtml}</div>
             <div class="c-seq-messages">${msgHtml}</div>

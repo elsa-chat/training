@@ -200,15 +200,13 @@ result = Py("<encode>my_module.process_data({'key': 'value'})</encode>");`, 'pix
             content: `
                 <h2>Publishing Workflow</h2>
                 <p>Publishing makes your app's UI available to end users at a public URL.</p>
-                ${C.sequence(
-                    ['Developer', 'SEMOSS UI', 'File System', 'Web Server'],
-                    [
-                        { from: 0, to: 1, label: 'Click "Publish files"' },
-                        { from: 1, to: 2, label: 'Copy assets/portals/ → public_home/<projectId>/portals/' },
-                        { from: 2, to: 3, label: 'Serve via HTTP' },
-                        { from: 3, to: 0, label: 'https://.../public_home/<projectId>/portals/index.html', type: 'response' }
-                    ]
-                )}
+                <h4>Publishing Steps</h4>
+                <ol>
+                    <li><strong>Developer</strong> clicks "Publish" button in SEMOSS UI</li>
+                    <li><strong>SEMOSS</strong> copies <code>assets/portals/</code> → <code>public_home/<projectId>/portals/</code></li>
+                    <li><strong>Web Server</strong> serves the files via HTTP</li>
+                    <li><strong>Live URL:</strong> <code>&lt;base-url&gt;/public_home/&lt;projectId&gt;/portals/index.html</code></li>
+                </ol>
                 <h3>Key Points</h3>
                 <ul>
                     <li>Only <code>assets/portals/</code> is published — <code>java/</code>, <code>py/</code>, <code>client/</code> are NOT served</li>

@@ -163,8 +163,10 @@
 }
 
 .c-seq-messages {
-    position: relative;
+    position: absolute;
     top: 40px;
+    left: 40px;
+    right: 40px;
 }
 
 .c-seq-msg {
@@ -224,6 +226,27 @@
 
 .c-seq-msg.response .c-seq-msg-label {
     color: var(--text-muted);
+}
+
+/* Self-message styling (when from === to) */
+.c-seq-msg.self {
+    /* Self-messages are centered with 15% width */
+}
+
+.c-seq-msg.self .c-seq-msg-line {
+    /* Add rounded corners for visual distinction */
+    border-radius: 6px;
+}
+
+.c-seq-msg.self .c-seq-msg-line::after {
+    /* Arrow points right for self-messages */
+    right: -1px;
+    border-left-color: var(--accent);
+}
+
+.c-seq-msg.self.response .c-seq-msg-line::after {
+    /* Response arrow color for self-messages */
+    border-left-color: var(--text-muted);
 }
 
 /* ── Code Block ── */
