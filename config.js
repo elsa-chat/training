@@ -3,5 +3,6 @@ const CONFIG = {
   productName: 'AI Core',
   tagline: 'Enterprise AI Platform',
   sidebarBranding: 'AI Core Training',
-  pageTitle: 'AI Core Training - Spain 2026'
+  logoSubtitle: 'AI Core 101',
+  pageTitle: 'AI Core Training'
 };

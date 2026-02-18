@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Apply branding from CONFIG
     document.getElementById('logoTitle').textContent = CONFIG.sidebarBranding;
     document.getElementById('pageTitle').textContent = CONFIG.pageTitle;
+    document.getElementById('logoSubtitle').textContent = CONFIG.logoSubtitle;
 
     buildNavStructure();
     buildSidebar();
