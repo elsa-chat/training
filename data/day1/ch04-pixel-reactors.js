@@ -59,7 +59,7 @@ statement3;`, 'pixel', 'Pixel Syntax Rules')}
             content: `
                 <h2>Basic Pixel Commands</h2>
                 ${C.code(`// Echo — return a value
-Echo("Hello, SEMOSS!");
+Echo("Hello, World!");
 
 // List your engines
 MyEngines();
@@ -405,7 +405,7 @@ Echo("Hello from Spain!");
 MyEngines();
 
 // Use a variable
-greeting = "Hola, SEMOSS!";
+greeting = "Hola, Madrid!";
 Echo(greeting);`, 'pixel')}
 
                     <h4>Exercise 2: Query a Database</h4>
