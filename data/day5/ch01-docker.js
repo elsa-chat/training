@@ -7,15 +7,15 @@ const day5_ch01 = {
             title: "Docker Deployment",
             content: C.titleSlide(
                 "Docker Deployment",
-                "Containerizing and deploying SEMOSS at scale",
+                `Containerizing and deploying ${CONFIG.productName} at scale`,
                 "90 minutes"
             )
         },
         {
             id: "d5-docker-overview",
-            title: "Why Docker for SEMOSS?",
+            title: `Why Docker for ${CONFIG.productName}?`,
             content: `
-                <h2>Why Docker for SEMOSS?</h2>
+                <h2>Why Docker for ${CONFIG.productName}?</h2>
                 <p class="lead">Docker enables consistent, reproducible deployments across dev, staging, and production environments.</p>
                 ${C.cards([
                     { badge: 'Benefit', title: 'Consistency', desc: 'Same image runs on laptops, staging servers, and production clusters' },
@@ -24,15 +24,15 @@ const day5_ch01 = {
                     { badge: 'Benefit', title: 'Fast Rollback', desc: 'Tag images by version and roll back instantly' },
                     { badge: 'Benefit', title: 'Developer Velocity', desc: 'Dev environment matches production — no "works on my machine"' },
                 ])}
-                ${C.callout('SEMOSS provides official Docker images on <strong>quay.io/semoss/semoss-dev</strong> and enterprise registries for production deployments.', 'info')}
+                ${C.callout(`${CONFIG.productName} provides official Docker images on <strong>quay.io/semoss/semoss-dev</strong> and enterprise registries for production deployments.`, 'info')}
             `
         },
         {
             id: "d5-docker-architecture",
-            title: "SEMOSS Docker Architecture",
+            title: `${CONFIG.productName} Docker Architecture`,
             content: `
-                <h2>SEMOSS Container Architecture</h2>
-                <p>A SEMOSS container packages all runtime dependencies into a single deployable unit.</p>
+                <h2>${CONFIG.productName} Container Architecture</h2>
+                <p>A ${CONFIG.productName} container packages all runtime dependencies into a single deployable unit.</p>
                 ${C.layers([
                     { label: "Application Layer", accent: true, items: [
                         { title: "Tomcat 9", desc: "Servlet container serving Monolith WAR", accent: true },
@@ -58,7 +58,7 @@ const day5_ch01 = {
             title: "Multi-Stage Dockerfile",
             content: `
                 <h2>Multi-Stage Build Strategy</h2>
-                <p>SEMOSS uses a multi-stage Dockerfile to minimize final image size and separate build tools from runtime.</p>
+                <p>${CONFIG.productName} uses a multi-stage Dockerfile to minimize final image size and separate build tools from runtime.</p>
                 ${C.flow([
                     { title: 'Stage 1: tomcat_builder', desc: 'Install Java, Tomcat, Maven, Codex CLI', accent: true, arrow: '↓ built artifacts' },
                     { title: 'Stage 2: mavenpuller', desc: 'Clone semoss-artifacts, download latest SEMOSS build', arrow: '↓ SEMOSS app files' },

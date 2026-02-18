@@ -7,7 +7,7 @@ const day2_ch03 = {
             title: "Custom Reactors",
             content: C.titleSlide(
                 "Custom Reactors",
-                "Extending SEMOSS with custom Java components",
+                `Extending ${CONFIG.productName} with custom Java components`,
                 "90 minutes"
             )
         },
@@ -16,15 +16,15 @@ const day2_ch03 = {
             title: "What is a Custom Reactor?",
             content: `
                 <h2>What is a Custom Reactor?</h2>
-                <p class="lead">A <span class="highlight">Custom Reactor</span> is a user-defined Java class that extends SEMOSS functionality by implementing the reactor interface.</p>
-                <p>While SEMOSS ships with hundreds of built-in reactors, you can create your own for:</p>
+                <p class="lead">A <span class="highlight">Custom Reactor</span> is a user-defined Java class that extends ${CONFIG.productName} functionality by implementing the reactor interface.</p>
+                <p>While ${CONFIG.productName} ships with hundreds of built-in reactors, you can create your own for:</p>
                 ${C.cards([
                     { badge: 'Use Case', title: 'Business Logic', desc: 'Custom calculations, validation rules, domain-specific transformations' },
                     { badge: 'Use Case', title: 'Integration', desc: 'Connect to proprietary APIs, legacy systems, custom data sources' },
                     { badge: 'Use Case', title: 'Performance', desc: 'Optimized batch operations, specialized algorithms' },
                     { badge: 'Use Case', title: 'Abstraction', desc: 'Wrap complex multi-step operations into reusable commands' },
                 ])}
-                ${C.callout('Custom reactors are <strong>first-class citizens</strong> in SEMOSS — they work exactly like built-in reactors in Pixel, the REST API, and the UI.', 'info')}
+                ${C.callout(`Custom reactors are <strong>first-class citizens</strong> in ${CONFIG.productName} — they work exactly like built-in reactors in Pixel, the REST API, and the UI.`, 'info')}
             `
         },
         {
@@ -243,7 +243,7 @@ PixelOperationType.WARNING      // succeeded with warnings`, 'java', 'NounMetada
             title: "Auto-Discovery",
             content: `
                 <h2>Reactor Auto-Discovery</h2>
-                <p>SEMOSS automatically discovers and registers all custom reactors at startup — no manual registration required.</p>
+                <p>${CONFIG.productName} automatically discovers and registers all custom reactors at startup — no manual registration required.</p>
                 ${C.flow([
                     { title: 'Extend AbstractReactor', desc: 'Create your reactor class' },
                     { title: 'Place in prerna.reactor.*', desc: 'Any subpackage under prerna.reactor', arrow: '↓' },
@@ -548,7 +548,7 @@ TemperatureConverter(temperature=273.15, from="k", to="c");
                         desc: 'Keep reactors focused, validate inputs, handle errors gracefully.'
                     },
                 ])}
-                ${C.callout('<strong>Next:</strong> Custom Python reactors via GAAS — extend SEMOSS with Python instead of Java.', 'info')}
+                ${C.callout(`<strong>Next:</strong> Custom Python reactors via GAAS — extend ${CONFIG.productName} with Python instead of Java.`, 'info')}
             `
         }
     ]

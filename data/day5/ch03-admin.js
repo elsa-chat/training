@@ -15,8 +15,8 @@ const day5_ch03 = {
             id: "d5-admin-overview",
             title: "Admin Features Overview",
             content: `
-                <h2>SEMOSS Admin Capabilities</h2>
-                <p class="lead">SEMOSS provides a comprehensive admin interface for managing users, engines, permissions, and monitoring system health.</p>
+                <h2>${CONFIG.productName} Admin Capabilities</h2>
+                <p class="lead">${CONFIG.productName} provides a comprehensive admin interface for managing users, engines, permissions, and monitoring system health.</p>
                 ${C.cards([
                     { badge: 'Feature', title: 'User Management', desc: 'Create users, set metadata, manage permissions, assign roles' },
                     { badge: 'Feature', title: 'Engine Management', desc: 'View engines, check health, manage permissions, monitor usage' },
@@ -178,12 +178,12 @@ DeleteEngine(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");`, 'pixel', 'Engine 
             id: "d5-admin-logging-architecture",
             title: "Logging Architecture",
             content: `
-                <h2>SEMOSS Logging: Multi-Appender Strategy</h2>
-                <p>SEMOSS uses Log4j2 with multiple appenders for comprehensive logging and auditing.</p>
+                <h2>${CONFIG.productName} Logging: Multi-Appender Strategy</h2>
+                <p>${CONFIG.productName} uses Log4j2 with multiple appenders for comprehensive logging and auditing.</p>
                 ${C.layers([
                     { label: "Application Loggers", accent: true, items: [
                         { title: "EngineLogger", desc: "Engine operations, query execution", accent: true },
-                        { title: "prerna.*", desc: "All SEMOSS packages", accent: true },
+                        { title: "prerna.*", desc: `All ${CONFIG.productName} packages`, accent: true },
                         { title: "AsyncRoot", desc: "Third-party libraries (WARN+)", },
                     ]},
                     { label: "Appenders", items: [

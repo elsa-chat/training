@@ -6,17 +6,17 @@ const day1_ch02 = {
             id: "d1-platform-title",
             title: "Platform Fundamentals",
             content: C.titleSlide(
-                "SEMOSS Platform Fundamentals",
+                `${CONFIG.productName} Platform Fundamentals`,
                 "Architecture, repositories, and how it all fits together",
                 "90 minutes"
             )
         },
         {
             id: "d1-platform-what-is",
-            title: "What is SEMOSS?",
+            title: `What is ${CONFIG.productName}?`,
             content: `
-                <h2>What is SEMOSS?</h2>
-                <p class="lead"><span class="highlight">SEMOSS</span> — <strong>Semantic Open Source Software</strong></p>
+                <h2>What is ${CONFIG.productName}?</h2>
+                <p class="lead"><span class="highlight">${CONFIG.productName}</span> — <strong>Semantic Open Source Software</strong></p>
                 <p>A web application platform for building and deploying custom solutions through a lightweight framework providing connectors to:</p>
                 ${C.cards([
                     { title: "Databases", desc: "Relational, graph, document stores via JDBC and native drivers" },
@@ -26,7 +26,7 @@ const day1_ch02 = {
                     { title: "Functions", desc: "Custom API endpoints, Python scripts, reusable logic" },
                     { title: "Guardrails", desc: "PII detection, content filtering, custom validation" },
                 ])}
-                ${C.callout('SEMOSS started as a visualization tool for RDF data (semantic web) and evolved into a <strong>general-purpose AI application platform</strong>.', 'info')}
+                ${C.callout(`${CONFIG.productName} started as a visualization tool for RDF data (semantic web) and evolved into a <strong>general-purpose AI application platform</strong>.`, 'info')}
             `
         },
         {
@@ -34,7 +34,7 @@ const day1_ch02 = {
             title: "Architecture Overview",
             content: `
                 <h2>Three-Tier Architecture</h2>
-                <p>Every SEMOSS deployment has three cooperating layers:</p>
+                <p>Every ${CONFIG.productName} deployment has three cooperating layers:</p>
                 ${C.layers([
                     {
                         label: 'Presentation',
@@ -67,7 +67,7 @@ const day1_ch02 = {
             id: "d1-platform-request-flow",
             title: "Request Flow",
             content: `
-                <h2>How a Request Flows Through SEMOSS</h2>
+                <h2>How a Request Flows Through ${CONFIG.productName}</h2>
                 <p>When a user clicks "Run" in the notebook, here's what happens:</p>
                 ${C.sequence(
                     ["Browser/UI", "REST API", "Reactor Layer", "Engine Layer"],
@@ -241,7 +241,7 @@ const day1_ch02 = {
             title: "Apps & Projects",
             content: `
                 <h2>Apps & Projects</h2>
-                ${C.callout('In SEMOSS, <strong>"app"</strong> and <strong>"project"</strong> are the same thing and used interchangeably. Each app/project is a workspace containing insights, portals, and configuration.', 'info')}
+                ${C.callout(`In ${CONFIG.productName}, <strong>"app"</strong> and <strong>"project"</strong> are the same thing and used interchangeably. Each app/project is a workspace containing insights, portals, and configuration.`, 'info')}
                 <h3>App/Project Characteristics</h3>
                 <ul>
                     <li>Unique UUID identifier</li>
@@ -274,7 +274,7 @@ const day1_ch02 = {
             title: "UI Overview",
             content: `
                 <h2>Navigation & UI Overview</h2>
-                <p>The SEMOSS UI is organized around these key areas:</p>
+                <p>The ${CONFIG.productName} UI is organized around these key areas:</p>
                 ${C.cards([
                     { badge: 'Navigate', title: 'Home', desc: 'Browse apps, projects, engines. Central dashboard.' },
                     { badge: 'Build', title: 'Notebook', desc: 'Write Pixel, run code, explore data interactively.' },

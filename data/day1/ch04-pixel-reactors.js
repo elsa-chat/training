@@ -7,7 +7,7 @@ const day1_ch04 = {
             title: "Pixel & Reactors",
             content: C.titleSlide(
                 "Pixel & Reactors",
-                "The command language and execution engine of SEMOSS",
+                `The command language and execution engine of ${CONFIG.productName}`,
                 "195 minutes"
             )
         },
@@ -16,8 +16,8 @@ const day1_ch04 = {
             title: "What is Pixel?",
             content: `
                 <h2>What is Pixel?</h2>
-                <p class="lead"><span class="highlight">Pixel</span> is the domain-specific command language of SEMOSS.</p>
-                <p>Every action in SEMOSS — querying data, calling an LLM, building a visualization — is ultimately a Pixel command. The UI generates Pixel under the hood.</p>
+                <p class="lead"><span class="highlight">Pixel</span> is the domain-specific command language of ${CONFIG.productName}.</p>
+                <p>Every action in ${CONFIG.productName} — querying data, calling an LLM, building a visualization — is ultimately a Pixel command. The UI generates Pixel under the hood.</p>
                 ${C.cards([
                     { title: 'Declarative', desc: 'Describe what you want, not how to do it' },
                     { title: 'Chainable', desc: 'Pipe operator | flows output → input' },
@@ -111,7 +111,7 @@ Database(database="bd1dea64-ec6b-49af-9308-94b05551c83d")
                         `
                     }
                 )}
-                ${C.callout('<strong>Recipes</strong> are saved chains of Pixel commands. When you save an insight, SEMOSS saves the Pixel recipe that produced it. Recipes can be replayed, shared, and embedded in apps.', 'info')}
+                ${C.callout(`<strong>Recipes</strong> are saved chains of Pixel commands. When you save an insight, ${CONFIG.productName} saves the Pixel recipe that produced it. Recipes can be replayed, shared, and embedded in apps.`, 'info')}
             `
         },
         {
@@ -138,8 +138,8 @@ Database(database = "66cf4dbb-483f-42e7-8804-4e3d5af89287") | Query("<encode> yo
             title: "What are Reactors?",
             content: `
                 <h2>What are Reactors?</h2>
-                <p class="lead">A <span class="highlight">Reactor</span> is a Java class that executes a single operation in the SEMOSS pipeline.</p>
-                <p>When you write <code>Echo("hello")</code>, SEMOSS:</p>
+                <p class="lead">A <span class="highlight">Reactor</span> is a Java class that executes a single operation in the ${CONFIG.productName} pipeline.</p>
+                <p>When you write <code>Echo("hello")</code>, ${CONFIG.productName}:</p>
                 ${C.flow([
                     { title: '1. Parse', desc: 'Pixel parser tokenizes "Echo(\\"hello\\")"' },
                     { title: '2. Resolve', desc: 'ReactorFactory looks up EchoReactor class', arrow: '↓ ReactorFactory' },

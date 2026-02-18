@@ -6,8 +6,8 @@ const day3_ch02 = {
             id: "d3-msg-title",
             title: "Message Structure",
             content: `
-                <h2>Message Structure in SEMOSS</h2>
-                <p class="lead">SEMOSS uses <span class="highlight">AbstractMessage</span> (package <code>prerna.engine.impl.model.message</code>) as the core abstraction for LLM communication.</p>
+                <h2>Message Structure in ${CONFIG.productName}</h2>
+                <p class="lead">${CONFIG.productName} uses <span class="highlight">AbstractMessage</span> (package <code>prerna.engine.impl.model.message</code>) as the core abstraction for LLM communication.</p>
                 <p>This chapter covers the message implementation used for conversational AI, model logs, and persistent chat history.</p>
                 ${C.flow([
                     { title: 'AbstractMessage', desc: 'Base class with messageId (UUID v7), modelId, tokens, ornaments', accent: true },
@@ -15,7 +15,7 @@ const day3_ch02 = {
                     { title: 'InputMessage', desc: 'User/system prompts, tool executions, media inputs', arrow: 'extends AbstractMessage' },
                     { title: 'ResponseMessage', desc: 'LLM responses (text, tools, media) with Builder pattern', arrow: 'extends AbstractMessage' },
                 ])}
-                ${C.callout('<strong>Key insight:</strong> Every LLM interaction in SEMOSS creates AbstractMessage instances that are persisted to the model logs database. This enables conversation history, feedback tracking, and token accounting.', 'info')}
+                ${C.callout(`<strong>Key insight:</strong> Every LLM interaction in ${CONFIG.productName} creates AbstractMessage instances that are persisted to the model logs database. This enables conversation history, feedback tracking, and token accounting.`, 'info')}
                 <p><strong>Time allocation:</strong> 90 minutes</p>
             `
         },
@@ -296,7 +296,7 @@ CREATE TABLE model_logs (
 SELECT * FROM model_logs
 WHERE transaction_id = 'abc-123-def'
 ORDER BY date_created ASC;`, 'sql', 'Model logs schema and query')}
-                ${C.callout('The model logs database is the single source of truth for all LLM conversations in SEMOSS. It enables conversation replay, debugging, and analytics.', 'info')}
+                ${C.callout(`The model logs database is the single source of truth for all LLM conversations in ${CONFIG.productName}. It enables conversation replay, debugging, and analytics.`, 'info')}
             `
         },
         {
@@ -358,7 +358,7 @@ ResponseMessage resp = ResponseMessage.builder()
                 <h2>Hands-on: Inspect AbstractMessage Instances</h2>
                 ${C.handson('Query and inspect message objects',
                     '<h4>Step 1: Have a conversation in Playground</h4>' +
-                    '<ol><li>Open the SEMOSS Playground</li><li>Send a few messages to an LLM</li><li>Note the conversation ID (transactionId) from the URL or UI</li></ol>' +
+                    `<ol><li>Open the ${CONFIG.productName} Playground</li><li>Send a few messages to an LLM</li><li>Note the conversation ID (transactionId) from the URL or UI</li></ol>` +
                     '<h4>Step 2: Query the model logs database</h4><p>Connect to LocalMasterDatabase and run:</p>' +
                     C.code("SELECT\n    message_id,\n    message_type,\n    LEFT(content, 100) as content_preview,\n    tokens,\n    visible,\n    date_created\nFROM model_logs\nWHERE transaction_id = '<your-transaction-id>'\nORDER BY date_created ASC;", 'sql') +
                     '<h4>Step 3: Inspect a specific message</h4>' +
@@ -406,7 +406,7 @@ ResponseMessage resp = ResponseMessage.builder()
                 )}
                 <h3>Key Takeaways</h3>
                 <ul>
-                    <li><strong>AbstractMessage</strong> is the foundation of all LLM conversations in SEMOSS</li>
+                    <li><strong>AbstractMessage</strong> is the foundation of all LLM conversations in ${CONFIG.productName}</li>
                     <li><strong>MessageType enum</strong> defines 6 message types (3 input, 3 response)</li>
                     <li><strong>Builder pattern</strong> enables flexible, readable message construction</li>
                     <li><strong>Model logs database</strong> persists every message for conversation history</li>
@@ -414,7 +414,7 @@ ResponseMessage resp = ResponseMessage.builder()
                     <li><strong>UUID v7</strong> messageIds ensure time-ordered, globally unique identifiers</li>
                     <li><strong>Tool execution loop</strong>: RESPONSE_TOOL → tool execution → INPUT_TOOL_EXEC → continue</li>
                 </ul>
-                ${C.callout('Understanding AbstractMessage is essential for debugging LLM conversations, building custom message handlers, and integrating external AI systems with SEMOSS.', 'tip')}
+                ${C.callout(`Understanding AbstractMessage is essential for debugging LLM conversations, building custom message handlers, and integrating external AI systems with ${CONFIG.productName}.`, 'tip')}
             `
         }
     ]

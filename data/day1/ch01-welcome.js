@@ -6,7 +6,7 @@ const day1_ch01 = {
             id: "d1-welcome-title",
             title: "Welcome",
             content: C.titleSlide(
-                "Welcome to SEMOSS Training",
+                `Welcome to ${CONFIG.productName} Training`,
                 "Spain 2026 — February 24–28",
                 "Day 1 of 5"
             )
@@ -19,7 +19,7 @@ const day1_ch01 = {
                 <p>Let's get to know each other.</p>
                 <ul>
                     <li><strong>Your name</strong> and role</li>
-                    <li><strong>Your experience</strong> with SEMOSS (or similar platforms)</li>
+                    <li><strong>Your experience</strong> with ${CONFIG.productName} (or similar platforms)</li>
                     <li><strong>What you hope to learn</strong> this week</li>
                     <li><strong>One fun fact</strong> about yourself</li>
                 </ul>
@@ -49,13 +49,13 @@ const day1_ch01 = {
                 <h2>Training Goals</h2>
                 <h3>By end of week you will:</h3>
                 <ul>
-                    <li>Understand the <strong>SEMOSS architecture</strong> end-to-end</li>
+                    <li>Understand the <strong>${CONFIG.productName} architecture</strong> end-to-end</li>
                     <li>Configure and manage <strong>engines</strong> (databases, LLMs, vector stores, storage)</li>
                     <li>Write and execute <strong>Pixel commands</strong> and build reactor chains</li>
                     <li>Build <strong>custom reactors</strong> and extend the platform</li>
-                    <li>Create <strong>apps and insights</strong> using the SEMOSS UI</li>
+                    <li>Create <strong>apps and insights</strong> using the ${CONFIG.productName} UI</li>
                     <li>Integrate <strong>AI/LLM capabilities</strong> into workflows</li>
-                    <li>Deploy and manage a <strong>SEMOSS instance</strong></li>
+                    <li>Deploy and manage a <strong>${CONFIG.productName} instance</strong></li>
                 </ul>
                 ${C.callout('Each session mixes explanation with hands-on exercises. Ask questions anytime.', 'tip')}
             `
@@ -68,7 +68,7 @@ const day1_ch01 = {
                 <ul>
                     <li><strong>Questions:</strong> Ask anytime — raise your hand or type in chat</li>
                     <li><strong>Breaks:</strong> 15 min mid-morning and mid-afternoon, 1 hour lunch</li>
-                    <li><strong>Hands-on labs:</strong> You'll work on a shared SEMOSS instance</li>
+                    <li><strong>Hands-on labs:</strong> You'll work on a shared ${CONFIG.productName} instance</li>
                     <li><strong>Materials:</strong> All slides and exercises are in this training portal</li>
                 </ul>
                 <h3>Today's Agenda</h3>

@@ -7,7 +7,7 @@ const day2_ch01 = {
             title: "App Fundamentals",
             content: C.titleSlide(
                 "App Fundamentals",
-                "Understanding SEMOSS applications and architecture",
+                `Understanding ${CONFIG.productName} applications and architecture`,
                 "90 minutes"
             )
         },
@@ -15,9 +15,9 @@ const day2_ch01 = {
             id: "d2-app-what-is",
             title: "What is an App?",
             content: `
-                <h2>What is an App in SEMOSS?</h2>
-                <p class="lead">An <span class="highlight">App</span> (also called a <span class="highlight">Project</span>) is a self-contained application workspace in SEMOSS.</p>
-                <p>Apps bundle together custom code, UI components, data connections, and configuration into a deployable unit. Think of them as mini-applications built on the SEMOSS platform.</p>
+                <h2>What is an App in ${CONFIG.productName}?</h2>
+                <p class="lead">An <span class="highlight">App</span> (also called a <span class="highlight">Project</span>) is a self-contained application workspace in ${CONFIG.productName}.</p>
+                <p>Apps bundle together custom code, UI components, data connections, and configuration into a deployable unit. Think of them as mini-applications built on the ${CONFIG.productName} platform.</p>
                 ${C.cards([
                     { badge: 'Identity', title: 'Project ID', desc: 'Stable UUID that persists across renames' },
                     { badge: 'Storage', title: 'Git-Backed', desc: 'Built-in version control for collaboration' },
@@ -32,7 +32,7 @@ const day2_ch01 = {
             title: "Three-Layer Architecture",
             content: `
                 <h2>App Architecture: Three Layers</h2>
-                <p>SEMOSS apps are built with a clean separation of concerns across three technology layers:</p>
+                <p>${CONFIG.productName} apps are built with a clean separation of concerns across three technology layers:</p>
                 ${C.layers([
                     {
                         label: "Presentation Layer",
@@ -72,7 +72,7 @@ const day2_ch01 = {
                         { name: "<AppName>__<projectId>/", type: "dir", desc: "← folder naming pattern", children: [
                             { name: "app_root/", type: "dir", children: [
                                 { name: "version/", type: "dir", desc: "← git repo root", children: [
-                                    { name: ".git/", type: "dir", desc: "← managed by SEMOSS" },
+                                    { name: ".git/", type: "dir", desc: `← managed by ${CONFIG.productName}` },
                                     { name: "assets/", type: "dir", desc: "← YOUR CODE GOES HERE", children: [
                                         { name: "portals/", type: "dir", desc: "← published UI (HTML/CSS/JS)" },
                                         { name: "client/", type: "dir", desc: "← React/Vite source (optional)" },
@@ -124,7 +124,7 @@ const day2_ch01 = {
 <body>
     <div id="app"></div>
     <script type="module">
-        // Import from bundled SDK (available in SEMOSS portals)
+        // Import from bundled SDK (available in ${CONFIG.productName} portals)
         import { runPixel } from './sdk.js';
 
         // Run Pixel commands
@@ -140,7 +140,7 @@ const day2_ch01 = {
             title: "Java Layer: Custom Reactors",
             content: `
                 <h2>Java Layer — Custom Reactors</h2>
-                <p>Apps can define <strong>project-specific reactors</strong> that extend SEMOSS functionality.</p>
+                <p>Apps can define <strong>project-specific reactors</strong> that extend ${CONFIG.productName} functionality.</p>
                 ${C.tree([
                     { name: "assets/java/", type: "dir", children: [
                         { name: "src/", type: "dir", desc: "← source code", children: [
@@ -155,11 +155,11 @@ const day2_ch01 = {
                 ${C.flow([
                     { title: 'Write Code', desc: 'Create reactors in assets/java/src/' },
                     { title: 'Recompile', desc: 'UI button or CompileAppReactors(project="<projectId>")', arrow: '↓ "Recompile reactors"' },
-                    { title: 'Compile', desc: 'SEMOSS compiles .java → .class', arrow: '↓ javac or Maven' },
+                    { title: 'Compile', desc: `${CONFIG.productName} compiles .java → .class`, arrow: '↓ javac or Maven' },
                     { title: 'Load', desc: '.class files written to assets/classes/', arrow: '↓ dynamic loading' },
                     { title: 'Available', desc: 'Call from Pixel: MyReactor();', accent: true }
                 ])}
-                ${C.callout('If you use Maven (<code>pom.xml</code>), SEMOSS will automatically resolve dependencies. Otherwise, it does simple <code>javac</code> compilation.', 'info')}
+                ${C.callout(`If you use Maven (<code>pom.xml</code>), ${CONFIG.productName} will automatically resolve dependencies. Otherwise, it does simple <code>javac</code> compilation.`, 'info')}
             `
         },
         {
@@ -183,7 +183,7 @@ def process_data(data):
     return {"processed": True, "count": len(data)}
 
 def call_llm(prompt):
-    """Call an LLM via SEMOSS."""
+    """Call an LLM via ${CONFIG.productName}."""
     # Use GAAS to call engines
     return "LLM response"`, 'python', 'assets/py/mcp_driver.py (example)')}
                 <h3>Loading Python Code</h3>
@@ -202,8 +202,8 @@ result = Py("<encode>my_module.process_data({'key': 'value'})</encode>");`, 'pix
                 <p>Publishing makes your app's UI available to end users at a public URL.</p>
                 <h4>Publishing Steps</h4>
                 <ol>
-                    <li><strong>Developer</strong> clicks "Publish" button in SEMOSS UI</li>
-                    <li><strong>SEMOSS</strong> copies <code>assets/portals/</code> → <code>public_home/<projectId>/portals/</code></li>
+                    <li><strong>Developer</strong> clicks "Publish" button in ${CONFIG.productName} UI</li>
+                    <li><strong>${CONFIG.productName}</strong> copies <code>assets/portals/</code> → <code>public_home/<projectId>/portals/</code></li>
                     <li><strong>Web Server</strong> serves the files via HTTP</li>
                     <li><strong>Live URL:</strong> <code>&lt;base-url&gt;/public_home/&lt;projectId&gt;/portals/index.html</code></li>
                 </ol>
@@ -222,9 +222,9 @@ result = Py("<encode>my_module.process_data({'key': 'value'})</encode>");`, 'pix
             title: "Versioning & Git",
             content: `
                 <h2>Versioning & Git Integration</h2>
-                <p>Every app's <code>app_root/version/</code> folder is a <strong>git repository</strong> managed by SEMOSS.</p>
+                <p>Every app's <code>app_root/version/</code> folder is a <strong>git repository</strong> managed by ${CONFIG.productName}.</p>
                 ${C.cards([
-                    { badge: 'Auto-Init', title: 'Git Repo', desc: 'SEMOSS initializes .git/ when you create an app' },
+                    { badge: 'Auto-Init', title: 'Git Repo', desc: `${CONFIG.productName} initializes .git/ when you create an app` },
                     { badge: 'Commits', title: 'Version History', desc: 'UI actions trigger commits automatically' },
                     { badge: 'Sync', title: 'Cloud Sync', desc: 'Push/pull to remote repos for collaboration' },
                     { badge: 'Rollback', title: 'Time Travel', desc: 'Revert to previous versions via git history' },
@@ -243,7 +243,7 @@ git checkout -b experimental-feature
 
 # Push to remote (if configured)
 git push origin main`, 'bash', 'Git commands in app_root/version/')}
-                ${C.callout('SEMOSS manages git commits for UI actions (save, publish, etc.), but you can also use <code>git</code> CLI directly for advanced workflows.', 'info')}
+                ${C.callout(`${CONFIG.productName} manages git commits for UI actions (save, publish, etc.), but you can also use <code>git</code> CLI directly for advanced workflows.`, 'info')}
             `
         },
         {
@@ -251,7 +251,7 @@ git push origin main`, 'bash', 'Git commands in app_root/version/')}
             title: "MCP Tool Manifests",
             content: `
                 <h2>MCP Tool Manifests</h2>
-                <p>SEMOSS can generate <strong>MCP (Model Context Protocol)</strong> manifests that describe your app's tools for AI agents.</p>
+                <p>${CONFIG.productName} can generate <strong>MCP (Model Context Protocol)</strong> manifests that describe your app's tools for AI agents.</p>
                 ${C.split(
                     {
                         title: 'Python MCP',
@@ -282,10 +282,10 @@ MakePixelMCP(
             title: "Hands-on: Create an App",
             content: `
                 <h2>Hands-on: Create Your First App</h2>
-                ${C.handson('Build a Simple SEMOSS App', `
+                ${C.handson(`Build a Simple ${CONFIG.productName} App`, `
                     <h4>Step 1: Create the App</h4>
                     <ol>
-                        <li>In SEMOSS UI, click <strong>Create New App</strong></li>
+                        <li>In ${CONFIG.productName} UI, click <strong>Create New App</strong></li>
                         <li>Name it "Training App"</li>
                         <li>Note the <strong>Project ID</strong> shown in the URL</li>
                     </ol>
@@ -309,8 +309,8 @@ MakePixelMCP(
     </style>
 </head>
 <body>
-    <h1>Hello from SEMOSS!</h1>
-    <p>This is my first SEMOSS app.</p>
+    <h1>Hello from ${CONFIG.productName}!</h1>
+    <p>This is my first ${CONFIG.productName} app.</p>
     <button onclick="runPixel()">Run Pixel</button>
     <pre id="output"></pre>
 

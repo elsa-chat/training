@@ -16,7 +16,7 @@ const day5_ch04 = {
             title: "Project Overview",
             content: `
                 <h2>Capstone Project: AI Sales Analytics Platform</h2>
-                <p class="lead">Build a complete SEMOSS application that combines data ingestion, LLM-powered analysis, custom business logic, and interactive visualizations.</p>
+                <p class="lead">Build a complete ${CONFIG.productName} application that combines data ingestion, LLM-powered analysis, custom business logic, and interactive visualizations.</p>
 
                 <h3>Project Requirements</h3>
                 ${C.cards([
@@ -38,7 +38,7 @@ const day5_ch04 = {
                     <li>Run in production with monitoring and logging</li>
                 </ul>
 
-                ${C.callout('This capstone integrates <strong>all major SEMOSS concepts</strong> covered this week. Work through each phase sequentially.', 'tip')}
+                ${C.callout(`This capstone integrates <strong>all major ${CONFIG.productName} concepts</strong> covered this week. Work through each phase sequentially.`, 'tip')}
             `
         },
         {
@@ -163,7 +163,7 @@ public class ForecastReactor extends AbstractReactor {
 }`, 'java', 'Custom ForecastReactor')}
                         </li>
                         <li>Register reactor in DIHelper</li>
-                        <li>Rebuild SEMOSS</li>
+                        <li>Rebuild ${CONFIG.productName}</li>
                     </ol>
 
                     <h4>Step 2: Create Python Anomaly Detection Script</h4>
@@ -198,11 +198,11 @@ def detect_anomalies(data, contamination=0.1):
 
     return df.to_dict('records')
 
-# Make available to SEMOSS
+# Make available to ${CONFIG.productName}
 __all__ = ['detect_anomalies']`, 'python', 'py/custom/anomaly_detection.py')}
                         </li>
                         <li>Call from Pixel:
-                            ${C.code("// Call Python function\nPy(\"<encode>\nimport sys\nsys.path.append('py/custom')\nfrom anomaly_detection import detect_anomalies\n\n# Get data from frame\nsales_data = <salesFrame>.to_dict('records')\nresult = detect_anomalies(sales_data, contamination=0.05)\n\n# Return to SEMOSS\nresult\n</encode>\") | As(frame=[\"anomaliesFrame\"]);", 'pixel')}
+                            ${C.code("// Call Python function\nPy(\"<encode>\nimport sys\nsys.path.append('py/custom')\nfrom anomaly_detection import detect_anomalies\n\n# Get data from frame\nsales_data = <salesFrame>.to_dict('records')\nresult = detect_anomalies(sales_data, contamination=0.05)\n\n# Return to ${CONFIG.productName}\nresult\n</encode>\") | As(frame=[\"anomaliesFrame\"]);", 'pixel')}
                         </li>
                     </ol>
                 `)}

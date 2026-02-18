@@ -7,24 +7,24 @@ const day3_ch04 = {
             title: "API Endpoints",
             content: C.titleSlide(
                 "API Endpoints",
-                "How External Clients Call SEMOSS via OpenAI and Anthropic APIs",
+                `How External Clients Call ${CONFIG.productName} via OpenAI and Anthropic APIs`,
                 "105 minutes"
             )
         },
         {
             id: "d3-api-overview",
-            title: "Overview: SEMOSS as an API Provider",
+            title: `Overview: ${CONFIG.productName} as an API Provider`,
             content: `
-                <h2>Overview: SEMOSS as an API Provider</h2>
-                <p class="lead">SEMOSS implements <span class="highlight">OpenAI-compatible</span> and <span class="highlight">Anthropic-compatible</span> API endpoints, allowing external clients to interact with SEMOSS models using standard commercial API formats.</p>
-                <p>This enables tools like Claude Code CLI, OpenAI SDK clients, LangChain, and custom applications to connect to SEMOSS without modification.</p>
+                <h2>Overview: ${CONFIG.productName} as an API Provider</h2>
+                <p class="lead">${CONFIG.productName} implements <span class="highlight">OpenAI-compatible</span> and <span class="highlight">Anthropic-compatible</span> API endpoints, allowing external clients to interact with ${CONFIG.productName} models using standard commercial API formats.</p>
+                <p>This enables tools like Claude Code CLI, OpenAI SDK clients, LangChain, and custom applications to connect to ${CONFIG.productName} without modification.</p>
                 ${C.cards([
                     { badge: 'Endpoint', title: 'OpenAI API', desc: 'Compatible with OpenAI SDK clients: /v1/chat/completions, /completions, /embeddings, /models' },
                     { badge: 'Endpoint', title: 'Anthropic API', desc: 'Compatible with Anthropic SDK: /v1/messages with full Messages API format' },
-                    { badge: 'Use Case', title: 'Claude Code CLI', desc: 'Connect Claude Code to SEMOSS by configuring base URL to point to your SEMOSS instance' },
-                    { badge: 'Use Case', title: 'Custom Apps', desc: 'Build applications using OpenAI/Anthropic SDKs that call SEMOSS models instead of commercial APIs' },
+                    { badge: 'Use Case', title: 'Claude Code CLI', desc: `Connect Claude Code to ${CONFIG.productName} by configuring base URL to point to your ${CONFIG.productName} instance` },
+                    { badge: 'Use Case', title: 'Custom Apps', desc: `Build applications using OpenAI/Anthropic SDKs that call ${CONFIG.productName} models instead of commercial APIs` },
                 ])}
-                ${C.callout('SEMOSS API endpoints are <strong>inbound</strong> — they accept requests FROM external clients and route them to configured model engines. This is different from configuring engines to call external APIs.', 'info')}
+                ${C.callout(`${CONFIG.productName} API endpoints are <strong>inbound</strong> — they accept requests FROM external clients and route them to configured model engines. This is different from configuring engines to call external APIs.`, 'info')}
             `
         },
         {
@@ -32,7 +32,7 @@ const day3_ch04 = {
             title: "API Request Architecture",
             content: `
                 <h2>API Request Architecture</h2>
-                <p>When an external client sends a request to SEMOSS API endpoints, the request flows through authentication, endpoint handling, Room creation, and model execution.</p>
+                <p>When an external client sends a request to ${CONFIG.productName} API endpoints, the request flows through authentication, endpoint handling, Room creation, and model execution.</p>
                 ${C.flow([
                     { title: 'External Client', desc: 'OpenAI SDK, Anthropic SDK, Claude Code CLI, curl, etc.', accent: true, arrow: '↓' },
                     { title: 'HTTP Request', desc: 'POST /model/openai/v1/chat/completions OR /model/anthropic/v1/messages', arrow: '↓' },
@@ -44,7 +44,7 @@ const day3_ch04 = {
                     { title: 'Response Translation', desc: 'AskModelEngineResponse → OpenAI/Anthropic response format', arrow: '↓' },
                     { title: 'HTTP Response', desc: 'JSON (or SSE stream) in OpenAI/Anthropic format', accent: true },
                 ])}
-                ${C.callout('The <code>model</code> parameter in the API request is the <strong>engine ID</strong> of a configured SEMOSS model engine. SEMOSS looks up the engine and routes the request to it.', 'tip')}
+                ${C.callout(`The <code>model</code> parameter in the API request is the <strong>engine ID</strong> of a configured ${CONFIG.productName} model engine. ${CONFIG.productName} looks up the engine and routes the request to it.`, 'tip')}
             `
         },
         {
@@ -52,7 +52,7 @@ const day3_ch04 = {
             title: "Authentication: OpenAIFilter",
             content: `
                 <h2>Authentication: OpenAIFilter</h2>
-                <p>SEMOSS uses the <code>OpenAIFilter</code> servlet filter to authenticate API requests using SEMOSS user access keys.</p>
+                <p>${CONFIG.productName} uses the <code>OpenAIFilter</code> servlet filter to authenticate API requests using ${CONFIG.productName} user access keys.</p>
                 <p>The filter intercepts requests and validates the <code>Authorization</code> header in a special format compatible with OpenAI SDK clients.</p>
                 ${C.code(`// OpenAIFilter.java - Authentication flow
 public class OpenAIFilter implements Filter {
@@ -103,7 +103,7 @@ public class OpenAIFilter implements Filter {
         arg2.doFilter(requestWrapper, arg1);
     }
 }`, 'java', 'prerna/web/conf/OpenAIFilter.java')}
-                ${C.callout('To authenticate with SEMOSS API endpoints, format your Bearer token as <code>access_key:secret_key</code>. Generate access/secret keys in SEMOSS Admin UI under User Management.', 'tip')}
+                ${C.callout(`To authenticate with ${CONFIG.productName} API endpoints, format your Bearer token as <code>access_key:secret_key</code>. Generate access/secret keys in ${CONFIG.productName} Admin UI under User Management.`, 'tip')}
             `
         },
         {
@@ -111,7 +111,7 @@ public class OpenAIFilter implements Filter {
             title: "OpenAI-Compatible Endpoints",
             content: `
                 <h2>OpenAI-Compatible Endpoints</h2>
-                <p>SEMOSS implements OpenAI-compatible REST endpoints at <code>/model/openai/*</code> using JAX-RS resource classes.</p>
+                <p>${CONFIG.productName} implements OpenAI-compatible REST endpoints at <code>/model/openai/*</code> using JAX-RS resource classes.</p>
                 ${C.table(
                     ["Endpoint", "Method", "OpenAI Equivalent", "Purpose"],
                     [
@@ -179,7 +179,7 @@ public class OpenAIEndpoints {
         // 6. Return OpenAI-formatted response (JSON or SSE stream)
     }
 }`, 'java', 'prerna/semoss/web/services/local/OpenAIEndpoints.java')}
-                ${C.callout('SEMOSS OpenAI endpoints accept the same request format as OpenAI API, but the <code>model</code> parameter is the <strong>SEMOSS engine ID</strong>, not an OpenAI model name like "gpt-4".', 'info')}
+                ${C.callout(`${CONFIG.productName} OpenAI endpoints accept the same request format as OpenAI API, but the <code>model</code> parameter is the <strong>${CONFIG.productName} engine ID</strong>, not an OpenAI model name like "gpt-4".`, 'info')}
             `
         },
         {
@@ -187,7 +187,7 @@ public class OpenAIEndpoints {
             title: "Anthropic-Compatible Endpoints",
             content: `
                 <h2>Anthropic-Compatible Endpoints</h2>
-                <p>SEMOSS implements Anthropic Messages API at <code>/model/anthropic/v1/messages</code>, enabling Claude Code CLI and Anthropic SDK clients to connect.</p>
+                <p>${CONFIG.productName} implements Anthropic Messages API at <code>/model/anthropic/v1/messages</code>, enabling Claude Code CLI and Anthropic SDK clients to connect.</p>
                 ${C.split(
                     {
                         title: 'Anthropic Messages API Endpoint',
@@ -262,7 +262,7 @@ Content-Type: application/json
 }`, 'json')
                     }
                 )}
-                ${C.callout('Claude Code CLI connects to SEMOSS by setting the base URL to your SEMOSS instance: <code>export ANTHROPIC_BASE_URL="http://localhost:8080/model/anthropic"</code>', 'tip')}
+                ${C.callout(`Claude Code CLI connects to ${CONFIG.productName} by setting the base URL to your ${CONFIG.productName} instance: <code>export ANTHROPIC_BASE_URL="http://localhost:8080/model/anthropic"</code>`, 'tip')}
             `
         },
         {
@@ -341,7 +341,7 @@ public Response runModelChatCompletion(@Context HttpServletRequest request) {
             title: "Room Creation from API Requests",
             content: `
                 <h2>Room Creation from API Requests</h2>
-                <p>When an API request comes in, SEMOSS creates or retrieves a <span class="highlight">Room</span> to manage the conversation context and message history.</p>
+                <p>When an API request comes in, ${CONFIG.productName} creates or retrieves a <span class="highlight">Room</span> to manage the conversation context and message history.</p>
                 <p>The <code>room_id</code> parameter (optional) allows clients to maintain conversation continuity across multiple API calls.</p>
                 ${C.code(`// OpenAIEndpoints.java - Room creation logic
 String insightId = WebUtility.inputSanitizer((String) dataMap.remove("insight_id"));
@@ -393,7 +393,7 @@ POST /v1/chat/completions
             title: "Format Translation: API → AbstractMessage",
             content: `
                 <h2>Format Translation: API → AbstractMessage</h2>
-                <p>SEMOSS translates external API formats (OpenAI, Anthropic) into its internal <code>AbstractMessage</code> format, then translates responses back.</p>
+                <p>${CONFIG.productName} translates external API formats (OpenAI, Anthropic) into its internal <code>AbstractMessage</code> format, then translates responses back.</p>
                 ${C.flow([
                     { title: 'OpenAI/Anthropic Request', desc: 'External client sends messages in commercial API format', accent: true, arrow: '↓' },
                     { title: 'Extract Messages', desc: 'Parse messages array from request JSON', arrow: '↓' },
@@ -462,8 +462,8 @@ public static Map<String, Object> processAskModelEngineResponse(
             title: "Streaming Responses via SSE",
             content: `
                 <h2>Streaming Responses via SSE</h2>
-                <p>When <code>stream: true</code> is set, SEMOSS returns responses as <span class="highlight">Server-Sent Events (SSE)</span> instead of a single JSON object.</p>
-                <p>SEMOSS uses <code>PixelJobManager</code> to execute the model request asynchronously and poll for partial responses.</p>
+                <p>When <code>stream: true</code> is set, ${CONFIG.productName} returns responses as <span class="highlight">Server-Sent Events (SSE)</span> instead of a single JSON object.</p>
+                <p>${CONFIG.productName} uses <code>PixelJobManager</code> to execute the model request asynchronously and poll for partial responses.</p>
                 ${C.code(`// OpenAIEndpoints.java - Streaming response handling
 if (isStreamingRequest) {
     classLogger.info("Starting streaming response for model: " + engineId);
@@ -667,14 +667,14 @@ public Response runModelChatCompletion(@Context HttpServletRequest request) {
         },
         {
             id: "d3-api-handson",
-            title: "Hands-on: Call SEMOSS from OpenAI SDK",
+            title: `Hands-on: Call ${CONFIG.productName} from OpenAI SDK`,
             content: `
-                <h2>Hands-on: Call SEMOSS from OpenAI SDK</h2>
-                ${C.handson('Connect to SEMOSS using OpenAI Python SDK', `
+                <h2>Hands-on: Call ${CONFIG.productName} from OpenAI SDK</h2>
+                ${C.handson(`Connect to ${CONFIG.productName} using OpenAI Python SDK`, `
                     <h4>Prerequisites</h4>
                     <ul>
-                        <li>SEMOSS instance running at <code>http://localhost:8080</code></li>
-                        <li>SEMOSS user access key and secret key (generate in Admin UI)</li>
+                        <li>${CONFIG.productName} instance running at <code>http://localhost:8080</code></li>
+                        <li>${CONFIG.productName} user access key and secret key (generate in Admin UI)</li>
                         <li>Configured model engine (any LLM engine) with ID</li>
                     </ul>
 
@@ -741,9 +741,9 @@ print(response2.choices[0].message.content)  # Should mention "Alice"`, 'python'
                     <h4>Expected Outcomes</h4>
                     <ul>
                         <li>Part 1: SDK installed successfully</li>
-                        <li>Part 2: Response from SEMOSS model via OpenAI SDK</li>
+                        <li>Part 2: Response from ${CONFIG.productName} model via OpenAI SDK</li>
                         <li>Part 3: Streaming chunks printed in real-time</li>
-                        <li>Part 4: List of your SEMOSS model engines</li>
+                        <li>Part 4: List of your ${CONFIG.productName} model engines</li>
                         <li>Part 5: Conversation context preserved across calls</li>
                     </ul>
                 `)}
@@ -798,16 +798,16 @@ print(response2.choices[0].message.content)  # Should mention "Alice"`, 'python'
                 )}
                 <h3>Key Takeaways</h3>
                 <ul>
-                    <li><strong>SEMOSS is an API provider</strong> — external clients call SEMOSS using OpenAI/Anthropic SDK formats</li>
-                    <li><strong>Authentication</strong> uses SEMOSS access/secret keys in Bearer token format: <code>access_key:secret_key</code></li>
-                    <li><strong>model parameter</strong> is the SEMOSS engine ID (UUID), not a commercial model name like "gpt-4"</li>
+                    <li><strong>${CONFIG.productName} is an API provider</strong> — external clients call ${CONFIG.productName} using OpenAI/Anthropic SDK formats</li>
+                    <li><strong>Authentication</strong> uses ${CONFIG.productName} access/secret keys in Bearer token format: <code>access_key:secret_key</code></li>
+                    <li><strong>model parameter</strong> is the ${CONFIG.productName} engine ID (UUID), not a commercial model name like "gpt-4"</li>
                     <li><strong>Room creation</strong> happens automatically from API requests using <code>room_id</code> parameter for conversation continuity</li>
                     <li><strong>Format translation</strong> converts OpenAI/Anthropic formats → <code>InputMessage</code> → back to external format</li>
                     <li><strong>Streaming</strong> uses polling architecture with <code>PixelJobManager</code>, not native SSE push</li>
                     <li><strong>Compatible clients</strong>: OpenAI SDK, Anthropic SDK, Claude Code CLI, LangChain, curl, custom apps</li>
                     <li><strong>Endpoints</strong> are at <code>/model/openai/*</code> and <code>/model/anthropic/*</code></li>
                 </ul>
-                ${C.callout('SEMOSS API endpoints enable <strong>drop-in replacement</strong> for commercial APIs. Point your OpenAI/Anthropic SDK client at SEMOSS and use your configured model engines instead of commercial models.', 'tip')}
+                ${C.callout(`${CONFIG.productName} API endpoints enable <strong>drop-in replacement</strong> for commercial APIs. Point your OpenAI/Anthropic SDK client at ${CONFIG.productName} and use your configured model engines instead of commercial models.`, 'tip')}
             `
         }
     ]

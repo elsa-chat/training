@@ -16,7 +16,7 @@ const day2_ch04 = {
             title: "What is GAAS?",
             content: `
                 <h2>What is GAAS?</h2>
-                <p class="lead"><span class="highlight">GAAS</span> (Generative AI Agent Services) is SEMOSS's out-of-process Python runtime.</p>
+                <p class="lead"><span class="highlight">GAAS</span> (Generative AI Agent Services) is ${CONFIG.productName}'s out-of-process Python runtime.</p>
                 <p>Python code runs in a <strong>separate process</strong> from the Java server, communicating over a <strong>TCP socket</strong> using a shared message protocol.</p>
                 ${C.cards([
                     { badge: 'Isolation', title: 'Separate Process', desc: 'Python crashes don\'t take down the Java server' },
@@ -59,7 +59,7 @@ const day2_ch04 = {
                         ]
                     }
                 ])}
-                ${C.callout('The GAAS server starts when SEMOSS starts (via <code>RUN_PYTHON_AS_SERVICE=true</code>) and listens on <code>localhost:9999</code>.', 'tip')}
+                ${C.callout(`The GAAS server starts when ${CONFIG.productName} starts (via <code>RUN_PYTHON_AS_SERVICE=true</code>) and listens on <code>localhost:9999</code>.`, 'tip')}
             `
         },
         {
@@ -192,7 +192,7 @@ class InsightGlobalStore:
             title: "Calling Python from Pixel",
             content: `
                 <h2>Calling Python from Pixel</h2>
-                <p>SEMOSS provides several Pixel reactors to execute Python code.</p>
+                <p>${CONFIG.productName} provides several Pixel reactors to execute Python code.</p>
                 ${C.code(`// Run Python code (wrapped in <encode> blocks)
 Py("<encode>x = 10; print(x)</encode>");  // Output: 10
 
@@ -307,7 +307,7 @@ result = gsp.callEngine(
                         { from: 1, to: 0, label: 'return result', type: 'response' },
                     ]
                 )}
-                ${C.callout('This callback mechanism enables Python code to orchestrate complex SEMOSS workflows — run queries, call LLMs, generate insights — all from Python.', 'tip')}
+                ${C.callout(`This callback mechanism enables Python code to orchestrate complex ${CONFIG.productName} workflows — run queries, call LLMs, generate insights — all from Python.`, 'tip')}
             `
         },
         {
@@ -315,7 +315,7 @@ result = gsp.callEngine(
             title: "Package Management",
             content: `
                 <h2>Installing Python Packages</h2>
-                <p>SEMOSS uses the system's <code>pip</code> to install packages for the GAAS runtime.</p>
+                <p>${CONFIG.productName} uses the system's <code>pip</code> to install packages for the GAAS runtime.</p>
                 ${C.code(`# Via Pixel
 Py("<encode>import subprocess; subprocess.check_call(['pip', 'install', 'requests'])</encode>");
 
@@ -341,7 +341,7 @@ CheckPyPackages(reload=true);  // Force refresh the package list`, 'pixel', 'Ins
             title: "Python Console",
             content: `
                 <h2>Python Console Usage</h2>
-                <p>SEMOSS provides an interactive Python console in the UI for exploring data and testing code.</p>
+                <p>${CONFIG.productName} provides an interactive Python console in the UI for exploring data and testing code.</p>
                 ${C.split(
                     {
                         title: 'Features',
@@ -382,7 +382,7 @@ max    3.000000`, 'python')
             id: "d2-python-writing-functions",
             title: "Writing Python Functions",
             content: `
-                <h2>Writing Python Functions for SEMOSS</h2>
+                <h2>Writing Python Functions for ${CONFIG.productName}</h2>
                 <p>Apps can include custom Python functions in <code>assets/py/</code> and expose them as MCP tools or Pixel commands.</p>
                 ${C.code(`# assets/py/mcp_driver.py
 """
@@ -464,7 +464,7 @@ def fetch_data_from_api(url: str) -> dict:
     response = requests.get(url)
     return response.json()`, 'python')}
 
-                    <h4>Step 2: Load the Module in SEMOSS</h4>
+                    <h4>Step 2: Load the Module in ${CONFIG.productName}</h4>
                     ${C.code(`// Load the Python file
 LoadPyFromFileProjectPy(
     projectId="<your-app-project-id>",
@@ -482,7 +482,7 @@ MakePythonMCP("<your-app-project-id>");
 // Output: assets/mcp/py_mcp.json`, 'pixel')}
 
                     <h4>Step 4: Use from Python Console</h4>
-                    <p>Open the Python console in SEMOSS and run:</p>
+                    <p>Open the Python console in ${CONFIG.productName} and run:</p>
                     ${C.code(`>>> import mcp_driver
 >>> stats = mcp_driver.calculate_stats([10, 20, 30, 40, 50])
 >>> print(stats)

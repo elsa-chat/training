@@ -397,7 +397,7 @@ def search_large_corpus(query: str):
                     { title: '3. Generate MCP JSON', desc: 'MakePythonMCP() or MakePixelMCP()', accent: true, arrow: '↓' },
                     { title: '4. Build Portal', desc: 'cd client/ && pnpm run build', arrow: '↓' },
                     { title: '5. Verify Output', desc: 'Check portals/ folder has index.html', arrow: '↓' },
-                    { title: '6. Publish in SEMOSS', desc: 'Publish → Refresh Files', accent: true, arrow: '↓' },
+                    { title: `6. Publish in ${CONFIG.productName}`, desc: 'Publish → Refresh Files', accent: true, arrow: '↓' },
                     { title: '7. Test in Playground', desc: 'Add MCP server, test tools', arrow: '↓' },
                     { title: '8. Deploy', desc: 'Publish to production environment', accent: true },
                 ])}

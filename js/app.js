@@ -6,6 +6,10 @@ let navStructure = [];
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
+    // Apply branding from CONFIG
+    document.getElementById('logoTitle').textContent = CONFIG.sidebarBranding;
+    document.getElementById('pageTitle').textContent = CONFIG.pageTitle;
+
     buildNavStructure();
     buildSidebar();
     buildSchedule();

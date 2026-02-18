@@ -7,7 +7,7 @@ const day3_ch03 = {
             title: "Model Logs",
             content: C.titleSlide(
                 "Model Logs",
-                "Tracking, analyzing, and troubleshooting LLM usage in SEMOSS",
+                `Tracking, analyzing, and troubleshooting LLM usage in ${CONFIG.productName}`,
                 "90 minutes"
             )
         },
@@ -16,8 +16,8 @@ const day3_ch03 = {
             title: "What are Model Logs?",
             content: `
                 <h2>What are Model Logs?</h2>
-                <p class="lead">SEMOSS maintains a comprehensive <span class="highlight">Model Inference Logs Database</span> that captures every LLM interaction for analytics, compliance, and troubleshooting.</p>
-                <p>Every time a user interacts with an LLM in SEMOSS — whether through chat, Pixel commands, or API calls — the system logs detailed information about the interaction.</p>
+                <p class="lead">${CONFIG.productName} maintains a comprehensive <span class="highlight">Model Inference Logs Database</span> that captures every LLM interaction for analytics, compliance, and troubleshooting.</p>
+                <p>Every time a user interacts with an LLM in ${CONFIG.productName} — whether through chat, Pixel commands, or API calls — the system logs detailed information about the interaction.</p>
                 ${C.cards([
                     { badge: 'Why Log?', title: 'Cost Tracking', desc: 'Monitor token usage and API costs per user, project, and model' },
                     { badge: 'Why Log?', title: 'Troubleshooting', desc: 'Debug failed requests, track response times, identify bottlenecks' },
@@ -152,7 +152,7 @@ USER_EMAIL_ID      VARCHAR(50)      -- User email`, 'sql', 'src/prerna/engine/im
             title: "Querying Model Logs",
             content: `
                 <h2>Querying Model Logs</h2>
-                <p>You can query the logs database like any SEMOSS database engine using Pixel or SQL.</p>
+                <p>You can query the logs database like any ${CONFIG.productName} database engine using Pixel or SQL.</p>
                 <h3>Via Pixel</h3>
                 ${C.code(`// Query recent messages
 Database(database="a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d")
@@ -294,7 +294,7 @@ ORDER BY HOUR_OF_DAY;`, 'sql', 'Performance analytics')}
             title: "Log Retention & Management",
             content: `
                 <h2>Log Retention and Management</h2>
-                <p>Model logs grow rapidly — a busy SEMOSS instance can generate millions of records per month.</p>
+                <p>Model logs grow rapidly — a busy ${CONFIG.productName} instance can generate millions of records per month.</p>
                 ${C.flow([
                     { title: 'Monitor Size', desc: 'Check database size regularly', accent: true },
                     { title: 'Define Policy', desc: 'Decide retention period (30 days? 90 days? 1 year?)', arrow: '↓' },
@@ -452,7 +452,7 @@ VACUUM FULL MESSAGE;`, 'sql', 'Log retention management')}
                     },
                 ])}
                 <h3>Next: Day 3 Ch4</h3>
-                <p>API Endpoints — building and consuming REST APIs in SEMOSS.</p>
+                <p>API Endpoints — building and consuming REST APIs in ${CONFIG.productName}.</p>
             `
         }
     ]

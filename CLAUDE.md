@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-A static HTML slide-based training site for a 5-day SEMOSS platform training (Spain, Feb 2026). No build tools, no bundler, no dependencies — just plain HTML/CSS/JS opened directly in a browser.
+A static HTML slide-based training site for a 5-day SEMOSS/AI Core platform training (Spain, Feb 2026). No build tools, no bundler, no dependencies — just plain HTML/CSS/JS opened directly in a browser. Product name is configurable via `config.js`.
 
 ## Running
 
@@ -24,7 +24,39 @@ No server required. All files load via `<script>` tags.
 4. **`js/components.js`** — Component library (`C` object) with helper functions that generate HTML from structured data
 5. **`js/app.js`** — Navigation controller. Flattens day data into `allSlides[]`, handles sidebar tree, prev/next, keyboard, URL hash routing
 
-**Script load order matters:** `components.js` → chapter files → day index → `app.js`
+**Script load order matters:** `config.js` → `components.js` → chapter files → day index → `app.js`
+
+## Product Name Configuration
+
+The site uses a centralized configuration system for branding/product name references.
+
+**`config.js`** (loaded first in `<head>`):
+```js
+const CONFIG = {
+  productName: 'SEMOSS',           // Main product name
+  tagline: 'Enterprise AI Platform',
+  sidebarBranding: 'SEMOSS Training',
+  pageTitle: 'SEMOSS Training - Spain 2026'
+};
+```
+
+**Usage in chapter files:**
+- Use `${CONFIG.productName}` instead of hardcoded "SEMOSS" in prose, headings, and diagram text
+- DO NOT replace in code blocks, package names (prerna.semoss.web), or technical paths
+- DO NOT replace the acronym expansion "SEMOSS Settings" for .smss files
+
+**Examples:**
+```js
+// ✓ Correct - use CONFIG in prose/headings
+content: `<h2>What is ${CONFIG.productName}?</h2>`
+C.callout(`${CONFIG.productName} started as a visualization tool...`)
+
+// ✗ Wrong - don't use CONFIG in code blocks or package names
+C.code(`package prerna.semoss.web;  // Leave as-is`)
+C.code(`.smss (SEMOSS Settings)`)    // Leave as-is
+```
+
+**To rebrand:** Edit `config.js` only - all slide content will update automatically. This allows marketing the platform as "SEMOSS" or "AI Core" without touching content files.
 
 ## Modular Content Structure
 

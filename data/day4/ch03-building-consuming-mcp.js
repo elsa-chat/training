@@ -25,7 +25,7 @@ const day4_ch03 = {
                     { title: '5. Test in Playground', desc: 'Configure MCP server and test tools', arrow: '↓' },
                     { title: '6. Deploy', desc: 'Make available to users or external apps', accent: true },
                 ])}
-                ${C.callout('SEMOSS MCP tools can be consumed in two ways: <strong>internally</strong> via Playground/Rooms, or <strong>externally</strong> via MCP-compatible clients like Claude Code CLI.', 'info')}
+                ${C.callout(`${CONFIG.productName} MCP tools can be consumed in two ways: <strong>internally</strong> via Playground/Rooms, or <strong>externally</strong> via MCP-compatible clients like Claude Code CLI.`, 'info')}
             `
         },
         {
@@ -109,7 +109,7 @@ def upload_to_vector_db(file_path: str, vector_engine_name: str):
             title: "Java/Pixel MCP Pattern",
             content: `
                 <h2>Building Java/Pixel MCP Tools</h2>
-                <p>Java reactors provide SEMOSS-native MCP tools with full access to engines, insights, and the reactor ecosystem.</p>
+                <p>Java reactors provide ${CONFIG.productName}-native MCP tools with full access to engines, insights, and the reactor ecosystem.</p>
                 ${C.code(`package reactors.examples;
 
 import prerna.reactor.AbstractReactor;
@@ -190,7 +190,7 @@ GetProjectFiles(
             title: "Engine MCP Pattern",
             content: `
                 <h2>Exposing Engines as MCP Tools</h2>
-                <p>Existing SEMOSS engines (Database, Vector, Storage, Function) can be exposed as MCP tools with a single command.</p>
+                <p>Existing ${CONFIG.productName} engines (Database, Vector, Storage, Function) can be exposed as MCP tools with a single command.</p>
                 ${C.table(
                     ["Engine Type", "Generated MCP Tools", "Use Case"],
                     [
@@ -244,7 +244,7 @@ MakeEngineMCP(engine="my-vector-db-name");
                     { title: 'Build UI', desc: 'components/mcp/YourTool.tsx', arrow: '↓' },
                     { title: 'Link MCP tool', desc: 'resourceURI: "/" in @mcp_metadata or pixel_mcp.json', accent: true, arrow: '↓' },
                     { title: 'Build portals/', desc: 'pnpm run build → portals/', arrow: '↓' },
-                    { title: 'Publish', desc: 'SEMOSS publishes portals/ to public_home', accent: true },
+                    { title: 'Publish', desc: `${CONFIG.productName} publishes portals/ to public_home`, accent: true },
                 ])}
                 ${C.split(
                     {

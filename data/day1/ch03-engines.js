@@ -7,7 +7,7 @@ const day1_ch03 = {
             title: "Engines: The Data Layer",
             content: C.titleSlide(
                 "Engines: The Data Layer",
-                "The pluggable abstraction that connects SEMOSS to everything",
+                `The pluggable abstraction that connects ${CONFIG.productName} to everything`,
                 "90 minutes"
             )
         },
@@ -16,7 +16,7 @@ const day1_ch03 = {
             title: "What are Engines?",
             content: `
                 <h2>What are Engines?</h2>
-                <p class="lead">An <span class="highlight">Engine</span> is SEMOSS's pluggable abstraction for connecting to external systems.</p>
+                <p class="lead">An <span class="highlight">Engine</span> is ${CONFIG.productName}'s pluggable abstraction for connecting to external systems.</p>
                 <p>Think of engines as <strong>managed connectors</strong>. Each engine wraps a connection to an external service and exposes a uniform interface.</p>
                 ${C.flow([
                     { title: 'IEngine', desc: 'Base interface — open(), close(), getEngineName(), getEngineId()', accent: true },
@@ -24,7 +24,7 @@ const day1_ch03 = {
                     { title: 'Implementation Class', desc: 'e.g., H2EmbeddedServerEngine, OpenAiEngine, FaissDatabase', arrow: 'implements' },
                     { title: '.smss Config', desc: 'Key-value file that configures the implementation' },
                 ])}
-                ${C.callout('<strong>Key insight:</strong> Everything in SEMOSS talks through engines — databases, AI models, file storage, custom APIs. This uniform abstraction is what makes the platform extensible.', 'info')}
+                ${C.callout(`<strong>Key insight:</strong> Everything in ${CONFIG.productName} talks through engines — databases, AI models, file storage, custom APIs. This uniform abstraction is what makes the platform extensible.`, 'info')}
             `
         },
         {
@@ -86,7 +86,7 @@ public interface IModelEngine extends IEngine {
                     {
                         title: 'Supported Types',
                         content: `
-                            <p><strong>SEMOSS can connect to almost ALL major databases</strong> via JDBC drivers. Common examples:</p>
+                            <p><strong>${CONFIG.productName} can connect to almost ALL major databases</strong> via JDBC drivers. Common examples:</p>
                             <ul>
                                 <li><strong>H2</strong> — Embedded (local master DB)</li>
                                 <li><strong>PostgreSQL</strong> — Primary RDBMS</li>
@@ -120,7 +120,7 @@ IDatabaseEngine engine = Utility.getDatabase("bd1dea64-ec6b-49af-9308-94b05551c8
 Object result = engine.execQuery(sqlString);
 
 // 4. Results wrapped in NounMetadata and returned`, 'java', 'Database Query Flow')}
-                ${C.callout('<strong>LocalMasterDatabase</strong> — Every SEMOSS instance has a master H2 database that stores metadata about all engines, projects, users, and permissions.', 'info')}
+                ${C.callout(`<strong>LocalMasterDatabase</strong> — Every ${CONFIG.productName} instance has a master H2 database that stores metadata about all engines, projects, users, and permissions.`, 'info')}
             `
         },
         {
@@ -191,19 +191,18 @@ VectorDatabaseQuery(
                     { badge: 'Storage', title: 'S3 / MinIO', desc: 'Object storage — bucket + key. Used in production.' },
                     { badge: 'Storage', title: 'Azure Blob', desc: 'Container + blob path. Enterprise deployments.' },
                     { badge: 'Function', title: 'Custom APIs', desc: 'Wrap external REST APIs as callable engine functions.' },
-                    { badge: 'Function', title: 'Python Scripts', desc: 'Execute Python code as a SEMOSS function engine.' },
+                    { badge: 'Function', title: 'Python Scripts', desc: `Execute Python code as a ${CONFIG.productName} function engine.` },
                     { badge: 'Guardrail', title: 'Validation', desc: 'Pre/post processing for LLM I/O — PII, toxicity, custom rules.' },
                 ])}
-                ${C.code(`// Storage engine — upload a file
-Storage(engine="b2c3d4e5-6f7a-8b9c-0d1e-2f3a4b5c6d7e")
-    | UploadFile(filePath="/local/data.csv", storagePath="uploads/data.csv");
+                ${C.code(`// Storage engine — pull file from storage
+Storage(storage="8be5fb68-ffab-47bd-af2a-cd409b51e732")
+    | PullFromStorage(storagePath="/your/storage/path", filePath="/your/local/path");
 
-// Function engine — call a custom API
-Function(engine="c3d4e5f6-7a8b-9c0d-1e2f-3a4b5c6d7e8f")
-    | RunFunction(city="Madrid");
-
-// Guardrail — apply to an LLM call
-LLM(engine="d4e5f6a7-8b9c-0d1e-2f3a-4b5c6d7e8f9a", command="...", guardrails=["pii_filter"]);`, 'pixel', 'Storage, Function & Guardrail — Pixel Commands')}
+// Function engine — call weather API
+ExecuteFunctionEngine(
+    engine="06383ab4-4738-4fe8-a7e9-737a14da737d",
+    map=[{"city": "Madrid", "units": "metric", "lang": "es"}]
+);`, 'pixel', 'Storage & Function — Pixel Commands')}
             `
         },
         {
@@ -240,7 +239,7 @@ CONNECTION_URL jdbc:h2:nio:@BaseFolder@/db/@ENGINE@/database`, 'properties', 'db
                             </ul>
                             <p><strong>Placeholders:</strong></p>
                             <ul>
-                                <li><code>@BaseFolder@</code> — SEMOSS install root</li>
+                                <li><code>@BaseFolder@</code> — ${CONFIG.productName} install root</li>
                                 <li><code>@ENGINE@</code> — Engine folder name</li>
                             </ul>
                         `
@@ -261,7 +260,7 @@ CONNECTION_URL jdbc:h2:nio:@BaseFolder@/db/@ENGINE@/database`, 'properties', 'db
                     { title: '5. Use', desc: 'Reactors interact with engine via interface methods', arrow: '↓' },
                     { title: '6. Sync (optional)', desc: 'SMSS watcher syncs to cloud storage for cluster deployments' },
                 ])}
-                ${C.code(`// Utility.java — how SEMOSS loads an engine on startup
+                ${C.code(`// Utility.java — how ${CONFIG.productName} loads an engine on startup
 // Note: Actual signature is private static with 2 params, simplified here for teaching
 private static IEngine loadEngine(String smssFilePath, Properties smssProp) {
     Properties props = (smssProp != null) ? smssProp : Utility.loadProperties(smssFilePath);
@@ -282,18 +281,18 @@ private static IEngine loadEngine(String smssFilePath, Properties smssProp) {
                 ${C.handson('Upload CSV → H2 Database Engine', `
                     <h4>Part 1: Create the Engine via UI</h4>
                     <ol>
-                        <li>Open the SEMOSS training instance in your browser</li>
+                        <li>Open the ${CONFIG.productName} training instance in your browser</li>
                         <li>Navigate to <strong>Database Catalog</strong></li>
                         <li>Click <strong>Add Database</strong></li>
                         <li>Choose <strong>File Upload</strong> method</li>
                         <li>Select <strong>H2</strong> database type</li>
                         <li>Choose a sample CSV file (e.g., sales data, customer list, any dataset)</li>
                         <li>Name your database (e.g., <code>MySalesDB</code>)</li>
-                        <li>Click <strong>Upload</strong> — SEMOSS creates an H2 database automatically</li>
+                        <li>Click <strong>Upload</strong> — ${CONFIG.productName} creates an H2 database automatically</li>
                         <li>Wait for the import to complete</li>
                     </ol>
                     <h4>Part 2: Explore What Got Created</h4>
-                    <p>Behind the scenes, SEMOSS created several files. Let's find them:</p>
+                    <p>Behind the scenes, ${CONFIG.productName} created several files. Let's find them:</p>
                     <ol>
                         <li>Navigate to the server filesystem: <code>db/</code> directory</li>
                         <li>Find your new database folder: <code>MySalesDB__[UUID]/</code></li>
@@ -308,12 +307,12 @@ private static IEngine loadEngine(String smssFilePath, Properties smssProp) {
                     </ol>
                     <h4>Part 3: Query Your New Database</h4>
                     <ol>
-                        <li>Go to <strong>Notebook</strong> in SEMOSS</li>
+                        <li>Go to <strong>Notebook</strong> in ${CONFIG.productName}</li>
                         <li>Run a query using Pixel: <code>Database(database="[your-engine-id]") | Query("SELECT * FROM [table-name] LIMIT 10");</code></li>
                         <li>See your CSV data now queryable as a database!</li>
                     </ol>
                     <h4>Key Takeaway</h4>
-                    <p><strong>UI Action → File System Result:</strong> When you upload a CSV, SEMOSS creates an H2 engine, registers it in LocalMasterDatabase, writes a <code>.smss</code> config, and stores the data. This is the engine lifecycle in action!</p>
+                    <p><strong>UI Action → File System Result:</strong> When you upload a CSV, ${CONFIG.productName} creates an H2 engine, registers it in LocalMasterDatabase, writes a <code>.smss</code> config, and stores the data. This is the engine lifecycle in action!</p>
                 `)}
             `
         }

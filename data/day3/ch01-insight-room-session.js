@@ -7,7 +7,7 @@ const day3_ch01 = {
             title: "Insight / Room / Session",
             content: C.titleSlide(
                 "Insight / Room / Session",
-                "Understanding state management, collaboration, and persistence in SEMOSS",
+                `Understanding state management, collaboration, and persistence in ${CONFIG.productName}`,
                 "105 minutes"
             )
         },
@@ -16,7 +16,7 @@ const day3_ch01 = {
             title: "What are Insights, Rooms, and Sessions?",
             content: `
                 <h2>What are Insights, Rooms, and Sessions?</h2>
-                <p class="lead">SEMOSS uses three interconnected concepts to manage stateful interactions: <span class="highlight">Insights</span> (execution context), <span class="highlight">Rooms</span> (conversation history), and <span class="highlight">Sessions</span> (HTTP session binding).</p>
+                <p class="lead">${CONFIG.productName} uses three interconnected concepts to manage stateful interactions: <span class="highlight">Insights</span> (execution context), <span class="highlight">Rooms</span> (conversation history), and <span class="highlight">Sessions</span> (HTTP session binding).</p>
                 ${C.cards([
                     { badge: 'Concept', title: 'Insight', desc: 'A stateful execution context holding variables, frames, panels, and R/Python environments. Identified by a unique <code>insightId</code> (UUID).' },
                     { badge: 'Concept', title: 'Room', desc: 'A persistent conversation thread with an LLM, storing message history and associated with an Insight for tool execution.' },
@@ -30,7 +30,7 @@ const day3_ch01 = {
             title: "Architecture Overview",
             content: `
                 <h2>Insight / Room / Session Architecture</h2>
-                <p>Understanding how these three components work together is key to building stateful SEMOSS applications.</p>
+                <p>Understanding how these three components work together is key to building stateful ${CONFIG.productName} applications.</p>
                 ${C.layers([
                     { label: "HTTP Layer", items: [
                         { title: "Browser", desc: "Holds sessionId cookie" },
@@ -361,7 +361,7 @@ await fetch('http://localhost:8080/api/engine/runPixel', {
                     <li>The <code>insightId</code> is the <strong>primary key</strong> for managing state across REST API calls</li>
                     <li>Rooms use Insights to execute tools, giving LLMs access to data, engines, and application state</li>
                 </ul>
-                ${C.callout('Understanding Insights and Rooms is critical for building stateful SEMOSS apps — whether you\'re managing user sessions, implementing LLM chat, or building multi-step workflows.', 'tip')}
+                ${C.callout(`Understanding Insights and Rooms is critical for building stateful ${CONFIG.productName} apps — whether you're managing user sessions, implementing LLM chat, or building multi-step workflows.`, 'tip')}
             `
         }
     ]

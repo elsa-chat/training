@@ -7,7 +7,7 @@ const day4_ch01 = {
             title: "Playground",
             content: C.titleSlide(
                 "Playground",
-                "The conversational AI interface in SEMOSS — Rooms, Workspaces, and Enterprise Customization",
+                `The conversational AI interface in ${CONFIG.productName} — Rooms, Workspaces, and Enterprise Customization`,
                 "90 minutes"
             )
         },
@@ -16,7 +16,7 @@ const day4_ch01 = {
             title: "What is Playground?",
             content: `
                 <h2>What is Playground?</h2>
-                <p class="lead"><span class="highlight">Playground</span> is SEMOSS's conversational AI interface — a ChatGPT-like experience powered by Rooms, Workspaces, and MCP tools.</p>
+                <p class="lead"><span class="highlight">Playground</span> is ${CONFIG.productName}'s conversational AI interface — a ChatGPT-like experience powered by Rooms, Workspaces, and MCP tools.</p>
                 <p>Think of Playground as the enterprise chat interface where users interact with LLMs, connect to data sources, and execute tools — all within a governed, shareable environment.</p>
                 ${C.cards([
                     { badge: 'Feature', title: 'Rooms', desc: 'Persistent conversation threads with message history and tool execution' },
@@ -34,7 +34,7 @@ const day4_ch01 = {
             title: "Playground Architecture",
             content: `
                 <h2>Playground Architecture</h2>
-                <p>Playground combines several SEMOSS components to deliver a cohesive conversational AI experience.</p>
+                <p>Playground combines several ${CONFIG.productName} components to deliver a cohesive conversational AI experience.</p>
                 ${C.layers([
                     { label: "Frontend", items: [
                         { title: "React UI", desc: "SemossWeb Playground interface" },
@@ -96,7 +96,7 @@ SearchRoomFilesWithContext(
 // Get token counts for uploaded files
 GetRoomFileTokenStats();`, 'pixel', 'Room Folder MCP Tools')}
                 ${C.callout('Room folders use <strong>chroot isolation</strong> when enabled — shell commands cannot access files outside the room folder.', 'warning')}
-                ${C.callout('The 4 Room Folder MCP tools shown above are project-specific implementations, not built-in SEMOSS core features. They may need to be registered separately for your deployment.', 'info')}
+                ${C.callout(`The 4 Room Folder MCP tools shown above are project-specific implementations, not built-in ${CONFIG.productName} core features. They may need to be registered separately for your deployment.`, 'info')}
             `
         },
         {
@@ -280,7 +280,7 @@ ClusterUtil.pullUserWorkspace(projectId, isAsset);`, 'java', 'prerna/cluster/uti
                 ${C.handson('Create and test a custom Workspace', `
                     <h4>Part 1: Create a Workspace in the UI</h4>
                     <ol>
-                        <li>Open the SEMOSS Playground interface</li>
+                        <li>Open the ${CONFIG.productName} Playground interface</li>
                         <li>Navigate to <strong>Workspaces</strong> → <strong>New Workspace</strong></li>
                         <li>Configure the workspace:
                             <ul>
@@ -389,7 +389,7 @@ ClusterUtil.pullUserWorkspace(projectId, isAsset);`, 'java', 'prerna/cluster/uti
                     <li><strong>Cloud sync</strong> enables cross-device access and real-time collaboration</li>
                     <li>All Room messages are logged in <code>MODEL_INFERENCE_LOGS_DB</code> for compliance and analytics</li>
                 </ul>
-                ${C.callout('Playground combines conversational AI, enterprise governance, and tool integration into a cohesive user experience — all built on SEMOSS\'s core Room and MCP architecture.', 'tip')}
+                ${C.callout(`Playground combines conversational AI, enterprise governance, and tool integration into a cohesive user experience — all built on ${CONFIG.productName}'s core Room and MCP architecture.`, 'tip')}
             `
         }
     ]

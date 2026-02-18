@@ -7,16 +7,16 @@ const day5_ch02 = {
             title: "Security & Auth",
             content: C.titleSlide(
                 "Security & Auth",
-                "Authentication, authorization, and access control in SEMOSS",
+                `Authentication, authorization, and access control in ${CONFIG.productName}`,
                 "90 minutes"
             )
         },
         {
             id: "d5-security-overview",
-            title: "SEMOSS Security Overview",
+            title: `${CONFIG.productName} Security Overview`,
             content: `
-                <h2>SEMOSS Security Architecture</h2>
-                <p class="lead">SEMOSS provides enterprise-grade security with <span class="highlight">pluggable authentication</span>, <span class="highlight">role-based authorization</span>, and <span class="highlight">granular permissions</span> for apps and engines.</p>
+                <h2>${CONFIG.productName} Security Architecture</h2>
+                <p class="lead">${CONFIG.productName} provides enterprise-grade security with <span class="highlight">pluggable authentication</span>, <span class="highlight">role-based authorization</span>, and <span class="highlight">granular permissions</span> for apps and engines.</p>
                 ${C.layers([
                     { label: "Authentication", items: [
                         { title: "AuthProvider", desc: "OAuth, SAML, LDAP, Native, CAC" }
@@ -42,7 +42,7 @@ const day5_ch02 = {
             title: "Authentication Providers",
             content: `
                 <h2>Authentication Providers</h2>
-                <p>SEMOSS supports multiple authentication providers via the <code>AuthProvider</code> enum, enabling SSO, OAuth, and enterprise identity integrations.</p>
+                <p>${CONFIG.productName} supports multiple authentication providers via the <code>AuthProvider</code> enum, enabling SSO, OAuth, and enterprise identity integrations.</p>
                 ${C.code(`public enum AuthProvider {
     // OAuth 2.0 Providers
     GOOGLE("GOOGLE", "Google", true, GoogleTokenFiller.class.getName()),
@@ -145,7 +145,7 @@ const day5_ch02 = {
             title: "Permission Model",
             content: `
                 <h2>Permission Model — OWNER / EDIT / READ_ONLY</h2>
-                <p class="lead">SEMOSS uses a 3-tier permission model applied to <span class="highlight">Projects</span> (apps) and <span class="highlight">Engines</span> (databases, models).</p>
+                <p class="lead">${CONFIG.productName} uses a 3-tier permission model applied to <span class="highlight">Projects</span> (apps) and <span class="highlight">Engines</span> (databases, models).</p>
                 ${C.code(`public enum AccessPermissionEnum {
     OWNER (1, "OWNER"),          // Full control: edit, delete, grant permissions
     EDIT (2, "EDIT"),            // Can modify but not delete or manage permissions

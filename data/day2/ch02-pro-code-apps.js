@@ -16,7 +16,7 @@ const day2_ch02 = {
             title: "What are Pro-Code Apps?",
             content: `
                 <h2>What are Pro-Code Apps?</h2>
-                <p class="lead"><span class="highlight">Pro-Code Apps</span> are SEMOSS applications built with modern frontend frameworks like React, using the full power of JavaScript tooling.</p>
+                <p class="lead"><span class="highlight">Pro-Code Apps</span> are ${CONFIG.productName} applications built with modern frontend frameworks like React, using the full power of JavaScript tooling.</p>
                 <p>Unlike simple HTML portals, pro-code apps use a <strong>build pipeline</strong> to compile TypeScript, bundle assets, and optimize for production.</p>
                 ${C.split(
                     {
@@ -84,8 +84,8 @@ const day2_ch02 = {
             id: "d2-procode-sdk",
             title: "@semoss/sdk",
             content: `
-                <h2>@semoss/sdk — The SEMOSS API Client</h2>
-                <p>The <code>@semoss/sdk</code> package provides TypeScript functions to interact with the SEMOSS backend.</p>
+                <h2>@semoss/sdk — The ${CONFIG.productName} API Client</h2>
+                <p>The <code>@semoss/sdk</code> package provides TypeScript functions to interact with the ${CONFIG.productName} backend.</p>
                 ${C.code(`import { runPixel, Env } from '@semoss/sdk/react';
 
 // Configure the SDK (usually in main.tsx or App.tsx)
@@ -157,7 +157,7 @@ function MyComponent() {
             title: "@semoss/renderer",
             content: `
                 <h2>@semoss/renderer — Block-Based UI Components</h2>
-                <p>The <code>@semoss/renderer</code> package provides the <strong>Renderer</strong> component for embedding SEMOSS block-based UIs.</p>
+                <p>The <code>@semoss/renderer</code> package provides the <strong>Renderer</strong> component for embedding ${CONFIG.productName} block-based UIs.</p>
                 ${C.code(`import { Renderer } from '@semoss/renderer';
 
 function MyApp() {
@@ -236,7 +236,7 @@ const theme = createTheme({
     palette: {
         mode: 'dark',
         primary: {
-            main: '#2c5f2d',  // SEMOSS green
+            main: '#2c5f2d',  // ${CONFIG.productName} green
         },
         background: {
             default: '#1a1a1a',
@@ -273,7 +273,7 @@ function App() {
                 ${C.flow([
                     { title: 'Develop', desc: 'Edit code in client/src/ with hot reload' },
                     { title: 'Build', desc: 'npm run build → Vite bundles to portals/', arrow: '↓ npm run build' },
-                    { title: 'Publish', desc: 'Click "Publish files" in SEMOSS UI', arrow: '↓ UI button' },
+                    { title: 'Publish', desc: `Click "Publish files" in ${CONFIG.productName} UI`, arrow: '↓ UI button' },
                     { title: 'Deploy', desc: 'portals/ copied to public_home/<projectId>/', accent: true, arrow: '↓ copy operation' },
                     { title: 'Live', desc: 'App available at published URL' },
                 ])}
@@ -415,7 +415,7 @@ export default defineConfig({
                     ${C.code(`npm run build
 # Output written to ../portals/
 
-# In SEMOSS UI, click "Publish files"
+# In ${CONFIG.productName} UI, click "Publish files"
 # Visit: <base-url>/public_home/<projectId>/portals/index.html`, 'bash')}
 
                     <h4>Bonus: Add Pixel Integration</h4>
@@ -453,10 +453,10 @@ function DataFetcher() {
                     { badge: 'Library', title: '@semoss/renderer', desc: 'Block-based UI components with Renderer component' },
                     { badge: 'State', title: 'MobX', desc: 'Reactive state management via InsightStore' },
                     { badge: 'UI', title: 'Material-UI', desc: 'Component library for theming and layouts' },
-                    { badge: 'Workflow', title: 'Dev → Build → Publish', desc: 'npm run build → SEMOSS publish → live deployment' },
+                    { badge: 'Workflow', title: 'Dev → Build → Publish', desc: `npm run build → ${CONFIG.productName} publish → live deployment` },
                 ])}
                 <h3>Next Up</h3>
-                <p>Custom Reactors — Extend SEMOSS functionality with Java backend logic.</p>
+                <p>Custom Reactors — Extend ${CONFIG.productName} functionality with Java backend logic.</p>
             `
         }
     ]
