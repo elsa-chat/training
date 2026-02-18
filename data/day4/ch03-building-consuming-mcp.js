@@ -79,7 +79,7 @@ def process_dataframe(table_name: str, operation: str = "summary"):
 
 
 @smssutil.mcp_metadata({
-    'execution': 'ask_user',  # Require confirmation for write operations
+    'execution': 'ask',  # Require confirmation for write operations
     'loadingMessage': 'Uploading to vector database...'
 })
 def upload_to_vector_db(file_path: str, vector_engine_name: str):
@@ -101,7 +101,7 @@ def upload_to_vector_db(file_path: str, vector_engine_name: str):
         return f"Successfully uploaded '{file_path}' to vector database '{vector_engine_name}'"
     except Exception as e:
         return f"Upload failed: {str(e)}"`, 'python', 'py/mcp_driver.py - Advanced patterns')}
-                ${C.callout('Use <code>execution: \'ask_user\'</code> for destructive operations (writes, deletes, uploads) to prevent accidental data modification.', 'warning')}
+                ${C.callout('Use <code>execution: \'ask\'</code> for destructive operations (writes, deletes, uploads) to prevent accidental data modification.', 'warning')}
             `
         },
         {
@@ -250,7 +250,7 @@ MakeEngineMCP(engine="my-vector-db-name");
                     {
                         title: 'Python decorator with resourceURI',
                         content: C.code(`@smssutil.mcp_metadata({
-    'execution': 'ask_user',
+    'execution': 'ask',
     'displayLocation': 'sidebar',
     'resourceURI': '/'  # Opens portal at root path
 })
@@ -404,7 +404,7 @@ print(result)`, 'python', 'LangChain integration with SEMOSS MCP')}
                 ${C.cards([
                     { badge: 'Security', title: 'API Keys', desc: 'Generate SEMOSS API keys for service-to-service authentication' },
                     { badge: 'Security', title: 'OAuth Tokens', desc: 'Use OAuth 2.0 for user-based authentication' },
-                    { badge: 'Security', title: 'Tool Permissions', desc: 'execution: ask_user prevents auto-execution of destructive tools' },
+                    { badge: 'Security', title: 'Tool Permissions', desc: 'execution: ask prevents auto-execution of destructive tools' },
                     { badge: 'Security', title: 'Rate Limiting', desc: 'Configure rate limits on MCP endpoints to prevent abuse' },
                 ])}
                 ${C.code(`// Secure MCP endpoint access patterns
@@ -432,12 +432,12 @@ def admin_delete_all_data():
     # ...
 
 @mcp_metadata({
-    'execution': 'ask_user'  # Requires user confirmation
+    'execution': 'ask'  # Requires user confirmation
 })
 def send_email(to: str, subject: str, body: str):
     """Sends an email. Requires user approval."""
     # ...`, 'python', 'MCP security patterns')}
-                ${C.callout('Always use <code>execution: \'ask_user\'</code> or <code>execution: \'disabled\'</code> for tools that modify data, send emails, or perform privileged operations.', 'danger')}
+                ${C.callout('Always use <code>execution: \'ask\'</code> or <code>execution: \'disabled\'</code> for tools that modify data, send emails, or perform privileged operations.', 'danger')}
             `
         },
         {
@@ -559,7 +559,7 @@ MakeEngineMCP(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");
                         <ul>
                             <li>API keys for service accounts</li>
                             <li>OAuth for user sessions</li>
-                            <li><code>execution: 'ask_user'</code> for destructive operations</li>
+                            <li><code>execution: 'ask'</code> for destructive operations</li>
                         </ul>
                     </li>
                 </ul>

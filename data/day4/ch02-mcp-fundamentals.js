@@ -190,7 +190,7 @@ const day4_ch02 = {
 import smssutil
 
 @smssutil.mcp_metadata({
-    'execution': 'auto',          # 'auto' | 'ask_user' | 'disabled'
+    'execution': 'auto',          # 'auto' | 'ask' | 'disabled'
     'displayLocation': 'inline',  # 'inline' | 'sidebar' | 'hidden'
     'loadingMessage': 'Executing code...',
     'resourceURI': None           # Portal path (e.g., '/' for custom UI)
@@ -214,7 +214,7 @@ def execute_python_code(code_b64: str = None):
                 ${C.table(
                     ["Decorator Key", "Values", "Description"],
                     [
-                        ["execution", "<code>'auto'</code> <code>'ask_user'</code> <code>'disabled'</code>", "Auto-execute tool, ask user first, or hide from model"],
+                        ["execution", "<code>'auto'</code> <code>'ask'</code> <code>'disabled'</code>", "Auto-execute tool, ask user first, or hide from model"],
                         ["displayLocation", "<code>'inline'</code> <code>'sidebar'</code> <code>'hidden'</code>", "Where to show portal UI in Playground"],
                         ["loadingMessage", "string", "Message shown while tool executes"],
                         ["resourceURI", "string or null", "Path to portal UI (e.g., <code>'/'</code> for root)"]
@@ -303,7 +303,7 @@ def say_hello(name: str = "World"):
     return f"Hello, {name}! Welcome to SEMOSS MCP."
 
 @smssutil.mcp_metadata({
-    'execution': 'ask_user',
+    'execution': 'ask',
     'loadingMessage': 'Counting...'
 })
 def count_to_n(n: int = 10):

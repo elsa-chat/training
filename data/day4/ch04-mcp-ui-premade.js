@@ -59,7 +59,7 @@ def show_quick_calculator():
                     {
                         title: 'Sidebar Display',
                         content: C.code(`@smssutil.mcp_metadata({
-    'execution': 'ask_user',
+    'execution': 'ask',
     'displayLocation': 'sidebar',
     'resourceURI': '/'
 })
@@ -84,9 +84,9 @@ def show_pdf_viewer(file_path: str):
                 <p>The <code>execution</code> parameter controls whether tools run automatically or require user approval.</p>
                 ${C.flow([
                     { title: 'Model calls tool', desc: 'Tool requested by LLM', accent: true, arrow: '↓' },
-                    { title: 'Check execution mode', desc: 'auto | ask_user | disabled', arrow: '↓' },
+                    { title: 'Check execution mode', desc: 'auto | ask | disabled', arrow: '↓' },
                     { title: 'auto: Execute immediately', desc: 'No user prompt', arrow: '↓ OR' },
-                    { title: 'ask_user: Show confirmation', desc: 'User approves or rejects', arrow: '↓ OR' },
+                    { title: 'ask: Show confirmation', desc: 'User approves or rejects', arrow: '↓ OR' },
                     { title: 'disabled: Tool not callable', desc: 'Error returned to model', arrow: '↓' },
                     { title: 'Return result', desc: 'Tool output sent to model', accent: true },
                 ])}
@@ -99,7 +99,7 @@ def search_database(query: str):
     # ...
 
 # 2. Ask user (destructive or sensitive operations)
-@smssutil.mcp_metadata({'execution': 'ask_user'})
+@smssutil.mcp_metadata({'execution': 'ask'})
 def delete_records(table: str, condition: str):
     """DANGER: Deletes data - requires confirmation"""
     # User sees: "Model wants to delete_records(table='users', condition='age>100'). Allow?"
@@ -111,7 +111,7 @@ def admin_reset_system():
     """Hidden from model - only callable via direct API"""
     # Model cannot call this tool
     # ...`, 'python', 'Execution mode examples')}
-                ${C.callout('Use <code>ask_user</code> for ANY operation that modifies data, sends messages, or costs money. Auto-execution is only for safe, read-only operations.', 'warning')}
+                ${C.callout('Use <code>ask</code> for ANY operation that modifies data, sends messages, or costs money. Auto-execution is only for safe, read-only operations.', 'warning')}
             `
         },
         {
@@ -135,7 +135,7 @@ def admin_reset_system():
                     {
                         title: 'Python tool with resourceURI',
                         content: C.code(`@smssutil.mcp_metadata({
-    'execution': 'ask_user',
+    'execution': 'ask',
     'displayLocation': 'sidebar',
     'resourceURI': '/reference-viewer'  # Portal path
 })
@@ -367,7 +367,7 @@ def search_large_corpus(query: str):
                         ],
                         [
                             "Execution Confirmation",
-                            "<code>execution: 'ask_user'</code>",
+                            "<code>execution: 'ask'</code>",
                             "User sees tool call and approves before execution"
                         ],
                         [
@@ -453,7 +453,7 @@ import smssutil
 import base64
 
 @smssutil.mcp_metadata({
-    'execution': 'ask_user',
+    'execution': 'ask',
     'displayLocation': 'sidebar',
     'resourceURI': '/',
     'loadingMessage': 'Executing code...'
@@ -554,7 +554,7 @@ def execute_python_code(code_b64: str = None):
                     <li><strong>execution</strong>:
                         <ul>
                             <li><code>'auto'</code> - Execute immediately (safe operations)</li>
-                            <li><code>'ask_user'</code> - Require confirmation (destructive ops)</li>
+                            <li><code>'ask'</code> - Require confirmation (destructive ops)</li>
                             <li><code>'disabled'</code> - Hidden from model</li>
                         </ul>
                     </li>
