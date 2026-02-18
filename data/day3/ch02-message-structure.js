@@ -5,368 +5,416 @@ const day3_ch02 = {
         {
             id: "d3-msg-title",
             title: "Message Structure",
-            content: C.titleSlide(
-                "Message Structure",
-                "How data flows through SEMOSS — from browser to backend and back",
-                "90 minutes"
-            )
-        },
-        {
-            id: "d3-msg-overview",
-            title: "Message Flow Overview",
             content: `
-                <h2>Message Flow Overview</h2>
-                <p class="lead">Every SEMOSS operation is a <span class="highlight">message transformation pipeline</span> — from HTTP request to Pixel execution to JSON response.</p>
-                <p>Understanding message structure is critical for debugging, building custom reactors, and integrating with external systems.</p>
-                ${C.sequence(
-                    ["Browser", "Monolith (REST)", "PixelRunner", "Reactor", "Engine"],
-                    [
-                        { from: 0, to: 1, label: "POST /api/engine/runPixel" },
-                        { from: 1, to: 2, label: "parse expression" },
-                        { from: 2, to: 3, label: "execute()" },
-                        { from: 3, to: 4, label: "query/inference" },
-                        { from: 4, to: 3, label: "raw data", type: "response" },
-                        { from: 3, to: 2, label: "NounMetadata", type: "response" },
-                        { from: 2, to: 1, label: "pixelReturn[]", type: "response" },
-                        { from: 1, to: 0, label: "JSON response", type: "response" },
-                    ]
-                )}
-                ${C.callout('SEMOSS uses <strong>three key message structures</strong>: HTTP JSON (REST API), NounMetadata (internal reactor communication), and PayloadStruct (Java ↔ Python TCP).', 'info')}
+                <h2>Message Structure in SEMOSS</h2>
+                <p class="lead">SEMOSS uses <span class="highlight">AbstractMessage</span> (package <code>prerna.engine.impl.model.message</code>) as the core abstraction for LLM communication.</p>
+                <p>This chapter covers the message implementation used for conversational AI, model logs, and persistent chat history.</p>
+                ${C.flow([
+                    { title: 'AbstractMessage', desc: 'Base class with messageId (UUID v7), modelId, tokens, ornaments', accent: true },
+                    { title: 'MessageType Enum', desc: 'INPUT_TEXT, INPUT_MEDIA, INPUT_TOOL_EXEC, RESPONSE_TEXT, RESPONSE_TOOL, RESPONSE_MEDIA', arrow: '↓' },
+                    { title: 'InputMessage', desc: 'User/system prompts, tool executions, media inputs', arrow: 'extends AbstractMessage' },
+                    { title: 'ResponseMessage', desc: 'LLM responses (text, tools, media) with Builder pattern', arrow: 'extends AbstractMessage' },
+                ])}
+                ${C.callout('<strong>Key insight:</strong> Every LLM interaction in SEMOSS creates AbstractMessage instances that are persisted to the model logs database. This enables conversation history, feedback tracking, and token accounting.', 'info')}
+                <p><strong>Time allocation:</strong> 90 minutes</p>
             `
         },
         {
-            id: "d3-msg-http-input",
-            title: "Input: HTTP Request",
+            id: "d3-msg-abstractmessage",
+            title: "AbstractMessage — Base Class",
             content: `
-                <h2>Input: HTTP Request Structure</h2>
-                <p>The browser sends Pixel expressions via <strong>POST /api/engine/runPixel</strong> with a structured JSON body.</p>
+                <h2>AbstractMessage — The Foundation</h2>
+                <p class="lead"><code>AbstractMessage</code> is the abstract base class that represents a single message in an LLM conversation.</p>
+                <p>Every user prompt, system message, tool execution, and LLM response extends this class.</p>
+                ${C.code(`public abstract class AbstractMessage implements Serializable {
+    // Core identification
+    protected String messageId;        // UUID v7 generated on creation
+    protected String transactionId;    // Groups messages in a conversation
+    protected String parentMessageId;  // For branching conversations
+
+    // Model linkage
+    protected String modelId;          // Engine ID of the LLM
+    protected ModelTypeEnum modelType; // TEXT_GENERATION, EMBEDDINGS, etc.
+
+    // Metadata
+    protected Integer tokens;          // Token count for this message
+    protected Boolean visible = true;  // Show in UI? (tool execs often hidden)
+    protected Boolean platformGenerated = false;
+    protected String feedback;         // User thumbs up/down
+    protected ZonedDateTime dateCreated;  // UTC timestamp
+
+    // Flexible metadata storage
+    protected Map<String, Object> ornaments = new HashMap<>();
+
+    // Constructor: creates UUID v7 messageId and sets dateCreated
+    public AbstractMessage() {
+        this.messageId = Utility.getRandomUUID7();
+        this.dateCreated = ZonedDateTime.now(ZoneId.of("UTC"));
+    }
+
+    // Abstract method: subclasses define their type
+    public abstract MessageType getMessageType();
+}`, 'java', 'prerna/engine/impl/model/message/AbstractMessage.java')}
+                <h3>Key Design Patterns</h3>
+                ${C.cards([
+                    { badge: 'UUID v7', title: 'Time-Ordered IDs', desc: 'messageId uses UUID v7 for sortable, unique identifiers' },
+                    { badge: 'Ornaments', title: 'Flexible Metadata', desc: 'Map<String, Object> for RAG chunks, citations, custom data' },
+                    { badge: 'Visibility', title: 'UI Control', desc: 'Tool executions set visible=false to hide internal messages' },
+                    { badge: 'Transactions', title: 'Conversation Grouping', desc: 'transactionId links related messages together' },
+                ])}
+            `
+        },
+        {
+            id: "d3-msg-messagetype",
+            title: "MessageType Enum",
+            content: `
+                <h2>MessageType — Classifying Messages</h2>
+                <p>The <code>MessageType</code> enum defines the six types of messages in an LLM conversation.</p>
+                ${C.code(`public enum MessageType {
+    // Input message types (user → LLM)
+    INPUT_TEXT,       // Plain text user prompt
+    INPUT_MEDIA,      // User prompt with images/audio/video
+    INPUT_TOOL_EXEC,  // Tool execution result fed back to LLM
+
+    // Response message types (LLM → user)
+    RESPONSE_TEXT,    // LLM text response
+    RESPONSE_TOOL,    // LLM requesting tool execution
+    RESPONSE_MEDIA;   // LLM generating media (images, audio)
+
+    // Helper methods
+    public boolean isResponseMessage() {
+        return this == RESPONSE_TEXT || this == RESPONSE_TOOL || this == RESPONSE_MEDIA;
+    }
+
+    public boolean isInputMessage() {
+        return this == INPUT_TEXT || this == INPUT_MEDIA || this == INPUT_TOOL_EXEC;
+    }
+}`, 'java', 'prerna/engine/impl/model/message/MessageType.java')}
+                <h3>Message Flow Pattern</h3>
+                ${C.sequence(
+                    ["User", "InputMessage", "LLM", "ResponseMessage"],
+                    [
+                        { from: 0, to: 1, label: "INPUT_TEXT or INPUT_MEDIA" },
+                        { from: 1, to: 2, label: "Send to model engine" },
+                        { from: 2, to: 3, label: "RESPONSE_TEXT or RESPONSE_TOOL", type: "response" },
+                        { from: 3, to: 1, label: "If RESPONSE_TOOL → INPUT_TOOL_EXEC" },
+                        { from: 1, to: 2, label: "Continue conversation" },
+                    ]
+                )}
+                ${C.callout('Tool execution creates a loop: LLM returns <code>RESPONSE_TOOL</code>, system executes tool, creates <code>INPUT_TOOL_EXEC</code> message, sends result back to LLM.', 'info')}
+            `
+        },
+        {
+            id: "d3-msg-inputmessage",
+            title: "InputMessage — User Input",
+            content: `
+                <h2>InputMessage — Capturing User Input</h2>
+                <p class="lead"><code>InputMessage</code> extends <code>AbstractMessage</code> to represent input from the user (or system) to the LLM.</p>
+                <p>It handles text prompts, system prompts, media inputs (images/audio/video), and tool execution results.</p>
+                ${C.code(`public class InputMessage extends AbstractMessage {
+    private String inputUIPrompt;      // User's original prompt
+    private String inputPrompt;        // Effective prompt (may include RAG chunks)
+    private String systemPrompt;       // System instructions
+    private MessageType type;          // INPUT_TEXT, INPUT_MEDIA, INPUT_TOOL_EXEC
+
+    // Tool execution fields (when type == INPUT_TOOL_EXEC)
+    private String toolCallId;         // ID from LLM's tool request
+    private String toolName;           // Name of tool that was executed
+    private String toolStatus;         // "success" or "error"
+    private Map<String, Object> toolParameterValues;
+
+    // Media inputs (images, audio, video)
+    private List<MessageInputMedia> mediaInputs;
+
+    // Additional parameters (tools list, temperature, etc.)
+    private Map<String, Object> paramMap;
+
+    // Room reference (required by builder)
+    Room room;
+
+    @Override
+    public MessageType getMessageType() {
+        return type;
+    }
+}`, 'java', 'prerna/engine/impl/model/message/InputMessage.java')}
+                <h3>Key Fields</h3>
                 ${C.split(
                     {
-                        title: 'HTTP Request',
-                        content: C.code(`POST /api/engine/runPixel HTTP/1.1
-Host: localhost:8080
-Content-Type: application/json
-
-{
-  "insightId": "abc-123-def",
-  "expression": "Database(database=\"sales_db\") | Query(\"SELECT * FROM customers LIMIT 10\") | Import();",
-  "tz": "America/New_York"
-}`, 'http', 'POST /api/engine/runPixel')
-                    },
-                    {
-                        title: 'Key Fields',
+                        title: 'Text Content',
                         content: `
                             <ul>
-                                <li><code>insightId</code> — Session context (or "new")</li>
-                                <li><code>expression</code> — Pixel command string (required)</li>
-                                <li><code>tz</code> — Timezone (optional)</li>
-                                <li><code>dropLogging</code> — Disable logging flag (optional)</li>
+                                <li><code>inputUIPrompt</code> — Original user text</li>
+                                <li><code>inputPrompt</code> — Augmented prompt (RAG chunks added)</li>
+                                <li><code>systemPrompt</code> — System instructions</li>
                             </ul>
-                            ${C.callout('The <code>insightId</code> identifies the stateful session where variables, frames, and panels are stored.', 'tip')}
+                        `
+                    },
+                    {
+                        title: 'Tool Execution',
+                        content: `
+                            <ul>
+                                <li><code>toolCallId</code> — Links to LLM's request</li>
+                                <li><code>toolName</code> — Which tool ran</li>
+                                <li><code>toolStatus</code> — "success" or "error"</li>
+                                <li><code>toolParameterValues</code> — Tool inputs</li>
+                            </ul>
                         `
                     }
                 )}
             `
         },
         {
-            id: "d3-msg-nounmetadata",
-            title: "NounMetadata — Internal Message",
+            id: "d3-msg-responsemessage",
+            title: "ResponseMessage — LLM Output",
             content: `
-                <h2>NounMetadata — The Core Message Type</h2>
-                <p class="lead"><span class="highlight">NounMetadata</span> is the primary data structure for passing values between reactors and through the Pixel execution pipeline.</p>
-                <p>Every reactor returns a <code>NounMetadata</code> object that wraps the actual data with type information.</p>
-                ${C.code(`public class NounMetadata implements Serializable {
-    Object value;               // Actual data (String, Map, Frame, etc.)
-    PixelDataType noun;        // Type descriptor (CONST_STRING, FRAME, MODEL, etc.)
-    List<PixelOperationType> opType;  // Operation context
-    String explanation = "";   // Optional description
-    List<NounMetadata> additionalReturns;  // Extra outputs
+                <h2>ResponseMessage — LLM Responses</h2>
+                <p class="lead"><code>ResponseMessage</code> extends <code>AbstractMessage</code> to represent output from the LLM.</p>
+                <p>It captures text responses, tool calls, thinking traces, and media generation.</p>
+                ${C.code(`public class ResponseMessage extends AbstractMessage {
+    private String content;            // LLM's text response
+    private String thinking;           // Claude extended thinking content
+    private MessageType type;          // RESPONSE_TEXT, RESPONSE_TOOL, RESPONSE_MEDIA
 
-    public NounMetadata(Object value, PixelDataType noun) {
-        this.value = value;
-        this.noun = noun;
-        this.opType.add(PixelOperationType.OPERATION);
+    // Tool responses (when type == RESPONSE_TOOL)
+    private List<Map<String, Object>> toolResponses;
+
+    // Transient link to raw model response
+    private transient AskModelEngineResponse<?> modelEngineResponse;
+
+    @Override
+    public MessageType getMessageType() {
+        return type;
     }
 
-    public Object getValue() { return this.value; }
-    public PixelDataType getNounType() { return this.noun; }
-}`, 'java', 'prerna/sablecc2/om/nounmeta/NounMetadata.java')}
-                <h3>Key Components</h3>
-                <ul>
-                    <li><code>value</code> — The actual payload (String, Integer, Map, Frame, Model, etc.)</li>
-                    <li><code>noun</code> — A <code>PixelDataType</code> enum indicating what the value represents</li>
-                    <li><code>opType</code> — Metadata about how this value was produced</li>
-                    <li><code>additionalReturns</code> — Side-channel for extra outputs (e.g., panel updates)</li>
-                </ul>
-            `
-        },
-        {
-            id: "d3-msg-pixeldatatype",
-            title: "PixelDataType Enum",
-            content: `
-                <h2>PixelDataType — Typing the Message</h2>
-                <p>The <code>PixelDataType</code> enum defines all possible data types that can flow through SEMOSS.</p>
+    // Check if this response includes tool calls
+    public boolean hasToolResponses() {
+        return toolResponses != null && !toolResponses.isEmpty();
+    }
+
+    // Factory methods for common response types
+    public static ResponseMessage text(String content) {
+        return builder().withText(content).withType(MessageType.RESPONSE_TEXT).build();
+    }
+
+    public static ResponseMessage toolResponses(List<Map<String, Object>> toolResponses) {
+        return builder().withToolResponses(toolResponses).build();
+    }
+}`, 'java', 'prerna/engine/impl/model/message/ResponseMessage.java')}
+                <h3>Response Types</h3>
                 ${C.cards([
-                    { badge: 'Category', title: 'Constants', desc: '<code>CONST_STRING</code>, <code>CONST_INT</code>, <code>CONST_DECIMAL</code>, <code>CONST_DATE</code>, <code>NULL_VALUE</code>' },
-                    { badge: 'Category', title: 'Collections', desc: '<code>VECTOR</code>, <code>MAP</code>, <code>FRAME</code>, <code>FRAME_MAP</code>' },
-                    { badge: 'Category', title: 'Engines', desc: '<code>MODEL</code>, <code>STORAGE</code>, <code>VECTORDB</code>' },
-                    { badge: 'Category', title: 'UI Elements', desc: '<code>PANEL</code>, <code>SHEET</code>, <code>TASK</code>, <code>ORNAMENT_MAP</code>' },
-                    { badge: 'Category', title: 'Query Structures', desc: '<code>QUERY_STRUCT</code>, <code>FILTER</code>, <code>JOIN</code>, <code>ALIAS</code>' },
-                    { badge: 'Category', title: 'Advanced', desc: '<code>PIXEL_RUNNER</code>, <code>CUSTOM_DATA_STRUCTURE</code>, <code>MCP_TOOL_EXECUTION</code>' },
+                    { badge: 'RESPONSE_TEXT', title: 'Text Response', desc: 'LLM returns text content — most common type' },
+                    { badge: 'RESPONSE_TOOL', title: 'Tool Call Request', desc: 'LLM wants to execute tool(s) — triggers tool execution loop' },
+                    { badge: 'RESPONSE_MEDIA', title: 'Media Generation', desc: 'LLM generates images or audio (DALL-E, etc.)' },
                 ])}
-                ${C.code(`// Example: Returning different data types from reactors
-// Simple string
-return new NounMetadata("Hello, SEMOSS!", PixelDataType.CONST_STRING);
-
-// A database frame (from variable store)
-ITableDataFrame frame = (ITableDataFrame) insight.getVarStore().get("myFrame");
-return new NounMetadata(frame, PixelDataType.FRAME);
-
-// An LLM model engine (via Utility helper)
-IEngine engine = Utility.getEngine(engineId);
-return new NounMetadata(engine, PixelDataType.MODEL);
-
-// A task from the task store
-TaskStore taskStore = insight.getTaskStore();
-return new NounMetadata(taskStore, PixelDataType.TASK);`, 'java', 'Example NounMetadata returns')}
             `
         },
         {
-            id: "d3-msg-chaining",
-            title: "Chaining & Transformation",
+            id: "d3-msg-builder-pattern",
+            title: "Builder Pattern",
             content: `
-                <h2>Chaining — Output Becomes Input</h2>
-                <p>When you chain reactors with <code>|</code>, the <code>NounMetadata</code> output of one reactor becomes the input of the next.</p>
-                ${C.flow([
-                    { title: 'ReactorA.execute()', desc: 'Returns NounMetadata(value=frameA, noun=FRAME)', accent: true, arrow: '↓ frameA' },
-                    { title: 'ReactorB receives input', desc: 'this.store.makeNoun(frameA) → accessible via getNoun(0)', arrow: '↓ transforms' },
-                    { title: 'ReactorB.execute()', desc: 'Returns NounMetadata(value=frameB, noun=FRAME)', accent: true },
-                ])}
-                ${C.code(`// Example chain: Database | Query | Import
-// Step 1: Database reactor returns DATABASE engine
-NounMetadata step1 = new NounMetadata(engine, PixelDataType.ENGINE);
-
-// Step 2: Query reactor receives engine, returns raw ResultSet
-// Access piped input via store's GenRowStruct
-GenRowStruct grs = this.store.getNoun("curRow");
-NounMetadata inputNoun = grs.getNoun(0);  // gets the engine from previous step
-IEngine engine = (IEngine) inputNoun.getValue();
-ResultSet rs = engine.executeQuery("SELECT * FROM users");
-NounMetadata step2 = new NounMetadata(rs, PixelDataType.RAW_DATA_SET);
-
-// Step 3: Import reactor receives ResultSet, creates Frame
-GenRowStruct grs3 = this.store.getNoun("curRow");
-ResultSet rs = (ResultSet) grs3.getNoun(0).getValue();
-ITableDataFrame frame = createFrame(rs);
-return new NounMetadata(frame, PixelDataType.FRAME);`, 'java', 'Reactor chaining logic')}
-                ${C.callout('The <code>store</code> object in <code>AbstractReactor</code> manages piped inputs via <code>GenRowStruct</code>. Call <code>store.getNoun("curRow")</code> then <code>getNoun(0)</code> to access the previous reactor\'s output.', 'info')}
-            `
-        },
-        {
-            id: "d3-msg-http-output",
-            title: "Output: JSON Response",
-            content: `
-                <h2>Output: JSON Response Structure</h2>
-                <p>The Monolith REST API serializes the final <code>NounMetadata</code> (or array of them) into a JSON response.</p>
-                ${C.code(`{
-  "pixelReturn": [
-    {
-      "pixelExpression": "Database(database=\"sales_db\") | Query(...) | Import();",
-      "output": {
-        "data": [...],  // depends on PixelDataType
-        "headers": ["col1", "col2"],
-        "numRows": 10,
-        "type": "FRAME"
-      },
-      "operationType": ["FRAME"],
-      "additionalOutput": [
-        {
-          "type": "PANEL",
-          "output": { "panelId": "panel_123", ... }
-        }
-      ]
-    }
-  ],
-  "insightID": "abc-123-def"
-}`, 'json', 'Response structure')}
-                <h3>Key Fields</h3>
-                <ul>
-                    <li><code>pixelReturn[]</code> — Array of results (one per Pixel statement)</li>
-                    <li><code>output</code> — Serialized value from <code>NounMetadata.getValue()</code></li>
-                    <li><code>operationType</code> — Corresponds to <code>PixelDataType</code></li>
-                    <li><code>additionalOutput</code> — From <code>NounMetadata.getAdditionalReturn()</code></li>
-                </ul>
-            `
-        },
-        {
-            id: "d3-msg-payloadstruct",
-            title: "PayloadStruct — Java ↔ Python",
-            content: `
-                <h2>PayloadStruct — Cross-Process Messages</h2>
-                <p class="lead">When SEMOSS needs to invoke Python code (GAAS), it uses <span class="highlight">PayloadStruct</span> for TCP communication.</p>
-                <p>This is a separate message protocol optimized for Java ↔ Python serialization.</p>
-                ${C.code(`public class PayloadStruct implements Serializable {
-    public enum OPERATION {
-        R, PYTHON, CHROME, ECHO, ENGINE, REACTOR, INSIGHT, PROJECT, CMD, STDOUT, STDERR, STRUCTURED_STREAM
-    };
-
-    public OPERATION operation = OPERATION.PYTHON;
-    public String methodName = "method";  // Python function name
-    public Object[] payload = null;       // Arguments
-    public Class[] payloadClasses = null; // Argument types
-    public String engineType = null;      // "PY" for Python
-
-    public String insightId = null;       // Session context
-    public String epoc = null;            // Unique request ID (UUID)
-    public String projectId = null;       // Project/app ID
-
-    public boolean response = false;      // Request vs response flag
-    public boolean hasReturn = true;      // Expect return value?
-    public String ex = null;              // Exception message (if error)
-}`, 'java', 'prerna/tcp/PayloadStruct.java')}
-                ${C.callout('PayloadStruct is used <strong>only</strong> for Java ↔ Python communication over TCP sockets. It\'s NOT used for Pixel execution or REST APIs.', 'warning')}
-            `
-        },
-        {
-            id: "d3-msg-payloadstruct-flow",
-            title: "PayloadStruct Flow",
-            content: `
-                <h2>PayloadStruct Message Flow</h2>
-                <p>When a Pixel expression calls a Python engine or reactor, SEMOSS serializes a <code>PayloadStruct</code> and sends it over TCP to the Python GAAS process.</p>
-                ${C.sequence(
-                    ["Java Reactor", "TCPHandler", "Python GAAS", "Python Function"],
-                    [
-                        { from: 0, to: 1, label: 'PayloadStruct(operation=PYTHON, methodName="myFunc", payload=[arg1, arg2])' },
-                        { from: 1, to: 2, label: "TCP socket write (serialized)" },
-                        { from: 2, to: 3, label: "deserialize → call myFunc(arg1, arg2)" },
-                        { from: 3, to: 2, label: "return result", type: "response" },
-                        { from: 2, to: 1, label: "PayloadStruct(response=true, payload=[result])", type: "response" },
-                        { from: 1, to: 0, label: "deserialize result", type: "response" },
-                    ]
-                )}
+                <h2>Builder Pattern for Message Creation</h2>
+                <p>Both <code>InputMessage</code> and <code>ResponseMessage</code> use the Builder pattern for flexible, readable construction.</p>
                 ${C.split(
                     {
-                        title: 'Request',
-                        content: C.code(`PayloadStruct req = new PayloadStruct();
-req.operation = OPERATION.PYTHON;
-req.methodName = "embed_text";
-req.payload = new Object[]{"Hello, world!"};
-req.insightId = insight.getInsightId();
-req.engineType = "PY";
-req.response = false;  // this is a request`, 'java')
+                        title: 'InputMessage Builder',
+                        content: C.code(`// Create a text input message
+InputMessage userMsg = InputMessage.builder(room)
+    .withInputUIPrompt("What is the weather in Madrid?")
+    .withSystemPrompt("You are a helpful assistant.")
+    .withType(MessageType.INPUT_TEXT)
+    .build();
+
+// Create a multimodal input (text + image)
+InputMessage multiModal = InputMessage.builder(room)
+    .withInputUIPrompt("What's in this image?")
+    .withMediaInput("/path/to/image.jpg", room)
+    .build();  // Auto-detects INPUT_MEDIA
+
+// Create a tool execution result
+InputMessage toolResult = InputMessage.toolExecution(
+    room,
+    "call_abc123",           // toolCallId from LLM
+    "get_weather",           // tool name
+    "{\\"temp\\": 22, \\"condition\\": \\"sunny\\"}", // result
+    toolParams,              // original parameters
+    "success"                // status
+);`, 'java')
                     },
                     {
-                        title: 'Response',
-                        content: C.code(`PayloadStruct resp = new PayloadStruct();
-resp.operation = OPERATION.PYTHON;
-resp.methodName = "embed_text";
-resp.payload = new Object[]{embedVector};
-resp.response = true;  // this is a response
-resp.hasReturn = true;`, 'java')
+                        title: 'ResponseMessage Builder',
+                        content: C.code(`// Create a text response
+ResponseMessage textResp = ResponseMessage.builder()
+    .withText("The weather in Madrid is sunny, 22°C.")
+    .withType(MessageType.RESPONSE_TEXT)
+    .build();
+
+// Create a tool call response
+ResponseMessage toolResp = ResponseMessage.builder()
+    .withToolResponses(toolCallsList)
+    .build();  // Auto-sets RESPONSE_TOOL
+
+// Create from AskModelEngineResponse
+AskModelEngineResponse<?> llmResp = modelEngine.ask(...);
+ResponseMessage fromLLM = ResponseMessage.Builder
+    .fromAskModelEngineResponse(llmResp)
+    .build();`, 'java')
                     }
                 )}
+                ${C.callout('<strong>Key insight:</strong> InputMessage requires a <code>Room</code> reference (enforced by builder), while ResponseMessage does not. This is because InputMessage needs room context for media handling.', 'info')}
+            `
+        },
+        {
+            id: "d3-msg-model-logs",
+            title: "Persistence to Model Logs",
+            content: `
+                <h2>Model Logs Database — Conversation History</h2>
+                <p class="lead">Every <code>AbstractMessage</code> instance is persisted to the <strong>model logs database</strong>, creating a permanent conversation history.</p>
+                <p>This enables features like conversation replay, feedback tracking, token accounting, and RAG chunk auditing.</p>
+                ${C.flow([
+                    { title: 'User sends prompt', desc: 'InputMessage created with messageId (UUID v7)' },
+                    { title: 'Saved to model_logs table', desc: 'Row inserted with all fields serialized to JSON', arrow: '↓ INSERT' },
+                    { title: 'LLM responds', desc: 'ResponseMessage created, linked via transactionId', accent: true },
+                    { title: 'Saved to model_logs table', desc: 'Another row inserted', arrow: '↓ INSERT' },
+                    { title: 'Conversation continues', desc: 'Each message = one row in model_logs' },
+                ])}
+                ${C.code(`-- Model logs table schema (simplified)
+CREATE TABLE model_logs (
+    message_id VARCHAR PRIMARY KEY,     -- UUID v7 from AbstractMessage
+    transaction_id VARCHAR,             -- Groups conversation messages
+    parent_message_id VARCHAR,          -- For branching
+    model_id VARCHAR,                   -- Engine ID
+    message_type VARCHAR,               -- INPUT_TEXT, RESPONSE_TEXT, etc.
+    content TEXT,                       -- Message content (JSON serialized)
+    tokens INTEGER,                     -- Token count
+    visible BOOLEAN,                    -- Show in UI?
+    feedback VARCHAR,                   -- User thumbs up/down
+    date_created TIMESTAMP,             -- UTC timestamp
+    ornaments TEXT                      -- JSON metadata (RAG chunks, etc.)
+);
+
+-- Query all messages in a conversation
+SELECT * FROM model_logs
+WHERE transaction_id = 'abc-123-def'
+ORDER BY date_created ASC;`, 'sql', 'Model logs schema and query')}
+                ${C.callout('The model logs database is the single source of truth for all LLM conversations in SEMOSS. It enables conversation replay, debugging, and analytics.', 'info')}
+            `
+        },
+        {
+            id: "d3-msg-ornaments",
+            title: "Ornaments — Flexible Metadata",
+            content: `
+                <h2>Ornaments Pattern — Flexible Metadata Storage</h2>
+                <p class="lead">The <code>ornaments</code> field in <code>AbstractMessage</code> is a <code>Map&lt;String, Object&gt;</code> that stores flexible metadata.</p>
+                <p>This pattern enables extensibility without adding new fields to the base class.</p>
+                ${C.code(`// AbstractMessage.java - Ornaments field and methods
+protected Map<String, Object> ornaments = new HashMap<>();
+
+public void setOrnament(String key, Object value) {
+    if (this.ornaments == null) {
+        this.ornaments = new HashMap<>();
+    }
+    this.ornaments.put(key, value);
+}
+
+public Object getOrnament(String key) {
+    if (this.ornaments == null) {
+        return null;
+    }
+    return this.ornaments.get(key);
+}
+
+public Map<String, Object> getOrnaments() {
+    return this.ornaments;
+}`, 'java', 'prerna/engine/impl/model/message/AbstractMessage.java')}
+                <h3>Common Ornament Keys</h3>
+                ${C.table(
+                    ['Key', 'Purpose', 'Value Type', 'Example'],
+                    [
+                        ['<code>chunks</code>', 'RAG document chunks', 'List&lt;Map&gt;', 'Retrieved passages from vector DB'],
+                        ['<code>citations</code>', 'Source citations', 'List&lt;String&gt;', 'Document references for factual claims'],
+                        ['<code>context</code>', 'Additional context', 'String', 'Extra information not in main prompt'],
+                        ['<code>metadata</code>', 'Custom app data', 'Map', 'Application-specific metadata'],
+                        ['<code>cost</code>', 'API cost tracking', 'Double', 'Dollar cost of this message'],
+                    ]
+                )}
+                ${C.code(`// Example: Adding RAG chunks to InputMessage
+InputMessage msg = InputMessage.builder(room)
+    .withInputUIPrompt("What is SEMOSS?")
+    .withRAGChunks(retrievedChunks)  // Uses setOrnament("chunks", ...)
+    .build();
+
+// Example: Adding custom metadata to ResponseMessage
+ResponseMessage resp = ResponseMessage.builder()
+    .withText("SEMOSS is a platform for...")
+    .withMetadata("source", "documentation")  // Uses setOrnament(...)
+    .build();`, 'java', 'Using ornaments in practice')}
+                ${C.callout('The ornaments pattern allows custom reactors and apps to attach domain-specific metadata without modifying the core AbstractMessage class.', 'tip')}
             `
         },
         {
             id: "d3-msg-handson",
-            title: "Hands-on: Trace a Message",
+            title: "Hands-on: Query Model Logs",
             content: `
-                <h2>Hands-on: Trace a Message Through SEMOSS</h2>
-                ${C.handson('Trace message transformation', `
-                    <h4>Step 1: Execute a Pixel command</h4>
-                    <p>In your browser console, run:</p>
-                    ${C.code(`await window.semoss.executePixel(\`
-  Database(database="MyDatabase")
-  | Query("SELECT name, age FROM people LIMIT 5")
-  | Import();
-\`);`, 'javascript')}
-
-                    <h4>Step 2: Inspect the HTTP request</h4>
-                    <p>Open DevTools → Network tab. Find the <strong>POST /api/engine/runPixel</strong> request. Look at:</p>
-                    <ul>
-                        <li><strong>Request Payload</strong>: What fields are sent?</li>
-                        <li><strong>Response</strong>: What is the structure of <code>pixelReturn[0]</code>?</li>
-                    </ul>
-
-                    <h4>Step 3: Create a custom reactor that logs NounMetadata</h4>
-                    ${C.code(`package prerna.reactor.custom;
-
-import prerna.reactor.AbstractReactor;
-import prerna.sablecc2.om.nounmeta.NounMetadata;
-
-public class LogNounReactor extends AbstractReactor {
-    @Override
-    public NounMetadata execute() {
-        organizeKeys();
-
-        // Get the input from previous reactor
-        GenRowStruct grs = this.store.getNoun("curRow");
-        NounMetadata input = grs.getNoun(0);
-
-        // Log its structure
-        logger.info("NounMetadata received:");
-        logger.info("  Type: " + input.getNounType());
-        logger.info("  Value class: " + input.getValue().getClass().getName());
-        logger.info("  OpType: " + input.getOpType());
-
-        // Pass it through unchanged
-        return input;
-    }
-}`, 'java', 'prerna/reactor/custom/LogNounReactor.java')}
-
-                    <h4>Step 4: Test the logger</h4>
-                    ${C.code(`Database(database="MyDatabase")
-  | Query("SELECT * FROM users LIMIT 3")
-  | LogNoun()
-  | Import();`, 'pixel')}
-                    <p>Check the SEMOSS logs to see the NounMetadata structure printed.</p>
-
-                    <h4>Expected Output</h4>
-                    <p>You should see logs like:</p>
-                    ${C.code(`INFO: NounMetadata received:
-INFO:   Type: RAW_DATA_SET
-INFO:   Value class: java.sql.ResultSet
-INFO:   OpType: [OPERATION]`, 'text')}
-                `)}
+                <h2>Hands-on: Inspect AbstractMessage Instances</h2>
+                ${C.handson('Query and inspect message objects',
+                    '<h4>Step 1: Have a conversation in Playground</h4>' +
+                    '<ol><li>Open the SEMOSS Playground</li><li>Send a few messages to an LLM</li><li>Note the conversation ID (transactionId) from the URL or UI</li></ol>' +
+                    '<h4>Step 2: Query the model logs database</h4><p>Connect to LocalMasterDatabase and run:</p>' +
+                    C.code("SELECT\n    message_id,\n    message_type,\n    LEFT(content, 100) as content_preview,\n    tokens,\n    visible,\n    date_created\nFROM model_logs\nWHERE transaction_id = '<your-transaction-id>'\nORDER BY date_created ASC;", 'sql') +
+                    '<h4>Step 3: Inspect a specific message</h4>' +
+                    C.code("SELECT\n    message_id,\n    message_type,\n    content,\n    ornaments\nFROM model_logs\nWHERE message_id = '<message-id-from-step-2>'", 'sql') +
+                    '<p>Look at the <code>content</code> field — it is a JSON serialization of the InputMessage or ResponseMessage object.</p>' +
+                    '<h4>Step 4: Find messages with ornaments (RAG chunks)</h4>' +
+                    C.code("SELECT\n    message_id,\n    message_type,\n    ornaments\nFROM model_logs\nWHERE transaction_id = '<your-transaction-id>'\nAND ornaments IS NOT NULL\nAND ornaments != '{}'", 'sql') +
+                    '<p>If you used RAG in your conversation, you will see the <code>chunks</code> ornament with retrieved document passages.</p>' +
+                    '<h4>Expected Observations</h4><ul>' +
+                    '<li>Each user prompt = one row with <code>message_type = ' + "'INPUT_TEXT'" + '</code></li>' +
+                    '<li>Each LLM response = one row with <code>message_type = ' + "'RESPONSE_TEXT'" + '</code></li>' +
+                    '<li>Tool executions = <code>INPUT_TOOL_EXEC</code> rows (may have <code>visible = false</code>)</li>' +
+                    '<li>All messages share the same <code>transaction_id</code></li>' +
+                    '<li>Message IDs are UUID v7 (time-ordered)</li></ul>'
+                )}
             `
         },
         {
             id: "d3-msg-summary",
             title: "Summary",
             content: `
-                <h2>Summary: Message Structures in SEMOSS</h2>
+                <h2>Summary: AbstractMessage System</h2>
                 ${C.table(
-                    ["Message Type", "Purpose", "Where Used", "Key Fields"],
+                    ["Class", "Purpose", "Key Fields", "MessageType Values"],
                     [
                         [
-                            "HTTP JSON",
-                            "Browser → Server communication",
-                            "REST API (/api/engine/runPixel)",
-                            "<code>insightId</code>, <code>expression</code>, <code>tz</code>"
+                            "<code>AbstractMessage</code>",
+                            "Base class for all LLM messages",
+                            "messageId (UUID v7), transactionId, modelId, tokens, ornaments",
+                            "Abstract — defined by subclasses"
                         ],
                         [
-                            "NounMetadata",
-                            "Internal reactor communication",
-                            "Pixel execution pipeline",
-                            "<code>value</code>, <code>noun</code> (PixelDataType), <code>opType</code>"
+                            "<code>InputMessage</code>",
+                            "User/system input to LLM",
+                            "inputUIPrompt, systemPrompt, mediaInputs, toolCallId",
+                            "INPUT_TEXT, INPUT_MEDIA, INPUT_TOOL_EXEC"
                         ],
                         [
-                            "PayloadStruct",
-                            "Java ↔ Python TCP communication",
-                            "Python GAAS calls",
-                            "<code>operation</code>, <code>methodName</code>, <code>payload</code>, <code>response</code>"
+                            "<code>ResponseMessage</code>",
+                            "LLM output to user",
+                            "content, thinking, toolResponses",
+                            "RESPONSE_TEXT, RESPONSE_TOOL, RESPONSE_MEDIA"
                         ]
                     ]
                 )}
                 <h3>Key Takeaways</h3>
                 <ul>
-                    <li><strong>HTTP JSON</strong> is the external API contract (browser ↔ server)</li>
-                    <li><strong>NounMetadata</strong> is the internal message format (reactor ↔ reactor)</li>
-                    <li><strong>PayloadStruct</strong> enables cross-language calls (Java ↔ Python)</li>
-                    <li>Reactor chaining works by passing <code>NounMetadata</code> through the <code>store</code></li>
-                    <li><code>PixelDataType</code> enum defines all possible data types in SEMOSS</li>
+                    <li><strong>AbstractMessage</strong> is the foundation of all LLM conversations in SEMOSS</li>
+                    <li><strong>MessageType enum</strong> defines 6 message types (3 input, 3 response)</li>
+                    <li><strong>Builder pattern</strong> enables flexible, readable message construction</li>
+                    <li><strong>Model logs database</strong> persists every message for conversation history</li>
+                    <li><strong>Ornaments</strong> provide extensible metadata without schema changes</li>
+                    <li><strong>UUID v7</strong> messageIds ensure time-ordered, globally unique identifiers</li>
+                    <li><strong>Tool execution loop</strong>: RESPONSE_TOOL → tool execution → INPUT_TOOL_EXEC → continue</li>
                 </ul>
-                ${C.callout('Understanding these three message structures is essential for debugging Pixel execution, building custom reactors, and integrating with external systems.', 'tip')}
+                ${C.callout('Understanding AbstractMessage is essential for debugging LLM conversations, building custom message handlers, and integrating external AI systems with SEMOSS.', 'tip')}
             `
         }
     ]

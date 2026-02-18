@@ -24,17 +24,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Debug: Log allSlides breakdown by day
+    console.log('[DEBUG] allSlides populated:', allSlides.length, 'total slides');
+    console.log('[DEBUG] Slides by day:', {
+        day1: allSlides.filter(s => s.id.startsWith('d1-')).length,
+        day2: allSlides.filter(s => s.id.startsWith('d2-')).length,
+        day3: allSlides.filter(s => s.id.startsWith('d3-')).length,
+        day4: allSlides.filter(s => s.id.startsWith('d4-')).length,
+        day5: allSlides.filter(s => s.id.startsWith('d5-')).length
+    });
+
     // Load initial slide (check URL hash)
     // Important: This must happen AFTER allSlides is built
     const hash = window.location.hash.slice(1);
+    console.log('[DEBUG] Initial hash:', hash);
     if (hash && allSlides.length > 0) {
         const idx = allSlides.findIndex(s => s.id === hash);
+        console.log('[DEBUG] Hash lookup result:', { hash, foundIndex: idx, exists: idx >= 0 });
         if (idx >= 0) {
             currentSlideIndex = idx;
+            console.log('[DEBUG] Setting currentSlideIndex to', idx, '(slide:', allSlides[idx]?.id, ')');
         } else {
             console.warn(`Slide not found for hash: #${hash}, defaulting to first slide`);
             currentSlideIndex = 0;
         }
+    } else {
+        console.log('[DEBUG] No hash or allSlides empty, defaulting to first slide');
     }
 
     renderSlide();
@@ -58,12 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle hash changes (browser back/forward, direct links)
     window.addEventListener('hashchange', () => {
         const hash = window.location.hash.slice(1);
+        console.log('[DEBUG] hashchange event fired, new hash:', hash);
         if (hash && allSlides.length > 0) {
             const idx = allSlides.findIndex(s => s.id === hash);
+            console.log('[DEBUG] hashchange lookup:', { hash, foundIndex: idx, currentIndex: currentSlideIndex });
             if (idx >= 0 && idx !== currentSlideIndex) {
+                console.log('[DEBUG] Navigating to slide', idx, ':', allSlides[idx]?.id);
                 currentSlideIndex = idx;
                 renderSlide();
                 updateNav();
+            } else if (idx < 0) {
+                console.warn('[DEBUG] hashchange: Slide not found for hash:', hash);
+            } else {
+                console.log('[DEBUG] hashchange: Already on this slide');
             }
         }
     });
@@ -82,9 +104,20 @@ function buildNavStructure() {
         typeof day5Data !== 'undefined' ? day5Data : null,
     ];
 
+    // Debug: Log which day data is loaded
+    console.log('[DEBUG] Day data availability:', {
+        day1: typeof day1Data !== 'undefined',
+        day2: typeof day2Data !== 'undefined',
+        day3: typeof day3Data !== 'undefined',
+        day4: typeof day4Data !== 'undefined',
+        day5: typeof day5Data !== 'undefined'
+    });
+
     dayDataSources.forEach(dayData => {
         if (dayData) navStructure.push(dayData);
     });
+
+    console.log('[DEBUG] navStructure built with', navStructure.length, 'days');
 }
 
 // Build sidebar HTML

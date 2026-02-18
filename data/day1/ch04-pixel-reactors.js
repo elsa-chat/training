@@ -64,19 +64,19 @@ Echo("Hello, SEMOSS!");
 // List your engines
 MyEngines();
 
-// Query a database
-Database(database="my_database") | Query("SELECT * FROM users LIMIT 10");
+// Query a database (use engine ID for database engines)
+Database(database="bd1dea64-ec6b-49af-9308-94b05551c83d") | Query("SELECT * FROM users LIMIT 10");
 
-// Call an LLM
-LLM(engine="my-gpt4-engine", command="What is SEMOSS?");
+// Call an LLM (use engine ID)
+LLM(engine="a1b2c3d4-5e6f-7890-abcd-1234567890ab", command="What is SEMOSS?");
 
 // Get engine metadata
-EngineMetadata(engine="my_database");
+EngineMetadata(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");
 
-// Import query results into a frame (in-memory table)
-Database(database="my_database")
+// Query and collect results
+Database(database="bd1dea64-ec6b-49af-9308-94b05551c83d")
   | Query("SELECT name, age FROM people")
-  | Import();`, 'pixel', 'Common Pixel Commands')}
+  | Collect(500);`, 'pixel', 'Common Pixel Commands')}
             `
         },
         {
@@ -88,14 +88,12 @@ Database(database="my_database")
                 ${C.split(
                     {
                         title: 'Query → Transform → Visualize',
-                        content: C.code(`Database(database="sales_db")
-  | Query("SELECT region, SUM(revenue) as total
-           FROM sales GROUP BY region")
+                        content: C.code(`Database(database="a7f3c2e1-9d8b-4c5a-b6e7-3f2a1d9c8b7a")
+  | Query("SELECT region, SUM(revenue) as total FROM sales GROUP BY region")
   | Import()
   | Frame()
   | QueryAll()
-  | AutoTaskOptions(panel="0",
-      layout="BarChart")
+  | AutoTaskOptions(panel="0", layout="BarChart")
   | Collect(500);`, 'pixel')
                     },
                     {
@@ -130,13 +128,8 @@ myList = ["a", "b", "c"];
 myEngine = "my-gpt4-engine";
 LLM(engine=myEngine, command="Tell me a joke");
 
-// Variable from a query result
-result = Database(database="my_db") | Query("SELECT COUNT(*) FROM users");
-Echo(result);
-
-// AddVar reactor — explicit variable storage
-AddVar("greeting", "Hola, Spain!");
-Echo(<greeting>);`, 'pixel', 'Pixel Variables')}
+// Database query example
+Database(database = "66cf4dbb-483f-42e7-8804-4e3d5af89287") | Query("<encode> your select query </encode>") | Collect(500);`, 'pixel', 'Pixel Variables')}
                 ${C.callout('Variables persist within the scope of the current <strong>insight</strong> (session). They are not shared across different insights or users.', 'info')}
             `
         },
@@ -162,34 +155,69 @@ Echo(<greeting>);`, 'pixel', 'Pixel Variables')}
             title: "Anatomy of a Reactor",
             content: `
                 <h2>Anatomy of a Reactor</h2>
-                ${C.code(`// src/prerna/reactor/EchoReactor.java
-// NOTE: Simplified for teaching — actual uses ReactorKeysEnum & GenRowStruct
-package prerna.reactor;
+                ${C.code(`// src/prerna/date/reactor/DateReactor.java
+package prerna.date.reactor;
 
-public class EchoReactor extends AbstractReactor {
+import java.util.Calendar;
+import prerna.date.SemossDate;
+import prerna.reactor.AbstractReactor;
+import prerna.sablecc2.om.PixelDataType;
+import prerna.sablecc2.om.nounmeta.NounMetadata;
 
-    public EchoReactor() {
-        // Actual: this.keysToGet = new String[] { ReactorKeysEnum.VALUE.getKey() };
-        this.keysToGet = new String[] { "0" };  // simplified positional param
+public class DateReactor extends AbstractReactor {
+    private static final String DEFAULT_FORMAT = "yyyy-MM-dd";
+
+    public DateReactor() {
+        this.keysToGet = new String[]{"date", "format"};
+        this.keyRequired = new int[] {0,0};
     }
 
     @Override
     public NounMetadata execute() {
-        // Actual retrieval pattern:
-        // GenRowStruct grs = this.store.getGenRowStruct(this.keysToGet[0]);
-        // return grs.getNoun(0);  // already wrapped as NounMetadata
+        organizeKeys();
+        SemossDate date = null;
+        String pattern = DEFAULT_FORMAT;
 
-        // Simplified for teaching:
-        String input = this.curRow.get(0).toString();
-        return new NounMetadata(input, PixelDataType.CONST_STRING);
+        // determine format
+        if(this.keyValue.containsKey(this.keysToGet[1])) {
+            pattern = this.keyValue.get(this.keysToGet[1]);
+        }
+
+        if(this.keyValue.containsKey(this.keysToGet[0])) {
+            String strDate = this.keyValue.get(this.keysToGet[0]);
+            date = new SemossDate(strDate, pattern);
+            date.getZonedDateTime();
+        } else {
+            date = new SemossDate(Calendar.getInstance().getTime(), pattern);
+        }
+
+        return new NounMetadata(date, PixelDataType.CONST_DATE);
     }
-}`, 'java', 'EchoReactor (teaching version — see actual source for production code)')}
+
+    @Override
+    public String getReactorDescription() {
+        return "Get todays date or return a date based on a specific date input and format";
+    }
+
+    @Override
+    protected String getDescriptionForKey(String key) {
+        if("date".equals(key)) {
+            return "A specific date to return. This is a string and assumes a date of yyyy-MM-dd";
+        } else if("format".equals(key)) {
+            return "A specified format for the date parameter to parse. This should be a Java compliant format";
+        }
+        return super.getDescriptionForKey(key);
+    }
+}`, 'java', 'DateReactor — Production code from prerna.date.reactor')}
                 <h3>Key Patterns</h3>
                 <ul>
-                    <li><code>keysToGet</code> — declares expected parameter names</li>
-                    <li><code>curRow</code> — the bound parameter values (filled by <code>setNoun</code>)</li>
+                    <li><code>keysToGet</code> — declares expected parameter names ("date", "format")</li>
+                    <li><code>keyRequired</code> — specifies which params are required (0=optional for both)</li>
+                    <li><code>organizeKeys()</code> — populates <code>keyValue</code> map from input params</li>
                     <li><code>execute()</code> — the core logic, always returns <code>NounMetadata</code></li>
-                    <li><code>NounMetadata</code> — wraps <strong>value</strong> + <strong>PixelDataType</strong> + <strong>PixelOperationType</strong></li>
+                    <li><code>getReactorDescription()</code> — provides user-facing documentation</li>
+                    <li><code>getDescriptionForKey()</code> — documents each parameter</li>
+                    <li><code>NounMetadata</code> — wraps <strong>value</strong> + <strong>PixelDataType</strong></li>
                 </ul>
             `
         },
@@ -302,18 +330,19 @@ Content-Type: application/json
                 <h2>Full Request Flow: UI → Reactor → Engine</h2>
                 <p>Putting it all together — here's what happens when a user runs a Pixel command:</p>
                 ${C.sequence(
-                    ['Browser (React)', 'Monolith (Servlet)', 'Pixel Parser', 'ReactorFactory', 'Reactor.execute()', 'Engine'],
+                    ["Browser/UI", "REST API (Monolith)", "PixelRunner", "Reactor", "Engine"],
                     [
-                        { from: 0, to: 1, label: 'POST /api/engine/runPixel { expression }' },
-                        { from: 1, to: 2, label: 'parsePixel(expression)' },
-                        { from: 2, to: 3, label: 'resolve("Database") → DatabaseReactor.class' },
-                        { from: 3, to: 4, label: 'new DatabaseReactor(); reactor.execute()' },
-                        { from: 4, to: 5, label: 'engine.execQuery(sql)' },
-                        { from: 5, to: 4, label: 'Object (result)', type: 'response' },
-                        { from: 4, to: 1, label: 'NounMetadata → JSON', type: 'response' },
-                        { from: 1, to: 0, label: 'HTTP 200 { pixelReturn }', type: 'response' },
+                        { from: 0, to: 1, label: "POST /api/engine/runPixel" },
+                        { from: 1, to: 2, label: "Parse Pixel expression" },
+                        { from: 2, to: 3, label: "Instantiate & execute()" },
+                        { from: 3, to: 4, label: "Execute operation (query/inference)" },
+                        { from: 4, to: 3, label: "Raw result", type: "response" },
+                        { from: 3, to: 2, label: "NounMetadata", type: "response" },
+                        { from: 2, to: 1, label: "pixelReturn[]", type: "response" },
+                        { from: 1, to: 0, label: "JSON response", type: "response" }
                     ]
                 )}
+                ${C.callout('The <strong>PixelRunner</strong> parses the Pixel string, resolves reactor names to classes (via ReactorFactory), and executes them in sequence. Each reactor returns a <code>NounMetadata</code> object that becomes the input to the next reactor in the chain.', 'info')}
             `
         },
         {
@@ -340,9 +369,9 @@ return error;`, 'java')
                     {
                         title: 'In Pixel',
                         content: C.code(`// Errors stop the chain
-Database(database="nonexistent_db")
+Database(database="00000000-0000-0000-0000-000000000000")
   | Query("SELECT 1");
-// → Error: Engine 'nonexistent_db'
+// → Error: Engine '00000000-...'
 //   not found
 
 // Check the Notebook output
@@ -380,18 +409,16 @@ greeting = "Hola, SEMOSS!";
 Echo(greeting);`, 'pixel')}
 
                     <h4>Exercise 2: Query a Database</h4>
-                    ${C.code(`Database(database="country_db")
+                    ${C.code(`Database(database="f9e8d7c6-b5a4-4321-9876-1e2d3c4b5a6f")
   | Query("SELECT * FROM country LIMIT 5");`, 'pixel')}
 
                     <h4>Exercise 3: Call an LLM</h4>
-                    ${C.code(`LLM(engine="my-gpt4-engine",
+                    ${C.code(`LLM(engine="a1b2c3d4-5e6f-7890-abcd-1234567890ab",
     command="What is the capital of Spain?");`, 'pixel')}
 
                     <h4>Exercise 4: Chain Commands</h4>
-                    ${C.code(`Database(database="country_db")
-  | Query("SELECT country_name, population
-           FROM country
-           ORDER BY population DESC LIMIT 10")
+                    ${C.code(`Database(database="f9e8d7c6-b5a4-4321-9876-1e2d3c4b5a6f")
+  | Query("SELECT country_name, population FROM country ORDER BY population DESC LIMIT 10")
   | Import()
   | Frame()
   | QueryAll()

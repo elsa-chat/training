@@ -86,6 +86,7 @@ public interface IModelEngine extends IEngine {
                     {
                         title: 'Supported Types',
                         content: `
+                            <p><strong>SEMOSS can connect to almost ALL major databases</strong> via JDBC drivers. Common examples:</p>
                             <ul>
                                 <li><strong>H2</strong> — Embedded (local master DB)</li>
                                 <li><strong>PostgreSQL</strong> — Primary RDBMS</li>
@@ -94,6 +95,7 @@ public interface IModelEngine extends IEngine {
                                 <li><strong>Databricks</strong></li>
                                 <li><strong>RDF / Sesame</strong> — Triple stores</li>
                             </ul>
+                            <p><em>And many more — any JDBC-compatible database is supported!</em></p>
                         `
                     },
                     {
@@ -102,18 +104,17 @@ public interface IModelEngine extends IEngine {
                             <ul>
                                 <li>A <strong>JDBC connection</strong> (pooled)</li>
                                 <li>An <strong>OWL metadata layer</strong></li>
-                                <li>Connection URL with <code>@BaseFolder@</code> placeholder</li>
                                 <li>Registered in <strong>LocalMasterDatabase</strong></li>
                             </ul>
                         `
                     }
                 )}
                 ${C.code(`// How a database query flows through the system
-// 1. Pixel command
-Database(database="my_db") | Query("SELECT * FROM users LIMIT 10");
+// 1. Pixel command (uses engine ID, not name)
+Database(database="bd1dea64-ec6b-49af-9308-94b05551c83d") | Query("SELECT * FROM users LIMIT 10");
 
-// 2. Java: DatabaseReactor resolves the engine
-IDatabaseEngine engine = Utility.getDatabase("my_db");
+// 2. Java: DatabaseReactor resolves the engine by ID
+IDatabaseEngine engine = Utility.getDatabase("bd1dea64-ec6b-49af-9308-94b05551c83d");
 
 // 3. Java: QueryReactor executes against the engine
 Object result = engine.execQuery(sqlString);
@@ -131,7 +132,7 @@ Object result = engine.execQuery(sqlString);
                 ${C.sequence(
                     ['Pixel', 'LLMReactor', 'GAAS (Python)', 'Provider API'],
                     [
-                        { from: 0, to: 1, label: 'LLM(engine="gpt4", command="...")' },
+                        { from: 0, to: 1, label: 'LLM(engine="e5f6a7b8-9c0d-1e2f-3a4b-5c6d7e8f9a0b", command="...")' },
                         { from: 1, to: 2, label: 'TCP: model_engine.ask(prompt, params)' },
                         { from: 2, to: 3, label: 'openai.chat.completions.create(...)' },
                         { from: 3, to: 2, label: 'completion response', type: 'response' },
@@ -168,13 +169,13 @@ Object result = engine.execQuery(sqlString);
                 ])}
                 ${C.code(`// Pixel: Add documents to a vector engine
 VectorDatabaseUpload(
-    engine="my_vector_db",
+    engine="a1b2c3d4-5e6f-7890-abcd-ef1234567890",
     filePath="/path/to/document.pdf"
 );
 
 // Pixel: Search the vector engine
 VectorDatabaseQuery(
-    engine="my_vector_db",
+    engine="a1b2c3d4-5e6f-7890-abcd-ef1234567890",
     searchStatement="What is the refund policy?",
     limit=5
 );`, 'pixel', 'Vector Engine — Pixel Commands')}
@@ -194,15 +195,15 @@ VectorDatabaseQuery(
                     { badge: 'Guardrail', title: 'Validation', desc: 'Pre/post processing for LLM I/O — PII, toxicity, custom rules.' },
                 ])}
                 ${C.code(`// Storage engine — upload a file
-Storage(engine="my_s3")
+Storage(engine="b2c3d4e5-6f7a-8b9c-0d1e-2f3a4b5c6d7e")
     | UploadFile(filePath="/local/data.csv", storagePath="uploads/data.csv");
 
 // Function engine — call a custom API
-Function(engine="weather_api")
+Function(engine="c3d4e5f6-7a8b-9c0d-1e2f-3a4b5c6d7e8f")
     | RunFunction(city="Madrid");
 
 // Guardrail — apply to an LLM call
-LLM(engine="gpt4", command="...", guardrails=["pii_filter"]);`, 'pixel', 'Storage, Function & Guardrail — Pixel Commands')}
+LLM(engine="d4e5f6a7-8b9c-0d1e-2f3a-4b5c6d7e8f9a", command="...", guardrails=["pii_filter"]);`, 'pixel', 'Storage, Function & Guardrail — Pixel Commands')}
             `
         },
         {
@@ -215,17 +216,17 @@ LLM(engine="gpt4", command="...", guardrails=["pii_filter"]);`, 'pixel', 'Storag
                     {
                         title: 'Database Engine .smss',
                         content: C.code(`# Base Properties
-ENGINE         LocalMasterDatabase
-ENGINE_TYPE    prerna.engine.impl.rdbms.H2EmbeddedServerEngine
-OWL            MasterDatabase_OWL.OWL
+ENGINE         66cf4dbb-483f-42e7-8804-4e3d5af89287
+ENGINE_ALIAS   Diabetes
+ENGINE_TYPE    prerna.engine.impl.rdbms.RDBMSNativeEngine
+OWL            Diabetes_OWL.OWL
 
+# Database Connection
 RDBMS_TYPE     H2_DB
 DRIVER         org.h2.Driver
 USERNAME       sa
 PASSWORD       ****
-CONNECTION_URL jdbc:h2:nio:@BaseFolder@/db/@ENGINE@/database
-USE_CONNECTION_POOLING  false
-DATABASE_ZONEID UTC`, 'properties', 'db/LocalMasterDatabase.smss')
+CONNECTION_URL jdbc:h2:nio:@BaseFolder@/db/@ENGINE@/database`, 'properties', 'db/Diabetes__66cf4dbb-483f-42e7-8804-4e3d5af89287.smss')
                     },
                     {
                         title: 'Key Fields',
@@ -255,7 +256,7 @@ DATABASE_ZONEID UTC`, 'properties', 'db/LocalMasterDatabase.smss')
                 ${C.flow([
                     { title: '1. Create', desc: 'User creates via UI or API call' },
                     { title: '2. Write .smss', desc: 'Config file written to db/ | model/ | vector/ etc.', arrow: '↓' },
-                    { title: '3. Register', desc: 'Entry added to LocalMasterDatabase', accent: true, arrow: '↓' },
+                    { title: '3. Register', desc: 'Entry added to Security DB (all engines) and LocalMasterDatabase (database engines)', accent: true, arrow: '↓' },
                     { title: '4. Open', desc: 'engine.open(smssProperties) — connection established', arrow: '↓' },
                     { title: '5. Use', desc: 'Reactors interact with engine via interface methods', arrow: '↓' },
                     { title: '6. Sync (optional)', desc: 'SMSS watcher syncs to cloud storage for cluster deployments' },
@@ -275,28 +276,44 @@ private static IEngine loadEngine(String smssFilePath, Properties smssProp) {
         },
         {
             id: "d1-engines-handson",
-            title: "Hands-on: Configure an LLM Engine",
+            title: "Hands-on: Create Database from CSV",
             content: `
-                <h2>Hands-on: Configure an LLM Engine</h2>
-                ${C.handson('Create Your First Model Engine', `
+                <h2>Hands-on: Create Database from CSV</h2>
+                ${C.handson('Upload CSV → H2 Database Engine', `
+                    <h4>Part 1: Create the Engine via UI</h4>
                     <ol>
                         <li>Open the SEMOSS training instance in your browser</li>
-                        <li>Navigate to <strong>Engine Catalog → Add Engine → Model</strong></li>
-                        <li>Select <strong>OpenAI</strong> as the provider</li>
-                        <li>Enter your API key in the configuration</li>
-                        <li>Set the model to <strong>gpt-4</strong></li>
-                        <li>Name your engine (e.g., <code>my-gpt4-engine</code>)</li>
-                        <li>Click <strong>Test Connection</strong> to verify</li>
-                        <li>Save the engine</li>
+                        <li>Navigate to <strong>Database Catalog</strong></li>
+                        <li>Click <strong>Add Database</strong></li>
+                        <li>Choose <strong>File Upload</strong> method</li>
+                        <li>Select <strong>H2</strong> database type</li>
+                        <li>Choose a sample CSV file (e.g., sales data, customer list, any dataset)</li>
+                        <li>Name your database (e.g., <code>MySalesDB</code>)</li>
+                        <li>Click <strong>Upload</strong> — SEMOSS creates an H2 database automatically</li>
+                        <li>Wait for the import to complete</li>
                     </ol>
-                    <h4>Verify</h4>
+                    <h4>Part 2: Explore What Got Created</h4>
+                    <p>Behind the scenes, SEMOSS created several files. Let's find them:</p>
                     <ol>
-                        <li>Find the engine in the catalog</li>
-                        <li>Go to <strong>Chat</strong> and select your engine — ask it a question</li>
-                        <li>Open the <strong>Notebook</strong> and run: <code>LLM(engine="my-gpt4-engine", command="Hello!");</code></li>
+                        <li>Navigate to the server filesystem: <code>db/</code> directory</li>
+                        <li>Find your new database folder: <code>MySalesDB__[UUID]/</code></li>
+                        <li>Inside you'll see:
+                            <ul>
+                                <li><code>MySalesDB__[UUID].smss</code> — Engine configuration file</li>
+                                <li><code>database.mv.db</code> — H2 database file</li>
+                                <li><code>MySalesDB_OWL.OWL</code> — Schema metadata</li>
+                            </ul>
+                        </li>
+                        <li>Open the <code>.smss</code> file — notice the fields we learned about (ENGINE, ENGINE_ALIAS, ENGINE_TYPE, CONNECTION_URL, etc.)</li>
                     </ol>
-                    <h4>Bonus: Find the .smss</h4>
-                    <p>Navigate to the <code>model/</code> directory on the server filesystem and find the <code>.smss</code> file for your new engine. What fields does it contain?</p>
+                    <h4>Part 3: Query Your New Database</h4>
+                    <ol>
+                        <li>Go to <strong>Notebook</strong> in SEMOSS</li>
+                        <li>Run a query using Pixel: <code>Database(database="[your-engine-id]") | Query("SELECT * FROM [table-name] LIMIT 10");</code></li>
+                        <li>See your CSV data now queryable as a database!</li>
+                    </ol>
+                    <h4>Key Takeaway</h4>
+                    <p><strong>UI Action → File System Result:</strong> When you upload a CSV, SEMOSS creates an H2 engine, registers it in LocalMasterDatabase, writes a <code>.smss</code> config, and stores the data. This is the engine lifecycle in action!</p>
                 `)}
             `
         }

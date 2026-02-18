@@ -155,7 +155,7 @@ USER_EMAIL_ID      VARCHAR(50)      -- User email`, 'sql', 'src/prerna/engine/im
                 <p>You can query the logs database like any SEMOSS database engine using Pixel or SQL.</p>
                 <h3>Via Pixel</h3>
                 ${C.code(`// Query recent messages
-Database(database="MODEL_INFERENCE_LOGS_DB")
+Database(database="a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d")
   | Query("SELECT MESSAGE_ID, MESSAGE_TYPE, USER_NAME, DATE_CREATED, RESPONSE_TIME
            FROM MESSAGE
            ORDER BY DATE_CREATED DESC
@@ -164,7 +164,7 @@ Database(database="MODEL_INFERENCE_LOGS_DB")
   | Collect(100);
 
 // Token usage by user
-Database(database="MODEL_INFERENCE_LOGS_DB")
+Database(database="a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d")
   | Query("SELECT USER_NAME, SUM(MESSAGE_TOKENS) as TOTAL_TOKENS, COUNT(*) as MESSAGE_COUNT
            FROM MESSAGE
            WHERE DATE_CREATED >= DATEADD('DAY', -7, CURRENT_DATE)
@@ -311,7 +311,7 @@ FROM MESSAGE;
 
 // Archive messages older than 90 days
 -- Step 1: Export to CSV
-Database(database="MODEL_INFERENCE_LOGS_DB")
+Database(database="a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d")
   | Query("SELECT * FROM MESSAGE WHERE DATE_CREATED < DATEADD('DAY', -90, CURRENT_DATE)")
   | ToCsv(filePath="archived_messages_2024Q1.csv");
 
@@ -334,7 +334,7 @@ VACUUM FULL MESSAGE;`, 'sql', 'Log retention management')}
                     <p>The Spain team reports that LLM responses are slow in the afternoon. Use the logs database to investigate.</p>
 
                     <h4>Step 1: Check Recent Response Times</h4>
-                    ${C.code(`Database(database="MODEL_INFERENCE_LOGS_DB")
+                    ${C.code(`Database(database="a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d")
   | Query("SELECT
             HOUR(DATE_CREATED) as HOUR,
             AVG(RESPONSE_TIME) as AVG_MS,
@@ -350,7 +350,7 @@ VACUUM FULL MESSAGE;`, 'sql', 'Log retention management')}
   | Collect(500);`, 'pixel')}
 
                     <h4>Step 2: Identify Slow Models</h4>
-                    ${C.code(`Database(database="MODEL_INFERENCE_LOGS_DB")
+                    ${C.code(`Database(database="a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d")
   | Query("SELECT
             MODEL_ID,
             AVG(RESPONSE_TIME) as AVG_MS,
@@ -365,7 +365,7 @@ VACUUM FULL MESSAGE;`, 'sql', 'Log retention management')}
   | Collect(100);`, 'pixel')}
 
                     <h4>Step 3: Find Heavy Users (if applicable)</h4>
-                    ${C.code(`Database(database="MODEL_INFERENCE_LOGS_DB")
+                    ${C.code(`Database(database="a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d")
   | Query("SELECT
             USER_NAME,
             COUNT(*) as REQUEST_COUNT,
@@ -379,7 +379,7 @@ VACUUM FULL MESSAGE;`, 'sql', 'Log retention management')}
   | Collect(100);`, 'pixel')}
 
                     <h4>Step 4: Check for Errors</h4>
-                    ${C.code(`Database(database="MODEL_INFERENCE_LOGS_DB")
+                    ${C.code(`Database(database="a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d")
   | Query("SELECT
             MESSAGE_ID,
             USER_NAME,

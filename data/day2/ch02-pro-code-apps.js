@@ -304,7 +304,7 @@ export function QueryRunner() {
     const runQuery = async () => {
         setLoading(true);
         try {
-            const pixel = \`Database(database="my_db") | Query("\${query}");\`;
+            const pixel = \`Database(database="d5e6f7a8-b9c0-4d1e-8f2a-3b4c5d6e7f8a") | Query("\${query}");\`;
             const { pixelReturn, errors } = await runPixel(
                 pixel,
                 insightId

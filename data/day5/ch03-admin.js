@@ -106,13 +106,13 @@ MyEngines(
 );
 
 // Get engine health status
-EngineHealth(engine="my-database");
+EngineHealth(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");
 
 // Get engine metadata
-EngineMetadata(engine="my-database");
+EngineMetadata(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");
 
 // Delete an engine (admin)
-DeleteEngine(engine="my-database");`, 'pixel', 'Engine Management Commands')}
+DeleteEngine(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");`, 'pixel', 'Engine Management Commands')}
                 ${C.table(
                     ['Reactor', 'Purpose', 'Admin Only'],
                     [

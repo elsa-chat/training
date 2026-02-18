@@ -111,21 +111,35 @@ const day2_ch04 = {
             title: "Java → Python Communication",
             content: `
                 <h2>Java → Python Communication Flow</h2>
-                <p>When Java needs to run Python code, it sends a PayloadStruct over the TCP socket and waits for a response.</p>
+                <p>When Java needs to run Python code, it sends a PayloadStruct over TCP and waits for a response with a matching unique identifier.</p>
                 ${C.sequence(
-                    ['PyTranslator (Java)', 'SocketClient', 'TCP Socket', 'GAAS Handler', 'Python Runtime'],
+                    ["Java (PyTranslator)", "TCP Socket", "GAAS Server", "Python Runtime"],
                     [
-                        { from: 0, to: 1, label: 'getString("str(42)")' },
-                        { from: 1, to: 2, label: 'PayloadStruct{ operation=PYTHON, payload=["str(42)"] }' },
-                        { from: 2, to: 3, label: 'Read 4-byte len + 20-byte epoc + JSON' },
-                        { from: 3, to: 4, label: 'exec(code, insight_globals)' },
-                        { from: 4, to: 3, label: 'result = "42"', type: 'response' },
-                        { from: 3, to: 2, label: 'PayloadStruct{ response=true, payload=["42"] }', type: 'response' },
-                        { from: 2, to: 1, label: 'JSON response', type: 'response' },
-                        { from: 1, to: 0, label: 'return "42"', type: 'response' },
+                        { from: 0, to: 1, label: "Send PayloadStruct (PYTHON operation)" },
+                        { from: 1, to: 2, label: "4-byte len + 20-byte epoc + JSON payload" },
+                        { from: 2, to: 3, label: "exec(code, insight_globals)" },
+                        { from: 3, to: 2, label: "result", type: "response" },
+                        { from: 2, to: 1, label: "PayloadStruct (response=true)", type: "response" },
+                        { from: 1, to: 0, label: "Return result to caller", type: "response" }
                     ]
                 )}
-                ${C.callout('Each request gets a unique <code>epoc</code> UUID. Java blocks until a response with the same <code>epoc</code> arrives.', 'info')}
+                ${C.callout('Each request gets a unique <code>epoc</code> (UUID). Java blocks until a response with the same <code>epoc</code> arrives, ensuring request/response pairing in concurrent environments.', 'info')}
+                <h3>PayloadStruct Format</h3>
+                ${C.code(`// Request from Java
+{
+    "operation": "PYTHON",
+    "epoc": "abc12345-6789-...",
+    "payload": ["str(42)"],
+    "response": false
+}
+
+// Response from Python
+{
+    "operation": "PYTHON",
+    "epoc": "abc12345-6789-...",  // Same as request
+    "payload": ["42"],
+    "response": true
+}`, 'json', 'PayloadStruct JSON structure')}
             `
         },
         {
@@ -184,7 +198,7 @@ Py("<encode>x = 10; print(x)</encode>");  // Output: 10
 
 // Run Python and get result
 result = Py("<encode>42 * 2</encode>");
-Echo(result);  // 84
+result;  // 84
 
 // Load a Python file from app assets
 LoadPyFromFileProjectPy(
@@ -459,7 +473,7 @@ LoadPyFromFileProjectPy(
 
 // Call a function
 result = Py("<encode>calculate_stats([1, 2, 3, 4, 5])</encode>");
-Echo(result);`, 'pixel')}
+result;`, 'pixel')}
 
                     <h4>Step 3: Generate MCP Manifest</h4>
                     ${C.code(`// Generate MCP tool definition

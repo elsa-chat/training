@@ -389,22 +389,22 @@ Frame(frame=["salesFrame"])
             title: "Variables Panel",
             content: `
                 <h2>Variables Panel — Inspecting State</h2>
-                <p>The <strong>Variables</strong> panel in the App Designer shows all StateStore variables with type icons and preview values.</p>
+                <p>The <strong>Variables</strong> panel in the App Designer shows all StateStore variables with type indicators and preview values.</p>
                 ${C.table(
-                    ['Icon', 'Type', 'Description'],
+                    ['Type', 'Description'],
                     [
-                        ['<img src="/path/VariableString.svg" width="20" />', '<code>String</code>', 'Text values'],
-                        ['<img src="/path/VariableNumber.svg" width="20" />', '<code>Number</code>', 'Integers, floats'],
-                        ['<img src="/path/VariableDate.svg" width="20" />', '<code>Date</code>', 'Date/time values'],
-                        ['<img src="/path/VariableArray.svg" width="20" />', '<code>Array</code>', 'Lists/vectors'],
-                        ['<img src="/path/VariableJSON.svg" width="20" />', '<code>JSON</code>', 'Objects/maps'],
-                        ['<img src="/path/VariableDatabase.svg" width="20" />', '<code>Frame</code>', 'Data frames (tables)'],
-                        ['<img src="/path/VariableFunction.svg" width="20" />', '<code>Function</code>', 'Lambda/callable'],
-                        ['<img src="/path/VariableQuery.svg" width="20" />', '<code>Query</code>', 'Query objects'],
-                        ['<img src="/path/VariableStorage.svg" width="20" />', '<code>Storage</code>', 'Storage references'],
-                        ['<img src="/path/VariableBlock.svg" width="20" />', '<code>Block</code>', 'Block references'],
-                        ['<img src="/path/VariableCell.svg" width="20" />', '<code>Cell</code>', 'Cell references'],
-                        ['<img src="/path/VariableBrain.png" width="20" />', '<code>Brain</code>', 'AI/LLM context']
+                        ['<code>String</code>', 'Text values'],
+                        ['<code>Number</code>', 'Integers, floats'],
+                        ['<code>Date</code>', 'Date/time values'],
+                        ['<code>Array</code>', 'Lists/vectors'],
+                        ['<code>JSON</code>', 'Objects/maps'],
+                        ['<code>Frame</code>', 'Data frames (tables)'],
+                        ['<code>Function</code>', 'Lambda/callable'],
+                        ['<code>Query</code>', 'Query objects'],
+                        ['<code>Storage</code>', 'Storage references'],
+                        ['<code>Block</code>', 'Block references'],
+                        ['<code>Cell</code>', 'Cell references'],
+                        ['<code>Brain</code>', 'AI/LLM context']
                     ]
                 )}
                 ${C.callout('Use the Variables panel to debug state issues — if a block isn\'t rendering, check if the variable it binds to exists and has the expected value.', 'tip')}

@@ -70,19 +70,17 @@ const day1_ch02 = {
                 <h2>How a Request Flows Through SEMOSS</h2>
                 <p>When a user clicks "Run" in the notebook, here's what happens:</p>
                 ${C.sequence(
-                    ['Browser', 'Monolith', 'Semoss Core', 'GAAS (Py)', 'Engine'],
+                    ["Browser/UI", "REST API", "Reactor Layer", "Engine Layer"],
                     [
-                        { from: 0, to: 1, label: 'POST /api/engine/runPixel' },
-                        { from: 1, to: 2, label: 'Pixel parser → Reactor chain' },
-                        { from: 2, to: 3, label: 'TCP: model.ask(prompt)' },
-                        { from: 3, to: 4, label: 'OpenAI API call' },
-                        { from: 4, to: 3, label: 'LLM response', type: 'response' },
-                        { from: 3, to: 2, label: 'NounMetadata result', type: 'response' },
-                        { from: 2, to: 1, label: 'JSON payload', type: 'response' },
-                        { from: 1, to: 0, label: 'HTTP 200 + pixelReturn', type: 'response' },
+                        { from: 0, to: 1, label: "POST /api/engine/runPixel" },
+                        { from: 1, to: 2, label: "Parse Pixel → Execute reactors" },
+                        { from: 2, to: 3, label: "Query/Inference/Operation" },
+                        { from: 3, to: 2, label: "Raw result", type: "response" },
+                        { from: 2, to: 1, label: "NounMetadata → JSON", type: "response" },
+                        { from: 1, to: 0, label: "HTTP 200 + pixelReturn", type: "response" }
                     ]
                 )}
-                ${C.callout('<strong>Key insight:</strong> The UI never talks to engines directly. Every interaction goes through Pixel → Reactor → Engine.', 'info')}
+                ${C.callout('<strong>Key insight:</strong> The UI never talks to engines directly. Every interaction goes through <strong>Pixel → Reactor → Engine</strong>. The REST API layer (Monolith) handles HTTP/auth, the Reactor Layer (Semoss Core) parses Pixel and executes logic, and the Engine Layer (databases, models, storage) performs the actual operations.', 'info')}
             `
         },
         {
@@ -216,51 +214,59 @@ const day1_ch02 = {
                         { name: 'py/', type: 'dir', desc: 'Python GAAS layer' },
                     ]}
                 ])}
+                <h3>Key Configuration Files</h3>
+                <p>These configuration files control critical platform behavior:</p>
+                ${C.cards([
+                    {
+                        badge: 'Core',
+                        title: 'RDF_Map.prop',
+                        desc: 'Main platform configuration file. Contains Kubernetes settings, cloud storage (Azure/MinIO), Python/R integration, engine watcher configurations, file paths, frame types, security, admin restrictions, logging, and scheduler settings. Located in Semoss root.'
+                    },
+                    {
+                        badge: 'Core',
+                        title: 'social.properties',
+                        desc: 'Authentication and OAuth configuration file. Defines login providers (Google, GitHub, Microsoft, ADFS, Okta, LDAP, native login), OAuth client IDs, secret keys, redirect URIs, and SMTP email settings. Located in Semoss root.'
+                    },
+                    {
+                        badge: 'Monolith',
+                        title: 'web.xml',
+                        desc: 'Servlet configuration for the Tomcat webapp. Defines URL mappings, filters (CORS, auth), session config, and servlet initialization parameters. Located in Monolith/WEB-INF/.'
+                    }
+                ])}
+                ${C.callout('<strong>Pro tip:</strong> When troubleshooting, check these files first — they control engine discovery, database connections, and API routing.', 'tip')}
             `
         },
         {
             id: "d1-platform-apps-projects",
             title: "Apps & Projects",
             content: `
-                <h2>Apps, Projects & Insights</h2>
-                ${C.split(
-                    {
-                        title: 'Project',
-                        content: `
-                            <p>A <strong>workspace</strong> containing insights, portals, and config.</p>
-                            <ul>
-                                <li>Unique UUID identifier</li>
-                                <li>Own <code>.smss</code> config file</li>
-                                <li>Version-controlled assets</li>
-                                <li>Permission model (owner, editor, viewer)</li>
-                            </ul>
-                        `
-                    },
-                    {
-                        title: 'App (Portal)',
-                        content: `
-                            <p>A <strong>user-facing interface</strong> built within a project.</p>
-                            <ul>
-                                <li>Composed of blocks + cells</li>
-                                <li>Backed by Pixel recipes</li>
-                                <li>Interactive — binds to engines</li>
-                                <li>Shareable via URL</li>
-                            </ul>
-                        `
-                    }
-                )}
+                <h2>Apps & Projects</h2>
+                ${C.callout('In SEMOSS, <strong>"app"</strong> and <strong>"project"</strong> are the same thing and used interchangeably. Each app/project is a workspace containing insights, portals, and configuration.', 'info')}
+                <h3>App/Project Characteristics</h3>
+                <ul>
+                    <li>Unique UUID identifier</li>
+                    <li>Own <code>.smss</code> config file</li>
+                    <li>Version-controlled assets</li>
+                    <li>Permission model (owner, editor, viewer)</li>
+                    <li>Composed of blocks + cells</li>
+                    <li>Backed by Pixel recipes</li>
+                    <li>Interactive — binds to engines</li>
+                    <li>Shareable via URL</li>
+                </ul>
                 <h3>On-Disk Structure</h3>
                 ${C.tree([
-                    { name: 'project/', type: 'dir', children: [
-                        { name: 'MyProject__a1b2c3d4-.../', type: 'dir', children: [
-                            { name: 'MyProject__a1b2c3d4-....smss', desc: 'project config' },
-                            { name: 'version/', type: 'dir', desc: 'insight version history' },
-                            { name: 'portals/', type: 'dir', desc: 'app definitions' },
-                            { name: 'assets/', type: 'dir', desc: 'uploaded files' },
+                    { name: 'project/', type: 'dir', desc: '← base directory', children: [
+                        { name: 'ProjectName__UUID/', type: 'dir', desc: '← app/project folder', children: [
+                            { name: 'ProjectName__UUID.smss', desc: 'project config' },
+                            { name: 'app_root/', type: 'dir', children: [
+                                { name: 'version/', type: 'dir', children: [
+                                    { name: 'assets/', type: 'dir', desc: 'portals, uploaded files, resources' }
+                                ]}
+                            ]}
                         ]}
                     ]}
                 ])}
-                ${C.callout('Naming convention: <code>Name__UUID</code> — e.g., <code>country_db__bd1dea64-ec6b-49af-9308-94b05551c83d</code>. This pattern applies to all engines and projects.', 'info')}
+                ${C.callout('Naming convention: <code>Name__UUID</code> — e.g., <code>Ginnie_Mae_Mortgage-Backed_Securities__8fd44ada-cd0a-4157-a75e-0ba0174439da</code>. This pattern applies to all engines and projects.', 'info')}
             `
         },
         {

@@ -59,7 +59,7 @@ const C = {
             </div>`;
         }).join('');
 
-        const height = (messages.length + 1) * 48 + 40;
+        const height = (messages.length + 1) * 100 + 100;
         return `<div class="c-seq" style="height:${height}px">
             <div class="c-seq-actors">${actorHtml}</div>
             <div class="c-seq-messages">${msgHtml}</div>
