@@ -240,46 +240,40 @@ PixelOperationType.WARNING      // succeeded with warnings`, 'java', 'NounMetada
         },
         {
             id: "d2-custom-reactors-registration",
-            title: "Registering Reactors",
+            title: "Auto-Discovery",
             content: `
-                <h2>Registering Custom Reactors</h2>
-                <p>SEMOSS uses <code>ReactorFactory</code> to discover and instantiate reactors at runtime.</p>
-                ${C.split(
-                    {
-                        title: 'Auto-Discovery (Classpath Scan)',
-                        content: `
-                            <p>ReactorFactory scans for classes implementing IReactor using ClassGraph:</p>
-                            ${C.code(`// In ReactorFactory.java
-ClassGraph classGraph = new ClassGraph()
-    .enableAllInfo()
-    .acceptPackages("prerna.reactor");  // Note: older ClassGraph versions use whitelistPackages()
+                <h2>Reactor Auto-Discovery</h2>
+                <p>SEMOSS automatically discovers and registers all custom reactors at startup — no manual registration required.</p>
+                ${C.flow([
+                    { title: 'Extend AbstractReactor', desc: 'Create your reactor class' },
+                    { title: 'Place in prerna.reactor.*', desc: 'Any subpackage under prerna.reactor', arrow: '↓' },
+                    { title: 'Rebuild & Deploy', desc: 'Add to classpath', arrow: '↓' },
+                    { title: 'Auto-Discovered at Startup', desc: 'ReactorFactory scans for IReactor implementations', accent: true, arrow: '↓' },
+                    { title: 'Ready to Use in Pixel', desc: 'Call by class name: MyCustomReactor();', accent: true }
+                ])}
+                ${C.code(`// ReactorFactory.java — Auto-discovery mechanism
+private static void loadFromCP(String... packages) {
+    // Scan classpath for all IReactor implementations
+    ScanResult sr = new ClassGraph()
+        .whitelistPackages(packages)  // e.g., "prerna.reactor"
+        .scan();
 
-ScanResult scanResult = classGraph.scan();
-ClassInfoList reactorClasses = scanResult
-    .getClassesImplementing(IReactor.class.getName())
-    .filter(ci -> !ci.isAbstract());
+    ClassInfoList classes = sr.getClassesImplementing(IReactor.class.getName());
 
-// Automatically registers all non-abstract reactors`, 'java', 'Auto-discovery in ReactorFactory.java')}
-                        `
-                    },
-                    {
-                        title: 'Manual Registration (Legacy)',
-                        content: `
-                            <p>For explicit control, add to the registry:</p>
-                            ${C.code(`// ReactorFactory.java
-private static void initReactors() {
-    // ...existing reactors...
+    for (ClassInfo classInfo : classes) {
+        Class actualClass = classInfo.loadClass();
 
-    // Custom reactors
-    reactorRegistry.put(
-        "Greeting",
-        GreetingReactor.class
-    );
-}`, 'java')}
-                            <p>Most projects use auto-discovery now.</p>
-                        `
-                    }
-                )}
+        // Only register concrete (non-abstract) classes
+        if (!Modifier.isAbstract(actualClass.getModifiers())
+                && !Arrays.asList(actualClass.getInterfaces()).contains(IEngine.class)) {
+
+            String reactorName = actualClass.getSimpleName();
+            REACTOR_REGISTRY.put(reactorName, actualClass);
+            // Now callable as: MyCustomReactor() in Pixel
+        }
+    }
+}`, 'java', 'ReactorFactory.java — Auto-discovery at startup')}
+                ${C.callout('<strong>Key insight:</strong> If your class extends <code>AbstractReactor</code> (or implements <code>IReactor</code>) and is in the <code>prerna.reactor.*</code> package, it gets automatically discovered and registered at server startup. No configuration files, no manual registration — just extend and deploy.', 'info')}
             `
         },
         {
