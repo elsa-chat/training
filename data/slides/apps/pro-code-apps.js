@@ -88,10 +88,10 @@ const slides_apps_pro_code = [
 
 // Configure the SDK (usually in main.tsx or App.tsx)
 Env.update({
-    MODULE: process.env.MODULE || '',
-    ACCESS_KEY: process.env.ACCESS_KEY || '',
-    SECRET_KEY: process.env.SECRET_KEY || '',
-    APP: process.env.APP || '',
+    MODULE: import.meta.env.MODULE || '/Monolith',
+    ACCESS_KEY: import.meta.env.ACCESS_KEY || '',
+    SECRET_KEY: import.meta.env.SECRET_KEY || '',
+    APP: import.meta.env.APP || '',
 });
 
 // Run a Pixel command
@@ -186,7 +186,7 @@ function MyApp() {
 
 function CustomBlockApp({ state }) {
     return (
-        <Blocks state={state} blocks={DefaultBlocks}>
+        <Blocks state={state} registry={DefaultBlocks}>
             <MyCustomGrid />
             <MyCustomChart />
         </Blocks>
@@ -355,7 +355,8 @@ export function QueryRunner() {
 mkdir client
 cd client
 npm init -y
-npm install react react-dom @mui/material
+npm install react react-dom @mui/material @emotion/react @emotion/styled
+npm install @semoss/sdk
 npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-dom`, 'bash')}
 
                     <h4>Step 2: Create App Structure</h4>
@@ -373,7 +374,13 @@ npm install -D vite @vitejs/plugin-react typescript @types/react @types/react-do
                     ${C.code(`import { InsightProvider, Env } from '@semoss/sdk/react';
 import { Button } from '@mui/material';
 
-Env.update({ MODULE: window.location.origin });
+const env = JSON.parse(
+    document.getElementById('semoss-env')?.textContent || '{}'
+);
+Env.update({
+    MODULE: env.MODULE || '/Monolith',
+    APP: env.APP || ''
+});
 
 export function App() {
     return (

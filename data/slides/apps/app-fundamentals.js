@@ -122,12 +122,23 @@ const slides_app_fundamentals = [
 <body>
     <div id="app"></div>
     <script type="module">
-        // Import from bundled SDK (available in ${CONFIG.productName} portals)
-        import { runPixel } from './sdk.js';
+        // Read injected environment (added on publish)
+        const env = JSON.parse(
+            document.getElementById('semoss-env')?.textContent || '{}'
+        );
+        const MODULE = env.MODULE || '/Monolith';
 
-        // Run Pixel commands
-        runPixel('Echo("Hello from my app!");', 'new')
-            .then(result => console.log(result.pixelReturn));
+        // Run a Pixel command via REST
+        fetch(\`\${MODULE}/api/engine/runPixel\`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                expression: 'Echo("Hello from my app!");',
+                insightId: 'new'
+            })
+        })
+        .then(res => res.json())
+        .then(result => console.log(result.pixelReturn));
     </script>
 </body>
 </html>`, 'html', 'assets/portals/index.html (simple example)')}
@@ -186,7 +197,11 @@ def call_llm(prompt):
     return "LLM response"`, 'python', 'assets/py/mcp_driver.py (example)')}
                 <h3>Loading Python Code</h3>
                 ${C.code(`// Load Python module from app's py/ folder
-LoadPyFromFileProjectPy(filePath="my_module.py", alias="my_module");
+LoadPyFromFileProjectPy(
+    filePath="version/assets/py/my_module.py",
+    alias="my_module",
+    space="<projectId>"
+);
 
 // Call a function (code wrapped in <encode> blocks)
 result = Py("<encode>my_module.process_data({'key': 'value'})</encode>");`, 'pixel', 'Pixel commands to load and run Python')}
@@ -209,6 +224,7 @@ result = Py("<encode>my_module.process_data({'key': 'value'})</encode>");`, 'pix
                 <ul>
                     <li>Only <code>assets/portals/</code> is published — <code>java/</code>, <code>py/</code>, <code>client/</code> are NOT served</li>
                     <li>Publishing is a <strong>copy operation</strong> (or symlink, depending on config)</li>
+                    <li><strong>Default:</strong> public home is enabled in standard deployments. If disabled, set <code>public_home_enable=true</code> in the project <code>.smss</code></li>
                     <li>URL pattern: <code>&lt;base-url&gt;/public_home/&lt;projectId&gt;/portals/index.html</code></li>
                     <li>Re-publish after every <code>portals/</code> change to update the live site</li>
                 </ul>
@@ -309,24 +325,32 @@ MakePixelMCP(
 <body>
     <h1>Hello from ${CONFIG.productName}!</h1>
     <p>This is my first ${CONFIG.productName} app.</p>
-    <button onclick="runPixel()">Run Pixel</button>
+    <button onclick="runPixelCmd()">Run Pixel</button>
     <pre id="output"></pre>
 
     <script type="module">
-        // Import runPixel from bundled SDK
-        import { runPixel } from './sdk.js';
+        // Read injected environment (added on publish)
+        const env = JSON.parse(
+            document.getElementById('semoss-env')?.textContent || '{}'
+        );
+        const MODULE = env.MODULE || '/Monolith';
 
-        async function runPixel() {
-            const { pixelReturn, errors } = await runPixel(
-                'Echo("Hello, Spain!");',
-                'new'
-            );
+        async function runPixelCmd() {
+            const res = await fetch(\`\${MODULE}/api/engine/runPixel\`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    expression: 'Echo("Hello, Spain!");',
+                    insightId: 'new'
+                })
+            });
+            const { pixelReturn, errors } = await res.json();
             document.getElementById('output').textContent =
                 JSON.stringify(pixelReturn, null, 2);
         }
 
         // Make function global for onclick
-        window.runPixel = runPixel;
+        window.runPixelCmd = runPixelCmd;
     </script>
 </body>
 </html>`, 'html')}

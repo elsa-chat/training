@@ -34,10 +34,8 @@ const SESSION_PLAN = {
             id: '3',
             label: 'Day 3 — Wednesday, Feb 26',
             slideIds: idsFrom(
-                typeof slides_insight_room_session !== 'undefined' ? slides_insight_room_session : null,
-                typeof slides_message_structure !== 'undefined' ? slides_message_structure : null,
-                typeof slides_model_logs !== 'undefined' ? slides_model_logs : null,
-                typeof slides_api_endpoints !== 'undefined' ? slides_api_endpoints : null,
+                typeof slides_app_fundamentals !== 'undefined' ? slides_app_fundamentals : null,
+                typeof slides_apps_pro_code !== 'undefined' ? slides_apps_pro_code : null,
             )
         },
         {
