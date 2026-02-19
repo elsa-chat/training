@@ -166,42 +166,39 @@ export const PAGE_TYPES = {
                 <h2>Portal UI Development Patterns</h2>
                 <p>Common patterns for building React portal UIs that integrate with MCP tools.</p>
                 ${C.code(`// client/src/components/mcp/ReferenceDocumentsViewer.tsx
-import { useAppContext } from '@semoss/sdk';
+import { useInsight } from '@semoss/sdk/react';
 import { useState, useEffect } from 'react';
 
 export function ReferenceDocumentsViewer() {
-    const { actions, state } = useAppContext();
+    const { actions, tool } = useInsight();
     const [documents, setDocuments] = useState([]);
     const [selectedDoc, setSelectedDoc] = useState(null);
 
     useEffect(() => {
         // Immediately acknowledge tool call on load
-        actions.sendMCPResponseToPlayground({
-            status: 'success',
-            message: 'Reference viewer opened'
-        });
+        actions.sendMCPResponseToPlayground('Reference viewer opened');
 
         // Load document list via Pixel (not MCP tool)
         loadDocuments();
     }, []);
 
     const loadDocuments = async () => {
-        const result = await actions.run(
+        const { pixelReturn } = await actions.run(
             'VectorDatabaseQuery(engine="my-vector-db", query="", limit=100);'
         );
-        setDocuments(result[0].output);
+        setDocuments(pixelReturn[0].output);
     };
 
     const handleDocumentClick = async (doc) => {
         setSelectedDoc(doc);
 
         // Download PDF via Pixel
-        const pdfResult = await actions.run(
+        const { pixelReturn } = await actions.run(
             \`DownloadReferenceDocument(fileName="\${doc.fileName}");\`
         );
 
         // Display PDF as base64 data URI
-        const pdfBase64 = pdfResult[0].output;
+        const pdfBase64 = pixelReturn[0].output;
         // ... render PDF in iframe
     };
 
@@ -309,7 +306,7 @@ Result: [
 // Portal component pattern:
 useEffect(() => {
     // Immediately acknowledge
-    actions.sendMCPResponseToPlayground({ status: 'success' });
+    actions.sendMCPResponseToPlayground('success');
 
     // Load first document
     loadFirstDocument();
@@ -498,18 +495,10 @@ def execute_python_code(code_b64: str = None):
             const code = document.getElementById('editor').value;
             const encoded = btoa(code);
 
-            // Call MCP tool via SEMOSS API
-            const response = await fetch('/api/mcp/runTool', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    toolName: 'execute_python_code',
-                    params: { code_b64: encoded }
-                })
-            });
-
-            const result = await response.json();
-            document.getElementById('output').textContent = result.output;
+            // Minimal portals should use @semoss/sdk in a built client
+            // to call actions.runMCPTool(). Raw REST calls are not supported here.
+            document.getElementById('output').textContent =
+                'Use the built React portal with @semoss/sdk to execute tools.';
         }
     </script>
 </body>

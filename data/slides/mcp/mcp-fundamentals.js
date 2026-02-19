@@ -100,12 +100,12 @@ const slides_mcp_fundamentals = [
                             "Java/Pixel MCP",
                             "Custom Java reactors in <code>java/src/reactors/</code>",
                             "SEMOSS-native operations, engine access, complex business logic",
-                            "<code>MakePixelMCP(projectId, reactorNames)</code>"
+                            "<code>MakePixelMCP(projectId, reactor)</code>"
                         ],
                         [
                             "Engine MCP",
-                            "Existing engine (Database, Vector, Storage, Function)",
-                            "Exposing database queries, vector search, or file storage as MCP tools",
+                            "Existing engine (Vector, Storage, Function)",
+                            "Exposing vector search, storage ops, or function execution as MCP tools",
                             "<code>MakeEngineMCP(engineId)</code>"
                         ]
                     ]
@@ -251,7 +251,7 @@ MakePythonMCP(
                         content: C.code(`// Generate pixel_mcp.json from Java reactors
 MakePixelMCP(
   project="a1b2c3d4-5e6f-7890-abcd-ef1234567890",
-  reactorNames=["OpenMCPAppReactor", "DownloadDocumentReactor"]
+  reactor=["OpenMCPAppReactor", "DownloadDocumentReactor"]
 );
 
 // Reads reactor metadata (inputs, descriptions)
@@ -265,10 +265,14 @@ MakeEngineMCP(
 );
 
 // Generates MCP tools for engine operations:
-// - VectorDatabaseUpload
+// - ListDocumentsInVectorDatabase
+// - CreateEmbeddingsFromDocuments
 // - VectorDatabaseQuery
-// - DatabaseQuery (for database engines)
-// - StorageUpload/Download (for storage engines)`, 'pixel', 'Exposing engines as MCP')}
+// - RemoveDocumentFromVectorDatabase
+// - VectorFileDownload
+// - ListStoragePath / ListStoragePathDetails
+// - PullFromStorage / PushToStorage / DeleteFromStorage
+// - ExecuteFunctionEngine`, 'pixel', 'Exposing engines as MCP')}
             `
         },
         {
@@ -358,7 +362,7 @@ MakePythonMCP(project="your-project-id-here");`, 'pixel')}
                     <li><strong>Make MCP Reactors</strong>:
                         <ul>
                             <li><code>MakePythonMCP(project)</code> → py_mcp.json</li>
-                            <li><code>MakePixelMCP(project, reactorNames)</code> → pixel_mcp.json</li>
+                            <li><code>MakePixelMCP(project, reactor)</code> → pixel_mcp.json</li>
                             <li><code>MakeEngineMCP(engine)</code> → engine tools</li>
                         </ul>
                     </li>

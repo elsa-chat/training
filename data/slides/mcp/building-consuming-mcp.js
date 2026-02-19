@@ -88,9 +88,9 @@ def upload_to_vector_db(file_path: str, vector_engine_name: str):
     insight = Insight()
 
     pixel = f"""
-    VectorDatabaseUpload(
+    CreateEmbeddingsFromDocuments(
         engine="{vector_engine_name}",
-        filePath="{file_path}"
+        filePaths=["{file_path}"]
     );
     """
 
@@ -193,23 +193,18 @@ GetProjectFiles(
                     ["Engine Type", "Generated MCP Tools", "Use Case"],
                     [
                         [
-                            "Database",
-                            "<code>DatabaseQuery</code><br><code>DatabaseExecute</code>",
-                            "Allow models to query SQL databases"
-                        ],
-                        [
                             "Vector",
-                            "<code>VectorDatabaseUpload</code><br><code>VectorDatabaseQuery</code>",
+                            "<code>CreateEmbeddingsFromDocuments</code><br><code>VectorDatabaseQuery</code><br><code>ListDocumentsInVectorDatabase</code><br><code>RemoveDocumentFromVectorDatabase</code><br><code>VectorFileDownload</code>",
                             "Semantic search over documents"
                         ],
                         [
                             "Storage",
-                            "<code>StorageUpload</code><br><code>StorageDownload</code>",
+                            "<code>ListStoragePath</code><br><code>ListStoragePathDetails</code><br><code>PullFromStorage</code><br><code>PushToStorage</code><br><code>DeleteFromStorage</code>",
                             "File upload/download from cloud storage"
                         ],
                         [
                             "Function",
-                            "<code>ExecuteFunction</code>",
+                            "<code>ExecuteFunctionEngine</code>",
                             "Call serverless functions or APIs"
                         ]
                     ]
@@ -218,12 +213,12 @@ GetProjectFiles(
 MakeEngineMCP(engine="my-vector-db-name");
 
 // This generates MCP tools:
-// - VectorDatabaseUpload(engine, filePath)
-// - VectorDatabaseQuery(engine, query, limit)
+// - CreateEmbeddingsFromDocuments(engine, filePaths)
+// - VectorDatabaseQuery(engine, command, limit)
 
 // Models can now call these tools in Playground:
 // User: "Upload the file /data/docs/manual.pdf to my-vector-db"
-// Model calls: VectorDatabaseUpload(engine="my-vector-db-name", filePath="/data/docs/manual.pdf")
+// Model calls: CreateEmbeddingsFromDocuments(engine="my-vector-db-name", filePaths=["/data/docs/manual.pdf"])
 
 // User: "Search for information about authentication"
 // Model calls: VectorDatabaseQuery(engine="my-vector-db-name", query="authentication", limit=5)`, 'pixel', 'Exposing vector database as MCP')}
@@ -261,20 +256,20 @@ def show_code_editor():
                     {
                         title: 'React component',
                         content: C.code(`// client/src/components/mcp/CodeEditor.tsx
-import { useAppContext } from '@semoss/sdk';
+import { useInsight } from '@semoss/sdk/react';
 
 export function CodeEditor() {
-  const { actions } = useAppContext();
+  const { actions } = useInsight();
   const [code, setCode] = useState('');
 
   const handleRun = async () => {
     const encoded = btoa(code);
-    const result = await actions.runMCPTool(
+    const { output } = await actions.runMCPTool(
       'execute_python_code',
       { code_b64: encoded }
     );
-    // Send result to Playground
-    await actions.sendMCPResponseToPlayground(result);
+    // output is already sent to Playground in MCP context
+    console.log(output);
   };
 
   return (
@@ -344,14 +339,14 @@ Model incorporates result into response`, 'plaintext', 'Playground MCP workflow'
 MakePythonMCP(project="your-project-id");
 // Publish files to make MCP accessible
 
-// 2. Get MCP endpoint URL (typically):
-// http://localhost:8080/api/mcp/<projectId>
+// 2. Get MCP endpoint URL:
+// http://localhost:8080/ext/mcp/<toolbox_id>/comms
 
 // 3. Configure Claude Code CLI (~/.config/claude/config.json):
 {
   "mcpServers": {
     "semoss-tools": {
-      "url": "http://localhost:8080/api/mcp/your-project-id",
+      "url": "http://localhost:8080/ext/mcp/your-project-id/comms",
       "headers": {
         "Authorization": "Bearer <your-semoss-api-key>"
       }
@@ -371,8 +366,19 @@ import requests
 def call_semoss_mcp_tool(tool_name: str, params: dict):
     """Call a SEMOSS MCP tool via REST API"""
     response = requests.post(
-        f"http://localhost:8080/api/mcp/your-project-id/tools/{tool_name}",
-        json=params,
+        "http://localhost:8080/runReactorMCP",
+        json={
+            "jsonrpc": "2.0",
+            "id": "req-1",
+            "method": "tools/call",
+            "params": {
+                "name": tool_name,
+                "arguments": params
+            },
+            "_meta": {
+                "contextProjectId": "your-project-id"
+            }
+        },
         headers={"Authorization": "Bearer <api-key>"}
     )
     return response.json()
@@ -408,14 +414,14 @@ print(result)`, 'python', 'LangChain integration with SEMOSS MCP')}
                 ${C.code(`// Secure MCP endpoint access patterns
 
 // 1. API Key authentication (service accounts)
-POST /api/mcp/<projectId>/tools/execute_python_code
+POST /ext/mcp/<toolbox_id>/comms
 Headers:
   Authorization: Bearer sk-semoss-<api-key>
 Body:
   { "code_b64": "cHJpbnQoJ0hlbGxvJyk=" }
 
 // 2. OAuth 2.0 authentication (user sessions)
-POST /api/mcp/<projectId>/tools/upload_to_vector_db
+POST /ext/mcp/<toolbox_id>/comms
 Headers:
   Authorization: Bearer <oauth-access-token>
 Body:
@@ -435,7 +441,7 @@ def admin_delete_all_data():
 def send_email(to: str, subject: str, body: str):
     """Sends an email. Requires user approval."""
     # ...`, 'python', 'MCP security patterns')}
-                ${C.callout('Always use <code>execution: \'ask\'</code> or <code>execution: \'disabled\'</code> for tools that modify data, send emails, or perform privileged operations.', 'danger')}
+${C.callout('Always use <code>execution: \'ask\'</code> or <code>execution: \'disabled\'</code> for tools that modify data, send emails, or perform privileged operations.', 'danger')}
             `
         },
         {
@@ -525,7 +531,7 @@ def query_database(database_id: str, query: str, limit: int = 10):
                     ${C.code(`// Alternative: Use MakeEngineMCP for simpler database exposure
 MakeEngineMCP(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");
 
-// This auto-generates DatabaseQuery and DatabaseExecute tools`, 'pixel')}
+// This auto-generates Vector/Storage/Function MCP tools (no Database tools in core)`, 'pixel')}
 
                     <h4>Expected Outcomes</h4>
                     <ul>
@@ -552,7 +558,7 @@ MakeEngineMCP(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");
                 <h3>Consuming MCP</h3>
                 <ul>
                     <li><strong>Internal</strong>: Playground → MCP Servers → Add your app → Tools available to model</li>
-                    <li><strong>External</strong>: Claude Code CLI, LangChain, custom apps via <code>/api/mcp/&lt;projectId&gt;</code></li>
+                    <li><strong>External</strong>: Claude Code CLI, LangChain, custom apps via <code>/ext/mcp/&lt;toolbox_id&gt;/comms</code></li>
                     <li><strong>Security</strong>:
                         <ul>
                             <li>API keys for service accounts</li>

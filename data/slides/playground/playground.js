@@ -118,11 +118,11 @@ GetRoomFileTokenStats();`, 'pixel', 'Room Folder MCP Tools')}
   "name": "Sales Assistant",
   "system_prompt": "You are a helpful sales assistant...",
   "resources": [
-    { "type": "APP", "id": "crm-app" },
+    { "type": "PROJECT", "id": "crm-app" },
     { "type": "DATABASE", "id": "sales-db" }
   ],
   "is_active": true,
-  "created_by": "user@example.com"
+  "owner": "user@example.com"
 }`, 'json', 'Workspace in MODEL_INFERENCE_LOGS_DB')
                     },
                     {
@@ -174,15 +174,15 @@ public List<Map<String, Object>> getAllToolsJsonForRoom() {
     List<Map<String, Object>> aggregated = new ArrayList<>();
     Map<String, Object> options = getOptionsMap();
 
-    // From options.mcp
-    if (options.containsKey("mcp")) {
-        List<Map<String, Object>> mcpList = (List) options.get("mcp");
-        for (Map<String, Object> mcpMap : mcpList) {
-            String type = (String) mcpMap.get("type");  // APP or DATABASE
-            String id = (String) mcpMap.get("id");
-            aggregated.addAll(getToolJson(id));
+        // From options.mcp
+        if (options.containsKey("mcp")) {
+            List<Map<String, Object>> mcpList = (List) options.get("mcp");
+            for (Map<String, Object> mcpMap : mcpList) {
+                String type = (String) mcpMap.get("type");  // CATALOG_TYPE (PROJECT, DATABASE, VECTOR, ...)
+                String id = (String) mcpMap.get("id");
+                aggregated.addAll(getToolJson(id)); // getToolJson filters out tools with SMSS_MCP_EXECUTION=disabled
+            }
         }
-    }
 
     // From workspace resources
     if (options.containsKey("workspace")) {
@@ -327,7 +327,7 @@ ClusterUtil.pullUserWorkspace(projectId, isAsset);`, 'java', 'prerna/cluster/uti
                         <li>Part 3: LLM successfully calls workspace resources (database, app) as tools</li>
                         <li>Part 4: File uploaded to room folder, LLM reads and analyzes it using MCP tools</li>
                     </ul>
-                    ${C.callout('This hands-on demonstrates the full Playground workflow: Workspace → Room → Tools → Files. In production, you can also interact with Rooms via Pixel commands like <code>RunRoomPixel(roomId, "message")</code>.', 'tip')}
+                    ${C.callout('This hands-on demonstrates the full Playground workflow: Workspace → Room → Tools → Files. For programmatic access, use the Playground room reactors (e.g., <code>AskPlayground</code>) rather than a non-existent <code>RunRoomPixel</code> call.', 'tip')}
                 `)}
             `
         },
