@@ -52,11 +52,26 @@ document.addEventListener('DOMContentLoaded', () => {
             currentSlideIndex = 0;
         }
     } else {
-        console.log('[DEBUG] No hash or allSlides empty, defaulting to first slide');
+        const autoDayIdx = getDayIndexForToday();
+        if (autoDayIdx !== null && allSlides.length > 0) {
+            const dayLabel = navStructure[autoDayIdx]?.label;
+            const firstIdx = allSlides.findIndex(s => s.dayLabel === dayLabel);
+            if (firstIdx >= 0) {
+                currentSlideIndex = firstIdx;
+                console.log('[DEBUG] Auto-jump to today:', dayLabel, 'slide index', firstIdx);
+            } else {
+                console.log('[DEBUG] Today matched but no slides found; defaulting to first slide');
+            }
+        } else {
+            console.log('[DEBUG] No hash or allSlides empty, defaulting to first slide');
+        }
     }
 
     renderSlide();
     updateNav();
+    // Expand sidebar to today's day (if matched) after initial render
+    const autoDayIdx = getDayIndexForToday();
+    if (autoDayIdx !== null) expandDay(autoDayIdx, true);
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
@@ -166,6 +181,69 @@ function buildSidebar() {
     });
 
     nav.innerHTML = html;
+}
+
+// Expand/collapse a specific day. If single=true, collapse all others.
+function expandDay(dayIdx, single = false) {
+    const headers = document.querySelectorAll('.nav-day-header');
+    const chapters = document.querySelectorAll('.nav-day-chapters');
+    headers.forEach((header, idx) => {
+        const ch = chapters[idx];
+        if (!ch) return;
+        const shouldExpand = idx === dayIdx;
+        if (single) {
+            header.classList.toggle('expanded', shouldExpand);
+            ch.classList.toggle('expanded', shouldExpand);
+        } else if (shouldExpand) {
+            header.classList.add('expanded');
+            ch.classList.add('expanded');
+        }
+    });
+}
+
+// Parse a label like "Day 4 — Thursday, Feb 27" and return a Date (year from today)
+function parseDayLabelDate(label) {
+    if (!label) return null;
+    const m = label.match(/\b([A-Za-z]{3,9})\s+(\d{1,2})\b/);
+    if (!m) return null;
+    const monthName = m[1].toLowerCase();
+    const dayNum = parseInt(m[2], 10);
+    const monthMap = {
+        jan: 0, january: 0,
+        feb: 1, february: 1,
+        mar: 2, march: 2,
+        apr: 3, april: 3,
+        may: 4,
+        jun: 5, june: 5,
+        jul: 6, july: 6,
+        aug: 7, august: 7,
+        sep: 8, sept: 8, september: 8,
+        oct: 9, october: 9,
+        nov: 10, november: 10,
+        dec: 11, december: 11
+    };
+    const monthIdx = monthMap[monthName];
+    if (monthIdx === undefined || Number.isNaN(dayNum)) return null;
+    const now = new Date();
+    return new Date(now.getFullYear(), monthIdx, dayNum);
+}
+
+// Find day index matching today's date in the sidebar labels
+function getDayIndexForToday() {
+    const today = new Date();
+    for (let i = 0; i < navStructure.length; i++) {
+        const label = navStructure[i]?.label;
+        const parsed = parseDayLabelDate(label);
+        if (!parsed) continue;
+        if (
+            parsed.getFullYear() === today.getFullYear() &&
+            parsed.getMonth() === today.getMonth() &&
+            parsed.getDate() === today.getDate()
+        ) {
+            return i;
+        }
+    }
+    return null;
 }
 
 // Toggle day expand/collapse
