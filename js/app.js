@@ -20,10 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
     navStructure.forEach(day => {
         day.chapters.forEach(chapter => {
             chapter.slides.forEach(slide => {
+                const chapterLabel = day.display === 'day-only' || !chapter.title ? day.label : chapter.title;
                 allSlides.push({
                     ...slide,
                     dayLabel: day.label,
-                    chapterLabel: chapter.title
+                    chapterLabel
                 });
             });
         });
@@ -31,13 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Debug: Log allSlides breakdown by day
     console.log('[DEBUG] allSlides populated:', allSlides.length, 'total slides');
-    console.log('[DEBUG] Slides by day:', {
-        day1: allSlides.filter(s => s.id.startsWith('d1-')).length,
-        day2: allSlides.filter(s => s.id.startsWith('d2-')).length,
-        day3: allSlides.filter(s => s.id.startsWith('d3-')).length,
-        day4: allSlides.filter(s => s.id.startsWith('d4-')).length,
-        day5: allSlides.filter(s => s.id.startsWith('d5-')).length
-    });
+    console.log('[DEBUG] Slides by day:', navStructure.map(day => ({
+        label: day.label,
+        count: day.chapters.reduce((sum, ch) => sum + (ch.slides?.length || 0), 0)
+    })));
 
     // Load initial slide (check URL hash)
     // Important: This must happen AFTER allSlides is built
@@ -100,29 +98,32 @@ document.addEventListener('DOMContentLoaded', () => {
 function buildNavStructure() {
     navStructure = [];
 
-    // Collect all loaded day data
-    const dayDataSources = [
-        typeof day1Data !== 'undefined' ? day1Data : null,
-        typeof day2Data !== 'undefined' ? day2Data : null,
-        typeof day3Data !== 'undefined' ? day3Data : null,
-        typeof day4Data !== 'undefined' ? day4Data : null,
-        typeof day5Data !== 'undefined' ? day5Data : null,
-    ];
+    const hasSessionPlan = typeof SESSION_PLAN !== 'undefined' && SESSION_PLAN && Array.isArray(SESSION_PLAN.days);
+    const hasSlideIndex = typeof SLIDES_BY_ID !== 'undefined' && SLIDES_BY_ID;
 
-    // Debug: Log which day data is loaded
-    console.log('[DEBUG] Day data availability:', {
-        day1: typeof day1Data !== 'undefined',
-        day2: typeof day2Data !== 'undefined',
-        day3: typeof day3Data !== 'undefined',
-        day4: typeof day4Data !== 'undefined',
-        day5: typeof day5Data !== 'undefined'
+    if (!hasSessionPlan || !hasSlideIndex) {
+        console.warn('[WARN] SESSION_PLAN or SLIDES_BY_ID missing; navigation will be empty.');
+        return;
+    }
+
+    SESSION_PLAN.days.forEach(day => {
+        const slideIds = Array.isArray(day.slideIds) ? day.slideIds : [];
+        const slides = slideIds
+            .map(id => SLIDES_BY_ID[id])
+            .filter(Boolean);
+        const missing = slideIds.filter(id => !SLIDES_BY_ID[id]);
+        if (missing.length) {
+            console.warn('[WARN] Missing slides for day', day.id || day.label, missing);
+        }
+
+        navStructure.push({
+            label: day.label || `Day ${day.id || ''}`.trim(),
+            chapters: [{ title: null, slides }],
+            display: 'day-only'
+        });
     });
 
-    dayDataSources.forEach(dayData => {
-        if (dayData) navStructure.push(dayData);
-    });
-
-    console.log('[DEBUG] navStructure built with', navStructure.length, 'days');
+    console.log('[DEBUG] navStructure built from SESSION_PLAN:', navStructure.length, 'days');
 }
 
 // Build sidebar HTML
@@ -139,20 +140,27 @@ function buildSidebar() {
         html += `</div>`;
         html += `<div class="nav-day-chapters ${isFirstDay ? 'expanded' : ''}" id="dayChapters${dayIdx}">`;
 
-        day.chapters.forEach((chapter, chIdx) => {
-            const chapterId = `day${dayIdx}_ch${chIdx}`;
-            html += `<div class="nav-chapter-header ${isFirstDay ? 'expanded' : ''}" onclick="toggleChapter('${chapterId}')">`;
-            html += `<span class="arrow">&#9654;</span>`;
-            html += `<span>${chapter.title}</span>`;
-            html += `</div>`;
-            html += `<div class="nav-chapter-topics ${isFirstDay ? 'expanded' : ''}" id="${chapterId}">`;
-
-            chapter.slides.forEach(slide => {
+        if (day.display === 'day-only') {
+            const slides = day.chapters[0]?.slides || [];
+            slides.forEach(slide => {
                 html += `<div class="nav-topic" id="nav-${slide.id}" onclick="goToSlide('${slide.id}')">${slide.title}</div>`;
             });
+        } else {
+            day.chapters.forEach((chapter, chIdx) => {
+                const chapterId = `day${dayIdx}_ch${chIdx}`;
+                html += `<div class="nav-chapter-header ${isFirstDay ? 'expanded' : ''}" onclick="toggleChapter('${chapterId}')">`;
+                html += `<span class="arrow">&#9654;</span>`;
+                html += `<span>${chapter.title}</span>`;
+                html += `</div>`;
+                html += `<div class="nav-chapter-topics ${isFirstDay ? 'expanded' : ''}" id="${chapterId}">`;
 
-            html += `</div>`;
-        });
+                chapter.slides.forEach(slide => {
+                    html += `<div class="nav-topic" id="nav-${slide.id}" onclick="goToSlide('${slide.id}')">${slide.title}</div>`;
+                });
+
+                html += `</div>`;
+            });
+        }
 
         html += `</div></div>`;
     });
@@ -291,13 +299,22 @@ function closeModal(e) {
 // Build schedule table
 function buildSchedule() {
     const body = document.getElementById('scheduleBody');
-    const schedule = [
-        { day: 'Day 1 - Monday, Feb 24', topics: ['Welcome & Introduction', 'Platform Fundamentals', 'Engines: The Data Layer', 'Pixel & Reactors'] },
-        { day: 'Day 2 - Tuesday, Feb 25', topics: ['Pro-Code Apps (@semoss/sdk)', 'Custom Reactors', 'Custom Python'] },
-        { day: 'Day 3 - Wednesday, Feb 26', topics: ['Pixel Advanced', 'Message Structure', 'API Integration', 'Architecture Deep Dive'] },
-        { day: 'Day 4 - Thursday, Feb 27', topics: ['Playground', 'Frontend Blocks & Cells', 'App Building', 'Notebooks & Insights'] },
-        { day: 'Day 5 - Friday, Feb 28', topics: ['Docker Deployment', 'Security & Authentication', 'Admin & Monitoring', 'Capstone Project'] },
-    ];
+    const hasSessionPlan = typeof SESSION_PLAN !== 'undefined' && SESSION_PLAN && Array.isArray(SESSION_PLAN.days);
+    const hasSlideIndex = typeof SLIDES_BY_ID !== 'undefined' && SLIDES_BY_ID;
+
+    if (!hasSessionPlan || !hasSlideIndex) {
+        body.innerHTML = '<p class="muted">Schedule unavailable.</p>';
+        console.warn('[WARN] SESSION_PLAN or SLIDES_BY_ID missing; schedule not built.');
+        return;
+    }
+
+    const schedule = SESSION_PLAN.days.map(day => {
+        const slideIds = Array.isArray(day.slideIds) ? day.slideIds : [];
+        const topics = slideIds
+            .map(id => SLIDES_BY_ID[id]?.title)
+            .filter(Boolean);
+        return { day: day.label || `Day ${day.id || ''}`.trim(), topics };
+    });
 
     let html = '<table>';
     html += '<thead><tr><th>Day</th><th>Topics</th></tr></thead>';

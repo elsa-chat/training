@@ -24,7 +24,7 @@ No server required. All files load via `<script>` tags.
 4. **`js/components.js`** — Component library (`C` object) with helper functions that generate HTML from structured data
 5. **`js/app.js`** — Navigation controller. Flattens day data into `allSlides[]`, handles sidebar tree, prev/next, keyboard, URL hash routing
 
-**Script load order matters:** `config.js` → `components.js` → chapter files → day index → `app.js`
+**Script load order matters:** `config.js` → `components.js` → topic slide modules → `data/slides/index.js` → `data/sessions/index.js` → `app.js`
 
 ## Product Name Configuration
 
@@ -60,37 +60,45 @@ C.code(`.smss (SEMOSS Settings)`)    // Leave as-is
 
 ## Modular Content Structure
 
-Content is split per-chapter:
+Content is split by topic/category and assembled into sessions via a day plan.
 
 ```
 data/
-├── day1/
-│   ├── ch01-welcome.js        ← exports day1_ch01
-│   ├── ch02-fundamentals.js   ← exports day1_ch02
-│   ├── ch03-engines.js        ← exports day1_ch03
-│   ├── ch04-pixel-reactors.js ← exports day1_ch04
-│   └── index.js               ← assembles day1Data from chapters
+├── slides/
+│   ├── platform/
+│   │   ├── fundamentals.js        ← exports slides_platform_fundamentals
+│   │   ├── engines.js             ← exports slides_platform_engines
+│   │   └── pixel-reactors.js       ← exports slides_platform_pixel_reactors
+│   ├── python/
+│   │   └── custom-python.js        ← exports slides_custom_python
+│   ├── mcp/
+│   │   ├── mcp-fundamentals.js     ← exports slides_mcp_fundamentals
+│   │   └── building-consuming-mcp.js
+│   ├── ... (other topic folders)
+│   └── index.js                    ← builds SLIDE_LIBRARY + SLIDES_BY_ID
+├── sessions/
+│   └── index.js                    ← defines SESSION_PLAN (days + slideIds)
 ```
 
-**Chapter file pattern:**
+**Topic file pattern:**
 ```js
-const day1_ch01 = {
-    title: "Chapter Name",
-    slides: [{ id: "d1-slug", title: "Label", content: `...` }]
+const slides_platform_fundamentals = [
+    { id: "platform-overview", title: "Platform Overview", content: `...` }
+];
+```
+
+**Session plan pattern:**
+```js
+const SESSION_PLAN = {
+    days: [
+        { id: "1", label: "Day 1 — Monday, Feb 24", slideIds: ["welcome-title", "platform-overview", "..."] }
+    ]
 };
 ```
 
-**Day index pattern:**
-```js
-const day1Data = {
-    label: "Day 1 — Monday, Feb 24",
-    chapters: [day1_ch01, day1_ch02, day1_ch03, day1_ch04]
-};
-```
+**Slide IDs:** Prefix-free (no `d1-`, `d2-`). Used as URL hashes and sidebar nav IDs (prefixed with `nav-`).
 
-**To add a chapter:** Create the chapter JS file, add its `<script>` tag in `index.html` before the day index, add the variable to the chapters array.
-
-**Slide IDs:** Pattern `d{day}-{chapter}-{topic}` (e.g., `d1-engines-smss`). Used as URL hashes and sidebar nav IDs (prefixed with `nav-`).
+**Ordering & day selection:** Edit `data/sessions/index.js` to reorder slides or build 3-day vs 5-day plans.
 
 ## Component Library (`C.*`)
 
