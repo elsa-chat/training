@@ -31,6 +31,7 @@ const slides_custom_reactors = [
             content: `
                 <h2>The Reactor Interface</h2>
                 <p>All reactors implement the <code>IReactor</code> interface and typically extend <code>AbstractReactor</code> to inherit common functionality.</p>
+                <p style="opacity:0.75;font-size:0.9em;">Excerpt — key methods only.</p>
                 ${C.split(
                     {
                         title: 'IReactor Interface',
@@ -42,6 +43,14 @@ const slides_custom_reactors = [
     void In();
     Object Out();
     void curNoun(String noun);
+    GenRowStruct getCurRow();
+    void closeNoun(String noun);
+    NounStore getNounStore();
+    void setNounStore(NounStore store);
+    List<NounMetadata> getInputs();
+    List<NounMetadata> getOutputs();
+    void mergeUp();
+    void updatePlan();
 
     // Pixel signature
     void setPixel(String operation, String fullOperation);
@@ -49,7 +58,8 @@ const slides_custom_reactors = [
 
     // Insight context
     void setInsight(Insight insight);
-}`, 'java', 'prerna/reactor/IReactor.java (simplified)')
+    Insight getInsight();
+}`, 'java', 'prerna/reactor/IReactor.java (excerpt)')
                     },
                     {
                         title: 'Why Extend AbstractReactor?',
@@ -229,7 +239,7 @@ PixelOperationType.WARNING      // succeeded with warnings`, 'java', 'NounMetada
                     { title: '3. Implement execute()', desc: 'organizeKeys(), business logic, return NounMetadata', arrow: '↓' },
                     { title: '4. (Optional) Add Help Text', desc: 'Override getReactorDescription(), getDescriptionForKey()', arrow: '↓' },
                     { title: '5. Compile', desc: 'Maven: mvn clean install', arrow: '↓ build' },
-                    { title: '6. Register in ReactorFactory', desc: 'Add to ReactorFactory.getAllReactors() (auto-scan or manual)', arrow: '↓' },
+                    { title: '6. Auto-Discovery at Startup', desc: 'Classpath scan (prerna + optional ADDITIONAL_REACTOR_PACKAGES)', arrow: '↓' },
                     { title: '7. Restart Server', desc: 'Deploy to Tomcat, restart', arrow: '↓' },
                     { title: '8. Test in Pixel', desc: 'MyCustomReactor(param="value");', accent: true },
                 ])}
@@ -241,10 +251,11 @@ PixelOperationType.WARNING      // succeeded with warnings`, 'java', 'NounMetada
             title: "Auto-Discovery",
             content: `
                 <h2>Reactor Auto-Discovery</h2>
-                <p>${CONFIG.productName} automatically discovers and registers all custom reactors at startup — no manual registration required.</p>
+                <p>${CONFIG.productName} automatically discovers and registers custom reactors at startup — no manual registration required.</p>
+                <p style="opacity:0.75;font-size:0.9em;">Scan roots: <code>prerna.*</code> plus any <code>ADDITIONAL_REACTOR_PACKAGES</code>.</p>
                 ${C.flow([
                     { title: 'Extend AbstractReactor', desc: 'Create your reactor class' },
-                    { title: 'Place in prerna.reactor.*', desc: 'Any subpackage under prerna.reactor', arrow: '↓' },
+                    { title: 'Place in prerna.*', desc: 'Classpath scan starts at prerna (plus optional extra packages)', arrow: '↓' },
                     { title: 'Rebuild & Deploy', desc: 'Add to classpath', arrow: '↓' },
                     { title: 'Auto-Discovered at Startup', desc: 'ReactorFactory scans for IReactor implementations', accent: true, arrow: '↓' },
                     { title: 'Ready to Use in Pixel', desc: 'Call by class name: MyCustomReactor();', accent: true }
@@ -271,7 +282,7 @@ private static void loadFromCP(String... packages) {
         }
     }
 }`, 'java', 'ReactorFactory.java — Auto-discovery at startup')}
-                ${C.callout('<strong>Key insight:</strong> If your class extends <code>AbstractReactor</code> (or implements <code>IReactor</code>) and is in the <code>prerna.reactor.*</code> package, it gets automatically discovered and registered at server startup. No configuration files, no manual registration — just extend and deploy.', 'info')}
+                ${C.callout('<strong>Key insight:</strong> If your class extends <code>AbstractReactor</code> (or implements <code>IReactor</code>) and is on the classpath under <code>prerna.*</code> (or another scanned package), it gets automatically discovered and registered at server startup. No configuration files, no manual registration — just extend and deploy.', 'info')}
             `
         },
         {
@@ -282,6 +293,7 @@ private static void loadFromCP(String... packages) {
                 <h3>1. Unit Testing</h3>
                 ${C.code(`import org.junit.Test;
 import prerna.om.Insight;
+import prerna.sablecc2.om.NounStore;
 import prerna.reactor.custom.GreetingReactor;
 import prerna.sablecc2.om.GenRowStruct;
 import prerna.sablecc2.om.nounmeta.NounMetadata;
@@ -295,12 +307,14 @@ public class GreetingReactorTest {
         // Mock insight
         Insight mockInsight = new Insight();
         reactor.setInsight(mockInsight);
+        reactor.setNounStore(new NounStore());
+        reactor.In(); // initialize curRow for the "all" noun store
 
         // Bind parameters
         GenRowStruct row = reactor.getNounStore().makeGenRowStruct("all");
         row.add(new NounMetadata("John", PixelDataType.CONST_STRING));
         row.add(new NounMetadata("en", PixelDataType.CONST_STRING));
-        reactor.getCurRow().addAll(row);
+        reactor.getCurRow().merge(row);
 
         // Execute
         NounMetadata result = reactor.execute();

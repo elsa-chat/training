@@ -26,8 +26,6 @@ const SESSION_PLAN = {
             id: '2',
             label: 'Day 2 — Tuesday, Feb 25',
             slideIds: idsFrom(
-                typeof slides_app_fundamentals !== 'undefined' ? slides_app_fundamentals : null,
-                typeof slides_apps_pro_code !== 'undefined' ? slides_apps_pro_code : null,
                 typeof slides_custom_reactors !== 'undefined' ? slides_custom_reactors : null,
                 typeof slides_custom_python !== 'undefined' ? slides_custom_python : null,
             )

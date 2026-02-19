@@ -57,7 +57,7 @@ const slides_custom_python = [
                         ]
                     }
                 ])}
-                ${C.callout(`The GAAS server starts when ${CONFIG.productName} starts (via <code>RUN_PYTHON_AS_SERVICE=true</code>) and listens on <code>localhost:9999</code>.`, 'tip')}
+                ${C.callout(`The GAAS server starts when ${CONFIG.productName} starts (via <code>NATIVE_PY_SERVER=true</code>) and listens on <code>localhost:9999</code>.`, 'tip')}
             `
         },
         {
@@ -121,12 +121,12 @@ const slides_custom_python = [
                         { from: 1, to: 0, label: "Return result to caller", type: "response" }
                     ]
                 )}
-                ${C.callout('Each request gets a unique <code>epoc</code> (UUID). Java blocks until a response with the same <code>epoc</code> arrives, ensuring request/response pairing in concurrent environments.', 'info')}
+                ${C.callout('Each request gets a unique <code>epoc</code> (fixed 20-byte ID, e.g., <code>py_123...</code>). Java blocks until a response with the same <code>epoc</code> arrives, ensuring request/response pairing in concurrent environments.', 'info')}
                 <h3>PayloadStruct Format</h3>
                 ${C.code(`// Request from Java
 {
     "operation": "PYTHON",
-    "epoc": "abc12345-6789-...",
+    "epoc": "py_12345678901234567",
     "payload": ["str(42)"],
     "response": false
 }
@@ -134,7 +134,7 @@ const slides_custom_python = [
 // Response from Python
 {
     "operation": "PYTHON",
-    "epoc": "abc12345-6789-...",  // Same as request
+    "epoc": "py_12345678901234567",  // Same as request
     "payload": ["42"],
     "response": true
 }`, 'json', 'PayloadStruct JSON structure')}
@@ -269,25 +269,27 @@ public class MyReactor extends AbstractReactor {
             content: `
                 <h2>Python → Java Callbacks</h2>
                 <p>Python code can call <strong>back into Java</strong> to run reactors or access engines.</p>
+                <p style="opacity:0.75;font-size:0.9em;">Use <code>ServerProxy.get_next_epoc()</code> to generate valid 20-byte epoc IDs.</p>
                 ${C.code(`# In Python (using gaas_server_proxy)
-import gaas_server_proxy as gsp
-import uuid
+from gaas_server_proxy import ServerProxy
+
+proxy = ServerProxy()
 
 # Call a reactor from Python (runs Pixel expression)
-epoc = str(uuid.uuid4())
-result = gsp.callReactor(
+epoc = proxy.get_next_epoc()
+result = proxy.callReactor(
     epoc=epoc,
     pixel="MyCustomReactor(param1='value1');",
     insight_id="my-insight-id"
 )
 
 # Access an engine from Python
-epoc = str(uuid.uuid4())
-result = gsp.callEngine(
+epoc = proxy.get_next_epoc()
+result = proxy.callEngine(
     epoc=epoc,
     engine_type="DATABASE",
     engine_id="my_database",
-    method_name="query",
+    method_name="execQuery",
     method_args=["SELECT * FROM users"],
     method_arg_types=["java.lang.String"],
     insight_id="my-insight-id"
@@ -313,13 +315,14 @@ result = gsp.callEngine(
             title: "Package Management",
             content: `
                 <h2>Installing Python Packages</h2>
-                <p>${CONFIG.productName} uses the system's <code>pip</code> to install packages for the GAAS runtime.</p>
+                <p>${CONFIG.productName} installs packages for the GAAS runtime via <code>smssutil.install_py()</code> (direct <code>subprocess</code> installs are blocked by the GAAS sandbox).</p>
+                <p style="opacity:0.75;font-size:0.9em;">If you try <code>import subprocess</code>, GAAS will block the import.</p>
                 ${C.code(`# Via Pixel
-Py("<encode>import subprocess; subprocess.check_call(['pip', 'install', 'requests'])</encode>");
+Py("<encode>import smssutil; smssutil.install_py('requests')</encode>");
 
 # Or via Python console in UI
-import subprocess
-subprocess.check_call(['pip', 'install', 'scikit-learn'])
+import smssutil
+smssutil.install_py("scikit-learn")
 
 # Check installed packages
 CheckPyPackages();  // Returns list of all installed packages
@@ -465,7 +468,7 @@ def fetch_data_from_api(url: str) -> dict:
                     <h4>Step 2: Load the Module in ${CONFIG.productName}</h4>
                     ${C.code(`// Load the Python file
 LoadPyFromFileProjectPy(
-    projectId="<your-app-project-id>",
+    space="<your-app-project-id>",
     filePath="mcp_driver.py"
 );
 
