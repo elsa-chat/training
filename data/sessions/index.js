@@ -15,38 +15,128 @@ const SESSION_PLAN = {
         {
             id: '1',
             label: 'Day 1 — Monday, Feb 23',
-            slideIds: idsFrom(
-                typeof slides_welcome !== 'undefined' ? slides_welcome : null,
-                typeof slides_platform_fundamentals !== 'undefined' ? slides_platform_fundamentals : null,
-                typeof slides_platform_engines !== 'undefined' ? slides_platform_engines : null,
-                typeof slides_platform_pixel_reactors !== 'undefined' ? slides_platform_pixel_reactors : null,
-                typeof slides_app_fundamentals !== 'undefined' ? slides_app_fundamentals : null,
-                typeof slides_apps_pro_code !== 'undefined' ? slides_apps_pro_code : null,
-                typeof slides_custom_reactors !== 'undefined' ? slides_custom_reactors : null,
-                typeof slides_custom_python !== 'undefined' ? slides_custom_python : null,
-            )
+            chapters: [
+                {
+                    title: 'Welcome & Introduction',
+                    slideIds: idsFrom(
+                        typeof slides_welcome !== 'undefined' ? slides_welcome : null,
+                    )
+                },
+                {
+                    title: 'Platform Fundamentals',
+                    slideIds: idsFrom(
+                        typeof slides_platform_fundamentals !== 'undefined' ? slides_platform_fundamentals : null,
+                    )
+                },
+                {
+                    title: 'Engines - The Data Layer',
+                    slideIds: idsFrom(
+                        typeof slides_platform_engines !== 'undefined' ? slides_platform_engines : null,
+                    )
+                },
+                {
+                    title: 'Pixel & Reactors',
+                    slideIds: idsFrom(
+                        typeof slides_platform_pixel_reactors !== 'undefined' ? slides_platform_pixel_reactors : null,
+                    )
+                },
+                {
+                    title: 'App Fundamentals',
+                    slideIds: idsFrom(
+                        typeof slides_app_fundamentals !== 'undefined' ? slides_app_fundamentals : null,
+                    )
+                },
+                {
+                    title: 'Pro-Code App Development',
+                    slideIds: idsFrom(
+                        typeof slides_apps_pro_code !== 'undefined' ? slides_apps_pro_code : null,
+                    )
+                },
+                {
+                    title: 'Custom Reactor Development',
+                    slideIds: idsFrom(
+                        typeof slides_custom_reactors !== 'undefined' ? slides_custom_reactors : null,
+                    )
+                },
+                {
+                    title: 'Python Integration',
+                    slideIds: idsFrom(
+                        typeof slides_custom_python !== 'undefined' ? slides_custom_python : null,
+                    )
+                }
+            ]
         },
         {
             id: '2',
             label: 'Day 2 — Tuesday, Feb 24',
-            slideIds: idsFrom(
-                typeof slides_playground !== 'undefined' ? slides_playground : null,
-                typeof slides_mcp_fundamentals !== 'undefined' ? slides_mcp_fundamentals : null,
-                typeof slides_mcp_building_consuming !== 'undefined' ? slides_mcp_building_consuming : null,
-                typeof slides_mcp_ui_premade !== 'undefined' ? slides_mcp_ui_premade : null,
-                typeof slides_message_structure !== 'undefined' ? slides_message_structure : null,
-                typeof slides_api_endpoints !== 'undefined' ? slides_api_endpoints : null,
-                typeof slides_model_logs !== 'undefined' ? slides_model_logs : null,
-            )
+            chapters: [
+                {
+                    title: 'Playground Deep Dive',
+                    slideIds: idsFrom(
+                        typeof slides_playground !== 'undefined' ? slides_playground : null,
+                    )
+                },
+                {
+                    title: 'MCP Fundamentals',
+                    slideIds: idsFrom(
+                        typeof slides_mcp_fundamentals !== 'undefined' ? slides_mcp_fundamentals : null,
+                    )
+                },
+                {
+                    title: 'MCP Building & Consuming',
+                    slideIds: idsFrom(
+                        typeof slides_mcp_building_consuming !== 'undefined' ? slides_mcp_building_consuming : null,
+                    )
+                },
+                {
+                    title: 'MCP UI & Pre-made MCPs',
+                    slideIds: idsFrom(
+                        typeof slides_mcp_ui_premade !== 'undefined' ? slides_mcp_ui_premade : null,
+                    )
+                },
+                {
+                    title: 'Message Structure & Multimodal',
+                    slideIds: idsFrom(
+                        typeof slides_message_structure !== 'undefined' ? slides_message_structure : null,
+                    )
+                },
+                {
+                    title: 'API Endpoints',
+                    slideIds: idsFrom(
+                        typeof slides_api_endpoints !== 'undefined' ? slides_api_endpoints : null,
+                    )
+                },
+                {
+                    title: 'Model Logs',
+                    slideIds: idsFrom(
+                        typeof slides_model_logs !== 'undefined' ? slides_model_logs : null,
+                    )
+                }
+            ]
         },
         {
             id: '3',
             label: 'Day 3 — Wednesday, Feb 25',
-            slideIds: idsFrom(
-                typeof slides_security_auth !== 'undefined' ? slides_security_auth : null,
-                typeof slides_docker !== 'undefined' ? slides_docker : null,
-                typeof slides_admin !== 'undefined' ? slides_admin : null,
-            )
+            chapters: [
+                {
+                    title: 'Security, RBAC & Guardrails',
+                    slideIds: idsFrom(
+                        typeof slides_security_auth !== 'undefined' ? slides_security_auth : null,
+                    )
+                },
+                {
+                    title: 'Infrastructure & Deployment',
+                    slideIds: idsFrom(
+                        typeof slides_docker !== 'undefined' ? slides_docker : null,
+                    )
+                },
+                {
+                    title: 'Admin & Production Best Practices',
+                    slideIds: idsFrom(
+                        typeof slides_admin !== 'undefined' ? slides_admin : null,
+                    )
+                }
+            ]
         }
     ]
 };

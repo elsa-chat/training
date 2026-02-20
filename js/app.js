@@ -122,17 +122,40 @@ function buildNavStructure() {
     }
 
     SESSION_PLAN.days.forEach(day => {
+        const dayLabel = day.label || `Day ${day.id || ''}`.trim();
+        const hasChapters = Array.isArray(day.chapters) && day.chapters.length > 0;
+
+        if (hasChapters) {
+            const chapters = day.chapters.map(ch => {
+                const slideIds = Array.isArray(ch.slideIds) ? ch.slideIds : [];
+                const slides = slideIds.map(id => SLIDES_BY_ID[id]).filter(Boolean);
+                const missing = slideIds.filter(id => !SLIDES_BY_ID[id]);
+                if (missing.length) {
+                    console.warn('[WARN] Missing slides for chapter', ch.title || 'Untitled', 'in', dayLabel, missing);
+                }
+                return {
+                    title: ch.title || 'Section',
+                    slides
+                };
+            });
+
+            navStructure.push({
+                label: dayLabel,
+                chapters,
+                display: 'chapters'
+            });
+            return;
+        }
+
         const slideIds = Array.isArray(day.slideIds) ? day.slideIds : [];
-        const slides = slideIds
-            .map(id => SLIDES_BY_ID[id])
-            .filter(Boolean);
+        const slides = slideIds.map(id => SLIDES_BY_ID[id]).filter(Boolean);
         const missing = slideIds.filter(id => !SLIDES_BY_ID[id]);
         if (missing.length) {
             console.warn('[WARN] Missing slides for day', day.id || day.label, missing);
         }
 
         navStructure.push({
-            label: day.label || `Day ${day.id || ''}`.trim(),
+            label: dayLabel,
             chapters: [{ title: null, slides }],
             display: 'day-only'
         });
@@ -163,11 +186,11 @@ function buildSidebar() {
         } else {
             day.chapters.forEach((chapter, chIdx) => {
                 const chapterId = `day${dayIdx}_ch${chIdx}`;
-                html += `<div class="nav-chapter-header ${isFirstDay ? 'expanded' : ''}" onclick="toggleChapter('${chapterId}')">`;
+                html += `<div class="nav-chapter-header" onclick="toggleChapter('${chapterId}')">`;
                 html += `<span class="arrow">&#9654;</span>`;
                 html += `<span>${chapter.title}</span>`;
                 html += `</div>`;
-                html += `<div class="nav-chapter-topics ${isFirstDay ? 'expanded' : ''}" id="${chapterId}">`;
+                html += `<div class="nav-chapter-topics" id="${chapterId}">`;
 
                 chapter.slides.forEach(slide => {
                     html += `<div class="nav-topic" id="nav-${slide.id}" onclick="goToSlide('${slide.id}')">${slide.title}</div>`;
