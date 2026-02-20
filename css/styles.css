@@ -626,7 +626,7 @@ body {
 }
 
 .slide-title-card .time-badge {
-    display: inline-block;
+    display: none;
     font-size: 12px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
