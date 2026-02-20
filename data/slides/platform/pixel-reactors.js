@@ -63,53 +63,17 @@ Echo("Hello, World!");
 MyEngines();
 
 // Query a database (use engine ID for database engines)
-Database(database="bd1dea64-ec6b-49af-9308-94b05551c83d") | Query("SELECT * FROM users LIMIT 10");
+Database(database="950eb187-e352-444d-ad6a-6476ed9390af") | Query("<encode> SELECT DISTINCT DRUG from DIABETES </encode>") | Collect(20);
 
 // Call an LLM (use engine ID)
-LLM(engine="a1b2c3d4-5e6f-7890-abcd-1234567890ab", command="What is SEMOSS?");
+myRoom=UUID();
+LLM(engine="3a226b19-f42d-4c37-b681-412f79602144", roomId=myRoom, command="<encode>Hello!</encode>");
 
-// Get engine metadata
-EngineMetadata(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");
+// Get database metamodel
+GetDatabaseMetamodel(database=["950eb187-e352-444d-ad6a-6476ed9390af"]);
 
-// Query and collect results
-Database(database="bd1dea64-ec6b-49af-9308-94b05551c83d")
-  | Query("SELECT name, age FROM people")
-  | Collect(500);`, 'pixel', 'Common Pixel Commands')}
-            `
-        },
-        {
-            id: "pixel-chaining",
-            title: "Chaining (Recipes)",
-            content: `
-                <h2>Chaining Pixel Commands (Recipes)</h2>
-                <p>The real power of Pixel is <strong>chaining</strong> — composing multiple operations into a pipeline.</p>
-                ${C.split(
-                    {
-                        title: 'Query → Transform → Visualize',
-                        content: C.code(`Database(database="a7f3c2e1-9d8b-4c5a-b6e7-3f2a1d9c8b7a")
-  | Query("SELECT region, SUM(revenue) as total FROM sales GROUP BY region")
-  | Import()
-  | Frame()
-  | QueryAll()
-  | AutoTaskOptions(panel="0", layout="BarChart")
-  | Collect(500);`, 'pixel')
-                    },
-                    {
-                        title: 'What Each Step Does',
-                        content: `
-                            <ol>
-                                <li><code>Database()</code> — select engine</li>
-                                <li><code>Query()</code> — run SQL</li>
-                                <li><code>Import()</code> — load into frame</li>
-                                <li><code>Frame()</code> — reference the frame</li>
-                                <li><code>QueryAll()</code> — select all rows</li>
-                                <li><code>AutoTaskOptions()</code> — set viz type</li>
-                                <li><code>Collect()</code> — limit and return</li>
-                            </ol>
-                        `
-                    }
-                )}
-                ${C.callout(`<strong>Recipes</strong> are saved chains of Pixel commands. When you save an insight, ${CONFIG.productName} saves the Pixel recipe that produced it. Recipes can be replayed, shared, and embedded in apps.`, 'info')}
+// Get current user info
+GetUserInfo();`, 'pixel', 'Common Pixel Commands')}
             `
         },
         {
@@ -123,11 +87,16 @@ count = 42;
 myList = ["a", "b", "c"];
 
 // Using variables
-myEngine = "my-gpt4-engine";
-LLM(engine=myEngine, command="Tell me a joke");
+myEngine = "3a226b19-f42d-4c37-b681-412f79602144";
+myRoom = UUID();
+llmOut = LLM(engine=myEngine, roomId=myRoom, command="<encode>Hello!</encode>");
+
+// Save output of a reactor
+userInfo = GetUserInfo();
+dbMeta = GetDatabaseMetamodel(database=["950eb187-e352-444d-ad6a-6476ed9390af"]);
 
 // Database query example
-Database(database = "66cf4dbb-483f-42e7-8804-4e3d5af89287") | Query("<encode> your select query </encode>") | Collect(500);`, 'pixel', 'Pixel Variables')}
+Database(database="950eb187-e352-444d-ad6a-6476ed9390af") | Query("<encode> SELECT DISTINCT DRUG from DIABETES </encode>") | Collect(20);`, 'pixel', 'Pixel Variables')}
                 ${C.callout('Variables persist within the scope of the current <strong>insight</strong> (session). They are not shared across different insights or users.', 'info')}
             `
         },
@@ -286,17 +255,17 @@ NounMetadata result = new NounMetadata(
         },
         {
             id: "reactors-rest-api",
-            title: "REST API for Pixel",
+            title: "runPixel Endpoint (Monolith)",
             content: `
-                <h2>Calling Pixel via REST API</h2>
-                <p>The UI calls the same REST endpoints you can call with curl or Postman.</p>
-                ${C.code(`// Run Pixel via REST
-POST /api/engine/runPixel
+                <h2>Calling Pixel via runPixel</h2>
+                <p>Focus on the Monolith <code>runPixel</code> endpoint only.</p>
+                ${C.code(`// Run Pixel via REST (Monolith)
+POST /Monolith/api/engine/runPixel
 Content-Type: application/json
 
 {
     "insightId": "new",
-    "expression": "Echo(\\"Hello from the API!\\");"
+    "expression": "Echo("Hello from the API!");"
 }
 
 // Response structure
@@ -307,18 +276,8 @@ Content-Type: application/json
         "output": "Hello from the API!",
         "operationType": ["OPERATION"]
     }]
-}`, 'http', 'Pixel REST API')}
-                <h3>Key Endpoints</h3>
-                ${C.table(
-                    ['Endpoint', 'Method', 'Purpose'],
-                    [
-                        ['<code>/api/engine/runPixel</code>', 'POST', 'Execute Pixel commands'],
-                        ['<code>/api/engine/openInsight</code>', 'POST', 'Open a new insight session'],
-                        ['<code>/api/engine/getEngines</code>', 'GET', 'List available engines'],
-                        ['<code>/api/auth/login</code>', 'POST', 'Authenticate'],
-                    ]
-                )}
-                ${C.callout('<strong>DevTools tip:</strong> Open browser DevTools → Network tab to see the Pixel commands the UI generates as you interact with it.', 'tip')}
+}`, 'http', 'runPixel REST API')}
+                ${C.callout('<strong>Tip:</strong> You can point Postman or curl to this endpoint to replay any Pixel you build in the UI.', 'tip')}
             `
         },
         {
@@ -414,19 +373,8 @@ Echo(greeting);`, 'pixel')}
                     ${C.code(`LLM(engine="a1b2c3d4-5e6f-7890-abcd-1234567890ab",
     command="What is the capital of Spain?");`, 'pixel')}
 
-                    <h4>Exercise 4: Chain Commands</h4>
-                    ${C.code(`Database(database="f9e8d7c6-b5a4-4321-9876-1e2d3c4b5a6f")
-  | Query("SELECT country_name, population FROM country ORDER BY population DESC LIMIT 10")
-  | Import()
-  | Frame()
-  | QueryAll()
-  | AutoTaskOptions(panel="0", layout="BarChart")
-  | Collect(500);`, 'pixel')}
-
-                    <h4>Exercise 5: REST API (Bonus)</h4>
-                    ${C.code(`curl -X POST http://localhost:8080/api/engine/runPixel \\
-  -H "Content-Type: application/json" \\
-  -d '{"insightId":"new","expression":"Echo(\\"Hello from API!\\");"}'`, 'bash')}
+                    <h4>Exercise 4: REST API (Bonus)</h4>
+                    ${C.code(`curl -u accessKey:secretKey 'https://dev.eu.aicore.deloitte.com/Monolith/api/engine/runPixel' -d 'expression=Echo("Hello from the API!");' -d 'insightId=new'`, 'bash')}
                 `)}
             `
         },
