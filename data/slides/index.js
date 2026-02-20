@@ -31,6 +31,7 @@ registerSlideCollection('App Fundamentals', typeof slides_app_fundamentals !== '
 registerSlideCollection('Pro-Code Apps', typeof slides_apps_pro_code !== 'undefined' ? slides_apps_pro_code : null);
 registerSlideCollection('Custom Reactors', typeof slides_custom_reactors !== 'undefined' ? slides_custom_reactors : null);
 registerSlideCollection('Custom Python', typeof slides_custom_python !== 'undefined' ? slides_custom_python : null);
+registerSlideCollection('Day 1 Activity', typeof slides_day1_activity !== 'undefined' ? slides_day1_activity : null);
 
 registerSlideCollection('Insight Room Session', typeof slides_insight_room_session !== 'undefined' ? slides_insight_room_session : null);
 registerSlideCollection('Message Structure', typeof slides_message_structure !== 'undefined' ? slides_message_structure : null);
