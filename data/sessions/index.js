@@ -69,6 +69,12 @@ const SESSION_PLAN = {
                     slideIds: idsFrom(
                         typeof slides_custom_python !== 'undefined' ? slides_custom_python : null,
                     )
+                },
+                {
+                    title: 'Day 1 Activity — Pro-Code App Build',
+                    slideIds: idsFrom(
+                        typeof slides_day1_activity !== 'undefined' ? slides_day1_activity : null,
+                    )
                 }
             ]
         },

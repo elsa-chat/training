@@ -263,34 +263,17 @@ git push origin main`, 'bash', 'Git commands in app_root/version/')}
             `
         },
         {
-            id: "app-mcp-manifests",
-            title: "MCP Tool Manifests",
+            id: "app-context-reactors",
+            title: "Set Context & Load App Reactors",
             content: `
-                <h2>MCP Tool Manifests</h2>
-                <p>${CONFIG.productName} can generate <strong>MCP (Model Context Protocol)</strong> manifests that describe your app's tools for AI agents.</p>
-                ${C.split(
-                    {
-                        title: 'Python MCP',
-                        content: C.code(`// Generate Python MCP manifest
-MakePythonMCP(project="<projectId>");
+                <h2>Set Context & Load App Reactors</h2>
+                <p><code>SetContext(projectId)</code> switches the active project for your insight. Once set, the app's custom reactors are available.</p>
+                ${C.code(`// Switch your insight to an app context
+SetContext("e258b9dd-6114-4928-b376-15edf191f4bd");
 
-// Output: assets/mcp/py_mcp.json
-// Describes functions from
-// assets/py/my_module.py`, 'pixel')
-                    },
-                    {
-                        title: 'Pixel/Java MCP',
-                        content: C.code(`// Generate Pixel MCP manifest
-MakePixelMCP(
-    project="<projectId>",
-    reactor=["CustomReactor", "OtherReactor"]
-);
-
-// Output: assets/mcp/pixel_mcp.json
-// Describes reactor metadata`, 'pixel')
-                    }
-                )}
-                ${C.callout('MCP manifests are <strong>generated</strong> — regenerate them after adding/changing Python functions or reactors.', 'warning')}
+// Now you can call app reactors by name
+SampleApp();`, 'pixel')}
+                ${C.callout('Think of <code>SetContext</code> as “load this app into the current insight.” It makes the app’s reactors and assets available in that context.', 'info')}
             `
         },
         {
@@ -381,7 +364,7 @@ git log --oneline`, 'bash')}
                     { badge: 'Architecture', title: 'Three Layers', desc: 'React frontend + Java/Python backend + Pixel orchestration' },
                     { badge: 'Publishing', title: 'portals/ → public_home/', desc: 'Copy UI to web-served directory for end users' },
                     { badge: 'Versioning', title: 'Git-Backed', desc: 'Automatic version control with commit history' },
-                    { badge: 'Tooling', title: 'MCP Manifests', desc: 'AI-readable tool descriptions for agents' },
+                    { badge: 'Context', title: 'SetContext', desc: 'Load an app into the current insight to access its reactors' },
                 ])}
                 <h3>Next Up</h3>
                 <p>Pro-Code Apps — Build sophisticated React portals with <code>@semoss/sdk</code> and <code>@semoss/renderer</code>.</p>
