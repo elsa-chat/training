@@ -47,6 +47,12 @@ const SESSION_PLAN = {
                     )
                 },
                 {
+                    title: 'Python in SEMOSS',
+                    slideIds: idsFrom(
+                        typeof slides_base_python !== 'undefined' ? slides_base_python : null,
+                    )
+                },
+                {
                     title: 'Pro-Code App Development',
                     slideIds: idsFrom(
                         typeof slides_apps_pro_code !== 'undefined' ? slides_apps_pro_code : null,

@@ -28,6 +28,7 @@ registerSlideCollection('Engines', typeof slides_platform_engines !== 'undefined
 registerSlideCollection('Pixel & Reactors', typeof slides_platform_pixel_reactors !== 'undefined' ? slides_platform_pixel_reactors : null);
 
 registerSlideCollection('App Fundamentals', typeof slides_app_fundamentals !== 'undefined' ? slides_app_fundamentals : null);
+registerSlideCollection('Python', typeof slides_base_python !== 'undefined' ? slides_base_python : null);
 registerSlideCollection('Pro-Code Apps', typeof slides_apps_pro_code !== 'undefined' ? slides_apps_pro_code : null);
 registerSlideCollection('Custom Reactors', typeof slides_custom_reactors !== 'undefined' ? slides_custom_reactors : null);
 registerSlideCollection('Custom Python', typeof slides_custom_python !== 'undefined' ? slides_custom_python : null);
