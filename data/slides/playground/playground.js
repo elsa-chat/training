@@ -14,17 +14,83 @@ const slides_playground = [
             title: "What is Playground?",
             content: `
                 <h2>What is Playground?</h2>
-                <p class="lead"><span class="highlight">Playground</span> is ${CONFIG.productName}'s conversational AI interface — a ChatGPT-like experience powered by Rooms, Workspaces, and MCP tools.</p>
-                <p>Think of Playground as the enterprise chat interface where users interact with LLMs, connect to data sources, and execute tools — all within a governed, shareable environment.</p>
+                <p class="lead"><span class="highlight">Playground</span> is where ${CONFIG.productName} is putting its largest effort — not “just ChatGPT,” but a harmonization layer between business apps and LLMs.</p>
+                <p>It brings together models, apps, vectors, and functions so user-driven computation can happen while you move between tools to complete real work.</p>
                 ${C.cards([
                     { badge: 'Feature', title: 'Rooms', desc: 'Persistent conversation threads with message history and tool execution' },
                     { badge: 'Feature', title: 'Workspaces', desc: 'Reusable configurations for system prompts, tools, and resources' },
                     { badge: 'Feature', title: 'Room Folders', desc: 'File storage scoped to each Room for document uploads and outputs' },
                     { badge: 'Feature', title: 'MCP Integration', desc: 'Connect Apps and Engines as tools accessible to the LLM' },
-                    { badge: 'Feature', title: 'Cloud Sync', desc: 'Sync Rooms across devices and share with teams' },
+                    { badge: 'Feature', title: 'Business Context', desc: 'Capture domain-specific inputs alongside AI automation' },
                     { badge: 'Feature', title: 'Enterprise Themes', desc: 'Customize system prompts globally with Pixel-backed variables' },
                 ])}
                 ${C.callout('Playground is built on top of the <strong>Room</strong> architecture we studied in Day 3, adding a user-friendly interface and enterprise governance features.', 'info')}
+            `
+        },
+        {
+            id: "playground-why-use",
+            title: "Why Use Playground?",
+            content: `
+                <h2>Why Use Playground?</h2>
+                <p class="lead">Playground is the operating layer where business context meets models, apps, vectors, and functions — so real work can happen end‑to‑end.</p>
+                ${C.split(
+                    {
+                        title: 'What It Replaces',
+                        content: `
+                            <ul>
+                                <li>Fragmented tools (chat, CRM, docs, search) with no shared context</li>
+                                <li>Manual handoffs between steps (research → draft → review)</li>
+                                <li>Copy/paste workflows that break governance and audit trails</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: 'What It Enables',
+                        content: `
+                            <ul>
+                                <li>One workspace that holds <strong>business inputs</strong> + <strong>LLM outputs</strong></li>
+                                <li>Tool orchestration across Apps, Engines, Vectors, Functions</li>
+                                <li>Human-in-the-loop review with traceable outputs</li>
+                            </ul>
+                        `
+                    }
+                )}
+                <h3>Value Stack (Why It Matters)</h3>
+                ${C.cards([
+                    { badge: 'Context', title: 'Business-Grade Inputs', desc: 'Users add domain signals, scores, and constraints instead of raw prompts.' },
+                    { badge: 'Orchestration', title: 'Tools + Data in One Flow', desc: 'LLMs call engines, apps, vectors, and functions inside one insight.' },
+                    { badge: 'Governance', title: 'Audit + Control', desc: 'Traceable steps, reusable workspaces, and standardized prompts.' },
+                    { badge: 'Velocity', title: 'Faster End-to-End', desc: 'From intake to approved response without app switching.' },
+                ])}
+                ${C.callout('Playground is not just chat — it is a <strong>workflow layer</strong> that binds business context, tools, and approvals into one governed experience.', 'info')}
+            `
+        },
+        {
+            id: "playground-why-use-demo",
+            title: "Why Use Playground? (CRM Demo Flow)",
+            content: `
+                <h2>Example: CRM Request → Approved Response</h2>
+                <p class="lead">A real workflow that combines user input, historical knowledge, and automated actions.</p>
+                ${C.cards([
+                    { badge: '1', title: 'Request Intake', desc: 'Customer email or CRM entry arrives.' },
+                    { badge: '2', title: 'Context + Scoring', desc: 'Compare to past requests, evaluate value/fit, capture scores in CRM.' },
+                    { badge: '3', title: 'Research & Examples', desc: 'Pull prior responses, qualifications, and similar cases.' },
+                    { badge: '4', title: 'Draft Response', desc: 'Generate a tailored reply based on priorities and constraints.' },
+                    { badge: '5', title: 'Human Review', desc: 'Send draft for approval before sending.' },
+                    { badge: '6', title: 'Auto-Send', desc: 'Approved response is sent automatically.' },
+                ])}
+                <h3>What the User Sees</h3>
+                ${C.table(
+                    ['UI Surface', 'Purpose'],
+                    [
+                        ['CRM Panel', 'Enter scores, priorities, and context'],
+                        ['Playground Chat', 'Draft and iterate with the LLM'],
+                        ['Tools Panel', 'Search prior cases, pull docs, query engines (tools exposed to the LLM)'],
+                        ['Approval Queue', 'Review + approve outbound response']
+                    ]
+                )}
+                ${C.callout('All steps occur in one Room with shared context — no switching tabs or losing state.', 'tip')}
+                ${C.callout('Every action is exposed as a tool you can invoke, and it all runs under the same RBAC + permissions model used across the platform.', 'info')}
             `
         },
         {
@@ -240,34 +306,6 @@ public List<Map<String, Object>> getAllToolsJsonForRoom() {
                         `
                     }
                 )}
-            `
-        },
-        {
-            id: "playground-cloud-sync",
-            title: "Cloud Sync & Sharing",
-            content: `
-                <h2>Cloud Sync & Sharing</h2>
-                <p>Playground Rooms can be synced to a <strong>central cloud storage</strong> for cross-device access and team collaboration.</p>
-                ${C.table(
-                    ["Feature", "Local-Only Mode", "Cloud Sync Enabled"],
-                    [
-                        ["Room Storage", "Local MODEL_INFERENCE_LOGS_DB", "Synced to central cluster"],
-                        ["File Storage", "Local room folder", "Synced to cloud (S3/GCS/Azure)"],
-                        ["Cross-Device", "❌ Not available", "✅ Access from any device"],
-                        ["Sharing", "Manual export/import", "✅ Real-time collaboration"],
-                        ["Backup", "Manual DB backup", "✅ Automatic cloud backup"]
-                    ]
-                )}
-                ${C.callout('Cloud sync is configured via <code>CentralCloudStorage</code> and <code>ClusterUtil</code>. When enabled, Room messages and files are automatically pushed/pulled on access.', 'info')}
-                ${C.code(`// Cloud sync utilities (from ClusterUtil)
-// Pull room from cloud storage
-ClusterUtil.pullRoom(roomId);
-
-// Push room to cloud storage
-ClusterUtil.pushRoom(roomId);
-
-// Pull workspace configuration from cloud
-ClusterUtil.pullUserWorkspace(projectId, isAsset);`, 'java', 'prerna/cluster/util/ClusterUtil.java')}
             `
         },
         {
