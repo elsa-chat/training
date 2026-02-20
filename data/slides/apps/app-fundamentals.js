@@ -67,7 +67,7 @@ const slides_app_fundamentals = [
                 <p>Every app has a predictable on-disk structure. The <strong>assets/</strong> folder is your workspace.</p>
                 ${C.tree([
                     { name: "project/", type: "dir", children: [
-                        { name: "<AppName>__<projectId>/", type: "dir", desc: "← folder naming pattern", children: [
+                        { name: "sampleProject__f1fc427c-c830-4bbe-a21d-02c6c513bfa2/", type: "dir", desc: "← folder naming pattern", children: [
                             { name: "app_root/", type: "dir", children: [
                                 { name: "version/", type: "dir", desc: "← git repo root", children: [
                                     { name: ".git/", type: "dir", desc: `← managed by ${CONFIG.productName}` },
@@ -84,7 +84,7 @@ const slides_app_fundamentals = [
                                 ]}
                             ]}
                         ]},
-                        { name: "<AppName>__<projectId>.smss", type: "file", desc: "← project metadata" }
+                        { name: "sampleProject__f1fc427c-c830-4bbe-a21d-02c6c513bfa2.smss", type: "file", desc: "← project metadata" }
                     ]}
                 ])}
                 ${C.callout('<strong>Key Rule:</strong> Never hand-edit <code>classes/</code> or <code>mcp/</code> — they are generated. Edit <code>java/</code> and <code>py/</code> instead.', 'warning')}
@@ -126,6 +126,8 @@ const slides_app_fundamentals = [
         const env = JSON.parse(
             document.getElementById('semoss-env')?.textContent || '{}'
         );
+        // MODULE is the platform base path (e.g., "/Monolith" or "/abc/Monolith")
+        // It's injected at publish time, so you don't hardcode it.
         const MODULE = env.MODULE || '/Monolith';
 
         // Run a Pixel command via REST
@@ -142,6 +144,7 @@ const slides_app_fundamentals = [
     </script>
 </body>
 </html>`, 'html', 'assets/portals/index.html (simple example)')}
+                ${C.callout('The platform injects <code>env.MODULE</code> at publish time to handle deployments with extra base paths (e.g., <code>/abc/Monolith</code>). Apps should always use <code>MODULE</code> so users don’t have to manage paths.', 'info')}
             `
         },
         {
@@ -179,13 +182,12 @@ const slides_app_fundamentals = [
                 <p>Python code runs out-of-process via <strong>GAAS</strong> (Generative AI Agent Services). Apps can bundle Python modules for custom logic.</p>
                 ${C.tree([
                     { name: "assets/py/", type: "dir", children: [
-                        { name: "mcp_driver.py", type: "file", desc: "← MCP tool entrypoint (preferred)" },
-                        { name: "smss_driver.py", type: "file", desc: "← legacy name" },
                         { name: "my_module.py", type: "file", desc: "← custom Python modules" },
+                        { name: "smss_driver.py", type: "file", desc: "← legacy name" },
                         { name: "requirements.txt", type: "file", desc: "← pip dependencies" }
                     ]}
                 ])}
-                ${C.code(`# assets/py/mcp_driver.py
+                ${C.code(`# assets/py/my_module.py
 def process_data(data):
     """Custom data processing function."""
     # Your Python logic here
@@ -194,7 +196,7 @@ def process_data(data):
 def call_llm(prompt):
     """Call an LLM via ${CONFIG.productName}."""
     # Use GAAS to call engines
-    return "LLM response"`, 'python', 'assets/py/mcp_driver.py (example)')}
+    return "LLM response"`, 'python', 'assets/py/my_module.py (example)')}
                 <h3>Loading Python Code</h3>
                 ${C.code(`// Load Python module from app's py/ folder
 LoadPyFromFileProjectPy(
@@ -274,7 +276,7 @@ MakePythonMCP(project="<projectId>");
 
 // Output: assets/mcp/py_mcp.json
 // Describes functions from
-// assets/py/mcp_driver.py`, 'pixel')
+// assets/py/my_module.py`, 'pixel')
                     },
                     {
                         title: 'Pixel/Java MCP',
