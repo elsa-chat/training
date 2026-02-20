@@ -5,8 +5,8 @@ const slides_welcome = [
             title: "Welcome",
             content: C.titleSlide(
                 `Welcome to ${CONFIG.productName} Training`,
-                "Spain 2026 — February 24–28",
-                "Day 1 of 5"
+                "Spain 2026 — February 23–25",
+                "Day 1 of 3"
             )
         },
         {
@@ -27,15 +27,13 @@ const slides_welcome = [
             id: "welcome-overview",
             title: "Week Overview",
             content: `
-                <h2>Week Overview</h2>
+                <h2>Training Overview</h2>
                 ${C.table(
                     ['Day', 'Focus'],
                     [
-                        ['<strong>Day 1 (Mon)</strong>', 'Platform Fundamentals, Engines, Pixel & Reactors'],
-                        ['<strong>Day 2 (Tue)</strong>', 'Advanced Development & Customization'],
-                        ['<strong>Day 3 (Wed)</strong>', 'AI & LLM Integration'],
-                        ['<strong>Day 4 (Thu)</strong>', 'Frontend & App Building'],
-                        ['<strong>Day 5 (Fri)</strong>', 'Deployment, Security & Capstone'],
+                        ['<strong>Day 1 (Mon)</strong>', 'Platform Fundamentals, Engines, Pixel & Reactors, App Building & Extensions'],
+                        ['<strong>Day 2 (Tue)</strong>', 'Playground, MCP Fundamentals, AI/LLM Integration'],
+                        ['<strong>Day 3 (Wed)</strong>', 'Security, Docker & Admin Operations'],
                     ]
                 )}
             `
@@ -45,7 +43,7 @@ const slides_welcome = [
             title: "Training Goals",
             content: `
                 <h2>Training Goals</h2>
-                <h3>By end of week you will:</h3>
+                <h3>By end of training you will:</h3>
                 <ul>
                     <li>Understand the <strong>${CONFIG.productName} architecture</strong> end-to-end</li>
                     <li>Configure and manage <strong>engines</strong> (databases, LLMs, vector stores, storage)</li>
