@@ -350,31 +350,6 @@ ResponseMessage resp = ResponseMessage.builder()
             `
         },
         {
-            id: "msg-handson",
-            title: "Hands-on: Query Model Logs",
-            content: `
-                <h2>Hands-on: Inspect AbstractMessage Instances</h2>
-                ${C.handson('Query and inspect message objects',
-                    '<h4>Step 1: Have a conversation in Playground</h4>' +
-                    `<ol><li>Open the ${CONFIG.productName} Playground</li><li>Send a few messages to an LLM</li><li>Note the conversation ID (transactionId) from the URL or UI</li></ol>` +
-                    '<h4>Step 2: Query the model logs database</h4><p>Connect to LocalMasterDatabase and run:</p>' +
-                    C.code("SELECT\n    message_id,\n    message_type,\n    LEFT(content, 100) as content_preview,\n    tokens,\n    visible,\n    date_created\nFROM model_logs\nWHERE transaction_id = '<your-transaction-id>'\nORDER BY date_created ASC;", 'sql') +
-                    '<h4>Step 3: Inspect a specific message</h4>' +
-                    C.code("SELECT\n    message_id,\n    message_type,\n    content,\n    ornaments\nFROM model_logs\nWHERE message_id = '<message-id-from-step-2>'", 'sql') +
-                    '<p>Look at the <code>content</code> field — it is a JSON serialization of the InputMessage or ResponseMessage object.</p>' +
-                    '<h4>Step 4: Find messages with ornaments (RAG chunks)</h4>' +
-                    C.code("SELECT\n    message_id,\n    message_type,\n    ornaments\nFROM model_logs\nWHERE transaction_id = '<your-transaction-id>'\nAND ornaments IS NOT NULL\nAND ornaments != '{}'", 'sql') +
-                    '<p>If you used RAG in your conversation, you will see the <code>chunks</code> ornament with retrieved document passages.</p>' +
-                    '<h4>Expected Observations</h4><ul>' +
-                    '<li>Each user prompt = one row with <code>message_type = ' + "'INPUT_TEXT'" + '</code></li>' +
-                    '<li>Each LLM response = one row with <code>message_type = ' + "'RESPONSE_TEXT'" + '</code></li>' +
-                    '<li>Tool executions = <code>INPUT_TOOL_EXEC</code> rows (may have <code>visible = false</code>)</li>' +
-                    '<li>All messages share the same <code>transaction_id</code></li>' +
-                    '<li>Message IDs are UUID v7 (time-ordered)</li></ul>'
-                )}
-            `
-        },
-        {
             id: "msg-summary",
             title: "Summary",
             content: `
