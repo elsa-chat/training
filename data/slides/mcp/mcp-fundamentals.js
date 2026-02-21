@@ -63,20 +63,65 @@ const slides_mcp_fundamentals = [
                 <h2>MCP App Filesystem Structure</h2>
                 <p>${CONFIG.productName} apps follow a canonical directory structure. MCP-related files live in specific folders:</p>
                 ${C.tree([
-                    { path: 'project/<ProjectName>__<projectId>/', type: 'dir' },
-                    { path: 'project/<ProjectName>__<projectId>/app_root/', type: 'dir' },
-                    { path: 'project/<ProjectName>__<projectId>/app_root/version/', type: 'dir' },
-                    { path: 'project/<ProjectName>__<projectId>/app_root/version/assets/', type: 'dir', note: 'This is what you edit' },
-                    { path: 'assets/py/', type: 'dir', note: 'Python source code' },
-                    { path: 'assets/py/mcp_driver.py', type: 'file', note: 'Python MCP tool entrypoint' },
-                    { path: 'assets/java/', type: 'dir', note: 'Java source code' },
-                    { path: 'assets/java/src/reactors/', type: 'dir', note: 'Custom reactors for MCP' },
-                    { path: 'assets/mcp/', type: 'dir', note: '⚠️ GENERATED - do not edit manually' },
-                    { path: 'assets/mcp/py_mcp.json', type: 'file', note: 'Python tool schemas (generated)' },
-                    { path: 'assets/mcp/pixel_mcp.json', type: 'file', note: 'Java/Pixel tool schemas (generated)' },
-                    { path: 'assets/classes/', type: 'dir', note: '⚠️ GENERATED - compiled Java output' },
-                    { path: 'assets/portals/', type: 'dir', note: 'Published web UI (built from client/)' },
-                    { path: 'assets/client/', type: 'dir', note: 'React source (Vite + Tailwind)' },
+                    {
+                        name: 'project/',
+                        type: 'dir',
+                        children: [
+                            {
+                                name: '&lt;ProjectName&gt;__&lt;ProjectId&gt;/',
+                                type: 'dir',
+                                children: [
+                                    {
+                                        name: 'app_root/',
+                                        type: 'dir',
+                                        children: [
+                                            {
+                                                name: 'version/',
+                                                type: 'dir',
+                                                children: [
+                                                    {
+                                                        name: 'assets/',
+                                                        type: 'dir',
+                                                        desc: 'This is what you edit',
+                                                        children: [
+                                                            {
+                                                                name: 'py/',
+                                                                type: 'dir',
+                                                                desc: 'Python source code',
+                                                                children: [
+                                                                    { name: 'mcp_driver.py', type: 'file', desc: 'Python MCP tool entrypoint' },
+                                                                ]
+                                                            },
+                                                            {
+                                                                name: 'java/',
+                                                                type: 'dir',
+                                                                desc: 'Java source code',
+                                                                children: [
+                                                                    { name: 'src/reactors/', type: 'dir', desc: 'Custom reactors for MCP' },
+                                                                ]
+                                                            },
+                                                            {
+                                                                name: 'mcp/',
+                                                                type: 'dir',
+                                                                desc: '⚠️ GENERATED - do not edit manually',
+                                                                children: [
+                                                                    { name: 'py_mcp.json', type: 'file', desc: 'Python tool schemas (generated)' },
+                                                                    { name: 'pixel_mcp.json', type: 'file', desc: 'Java/Pixel tool schemas (generated)' },
+                                                                ]
+                                                            },
+                                                            { name: 'classes/', type: 'dir', desc: '⚠️ GENERATED - compiled Java output' },
+                                                            { name: 'portals/', type: 'dir', desc: 'Published web UI (built from client/)' },
+                                                            { name: 'client/', type: 'dir', desc: 'React source (Vite + Tailwind)' },
+                                                        ]
+                                                    },
+                                                ]
+                                            },
+                                        ]
+                                    },
+                                ]
+                            },
+                        ]
+                    },
                 ])}
                 ${C.callout('<strong>⚠️ Key Rule:</strong> Never hand-edit <code>classes/</code> or <code>mcp/</code> — they are generated. Edit <code>java/</code> and <code>py/</code> instead. Platform auto-compiles Java. MCP JSONs can be edited manually but may be overwritten if regenerated via UI.', 'danger')}
             `
