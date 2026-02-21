@@ -164,10 +164,9 @@ const slides_mcp_fundamentals = [
             content: `
                 <h2>MCP JSON Schema Structure</h2>
                 <p>MCP tools are described using a JSON schema that follows the Model Context Protocol standard:</p>
-                ${C.split(
-                    {
-                        title: 'Python MCP JSON (py_mcp.json)',
-                        content: C.code(`{
+                <h3>Python MCP JSON (py_mcp.json)</h3>
+                <div class="c-code-wrap">
+                    ${C.code(`{
   "tools": [
     {
       "name": "execute_python_code",
@@ -183,19 +182,21 @@ const slides_mcp_fundamentals = [
           }
         },
         "required": ["code_b64"]
+      },
+      "_meta": {
+        "generated_on": "2026-01-21",
+        "SMSS_MCP_EXECUTION": "auto"
       }
     }
   ],
   "_meta": {
-    "last_modified_date": "2025-01-15",
-    "file_last_modified_date": "2025-01-15",
-    "source_file": "/path/to/py/mcp_driver.py"
-  }
-}`, 'json')
-                    },
-                    {
-                        title: 'Pixel MCP JSON (pixel_mcp.json)',
-                        content: C.code(`{
+    "last_modified_date": "2026-01-21",
+    "file_last_modified_date": "2026-01-21"
+   }
+}`, 'json')}
+                </div>
+                <h3>Pixel MCP JSON (pixel_mcp.json)</h3>
+                ${C.code(`{
   "_meta": { "last_modified_date": "2025-11-24" },
   "tools": [
     {
@@ -217,9 +218,69 @@ const slides_mcp_fundamentals = [
       }
     }
   ]
-}`, 'json')
-                    }
-                )}
+}`, 'json')}
+                <h3>Schema Breakdown</h3>
+                <h4>Root</h4>
+                ${C.tree([
+                    {
+                        name: 'Root',
+                        type: 'dir',
+                        children: [
+                            { name: 'tools[]', type: 'dir', desc: 'Array of tool objects (each follows the Tool schema below)' },
+                            { name: '_meta', type: 'file', desc: 'File-level metadata (timestamps, source file)' },
+                        ]
+                    },
+                ])}
+                <h4>Tool Schema (tools[] items)</h4>
+                ${C.tree([
+                    {
+                        name: 'Tool',
+                        type: 'dir',
+                        children: [
+                            { name: 'name', type: 'file', desc: 'Stable tool identifier' },
+                            { name: 'title', type: 'file', desc: 'UI label' },
+                            { name: 'description', type: 'file', desc: 'Usage guidance' },
+                            {
+                                name: 'inputSchema',
+                                type: 'dir',
+                                desc: 'JSON Schema for arguments',
+                                children: [
+                                    { name: 'type', type: 'file', desc: 'Usually object' },
+                                    { name: 'title', type: 'file', desc: 'Schema name' },
+                                    { name: 'properties', type: 'dir', desc: 'Argument definitions' },
+                                    { name: 'required[]', type: 'file', desc: 'Required argument keys' },
+                                ]
+                            },
+                            { name: '_meta', type: 'dir', desc: 'Tool-level metadata (execution/UI hints)' },
+                        ]
+                    },
+                ])}
+                <h4>Property Schema (inputSchema.properties.*)</h4>
+                ${C.tree([
+                    {
+                        name: 'Property',
+                        type: 'dir',
+                        children: [
+                            { name: 'type', type: 'file', desc: 'Argument data type' },
+                            { name: 'title', type: 'file', desc: 'Display label' },
+                            { name: 'description', type: 'file', desc: 'How it is used' },
+                            { name: 'enum / default', type: 'file', desc: 'Allowed values or default (optional)' },
+                        ]
+                    },
+                ])}
+                <h4>${CONFIG.productName} Meta MCP Extensions</h4>
+                ${C.tree([
+                    {
+                        name: `${CONFIG.productName} Meta MCP Extensions`,
+                        type: 'dir',
+                        children: [
+                            { name: 'SMSS_MCP_EXECUTION', type: 'file', desc: 'Execution hint (ask/auto/disabled)' },
+                            { name: 'SMSS_MCP_UI', type: 'dir', desc: 'UI hint block' },
+                            { name: 'SMSS_MCP_UI.resourceURI', type: 'file', desc: 'UI resource path' },
+                            { name: 'SMSS_MCP_UI.displayLocation', type: 'file', desc: 'UI placement (e.g., sidebar)' },
+                        ]
+                    },
+                ])}
                 ${C.callout('The <code>inputSchema</code> follows JSON Schema format and describes tool parameters. SEMOSS extensions like <code>SMSS_MCP_EXECUTION</code> and <code>SMSS_MCP_UI</code> control execution behavior and UI layout.', 'info')}
             `
         },

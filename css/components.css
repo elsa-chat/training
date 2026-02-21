@@ -297,6 +297,17 @@
     line-height: 1.6;
 }
 
+/* Allow wrapping for specific code blocks */
+.c-code-wrap .c-code pre,
+.c-code-wrap .c-code pre code {
+    white-space: pre-wrap;
+}
+
+.c-code-wrap .c-code pre code {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
 /* ── Split View ── */
 .c-split {
     display: flex;
