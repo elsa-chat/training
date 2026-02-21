@@ -91,8 +91,7 @@ public interface IModelEngine extends IEngine {
                 ${C.split(
                     {
                         title: 'Database Engine .smss',
-                        content: C.code(`#Base Properties
-ENGINE	877ecba9-9125-40b8-9eb4-b82dbefc92cf
+                        content: C.code(`ENGINE	877ecba9-9125-40b8-9eb4-b82dbefc92cf
 ENGINE_ALIAS AuditLogs
 ENGINE_TYPE	prerna.engine.impl.rdbms.RDBMSNativeEngine
 OWL	AuditLogs_OWL.OWL
@@ -136,23 +135,24 @@ DATABASE_ZONEID UTC`, 'properties', 'db/AuditLogs.smss')
                         content: `
                             <p><strong>${CONFIG.productName} can connect to almost ALL major databases</strong> via JDBC drivers. Common examples:</p>
                             <ul>
-                                <li><strong>H2</strong> — Embedded (local master DB)</li>
-                                <li><strong>PostgreSQL</strong> — Primary RDBMS</li>
+                                <li><strong>H2</strong> — Embedded or Server</li>
+                                <li><strong>PostgreSQL</strong></li>
                                 <li><strong>MySQL / MariaDB</strong></li>
-                                <li><strong>SQL Server / Oracle</strong></li>
+                                <li><strong>SQL Server</strong></li>
+                                <li><strong>Oracle</strong></li>
                                 <li><strong>Databricks</strong></li>
-                                <li><strong>RDF / Sesame</strong> — Triple stores</li>
+                                <li><strong>RDF (Sesame, Jena)</strong> — Triple stores</li>
                             </ul>
-                            <p><em>And many more — any JDBC-compatible database is supported!</em></p>
+                            <p><em>And many more — any JDBC-compatible database is supported</em></p>
                         `
                     },
                     {
                         title: 'Each Engine Has',
                         content: `
                             <ul>
-                                <li>A <strong>JDBC connection</strong> (pooled)</li>
+                                <li>A <strong>JDBC connection</strong></li>
                                 <li>An <strong>OWL metadata layer</strong></li>
-                                <li>Registered in <strong>LocalMasterDatabase</strong></li>
+                                <li>Registered in <strong>LocalMasterDatabase</strong> for discovery</li>
                             </ul>
                         `
                     }
@@ -177,17 +177,6 @@ POOL_MAX_SIZE       50	# max connections
 AUTO_COMMIT         false	# transaction behavior
 
 DATABASE_ZONEID UTC	# database timezone`, 'properties', 'Example Database Engine .smss')}
-                ${C.code(`// How a database query flows through the system
-// 1. Pixel command (uses engine ID, not name)
-Database(database="bd1dea64-ec6b-49af-9308-94b05551c83d") | Query("SELECT * FROM users LIMIT 10");
-
-// 2. Java: DatabaseReactor resolves the engine by ID
-IDatabaseEngine engine = Utility.getDatabase("bd1dea64-ec6b-49af-9308-94b05551c83d");
-
-// 3. Java: QueryReactor executes against the engine
-Object result = engine.execQuery(sqlString);
-
-// 4. Results wrapped in NounMetadata and returned`, 'java', 'Database Query Flow')}
                 ${C.callout(`<strong>System Databases</strong> — ${CONFIG.productName} uses multiple internal databases for different concerns.<br>
                 ${C.table(
                     ['Database', 'What it Stores'],
@@ -220,18 +209,44 @@ Object result = engine.execQuery(sqlString);
                         { from: 1, to: 0, label: 'NounMetadata(CONST_STRING)', type: 'response' },
                     ]
                 )}
+                ${C.code(`# Base Properties
+ENGINE	8380e91f-7c0b-46a1-ad2a-d795b24037b5
+ENGINE_ALIAS	GPT 5-2
+ENGINE_TYPE	prerna.engine.impl.model.OpenAiEngine
+
+KEEP_INPUT_OUTPUT	true
+KEEP_CONVERSATION_HISTORY	true
+MODEL_TYPE	OPEN_AI
+VAR_NAME	openAIModel
+INIT_MODEL_ENGINE	import genai_client;\${VAR_NAME} = genai_client.OpenAiClient(
+    model_name = '\${MODEL}',
+    api_key = '\${OPEN_AI_KEY}',
+    chat_type = '\${CHAT_TYPE}',
+    context_window = \${CONTEXT_WINDOW},
+    max_tokens = \${MAX_TOKENS}
+)
+MAX_TOKENS	128000
+CONTEXT_WINDOW	400000
+MODEL	gpt-5.2-2025-12-11
+OPEN_AI_KEY	********
+CHAT_TYPE	responses
+NAME	GPT 5-2
+PIPELINE	pipeline.json
+MCP_ENABLED	false`, 'properties', 'Model Engine .smss — OpenAI')}
                 <h3>Supported Providers</h3>
+                <p class="muted">Providers: Anthropic, Azure OpenAI, Bedrock, Google, OpenAI, Text Generation Inference. The init script uses provider-specific client names.</p>
                 ${C.table(
-                    ['Provider', 'Model Type', 'Config Key'],
+                    ['Provider', 'Client Names Used In Init Script'],
                     [
-                        ['OpenAI', 'TEXT_GENERATION, EMBEDDINGS', '<code>OPENAI_API_KEY</code>'],
-                        ['Anthropic (Claude)', 'TEXT_GENERATION', '<code>ANTHROPIC_API_KEY</code>'],
-                        ['Azure OpenAI', 'TEXT_GENERATION, EMBEDDINGS', '<code>AZURE_*</code> keys'],
-                        ['Google (Gemini)', 'TEXT_GENERATION', '<code>GOOGLE_API_KEY</code>'],
-                        ['AWS Bedrock', 'TEXT_GENERATION', 'AWS credentials'],
-                        ['Local (GGUF/HF)', 'TEXT_GENERATION, EMBEDDINGS', 'Model path on disk'],
+                        ['Anthropic', '<code>genai_client.AnthropicClient</code>'],
+                        ['Azure OpenAI', '<code>genai_client.AzureOpenAiClient</code> / <code>genai_client.AzureOpenAiEmbedder</code>'],
+                        ['Bedrock', '<code>genai_client.BedrockClient</code> / <code>genai_client.BedrockEmbedder</code>'],
+                        ['Google', '<code>genai_client.GoogleGenAiTextClient</code> / <code>genai_client.GoogleGenAiImageClient</code> / <code>genai_client.VertexAiEmbedder</code>'],
+                        ['OpenAI', '<code>genai_client.OpenAiClient</code> / <code>genai_client.OpenAiEmbedder</code>'],
+                        ['Text Generation Inference', '<code>genai_client.TextGenClient</code> / <code>genai_client.TextEmbeddingsInference</code>'],
                     ]
                 )}
+                ${C.callout(`<strong>Key insight:</strong> All model engines share a common abstract interface; the differences between providers are encapsulated in the <code>INIT_MODEL_ENGINE</code> script.`, 'info')}
             `
         },
         {
@@ -247,18 +262,32 @@ Object result = engine.execQuery(sqlString);
                     { title: '4. Store', desc: 'Write vectors + metadata to vector DB', arrow: '↓ FAISS / Weaviate / PGVector' },
                     { title: '5. Query', desc: 'User asks a question → embed query → nearest neighbor search' },
                 ])}
-                ${C.code(`// Pixel: Add documents to a vector engine
-VectorDatabaseUpload(
-    engine="a1b2c3d4-5e6f-7890-abcd-ef1234567890",
-    filePath="/path/to/document.pdf"
-);
+                ${C.code(`ENGINE	f5555ec7-5fcc-4cff-91de-0042aa4b8a13
+ENGINE_ALIAS	azure semantic search
+ENGINE_TYPE	prerna.engine.impl.vector.AzureAISearchRestVectorDatabaseEngine
 
-// Pixel: Search the vector engine
-VectorDatabaseQuery(
-    engine="a1b2c3d4-5e6f-7890-abcd-ef1234567890",
-    searchStatement="What is the refund policy?",
-    limit=5
-);`, 'pixel', 'Vector Engine — Pixel Commands')}
+VECTOR_TYPE	AZURE_AI_SEARCH
+EF_CONSTRUCTION	128
+RETAIN_EXTRACTED_TEXT	false
+INDEX_ENGINE	lucene
+CHUNKING_STRATEGY	ALL
+M_VALUE	10
+INDEX_NAME	test-index
+API_VERSION	2024-07-01
+DISTANCE_METHOD	euclidean
+KEEP_INPUT_OUTPUT	false
+INDEX_CLASSES	default
+CONTENT_LENGTH	512
+API_KEY	********
+SPACE_TYPE	l2
+HOSTNAME	https://<some dns>
+METHOD_NAME	hnsw
+CONTENT_OVERLAP	20
+DIMENSION_SIZE	1024
+
+EMBEDDER_ENGINE_ID	e4449559-bcff-4941-ae72-0e3f18e06660
+EMBEDDER_ENGINE_NAME	TextEmbeddings BAAI-Large-En-V1.5`, 'properties', 'Vector Engine .smss — Azure AI Search')}
+                ${C.callout(`<strong>Key insight:</strong> We store the embedder engine so any text added to a vector store is embedded with the same model for consistent searching / retrieval.`, 'info')}
             `
         },
         {
@@ -267,13 +296,25 @@ VectorDatabaseQuery(
             content: `
                 <h2>Storage Engines</h2>
                 ${C.cards([
-                    { badge: 'Storage', title: 'Local', desc: 'Server filesystem — default for dev. Path-based access.' },
-                    { badge: 'Storage', title: 'S3 / MinIO', desc: 'Object storage — bucket + key. Used in production.' },
-                    { badge: 'Storage', title: 'Azure Blob', desc: 'Container + blob path. Enterprise deployments.' },
+                    { badge: 'Storage', title: 'Amazon S3', desc: 'Object storage with bucket + key addressing.' },
+                    { badge: 'Storage', title: 'CEPH', desc: 'S3-compatible object storage backend.' },
+                    { badge: 'Storage', title: 'DropBox', desc: 'File storage via Dropbox APIs.' },
+                    { badge: 'Storage', title: 'Google Cloud', desc: 'GCS bucket storage.' },
+                    { badge: 'Storage', title: 'Azure Blob', desc: 'Blob storage with container + blob path.' },
+                    { badge: 'Storage', title: 'MinIO', desc: 'S3-compatible object storage service.' },
+                    { badge: 'Storage', title: 'Network File System', desc: 'Shared filesystem via NFS.' },
+                    { badge: 'Storage', title: 'SFTP', desc: 'File storage over SSH using SFTP.' },
                 ])}
-                ${C.code(`// Storage engine — pull file from storage
-Storage(storage="8be5fb68-ffab-47bd-af2a-cd409b51e732")
-    | PullFromStorage(storagePath="/your/storage/path", filePath="/your/local/path");`, 'pixel', 'Storage — Pixel Command')}
+                ${C.code(`ENGINE	68b7e856-2312-4106-ab7a-7d7bb006173a
+ENGINE_ALIAS	MinIO Example
+ENGINE_TYPE	prerna.engine.impl.storage.MinioStorageEngine
+
+MINIO_BUCKET	aicore
+MINIO_REGION	us-east-1
+MINIO_ENDPOINT	http://localhost:9000
+MINIO_ACCESS_KEY	minioadmin-access
+MINIO_SECRET_KEY	minioadmin-password123
+STORAGE_TYPE	MINIO`, 'properties', 'Storage Engine .smss — MinIO')}
             `
         },
         {
@@ -282,14 +323,39 @@ Storage(storage="8be5fb68-ffab-47bd-af2a-cd409b51e732")
             content: `
                 <h2>Function Engines</h2>
                 ${C.cards([
-                    { badge: 'Function', title: 'Custom APIs', desc: 'Wrap external REST APIs as callable engine functions.' },
-                    { badge: 'Function', title: 'Python Scripts', desc: `Execute Python code as a ${CONFIG.productName} function engine.` },
+                    { badge: 'Function', title: 'AWS Image Text Extraction', desc: 'Text extraction via AWS image services.' },
+                    { badge: 'Function', title: 'AWS Polly', desc: 'Text-to-speech synthesis via Polly.' },
+                    { badge: 'Function', title: 'AWS Transcribe', desc: 'Speech-to-text via Transcribe.' },
+                    { badge: 'Function', title: 'AWS Comprehend', desc: 'NLP analysis via Comprehend.' },
+                    { badge: 'Function', title: 'Azure Document Intelligence', desc: 'Document extraction via Azure.' },
+                    { badge: 'Function', title: 'Azure Speech to Text', desc: 'Speech-to-text via Azure.' },
+                    { badge: 'Function', title: 'Google Speech to Text', desc: 'Speech-to-text via Google.' },
+                    { badge: 'Function', title: 'Google OCR', desc: 'OCR via Google vision services.' },
+                    { badge: 'Function', title: 'REST Endpoint', desc: 'HTTP-based function endpoints.' },
+                    { badge: 'Function', title: 'Local Python Functions', desc: 'Local Python execution.' },
                 ])}
-                ${C.code(`// Function engine — call weather API
-ExecuteFunctionEngine(
-    engine="06383ab4-4738-4fe8-a7e9-737a14da737d",
-    map=[{"city": "Madrid", "units": "metric", "lang": "es"}]
-);`, 'pixel', 'Function — Pixel Command')}
+                ${C.code(`ENGINE  d94d9acb-8270-4516-8a5a-ee023dfb9c50
+ENGINE_ALIAS	APIWrapper
+ENGINE_TYPE	prerna.engine.impl.function.LocalPythonFunctionEngine
+
+FUNCTION_NAME	main
+FUNCTION_DESCRIPTION	
+FUNCTION_TYPE	LOCAL_PYTHON
+FUNCTION_REQUIRED_PARAMETERS	["parameter1", "parameter2"]
+FUNCTION_PARAMETERS	[
+  {"parameterName": "parameter1", "parameterType": "String", "parameterDescription": "description of parameter 1"},
+  {"parameterName": "parameter2", "parameterType": "String", "parameterDescription": "description of parameter 2"},
+  {"parameterName": "parameter3", "parameterType": "String", "parameterDescription": "description of parameter 3"},
+  {"parameterName": "parameter4", "parameterType": "Int", "parameterDescription": "description of parameter 4"}
+]
+
+PYTHON_FILE_NAME	main.py`, 'properties', 'Function Engine .smss — Local Python')}
+                ${C.callout(`<strong>Important:</strong> <code>FUNCTION_PARAMETERS</code> is a JSON list of objects requiring these keys: <code>parameterName</code>, <code>parameterType</code>, <code>parameterDescription</code>. <code>FUNCTION_REQUIRED_PARAMETERS</code> is a JSON list of strings.`, 'info')}
+                ${C.code(`from typing import Optional
+
+def main(parameter1: str, parameter2: str, parameter3: Optional[str] = None, parameter4: Optional[int] = None):
+    # custom logic implementation
+    pass`, 'python', 'main.py — Function Entry Point')}
             `
         },
         {
@@ -298,9 +364,61 @@ ExecuteFunctionEngine(
             content: `
                 <h2>Guardrail Engines</h2>
                 ${C.cards([
-                    { badge: 'Guardrail', title: 'Validation', desc: 'Pre/post processing for LLM I/O — PII, toxicity, custom rules.' },
+                    { badge: 'Guardrail', title: 'Detoxify', desc: 'Detects toxic or harmful inputs/outputs.' },
+                    { badge: 'Guardrail', title: 'GLiNER', desc: 'Classifies sensitive categories (PII, PHI, etc.) in inputs/outputs.' },
+                    { badge: 'Guardrail', title: 'Prompt Injection', desc: 'Detects malicious inputs that attempt to bypass model instructions.' },
                 ])}
                 <p class="muted">Guardrail engines enforce safety and policy checks for AI workflows.</p>
+                ${C.code(`ENGINE	fffd1e30-f92b-4ed7-aa31-006147c28925
+ENGINE_ALIAS	GLINER
+ENGINE_TYPE	prerna.engine.impl.guardrail.GLiNERGuardrailEngine
+
+MODEL_NAME urchade/gliner_multi_pii-v1`, 'properties', 'Guardrail Engine .smss — GLiNER')}
+                ${C.callout(`<strong>Important:</strong> Guardrail engines let you add custom logic on the input/output of any engine, applied through a <code>pipeline.json</code>.`, 'info')}
+                ${C.code(`{
+  "pipelines": {
+    "askRoom": { # method we are adding the guardrail on for this model engine
+      "input": [
+        {
+          "reactorClass": "prerna.reactor.interceptor.GenericGuardrailInputReactor",
+          "params": {
+            "blockOnGuardrailFailure": true,
+            "guardrailEngineId": "aaad1e30-f92b-4ed7-aa31-006147c28925", # the engine id of a detoxify engine
+            "directParameters": {
+              "threshold": 0.8
+            },
+            "inputMapping": {
+              "prompt": "arg0"
+            }
+          }
+        },
+        {
+          "reactorClass": "prerna.reactor.interceptor.GenericGuardrailInputReactor",
+          "params": {
+            "blockOnGuardrailFailure": true,
+            "guardrailEngineId": "fffd1e30-f92b-4ed7-aa31-006147c28925", # the engine id of a GLiNER engine
+            "directParameters": {
+              "labels": [ # a parameter that GLiNER expects to classify against
+                "personally identifiable information",
+                "driver licence",
+                "person",
+                "full address",
+                "email",
+                "passport number",
+                "Social Security Number",
+                "phone number"
+              ],
+              "threshold": 0.7
+            },
+            "inputMapping": {
+              "prompt": "arg0"
+            }
+          }
+        }
+      ]
+    }
+  }
+}`, 'json', 'pipeline.json — Guardrail Input Filters')}
             `
         },
         {
@@ -311,22 +429,25 @@ ExecuteFunctionEngine(
                 ${C.flow([
                     { title: '1. Create', desc: 'User creates via UI or API call' },
                     { title: '2. Write .smss', desc: 'Config file written to db/ | model/ | vector/ etc.', arrow: '↓' },
-                    { title: '3. Register', desc: 'Entry added to Security DB (all engines) and LocalMasterDatabase (database engines)', accent: true, arrow: '↓' },
-                    { title: '4. Open', desc: 'engine.open(smssProperties) — connection established', arrow: '↓' },
+                    { title: '3. Register', desc: 'Entry added to Security DB (all engines) and LocalMasterDatabase (database engines)', arrow: '↓' },
+                    { title: '4. Open', desc: 'engine.open(smssProperties) — connection established', accent: true, arrow: '↓' },
                     { title: '5. Use', desc: 'Reactors interact with engine via interface methods', arrow: '↓' },
-                    { title: '6. Sync (optional)', desc: 'SMSS watcher syncs to cloud storage for cluster deployments' },
+                    { title: '6. Sync', desc: 'Sync to cloud storage for cluster deployments' },
                 ])}
-                ${C.code(`// Utility.java — how ${CONFIG.productName} loads an engine on startup
-// Note: Actual signature is private static with 2 params, simplified here for teaching
-private static IEngine loadEngine(String smssFilePath, Properties smssProp) {
-    Properties props = (smssProp != null) ? smssProp : Utility.loadProperties(smssFilePath);
-    String engineClass = props.getProperty("ENGINE_TYPE");
-
-    IEngine engine = (IEngine) Class.forName(engineClass).newInstance();
-    engine.open(props);  // establish connection
-
-    return engine;
-}`, 'java', 'Engine Loading — src/prerna/util/Utility.java')}
+                <h3>Engine Load Decision Tree</h3>
+                ${C.decision(
+                    'Decision: Is the engine connection already established in this container?',
+                    C.flow([
+                        { title: 'Connection Exists', desc: 'Use the cached connection', accent: true, arrow: '↓' },
+                        { title: 'Return Engine', desc: 'Return connection encapsulated as an engine' },
+                    ]),
+                    C.flow([
+                        { title: 'Pull Storage Details', desc: 'Cloud storage or local filesystem (dev)', accent: true, arrow: '↓' },
+                        { title: 'Build Engine', desc: 'Use .smss details to instantiate', arrow: '↓' },
+                        { title: 'Store In Container', desc: 'Cache engine for future requests', arrow: '↓' },
+                        { title: 'Return Engine', desc: 'Return engine object to calling logic' },
+                    ])
+                )}
             `
         },
         {

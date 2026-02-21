@@ -175,5 +175,24 @@ const C = {
             ${subtitle ? `<p class="lead">${subtitle}</p>` : ''}
             ${timeBadge ? `<span class="time-badge">${timeBadge}</span>` : ''}
         </div>`;
+    },
+
+    // ── Decision tree (yes/no) ──
+    // question: string, yesContent/noContent: HTML strings
+    decision(question, yesContent, noContent) {
+        return `<div class="c-decision">
+            <div class="c-decision-question">${question}</div>
+            <div class="c-decision-connector"><span>↓</span></div>
+            <div class="c-decision-branches">
+                <div class="c-decision-branch">
+                    <div class="c-decision-label">Yes</div>
+                    <div class="c-decision-content">${yesContent}</div>
+                </div>
+                <div class="c-decision-branch">
+                    <div class="c-decision-label">No</div>
+                    <div class="c-decision-content">${noContent}</div>
+                </div>
+            </div>
+        </div>`;
     }
 };

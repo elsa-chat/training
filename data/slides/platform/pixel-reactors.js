@@ -208,7 +208,8 @@ public class DateReactor extends AbstractReactor {
                         ['<strong>Agent</strong>', 'Agent orchestration reactors', '<code>reactor/agent/</code>'],
                     ]
                 )}
-                ${C.callout('The full reactor registry is in <code>ReactorFactory.java</code>. This class maps reactor names (strings) to Java classes.', 'info')}
+                ${C.callout('The full reactor registry gets loaded to <code>ReactorFactory.java</code>. This class maps reactor names (strings - minus the suffix \'Reactor\') to its Java class. On startup, the platform discovers and registers all reactors.', 'info')}
+                ${C.callout('We will dive into this more, but projects can have their own isolated reactors. These reactors are only available after a SetContext(&quot;&lt;engine id&gt;&quot;) is called in the insight.', 'info')}
             `
         },
         {
