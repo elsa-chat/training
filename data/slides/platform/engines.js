@@ -1,10 +1,10 @@
-// Topic: Engines: The Data Layer
+// Topic: Engines: The Resource Layer
 const slides_platform_engines = [
         {
             id: "engines-title",
-            title: "Engines: The Data Layer",
+            title: "Engines: The Resource Layer",
             content: C.titleSlide(
-                "Engines: The Data Layer",
+                "Engines: The Resource Layer",
                 `The pluggable abstraction that connects ${CONFIG.productName} to everything`,
                 "90 minutes"
             )
@@ -76,6 +76,56 @@ public interface IModelEngine extends IEngine {
             `
         },
         {
+            id: "engines-smss",
+            title: ".smss Configuration Files",
+            content: `
+                <h2>.smss Configuration Files</h2>
+                <p>Every engine has its configuration as a <code>.smss</code> (SEMOSS Settings) file — a text based key-value format.</p>
+                <h3>Required Values For Each Engine</h3>
+                <ul>
+                    <li><code>ENGINE</code> — <code>&lt;UUID&gt;</code></li>
+                    <li><code>ENGINE_ALIAS</code> — <code>&lt;The Display Name&gt;</code></li>
+                    <li><code>ENGINE_TYPE</code> — <code>&lt;The Java Fully Qualified Name&gt;</code></li>
+                </ul>
+                <p class="muted">Other <code>.smss</code> fields depend on the specific engine implementation class. These values can also be stored in a secret store based on your deployment.</p>
+                ${C.split(
+                    {
+                        title: 'Database Engine .smss',
+                        content: C.code(`#Base Properties
+ENGINE	877ecba9-9125-40b8-9eb4-b82dbefc92cf
+ENGINE_ALIAS AuditLogs
+ENGINE_TYPE	prerna.engine.impl.rdbms.RDBMSNativeEngine
+OWL	AuditLogs_OWL.OWL
+
+RDBMS_TYPE	postgres
+DATABASE	semoss_audit
+SCHEMA	public
+DRIVER	org.postgresql.Driver
+USERNAME	myuser
+PASSWORD	mypassword
+CONNECTION_URL	jdbc:postgresql://db:5432/semoss_audit?currentSchema=public
+USE_CONNECTION_POOLING	true
+POOL_MIN_SIZE       10
+POOL_MAX_SIZE       50
+AUTO_COMMIT         false
+
+DATABASE_ZONEID UTC`, 'properties', 'db/AuditLogs.smss')
+                    },
+                    {
+                        title: 'Key Fields',
+                        content: `
+                            <ul>
+                                <li><code>ENGINE</code> — the unique ID that anchors everything (<strong>required</strong>)</li>
+                                <li><code>ENGINE_ALIAS</code> — the human-friendly name shown in the UI (<strong>required</strong>)</li>
+                                <li><code>ENGINE_TYPE</code> — the implementation class that defines the rest (<strong>required</strong>)</li>
+                                <li>All other fields are implementation-specific for <code>prerna.engine.impl.rdbms.RDBMSNativeEngine</code></li>
+                            </ul>
+                        `
+                    }
+                )}
+            `
+        },
+        {
             id: "engines-database-deep",
             title: "Database Engines",
             content: `
@@ -107,6 +157,26 @@ public interface IModelEngine extends IEngine {
                         `
                     }
                 )}
+                ${C.code(`# Base Properties
+ENGINE	877ecba9-9125-40b8-9eb4-b82dbefc92cf	# unique engine id
+ENGINE_ALIAS AuditLogs	# display name in UI
+ENGINE_TYPE	prerna.engine.impl.rdbms.RDBMSNativeEngine	# implementation class
+OWL	AuditLogs_OWL.OWL	# metadata schema file
+
+# Database Connection
+RDBMS_TYPE	postgres	# rdbms type
+DATABASE	semoss_audit	# database name
+SCHEMA	public	# schema name
+DRIVER	org.postgresql.Driver	# JDBC driver class
+USERNAME	myuser	# database user
+PASSWORD	mypassword	# database password
+CONNECTION_URL	jdbc:postgresql://db:5432/semoss_audit?currentSchema=public	# JDBC URL
+USE_CONNECTION_POOLING	true	# enable pooling
+POOL_MIN_SIZE       10	# min connections
+POOL_MAX_SIZE       50	# max connections
+AUTO_COMMIT         false	# transaction behavior
+
+DATABASE_ZONEID UTC	# database timezone`, 'properties', 'Example Database Engine .smss')}
                 ${C.code(`// How a database query flows through the system
 // 1. Pixel command (uses engine ID, not name)
 Database(database="bd1dea64-ec6b-49af-9308-94b05551c83d") | Query("SELECT * FROM users LIMIT 10");
@@ -118,7 +188,19 @@ IDatabaseEngine engine = Utility.getDatabase("bd1dea64-ec6b-49af-9308-94b05551c8
 Object result = engine.execQuery(sqlString);
 
 // 4. Results wrapped in NounMetadata and returned`, 'java', 'Database Query Flow')}
-                ${C.callout(`<strong>LocalMasterDatabase</strong> — Every ${CONFIG.productName} instance has a master H2 database that stores metadata about all engines, projects, users, and permissions.`, 'info')}
+                ${C.callout(`<strong>System Databases</strong> — ${CONFIG.productName} uses multiple internal databases for different concerns.<br>
+                ${C.table(
+                    ['Database', 'What it Stores'],
+                    [
+                        ['<code>LocalMasterDatabase</code>', 'Core metadata for engines, projects, users, and permissions'],
+                        ['<code>Security DB</code>', 'Authorization and security-related metadata'],
+                        ['<code>Scheduler DB</code>', 'Scheduled jobs, triggers, and run history (if enabled)'],
+                        ['<code>Model Logs DB</code>', 'Model/LLM request + response logs and related telemetry (if enabled)'],
+                        ['<code>Audit Logs DB</code>', 'Audit events for user/system actions (if enabled)'],
+                        ['<code>Themes DB</code>', 'UI themes and styling configuration'],
+                        ['<code>Prompt DB</code>', 'Prompt templates, reusable prompt assets, and prompt metadata'],
+                    ]
+                )}`, 'info')}
             `
         },
         {
@@ -180,69 +262,45 @@ VectorDatabaseQuery(
             `
         },
         {
-            id: "engines-storage-function-guardrail",
-            title: "Storage, Function & Guardrail",
+            id: "engines-storage",
+            title: "Storage Engines",
             content: `
-                <h2>Storage, Function & Guardrail Engines</h2>
+                <h2>Storage Engines</h2>
                 ${C.cards([
                     { badge: 'Storage', title: 'Local', desc: 'Server filesystem — default for dev. Path-based access.' },
                     { badge: 'Storage', title: 'S3 / MinIO', desc: 'Object storage — bucket + key. Used in production.' },
                     { badge: 'Storage', title: 'Azure Blob', desc: 'Container + blob path. Enterprise deployments.' },
-                    { badge: 'Function', title: 'Custom APIs', desc: 'Wrap external REST APIs as callable engine functions.' },
-                    { badge: 'Function', title: 'Python Scripts', desc: `Execute Python code as a ${CONFIG.productName} function engine.` },
-                    { badge: 'Guardrail', title: 'Validation', desc: 'Pre/post processing for LLM I/O — PII, toxicity, custom rules.' },
                 ])}
                 ${C.code(`// Storage engine — pull file from storage
 Storage(storage="8be5fb68-ffab-47bd-af2a-cd409b51e732")
-    | PullFromStorage(storagePath="/your/storage/path", filePath="/your/local/path");
-
-// Function engine — call weather API
-ExecuteFunctionEngine(
-    engine="06383ab4-4738-4fe8-a7e9-737a14da737d",
-    map=[{"city": "Madrid", "units": "metric", "lang": "es"}]
-);`, 'pixel', 'Storage & Function — Pixel Commands')}
+    | PullFromStorage(storagePath="/your/storage/path", filePath="/your/local/path");`, 'pixel', 'Storage — Pixel Command')}
             `
         },
         {
-            id: "engines-smss",
-            title: ".smss Configuration Files",
+            id: "engines-function",
+            title: "Function Engines",
             content: `
-                <h2>.smss Configuration Files</h2>
-                <p>Every engine is persisted on disk as a <code>.smss</code> (SEMOSS Settings) file — a simple key-value format.</p>
-                ${C.split(
-                    {
-                        title: 'Database Engine .smss',
-                        content: C.code(`# Base Properties
-ENGINE         66cf4dbb-483f-42e7-8804-4e3d5af89287
-ENGINE_ALIAS   Diabetes
-ENGINE_TYPE    prerna.engine.impl.rdbms.RDBMSNativeEngine
-OWL            Diabetes_OWL.OWL
-
-# Database Connection
-RDBMS_TYPE     H2_DB
-DRIVER         org.h2.Driver
-USERNAME       sa
-PASSWORD       ****
-CONNECTION_URL jdbc:h2:nio:@BaseFolder@/db/@ENGINE@/database`, 'properties', 'db/Diabetes__66cf4dbb-483f-42e7-8804-4e3d5af89287.smss')
-                    },
-                    {
-                        title: 'Key Fields',
-                        content: `
-                            <ul>
-                                <li><code>ENGINE</code> — Display name</li>
-                                <li><code>ENGINE_TYPE</code> — Fully qualified Java class</li>
-                                <li><code>OWL</code> — Schema metadata file</li>
-                                <li><code>RDBMS_TYPE</code> — Database flavor</li>
-                                <li><code>CONNECTION_URL</code> — JDBC URL</li>
-                            </ul>
-                            <p><strong>Placeholders:</strong></p>
-                            <ul>
-                                <li><code>@BaseFolder@</code> — ${CONFIG.productName} install root</li>
-                                <li><code>@ENGINE@</code> — Engine folder name</li>
-                            </ul>
-                        `
-                    }
-                )}
+                <h2>Function Engines</h2>
+                ${C.cards([
+                    { badge: 'Function', title: 'Custom APIs', desc: 'Wrap external REST APIs as callable engine functions.' },
+                    { badge: 'Function', title: 'Python Scripts', desc: `Execute Python code as a ${CONFIG.productName} function engine.` },
+                ])}
+                ${C.code(`// Function engine — call weather API
+ExecuteFunctionEngine(
+    engine="06383ab4-4738-4fe8-a7e9-737a14da737d",
+    map=[{"city": "Madrid", "units": "metric", "lang": "es"}]
+);`, 'pixel', 'Function — Pixel Command')}
+            `
+        },
+        {
+            id: "engines-guardrail",
+            title: "Guardrail Engines",
+            content: `
+                <h2>Guardrail Engines</h2>
+                ${C.cards([
+                    { badge: 'Guardrail', title: 'Validation', desc: 'Pre/post processing for LLM I/O — PII, toxicity, custom rules.' },
+                ])}
+                <p class="muted">Guardrail engines enforce safety and policy checks for AI workflows.</p>
             `
         },
         {

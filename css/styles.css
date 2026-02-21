@@ -512,6 +512,22 @@ body {
     background: rgba(84, 104, 255, 0.03);
 }
 
+/* Tighter tables inside callouts */
+.c-callout table {
+    margin: 4px 0 0;
+}
+
+.c-callout th {
+    padding: 8px 12px;
+    font-size: 11px;
+}
+
+.c-callout td {
+    padding: 8px 12px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
 /* Diagram / Visual boxes */
 .slide-content .diagram {
     display: flex;

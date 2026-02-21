@@ -74,7 +74,7 @@ const slides_welcome = [
                         ['9:00 – 9:30', 'Welcome & Introductions'],
                         ['9:30 – 11:00', 'Platform Fundamentals'],
                         ['11:00 – 11:15', 'Break'],
-                        ['11:15 – 12:45', 'Engines: The Data Layer'],
+                        ['11:15 – 12:45', 'Engines: The Resource Layer'],
                         ['12:45 – 1:45', 'Lunch'],
                         ['1:45 – 5:00', 'Pixel & Reactors'],
                     ]
