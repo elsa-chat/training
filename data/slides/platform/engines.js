@@ -429,22 +429,25 @@ MODEL_NAME urchade/gliner_multi_pii-v1`, 'properties', 'Guardrail Engine .smss �
                 ${C.flow([
                     { title: '1. Create', desc: 'User creates via UI or API call' },
                     { title: '2. Write .smss', desc: 'Config file written to db/ | model/ | vector/ etc.', arrow: '↓' },
-                    { title: '3. Register', desc: 'Entry added to Security DB (all engines) and LocalMasterDatabase (database engines)', accent: true, arrow: '↓' },
-                    { title: '4. Open', desc: 'engine.open(smssProperties) — connection established', arrow: '↓' },
+                    { title: '3. Register', desc: 'Entry added to Security DB (all engines) and LocalMasterDatabase (database engines)', arrow: '↓' },
+                    { title: '4. Open', desc: 'engine.open(smssProperties) — connection established', accent: true, arrow: '↓' },
                     { title: '5. Use', desc: 'Reactors interact with engine via interface methods', arrow: '↓' },
-                    { title: '6. Sync (optional)', desc: 'SMSS watcher syncs to cloud storage for cluster deployments' },
+                    { title: '6. Sync', desc: 'Sync to cloud storage for cluster deployments' },
                 ])}
-                ${C.code(`// Utility.java — how ${CONFIG.productName} loads an engine on startup
-// Note: Actual signature is private static with 2 params, simplified here for teaching
-private static IEngine loadEngine(String smssFilePath, Properties smssProp) {
-    Properties props = (smssProp != null) ? smssProp : Utility.loadProperties(smssFilePath);
-    String engineClass = props.getProperty("ENGINE_TYPE");
-
-    IEngine engine = (IEngine) Class.forName(engineClass).newInstance();
-    engine.open(props);  // establish connection
-
-    return engine;
-}`, 'java', 'Engine Loading — src/prerna/util/Utility.java')}
+                <h3>Engine Load Decision Tree</h3>
+                ${C.decision(
+                    'Decision: Is the engine connection already established in this container?',
+                    C.flow([
+                        { title: 'Connection Exists', desc: 'Use the cached connection', accent: true, arrow: '↓' },
+                        { title: 'Return Engine', desc: 'Return connection encapsulated as an engine' },
+                    ]),
+                    C.flow([
+                        { title: 'Pull Storage Details', desc: 'Cloud storage or local filesystem (dev)', accent: true, arrow: '↓' },
+                        { title: 'Build Engine', desc: 'Use .smss details to instantiate', arrow: '↓' },
+                        { title: 'Store In Container', desc: 'Cache engine for future requests', arrow: '↓' },
+                        { title: 'Return Engine', desc: 'Return engine object to calling logic' },
+                    ])
+                )}
             `
         },
         {
