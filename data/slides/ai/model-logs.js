@@ -2,10 +2,10 @@
 const slides_model_logs = [
         {
             id: "model-logs-title",
-            title: "Model Logs",
+            title: "Model & Audit Logs",
             content: C.titleSlide(
-                "Model Logs",
-                `Tracking, analyzing, and troubleshooting LLM usage in ${CONFIG.productName}`,
+                "Model & Audit Logs",
+                `Tracking, analyzing, and troubleshooting LLM usage and engine operations in ${CONFIG.productName}`,
                 "90 minutes"
             )
         },
@@ -413,44 +413,275 @@ VACUUM FULL MESSAGE;`, 'sql', 'Log retention management')}
             `
         },
         {
+            id: "audit-logs-overview",
+            title: "Audit Logs: The Other Half",
+            content: `
+                <h2>Audit Logs: The Other Half</h2>
+                <p class="lead">While Model Inference Logs track LLM conversations, <span class="highlight">Audit Logs</span> capture every engine operation for operational telemetry and compliance.</p>
+                ${C.split(
+                    {
+                        title: 'MODEL_INFERENCE_LOGS_DB',
+                        content: `
+                            <h4>What It Tracks</h4>
+                            <ul>
+                                <li><strong>LLM Conversations</strong> — User messages, assistant responses, system prompts</li>
+                                <li><strong>Chat Context</strong> — Rooms (conversation sessions), feedback (thumbs up/down)</li>
+                                <li><strong>Token Usage</strong> — MESSAGE_TOKENS for cost tracking</li>
+                                <li><strong>User Behavior</strong> — Conversation history, model preferences</li>
+                            </ul>
+                            <h4>Primary Use Case</h4>
+                            <p><strong>Chat history and user experience analytics</strong></p>
+                        `
+                    },
+                    {
+                        title: 'AUDIT_LOGS_DB',
+                        content: `
+                            <h4>What It Tracks</h4>
+                            <ul>
+                                <li><strong>Engine Operations</strong> — Every database query, model inference, vector search, function call</li>
+                                <li><strong>Request/Response Payloads</strong> — Full REQUEST and RESPONSE CLOBs for debugging</li>
+                                <li><strong>Reactor Names</strong> — INPUT_REACTOR_NAME, OUTPUT_REACTOR_NAME, METHOD_NAME</li>
+                                <li><strong>Success/Failure</strong> — IS_SUCCESS flag, error messages</li>
+                                <li><strong>Performance</strong> — REQUEST_START_TIME, RESPONSE_END_TIME</li>
+                            </ul>
+                            <h4>Primary Use Case</h4>
+                            <p><strong>Operational telemetry, debugging, compliance auditing</strong></p>
+                        `
+                    }
+                )}
+                ${C.callout('These are <strong>TWO separate databases</strong>. Model logs = chat history. Audit logs = operational telemetry. Both are used together for comprehensive observability.', 'info')}
+            `
+        },
+        {
+            id: "audit-logs-schema",
+            title: "Audit Logs Schema",
+            content: `
+                <h2>Audit Logs Database Schema</h2>
+                <p>The audit logs database consists of 2 main tables capturing engine operations and server-side logging.</p>
+                <h3>AUDIT_LOGS Table (29 Columns)</h3>
+                ${C.code(`-- AUDIT_LOGS table structure (from AuditLogsDbOwlCreator.java)
+LOG_ID                         VARCHAR(255)   -- Unique log identifier
+REQUEST_ID                     VARCHAR(255)   -- Links related requests
+IS_SUCCESS                     BOOLEAN        -- Did the operation succeed?
+SESSION_ID                     VARCHAR(255)   -- HTTP session
+USER_ID                        VARCHAR(255)   -- User identifier
+USER_TYPE                      VARCHAR(255)   -- User type (local, oauth, etc.)
+SPAN_ID                        VARCHAR(255)   -- Distributed tracing span
+INSIGHT_ID                     VARCHAR(255)   -- Insight context
+PROJECT_ID                     VARCHAR(255)   -- Project ID
+PROJECT_NAME                   VARCHAR(255)   -- Project name
+ROOM_ID                        VARCHAR(255)   -- Room/conversation ID
+ENGINE_ID                      VARCHAR(255)   -- Engine identifier
+ENGINE_NAME                    VARCHAR(255)   -- Engine name
+ENGINE_TYPE                    VARCHAR(255)   -- Engine type (Database, Model, Vector, etc.)
+METHOD_NAME                    VARCHAR(255)   -- Method called on engine
+ENGINE_SUBTYPE                 VARCHAR(255)   -- Engine subtype (e.g., PostgreSQL, OpenAI)
+INPUT_REACTOR_NAME             VARCHAR(255)   -- Reactor that initiated the call
+OUTPUT_REACTOR_NAME            VARCHAR(255)   -- Reactor that processed output
+MESSAGE                        CLOB           -- Log message (formatted string)
+REQUEST                        CLOB           -- Full request payload (JSON)
+RESPONSE                       CLOB           -- Full response payload (JSON)
+NUMBER_OF_TOKENS_IN_PROMPT     INTEGER        -- Token count in prompt
+NUMBER_OF_TOKENS_IN_RESPONSE   INTEGER        -- Token count in response
+REQUEST_START_TIME             TIMESTAMP      -- When request started
+RESPONSE_END_TIME              TIMESTAMP      -- When response completed
+LOG_LEVEL                      VARCHAR(255)   -- Log level (INFO, WARN, ERROR)
+LOG_TIMESTAMP                  TIMESTAMP      -- When log was created
+LOGGER_NAME                    VARCHAR(255)   -- Logger name (e.g., EngineLogger)
+LOGGER_LOCATION                VARCHAR(255)   -- Source code location`, 'sql', 'src/prerna/engine/logging/AuditLogsDbOwlCreator.java (lines 73-89)')}
+                <h3>SERVER_LOGS Table (11 Columns)</h3>
+                ${C.code(`-- SERVER_LOGS table structure (from AuditLogsDbOwlCreator.java)
+LOG_ID          VARCHAR(255)   -- Unique log identifier
+SESSION_ID      VARCHAR(255)   -- HTTP session
+REQUEST_ID      VARCHAR(255)   -- Links related requests
+USER_ID         VARCHAR(255)   -- User identifier
+USER_TYPE       VARCHAR(255)   -- User type
+LEVEL           VARCHAR(50)    -- Log level (INFO, WARN, ERROR, DEBUG)
+LOGGER_NAME     VARCHAR(255)   -- Logger name
+LOGGER_LOCATION VARCHAR(255)   -- Source code location
+THREAD_NAME     VARCHAR(255)   -- Thread name
+LOG_TIMESTAMP   TIMESTAMP      -- When log was created
+MESSAGE         CLOB           -- Log message (may include stack traces)`, 'sql', 'src/prerna/engine/logging/AuditLogsDbOwlCreator.java (lines 91-96)')}
+                <h3>Column Groups</h3>
+                ${C.table(
+                    ['Group', 'Columns', 'Purpose'],
+                    [
+                        ['<strong>Identity</strong>', 'USER_ID, USER_TYPE, SESSION_ID', 'Who made the request'],
+                        ['<strong>Context</strong>', 'INSIGHT_ID, PROJECT_ID, ROOM_ID, SPAN_ID', 'Where and when'],
+                        ['<strong>Engine</strong>', 'ENGINE_ID, ENGINE_NAME, ENGINE_TYPE, ENGINE_SUBTYPE', 'Which engine was called'],
+                        ['<strong>Reactor</strong>', 'INPUT_REACTOR_NAME, OUTPUT_REACTOR_NAME, METHOD_NAME', 'Which reactor handled the request'],
+                        ['<strong>Content</strong>', 'REQUEST, RESPONSE, MESSAGE (all CLOBs)', 'Full payloads for debugging'],
+                        ['<strong>Timing</strong>', 'REQUEST_START_TIME, RESPONSE_END_TIME', 'Performance metrics'],
+                        ['<strong>Tokens</strong>', 'NUMBER_OF_TOKENS_IN_PROMPT, NUMBER_OF_TOKENS_IN_RESPONSE', 'LLM cost tracking'],
+                    ]
+                )}
+            `
+        },
+        {
+            id: "audit-logs-when-to-use",
+            title: "Model Logs vs Audit Logs",
+            content: `
+                <h2>Model Logs vs Audit Logs: When to Use Which</h2>
+                <p>Both logging systems complement each other. Here's how to choose the right one for your use case.</p>
+                ${C.table(
+                    ['Question', 'Use This', 'Table / Column'],
+                    [
+                        ['What did the user ask the LLM?', '<strong>Model Inference Logs</strong>', '<code>MESSAGE.MESSAGE_DATA</code> (user messages)'],
+                        ['Did the engine call succeed or fail?', '<strong>Audit Logs</strong>', '<code>AUDIT_LOGS.IS_SUCCESS</code>'],
+                        ['Which reactor handled the request?', '<strong>Audit Logs</strong>', '<code>AUDIT_LOGS.INPUT_REACTOR_NAME</code>, <code>OUTPUT_REACTOR_NAME</code>'],
+                        ['Full API request/response payload?', '<strong>Audit Logs</strong>', '<code>AUDIT_LOGS.REQUEST</code>, <code>RESPONSE</code> (CLOBs)'],
+                        ['Token usage for cost tracking?', '<strong>Both</strong>', 'Model: <code>MESSAGE.MESSAGE_TOKENS</code><br>Audit: <code>AUDIT_LOGS.NUMBER_OF_TOKENS_IN_PROMPT/RESPONSE</code>'],
+                        ['User conversation history?', '<strong>Model Inference Logs</strong>', '<code>ROOM</code> + <code>MESSAGE</code> tables'],
+                        ['Server errors and stack traces?', '<strong>Audit Logs</strong>', '<code>SERVER_LOGS.MESSAGE</code> (CLOB with full stack trace)'],
+                        ['How long did the LLM take to respond?', '<strong>Both</strong>', 'Model: <code>MESSAGE.RESPONSE_TIME</code><br>Audit: <code>RESPONSE_END_TIME - REQUEST_START_TIME</code>'],
+                        ['Which project/insight was used?', '<strong>Both</strong>', 'Model: <code>MESSAGE.INSIGHT_ID</code><br>Audit: <code>AUDIT_LOGS.PROJECT_ID</code>, <code>INSIGHT_ID</code>'],
+                        ['What method was called on the engine?', '<strong>Audit Logs</strong>', '<code>AUDIT_LOGS.METHOD_NAME</code> (e.g., "ask", "query", "search")'],
+                    ]
+                )}
+                ${C.callout('<strong>Rule of thumb:</strong> Model logs for <em>what users said</em>. Audit logs for <em>what the system did</em>.', 'tip')}
+            `
+        },
+        {
+            id: "audit-logs-usage-reactors",
+            title: "Built-in Usage Reactors",
+            content: `
+                <h2>Built-in Usage Reactors</h2>
+                <p>${CONFIG.productName} provides reactors to query both logging systems without writing raw SQL. These reactors handle permission checks and return formatted data.</p>
+                <h3>Model Inference Logs Reactors</h3>
+                ${C.code(`// Get overall engine usage stats (requires engine ownership)
+GetAllEngineUsage(engine="my-gpt4-engine", limit=100, offset=0, startDate="2024-01-01", endDate="2024-12-31");
+// Returns: total tokens, message count, unique users, response times
+
+// Get per-user usage breakdown (requires engine ownership)
+GetEngineUsagePerUser(engine="my-gpt4-engine", limit=50, startDate="2024-01-01");
+// Returns: user_name, total_tokens, message_count
+
+// Get per-project usage breakdown (requires admin)
+GetEngineUsagePerProject(engine="my-gpt4-engine", limit=50, startDate="2024-01-01");
+// Returns: project_id, project_name, total_tokens, message_count`, 'pixel', 'Model inference tracking reactors')}
+                <h3>Admin Usage Reactors</h3>
+                ${C.code(`// Admin-only: Get usage across all users (no ownership check)
+AdminGetAllEngineUsage(engine="my-gpt4-engine", limit=100);
+
+// Admin-only: Get per-user usage without ownership restriction
+AdminGetEngineUsagePerUser(engine="my-gpt4-engine", limit=50);`, 'pixel', 'Admin reactors (require admin role)')}
+                <h3>Audit Logs Reactor</h3>
+                ${C.code(`// Query audit logs timeline with filters
+AuditLogReport(paramValuesMap={
+    "engineId": "my-db-engine",           // Optional: filter by engine
+    "projectId": "abc-123",               // Optional: filter by project
+    "roomId": "room-xyz",                 // Optional: filter by room
+    "sessionId": "session-456",           // Optional: filter by session
+    "filterUserId": "user@example.com",   // Optional: filter by user (owner/admin only)
+    "dateRangeType": "week",              // "day" | "week" | "month" | "custom"
+    "dateRangeValue": 2,                  // Number of periods (e.g., 2 weeks)
+    "startDate": "2024-01-01T00:00:00Z",  // Required if dateRangeType="custom"
+    "endDate": "2024-12-31T23:59:59Z"     // Required if dateRangeType="custom"
+}, limit=100, offset=0);
+// Returns: { totalCount: 1234, logs: [ {logId, requestId, isSuccess, ...}, ... ] }`, 'pixel', 'src/prerna/logging/AuditLogReportReactor.java')}
+                ${C.callout('These reactors query the logs for you — <strong>no raw SQL needed</strong> for common usage reports. They handle permission checks and return formatted data ready for dashboards.', 'tip')}
+            `
+        },
+        {
+            id: "audit-logs-infrastructure",
+            title: "How Logging Works",
+            content: `
+                <h2>How Logging Works Under the Hood</h2>
+                <p>The logging system uses a dual-path architecture: audit logs capture engine operations, while model inference logs track LLM conversations.</p>
+                ${C.sequence(
+                    ['User', 'Engine', 'log4j2', 'AuditLogsJDBCAppender', 'ServerLogsJDBCAppender', 'ModelEngineInferenceLogsWorker'],
+                    [
+                        { from: 0, to: 1, label: 'Request (Pixel, REST, etc.)' },
+                        { from: 1, to: 2, label: 'EngineLogger.info(...)' },
+                        { from: 2, to: 3, label: 'Route to AUDIT_LOGS' },
+                        { from: 2, to: 4, label: 'Route to SERVER_LOGS' },
+                        { from: 3, to: 3, label: 'Batch insert to AUDIT_LOGS table', type: 'request' },
+                        { from: 4, to: 4, label: 'Batch insert to SERVER_LOGS table', type: 'request' },
+                        { from: 1, to: 5, label: 'Async worker thread (model engines only)' },
+                        { from: 5, to: 5, label: 'Insert to MODEL_INFERENCE_LOGS_DB', type: 'request' },
+                        { from: 1, to: 0, label: 'Response', type: 'response' },
+                    ]
+                )}
+                <h3>Key Infrastructure Components</h3>
+                ${C.cards([
+                    {
+                        badge: 'log4j2.xml',
+                        title: 'EngineLogger',
+                        desc: 'AsyncLogger named "EngineLogger" routes to <strong>both</strong> AuditLogsJDBCAppender and ServerLogsJDBCAppender. Configured in <code>log4j2.xml</code>.'
+                    },
+                    {
+                        badge: 'Audit Path',
+                        title: 'AuditLogsJDBCAppender',
+                        desc: 'Batches log events (default 100) and inserts into <code>AUDIT_LOGS</code> table. Flushes every 60 seconds or when batch is full. Source: <code>AuditLogsJDBCAppender.java</code>'
+                    },
+                    {
+                        badge: 'Server Path',
+                        title: 'ServerLogsJDBCAppender',
+                        desc: 'Batches general server logs and inserts into <code>SERVER_LOGS</code> table. Captures stack traces and error details.'
+                    },
+                    {
+                        badge: 'Model Path',
+                        title: 'ModelEngineInferenceLogsWorker',
+                        desc: 'Async thread that writes to MODEL_INFERENCE_LOGS_DB. Only runs for model/vector engines. Respects <code>keepInputOutput()</code> flag for privacy.'
+                    },
+                ])}
+                <h3>keepInputOutput() Flag (Privacy Control)</h3>
+                <p>Model and vector engines have a <code>keepInputOutput()</code> flag in their <code>.smss</code> configuration:</p>
+                ${C.code(`# In .smss file for a model engine
+ENGINE_KEEP_INPUT_OUTPUT = true   # Store full prompt/response in model logs
+ENGINE_KEEP_INPUT_OUTPUT = false  # Only store metadata (tokens, timing) — no content`, 'properties', 'Model engine .smss configuration')}
+                ${C.callout('<strong>Privacy note:</strong> When <code>keepInputOutput=false</code>, prompt/response content is <em>not</em> stored in MODEL_INFERENCE_LOGS_DB (only tokens and timing). However, AUDIT_LOGS may still capture REQUEST/RESPONSE payloads depending on log level. Configure both for full privacy compliance.', 'warning')}
+            `
+        },
+        {
             id: "model-logs-recap",
             title: "Recap",
             content: `
-                <h2>Model Logs Recap</h2>
+                <h2>Model & Audit Logs Recap</h2>
                 ${C.cards([
                     {
-                        badge: 'Database',
+                        badge: 'Model Logs',
                         title: 'MODEL_INFERENCE_LOGS_DB',
-                        desc: 'Dedicated RDBMS tracking all LLM interactions with 6 tables: MESSAGE, ROOM, AGENT, FEEDBACK, WORKSPACE, WORKSPACE_RESOURCE.'
+                        desc: 'Dedicated RDBMS tracking all LLM interactions with 6 tables: MESSAGE, ROOM, AGENT, FEEDBACK, WORKSPACE, WORKSPACE_RESOURCE. Focus: chat history and user experience.'
+                    },
+                    {
+                        badge: 'Audit Logs',
+                        title: 'AUDIT_LOGS_DB',
+                        desc: 'Separate database tracking every engine operation with 2 tables: AUDIT_LOGS (29 columns) and SERVER_LOGS (11 columns). Focus: operational telemetry and compliance.'
                     },
                     {
                         badge: 'What Gets Logged',
-                        title: 'MESSAGE Table',
-                        desc: 'Every LLM interaction logs: content (BLOB), tokens (INTEGER), response time (DOUBLE), user, model, timestamp, room context.'
+                        title: 'MESSAGE vs AUDIT_LOGS',
+                        desc: 'Model logs: user messages, assistant responses, tokens, room context. Audit logs: reactor names, request/response payloads (CLOBs), success/failure, performance timing.'
                     },
                     {
                         badge: 'Use Cases',
                         title: 'Cost, Compliance, Troubleshooting',
-                        desc: 'Track usage costs, audit for compliance, debug slow/failed requests, analyze user behavior.'
+                        desc: 'Track usage costs, audit for compliance, debug slow/failed requests, analyze user behavior, identify which reactors are being called.'
                     },
                     {
-                        badge: 'Querying',
-                        title: 'Pixel or SQL',
-                        desc: 'Use Database() reactor or direct SQL. Join MESSAGE, ROOM, FEEDBACK for rich analytics.'
+                        badge: 'Built-in Reactors',
+                        title: 'No SQL Needed',
+                        desc: 'GetAllEngineUsage(), GetEngineUsagePerUser(), GetEngineUsagePerProject(), AuditLogReport() — all handle permission checks and return formatted data.'
+                    },
+                    {
+                        badge: 'Infrastructure',
+                        title: 'Dual-Path Logging',
+                        desc: 'EngineLogger → log4j2 → AuditLogsJDBCAppender + ServerLogsJDBCAppender (batched). ModelEngineInferenceLogsWorker (async) → MODEL_INFERENCE_LOGS_DB. Respects keepInputOutput() flag.'
                     },
                     {
                         badge: 'Analytics',
                         title: 'Insights from Logs',
-                        desc: 'Token trends, cost per user, performance metrics (P95 latency), traffic patterns (hourly).'
+                        desc: 'Token trends, cost per user, performance metrics (P95 latency), traffic patterns (hourly), reactor usage, error rates.'
                     },
                     {
                         badge: 'Retention',
                         title: 'Archive & Purge',
-                        desc: 'Export old logs to S3/data lake, delete beyond retention period, vacuum to reclaim space.'
+                        desc: 'Export old logs to S3/data lake, delete beyond retention period, vacuum to reclaim space. Apply to both databases.'
                     },
                 ])}
-                <h3>Next: Day 3 Ch4</h3>
-                <p>API Endpoints — building and consuming REST APIs in ${CONFIG.productName}.</p>
+                <h3>Next: API Endpoints</h3>
+                <p>Building and consuming REST APIs in ${CONFIG.productName}.</p>
             `
         }
     ];
