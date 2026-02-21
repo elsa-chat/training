@@ -129,7 +129,8 @@ const slides_playground = [
             content: `
                 <h2>Room Folders — Scoped File Storage</h2>
                 <p>Each Room has its own <strong>Room Folder</strong> where uploaded documents and tool outputs are stored.</p>
-                <p>This provides file isolation between conversations and enables document-based workflows like RAG and file analysis.</p>
+                <p>The <strong>Insight context</strong> for a Room is mapped directly to this folder — the same storage used by apps/MCP tools.</p>
+                <p>So writing to the Room is just like writing to the Insight when using the app normally — no bifurcation between a user using the app and an LLM using it via MCP.</p>
                 ${C.tree([
                     { name: "BASE_FOLDER/", type: "dir", children: [
                         { name: "room/", type: "dir", desc: "← Room folders root", children: [
