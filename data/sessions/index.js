@@ -29,7 +29,7 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: 'Engines - The Data Layer',
+                    title: 'Engines - The Resource Layer',
                     slideIds: idsFrom(
                         typeof slides_platform_engines !== 'undefined' ? slides_platform_engines : null,
                     )

@@ -17,9 +17,8 @@ const slides_welcome = [
                 <p>Let's get to know each other.</p>
                 <ul>
                     <li><strong>Your name</strong> and role</li>
-                    <li><strong>Your experience</strong> with ${CONFIG.productName} (or similar platforms)</li>
+                    <li><strong>Your experience</strong> with ${CONFIG.productName} (if any)</li>
                     <li><strong>What you hope to learn</strong> this week</li>
-                    <li><strong>One fun fact</strong> about yourself</li>
                 </ul>
             `
         },
@@ -74,7 +73,7 @@ const slides_welcome = [
                         ['9:00 – 9:30', 'Welcome & Introductions'],
                         ['9:30 – 11:00', 'Platform Fundamentals'],
                         ['11:00 – 11:15', 'Break'],
-                        ['11:15 – 12:45', 'Engines: The Data Layer'],
+                        ['11:15 – 12:45', 'Engines: The Resource Layer'],
                         ['12:45 – 1:45', 'Lunch'],
                         ['1:45 – 5:00', 'Pixel & Reactors'],
                     ]

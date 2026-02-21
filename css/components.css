@@ -360,6 +360,12 @@
     margin-bottom: 4px;
 }
 
+.c-split-content li code {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
 /* ── File Tree ── */
 .c-tree-root {
     background: var(--code-bg);
@@ -409,9 +415,21 @@
 /* ── Concept Cards ── */
 .c-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
     margin: 28px 0;
+}
+
+@media (max-width: 1100px) {
+    .c-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .c-cards {
+        grid-template-columns: 1fr;
+    }
 }
 
 .c-card {
@@ -450,6 +468,12 @@
     color: var(--text-muted);
     font-size: 14px;
     line-height: 1.6;
+}
+
+.c-card-desc code {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 /* ── Callout ── */
