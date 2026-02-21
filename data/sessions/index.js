@@ -107,6 +107,18 @@ const SESSION_PLAN = {
                     )
                 },
                 {
+                    title: 'Insight, Room & Session Architecture',
+                    slideIds: idsFrom(
+                        typeof slides_insight_room_session !== 'undefined' ? slides_insight_room_session : null,
+                    )
+                },
+                {
+                    title: 'Context Engineering for Agents',
+                    slideIds: idsFrom(
+                        typeof slides_context_engineering !== 'undefined' ? slides_context_engineering : null,
+                    )
+                },
+                {
                     title: 'Message Structure & Multimodal',
                     slideIds: idsFrom(
                         typeof slides_message_structure !== 'undefined' ? slides_message_structure : null,

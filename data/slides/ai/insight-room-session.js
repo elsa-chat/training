@@ -182,6 +182,165 @@ public PixelRunner runPixel(PixelRunner runner, List<String> pixelList) {
             `
         },
         {
+            id: "message-parts-architecture",
+            title: "Message Parts Architecture (Schema v2)",
+            content: `
+                <h2>Message Parts Architecture (Schema v2)</h2>
+                <p class="lead">Modern ${CONFIG.productName} messages use a <span class="highlight">composable parts[] architecture</span> instead of legacy flat fields. This enables multimodal content, tool calling, and thinking tokens in a single message.</p>
+
+                ${C.split(
+                    {
+                        title: 'Legacy Schema v1 (Flat Fields)',
+                        content: `
+                            <p><strong>Old approach</strong>: Each message had separate flat fields for different content types:</p>
+                            ${C.code(`{
+  "type": "user",
+  "content": "Analyze this image",
+  "imageInfos": [{...}],           // Images separate
+  "tool_responses": [{...}],       // Tool results separate
+  // No support for thinking tokens
+}`, 'json')}
+                            <p><strong>Problems</strong>:</p>
+                            <ul>
+                                <li>Hard to mix text + images + tool calls</li>
+                                <li>No support for thinking tokens (o1-style reasoning)</li>
+                                <li>Difficult to customize UI text vs LLM text</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: 'Modern Schema v2 (Parts Array)',
+                        content: `
+                            <p><strong>New approach</strong>: Messages contain a <code>parts[]</code> array of composable message parts:</p>
+                            ${C.code(`{
+  "schemaVersion": 2,
+  "io": "input",
+  "parts": [
+    {"type": "TEXT", "text": "Analyze this image"},
+    {"type": "MEDIA", "mediaInfo": {...}},
+    {"type": "TOOL_CALL", "toolCall": {...}}
+  ]
+}`, 'json')}
+                            <p><strong>Benefits</strong>:</p>
+                            <ul>
+                                <li>✅ Composable: Mix any combination of parts</li>
+                                <li>✅ Multimodal: Text + images + audio + video</li>
+                                <li>✅ Tool calling: ToolCall + ToolResult parts</li>
+                                <li>✅ Thinking tokens: ThinkingMessagePart for o1-style models</li>
+                            </ul>
+                        `
+                    }
+                )}
+
+                ${C.code(`public abstract class AbstractMessage {
+    /**
+     * Latest supported message JSON schema version for persisted room messages.
+     */
+    public static final int LATEST_SCHEMA_VERSION = 2;
+
+    /**
+     * Message JSON schema version.
+     * Version 1 = legacy flat message fields (type/content/imageInfos/tool_responses...)
+     * Version 2 = parts-based schema via parts[]
+     */
+    @SerializedName("schemaVersion")
+    protected Integer schemaVersion;
+
+    /**
+     * Discriminator to support clean deserialization into InputMessage vs ResponseMessage
+     */
+    @SerializedName("io")
+    protected MessageIO io;  // INPUT or OUTPUT
+
+    @SerializedName("parts")
+    protected List<MessagePart> parts = new ArrayList<>();  // ← The new architecture!
+
+    protected String modelId;
+    protected String messageId;
+    protected String parentMessageId;
+    // ... other fields
+}`, 'java', 'prerna/engine/impl/model/message/AbstractMessage.java')}
+
+                ${C.callout('All new ${CONFIG.productName} code uses <strong>schemaVersion: 2</strong> with parts[]. Legacy messages with schemaVersion: 1 are still supported for backwards compatibility but should be migrated.', 'tip')}
+            `
+        },
+        {
+            id: "message-part-types",
+            title: "Message Part Types",
+            content: `
+                <h2>Message Part Types</h2>
+                <p>The <code>parts[]</code> array can contain six different types of message parts, each with specific fields and use cases:</p>
+
+                ${C.code(`public enum MessagePartType {
+    TEXT,         // Text content (with optional UI text)
+    MEDIA,        // Images, video, audio
+    TOOL_CALL,    // LLM requesting tool execution
+    TOOL_RESULT,  // Result from tool execution
+    THINKING,     // LLM reasoning process (o1-style)
+    SYSTEM,       // System-level instructions
+    UNKNOWN       // Fallback for unrecognized types
+}`, 'java', 'prerna/engine/impl/model/message/MessagePartType.java')}
+
+                ${C.cards([
+                    {
+                        badge: 'TEXT',
+                        title: 'TextMessagePart',
+                        desc: '<strong>Fields</strong>: <code>text</code> (what LLM sees), <code>uiText</code> (what user sees)<br><strong>Use case</strong>: Normal conversation text. Use <code>uiText</code> to show simplified text in UI while LLM gets full context.'
+                    },
+                    {
+                        badge: 'MEDIA',
+                        title: 'MediaMessagePart',
+                        desc: '<strong>Fields</strong>: <code>mediaInfo</code> (MessageInputMedia with URL, type, base64)<br><strong>Use case</strong>: Images, video, audio in multimodal conversations. LLM can analyze visual content.'
+                    },
+                    {
+                        badge: 'TOOL_CALL',
+                        title: 'ToolCallMessagePart',
+                        desc: '<strong>Fields</strong>: <code>toolCall</code> (Map with id, name, arguments)<br><strong>Use case</strong>: LLM requests tool execution. Room extracts this and calls Insight.runPixel() to execute.'
+                    },
+                    {
+                        badge: 'TOOL_RESULT',
+                        title: 'ToolResultMessagePart',
+                        desc: '<strong>Fields</strong>: <code>toolResult</code> (ToolResultPart with toolCallId, toolName, output, toolParameterValues, toolStatus)<br><strong>Use case</strong>: Result from tool execution sent back to LLM. Room adds this after Insight executes the tool.'
+                    },
+                    {
+                        badge: 'THINKING',
+                        title: 'ThinkingMessagePart',
+                        desc: '<strong>Fields</strong>: <code>thinking</code> (String with reasoning process)<br><strong>Use case</strong>: LLM reasoning tokens (o1-style models). Shows how the model arrived at its answer.'
+                    },
+                    {
+                        badge: 'SYSTEM',
+                        title: 'SystemMessagePart',
+                        desc: '<strong>Fields</strong>: <code>prompt</code> (String with system-level instructions)<br><strong>Use case</strong>: System prompts, meta-instructions that guide LLM behavior without appearing in conversation.'
+                    },
+                ])}
+
+                <h3>Example: TextMessagePart with UI Customization</h3>
+                ${C.code(`public class TextMessagePart extends MessagePart {
+
+    @SerializedName("text")
+    private String text;  // What the LLM sees
+
+    /**
+     * Optional UI-only text (legacy inputUIPrompt) when text differs.
+     */
+    @SerializedName("uiText")
+    private String uiText;  // What the user sees in the UI
+
+    public TextMessagePart(String text, String uiText) {
+        super(MessagePartType.TEXT);
+        this.text = text;
+        this.uiText = (uiText == null || uiText.isEmpty()) ? text : uiText;
+    }
+
+    // Example usage:
+    // LLM sees: "Execute PixelQuery(database='MyDB', query='SELECT * FROM users');"
+    // UI shows: "Query the database for user records"
+}`, 'java', 'prerna/engine/impl/model/message/TextMessagePart.java')}
+
+                ${C.callout('<strong>Why this matters</strong>: Understanding message parts is essential for:<ul><li>Building multimodal chat UIs (MediaMessagePart)</li><li>Debugging tool execution flows (ToolCallMessagePart + ToolResultMessagePart)</li><li>Customizing what users see vs what LLMs see (TextMessagePart.uiText)</li><li>Supporting o1-style reasoning models (ThinkingMessagePart)</li></ul>', 'tip')}
+            `
+        },
+        {
             id: "room-insight-connection",
             title: "Room ↔ Insight Connection",
             content: `
@@ -248,74 +407,6 @@ public PixelRunner runPixel(PixelRunner runner, List<String> pixelList) {
 }`, 'http')
                     }
                 )}
-            `
-        },
-        {
-            id: "handson",
-            title: "Hands-on: Manage Insights and Rooms",
-            content: `
-                <h2>Hands-on: Create and Manage Insights/Rooms via API</h2>
-                ${C.handson('Insight and Room API exploration', `
-                    <h4>Part 1: Create a temporary Insight and run Pixel</h4>
-                    ${C.code(`// In browser console or Postman
-const response = await fetch('http://localhost:8080/api/engine/runPixel', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        insightId: "new",
-        expression: "myVar = 42; Echo(myVar);"
-    })
-});
-
-const data = await response.json();
-console.log("InsightID:", data.insightId);
-console.log("Result:", data.pixelReturn[0].output);`, 'javascript')}
-
-                    <h4>Part 2: Reuse the same Insight</h4>
-                    ${C.code(`// Use the insightId from Part 1
-const response2 = await fetch('http://localhost:8080/api/engine/runPixel', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        insightId: data.insightId,  // ← Same insight!
-        expression: "Echo(myVar * 2);"  // myVar is still 42
-    })
-});
-
-const data2 = await response2.json();
-console.log("Result:", data2.pixelReturn[0].output);  // Should be 84`, 'javascript')}
-
-                    <h4>Part 3: Inspect Insight state</h4>
-                    ${C.code(`// Get all variables in the Insight
-const varsResponse = await fetch('http://localhost:8080/api/engine/runPixel', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        insightId: data.insightId,
-        expression: "CurrentVariables();"
-    })
-});
-
-const varsData = await varsResponse.json();
-console.log("Variables:", varsData.pixelReturn[0].output);
-
-// Drop the Insight (clean up)
-await fetch('http://localhost:8080/api/engine/runPixel', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        insightId: data.insightId,
-        expression: "DropInsight();"
-    })
-});`, 'javascript')}
-
-                    <h4>Expected Outcomes</h4>
-                    <ul>
-                        <li>Part 1: You should see <code>insightId</code> returned with <code>42</code> as the result</li>
-                        <li>Part 2: The variable <code>myVar</code> persists, so you get <code>84</code></li>
-                        <li>Part 3: All variables in the Insight are listed via <code>CurrentVariables()</code></li>
-                    </ul>
-                `)}
             `
         },
         {
