@@ -65,9 +65,9 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: 'Python Integration',
+                    title: 'Python SDK',
                     slideIds: idsFrom(
-                        typeof slides_custom_python !== 'undefined' ? slides_custom_python : null,
+                        typeof slides_python_sdk !== 'undefined' ? slides_python_sdk : null,
                     )
                 },
                 {
