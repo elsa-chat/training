@@ -268,6 +268,76 @@ public List<Map<String, Object>> getAllToolsJsonForRoom() {
             `
         },
         {
+            id: "playground-reactors",
+            title: "Playground Reactors",
+            content: `
+                <h2>Playground Reactors</h2>
+                <p>Playground provides several specialized reactors for programmatic interaction with rooms and conversations.</p>
+                <p>These reactors enable custom integrations and automation beyond the standard UI.</p>
+                ${C.table(
+                    ["Reactor", "Purpose", "Key Inputs", "Key Outputs"],
+                    [
+                        [
+                            "AskPlaygroundReactor",
+                            "Run an LLM text-generation call with full message context",
+                            "engine, roomId, command (prompt), image, paramValuesMap",
+                            "{ inputMessage, responseMessage }"
+                        ],
+                        [
+                            "CreatePlaygroundRoomReactor",
+                            "Create a new playground room with automatic playground project association",
+                            "roomId (optional), model, systemPrompt",
+                            "Room object with PLAYGROUND_PROJECT_ID set"
+                        ],
+                        [
+                            "GetPlaygroundMessagesReactor",
+                            "Retrieve message history from a room with pagination and sorting",
+                            "roomId, limit, offset, sort (ASC/DESC)",
+                            "Array of message objects (InputMessage + ResponseMessage)"
+                        ],
+                        [
+                            "GetPlaygroundRoomsReactor",
+                            "Get all playground rooms for the current user",
+                            "projectId (auto-set to PLAYGROUND_PROJECT_ID)",
+                            "Array of room objects with metadata"
+                        ],
+                        [
+                            "AddPlaygroundToolExecutionReactor",
+                            "Add tool execution results to message history and continue LLM conversation",
+                            "engine, roomId, toolId, toolName, toolExecutionResponse, toolParameterValues",
+                            "{ responseMessage } OR confirmation string if more tools needed"
+                        ]
+                    ]
+                )}
+                ${C.callout('All playground reactors enforce RBAC — users can only access rooms they own or have been granted access to.', 'warning')}
+                <h3>Example: Programmatic Playground Interaction</h3>
+                ${C.code(`// 1. Create a playground room
+CreatePlaygroundRoom(
+    roomId="my-custom-room",
+    model=["GPT4_MODEL"]
+);
+
+// 2. Ask the LLM a question
+AskPlayground(
+    engine=["GPT4_MODEL"],
+    roomId=["my-custom-room"],
+    command=["What is the weather in New York?"]
+);
+
+// 3. Get message history
+GetPlaygroundMessages(
+    roomId=["my-custom-room"],
+    limit=["10"],
+    offset=["0"],
+    sort=["ASC"]
+);
+
+// 4. List all playground rooms
+GetPlaygroundRooms();`, 'pixel', 'Using Playground Reactors')}
+                ${C.callout('The <strong>AskPlaygroundReactor</strong> automatically processes markdown code blocks in LLM responses, extracting executable code for the Pixel console.', 'tip')}
+            `
+        },
+        {
             id: "playground-enterprise-prompt",
             title: "Enterprise System Prompt",
             content: `
