@@ -45,15 +45,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const idx = allSlides.findIndex(s => s.id === hash);
         console.log('[DEBUG] Hash lookup result:', { hash, foundIndex: idx, exists: idx >= 0 });
         if (idx >= 0) {
-            currentSlideIndex = idx;
-            console.log('[DEBUG] Setting currentSlideIndex to', idx, '(slide:', allSlides[idx]?.id, ')');
+            // Check if this slide belongs to a locked day
+            const slide = allSlides[idx];
+            const dayIdx = navStructure.findIndex(day => day.label === slide.dayLabel);
+            if (dayIdx >= 0 && isDayLocked(dayIdx)) {
+                console.warn('[LOCKED] Initial hash points to locked day; defaulting to first slide');
+                currentSlideIndex = 0;
+            } else {
+                currentSlideIndex = idx;
+                console.log('[DEBUG] Setting currentSlideIndex to', idx, '(slide:', allSlides[idx]?.id, ')');
+            }
         } else {
             console.warn(`Slide not found for hash: #${hash}, defaulting to first slide`);
             currentSlideIndex = 0;
         }
     } else {
         const autoDayIdx = getDayIndexForToday();
-        if (autoDayIdx !== null && allSlides.length > 0) {
+        if (autoDayIdx !== null && allSlides.length > 0 && !isDayLocked(autoDayIdx)) {
             const dayLabel = navStructure[autoDayIdx]?.label;
             const firstIdx = allSlides.findIndex(s => s.dayLabel === dayLabel);
             if (firstIdx >= 0) {
@@ -63,15 +71,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('[DEBUG] Today matched but no slides found; defaulting to first slide');
             }
         } else {
+            if (autoDayIdx !== null && isDayLocked(autoDayIdx)) {
+                console.log('[DEBUG] Today is locked; defaulting to first slide');
+            }
             console.log('[DEBUG] No hash or allSlides empty, defaulting to first slide');
         }
     }
 
     renderSlide();
     updateNav();
-    // Expand sidebar to today's day (if matched) after initial render
+    // Expand sidebar to today's day (if matched and not locked) after initial render
     const autoDayIdx = getDayIndexForToday();
-    if (autoDayIdx !== null) expandDay(autoDayIdx, true);
+    if (autoDayIdx !== null && !isDayLocked(autoDayIdx)) expandDay(autoDayIdx, true);
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
@@ -96,6 +107,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const idx = allSlides.findIndex(s => s.id === hash);
             console.log('[DEBUG] hashchange lookup:', { hash, foundIndex: idx, currentIndex: currentSlideIndex });
             if (idx >= 0 && idx !== currentSlideIndex) {
+                // Check if this slide belongs to a locked day
+                const slide = allSlides[idx];
+                const dayIdx = navStructure.findIndex(day => day.label === slide.dayLabel);
+                if (dayIdx >= 0 && isDayLocked(dayIdx)) {
+                    console.warn('[LOCKED] Cannot navigate to', hash, '- Day is locked');
+                    // Reset hash to current slide
+                    window.location.hash = allSlides[currentSlideIndex]?.id || '';
+                    return;
+                }
                 console.log('[DEBUG] Navigating to slide', idx, ':', allSlides[idx]?.id);
                 currentSlideIndex = idx;
                 renderSlide();
@@ -164,6 +184,14 @@ function buildNavStructure() {
     console.log('[DEBUG] navStructure built from SESSION_PLAN:', navStructure.length, 'days');
 }
 
+// Check if a day is locked based on CONFIG.lockedDays
+function isDayLocked(dayIdx) {
+    if (!CONFIG.lockedDays || !Array.isArray(CONFIG.lockedDays)) return false;
+    // dayIdx is 0-indexed, but CONFIG.lockedDays uses 1-indexed day numbers
+    const dayNumber = dayIdx + 1;
+    return CONFIG.lockedDays.includes(dayNumber);
+}
+
 // Build sidebar HTML
 function buildSidebar() {
     const nav = document.getElementById('sidebarNav');
@@ -171,29 +199,35 @@ function buildSidebar() {
 
     navStructure.forEach((day, dayIdx) => {
         const isFirstDay = dayIdx === 0;
-        html += `<div class="nav-day">`;
+        const locked = isDayLocked(dayIdx);
+        const lockedClass = locked ? 'locked' : '';
+        const lockIcon = locked ? '<span class="lock-icon">🔒</span>' : '';
+
+        html += `<div class="nav-day ${lockedClass}">`;
         html += `<div class="nav-day-header ${isFirstDay ? 'expanded' : ''}" onclick="toggleDay(${dayIdx})">`;
         html += `<span class="arrow">&#9654;</span>`;
-        html += `<span>${day.label}</span>`;
+        html += `<span>${day.label}${lockIcon}</span>`;
         html += `</div>`;
         html += `<div class="nav-day-chapters ${isFirstDay ? 'expanded' : ''}" id="dayChapters${dayIdx}">`;
 
         if (day.display === 'day-only') {
             const slides = day.chapters[0]?.slides || [];
             slides.forEach(slide => {
-                html += `<div class="nav-topic" id="nav-${slide.id}" onclick="goToSlide('${slide.id}')">${slide.title}</div>`;
+                const clickHandler = locked ? '' : `onclick="goToSlide('${slide.id}')"`;
+                html += `<div class="nav-topic ${lockedClass}" id="nav-${slide.id}" ${clickHandler}>${slide.title}</div>`;
             });
         } else {
             day.chapters.forEach((chapter, chIdx) => {
                 const chapterId = `day${dayIdx}_ch${chIdx}`;
-                html += `<div class="nav-chapter-header" onclick="toggleChapter('${chapterId}')">`;
+                html += `<div class="nav-chapter-header ${lockedClass}" onclick="toggleChapter('${chapterId}')">`;
                 html += `<span class="arrow">&#9654;</span>`;
                 html += `<span>${chapter.title}</span>`;
                 html += `</div>`;
                 html += `<div class="nav-chapter-topics" id="${chapterId}">`;
 
                 chapter.slides.forEach(slide => {
-                    html += `<div class="nav-topic" id="nav-${slide.id}" onclick="goToSlide('${slide.id}')">${slide.title}</div>`;
+                    const clickHandler = locked ? '' : `onclick="goToSlide('${slide.id}')"`;
+                    html += `<div class="nav-topic ${lockedClass}" id="nav-${slide.id}" ${clickHandler}>${slide.title}</div>`;
                 });
 
                 html += `</div>`;
@@ -289,6 +323,14 @@ function toggleChapter(chapterId) {
 function goToSlide(slideId) {
     const idx = allSlides.findIndex(s => s.id === slideId);
     if (idx >= 0) {
+        // Check if this slide belongs to a locked day
+        const slide = allSlides[idx];
+        const dayIdx = navStructure.findIndex(day => day.label === slide.dayLabel);
+        if (dayIdx >= 0 && isDayLocked(dayIdx)) {
+            console.warn('[LOCKED] Cannot navigate to', slideId, '- Day is locked');
+            return; // Prevent navigation to locked days
+        }
+
         currentSlideIndex = idx;
         renderSlide();
         updateNav();
@@ -298,18 +340,48 @@ function goToSlide(slideId) {
 // Next slide
 function nextSlide() {
     if (currentSlideIndex < allSlides.length - 1) {
-        currentSlideIndex++;
-        renderSlide();
-        updateNav();
+        let nextIdx = currentSlideIndex + 1;
+
+        // Skip locked days
+        while (nextIdx < allSlides.length) {
+            const slide = allSlides[nextIdx];
+            const dayIdx = navStructure.findIndex(day => day.label === slide.dayLabel);
+            if (dayIdx >= 0 && isDayLocked(dayIdx)) {
+                nextIdx++;
+            } else {
+                break; // Found unlocked slide
+            }
+        }
+
+        if (nextIdx < allSlides.length) {
+            currentSlideIndex = nextIdx;
+            renderSlide();
+            updateNav();
+        }
     }
 }
 
 // Previous slide
 function prevSlide() {
     if (currentSlideIndex > 0) {
-        currentSlideIndex--;
-        renderSlide();
-        updateNav();
+        let prevIdx = currentSlideIndex - 1;
+
+        // Skip locked days
+        while (prevIdx >= 0) {
+            const slide = allSlides[prevIdx];
+            const dayIdx = navStructure.findIndex(day => day.label === slide.dayLabel);
+            if (dayIdx >= 0 && isDayLocked(dayIdx)) {
+                prevIdx--;
+            } else {
+                break; // Found unlocked slide
+            }
+        }
+
+        if (prevIdx >= 0) {
+            currentSlideIndex = prevIdx;
+            renderSlide();
+            updateNav();
+        }
     }
 }
 
