@@ -129,8 +129,15 @@ const slides_playground = [
             content: `
                 <h2>Room Folders — Scoped File Storage</h2>
                 <p>Each Room has its own <strong>Room Folder</strong> where uploaded documents and tool outputs are stored.</p>
+                <p><strong>By default, rooms are empty.</strong> Files are added to a room folder when:</p>
+                <ul>
+                    <li><strong>You upload an image or document</strong> — The file is both sent to the model AND saved to the room folder</li>
+                    <li><strong>MCP tools write outputs</strong> — Tools should write their results to the room folder for persistence</li>
+                </ul>
                 <p>The <strong>Insight context</strong> for a Room is mapped directly to this folder — the same storage used by apps/MCP tools.</p>
                 <p>So writing to the Room is just like writing to the Insight when using the app normally — no bifurcation between a user using the app and an LLM using it via MCP.</p>
+                <h3>Example Room Folder Structure</h3>
+                <p class="text-muted">The structure below shows an example of how room folders might be organized after files are added:</p>
                 ${C.tree([
                     { name: "BASE_FOLDER/", type: "dir", children: [
                         { name: "room/", type: "dir", desc: "← Room folders root", children: [
@@ -144,24 +151,7 @@ const slides_playground = [
                         ]},
                     ]}
                 ])}
-                ${C.code(`// Room Folder MCP Tools (available in Playground)
-// Execute shell commands within the room folder
-ExecuteRoomShellCommand(command="ls -la");
-
-// Extract text from uploaded documents
-ExtractRoomFiles(filePaths=["uploaded/document.pdf"]);
-
-// Search extracted text with context
-SearchRoomFilesWithContext(
-  searchTerm="SEMOSS",
-  contextWords=50,
-  maxMatches=10
-);
-
-// Get token counts for uploaded files
-GetRoomFileTokenStats();`, 'pixel', 'Room Folder MCP Tools')}
                 ${C.callout('Room folders use <strong>chroot isolation</strong> when enabled — shell commands cannot access files outside the room folder.', 'warning')}
-                ${C.callout(`The 4 Room Folder MCP tools shown above are project-specific implementations, not built-in ${CONFIG.productName} core features. They may need to be registered separately for your deployment.`, 'info')}
             `
         },
         {
@@ -223,8 +213,8 @@ GetRoomFileTokenStats();`, 'pixel', 'Room Folder MCP Tools')}
                     [
                         { from: 0, to: 1, label: "\"Query the sales database\"" },
                         { from: 1, to: 2, label: "message + tools list" },
-                        { from: 2, to: 1, label: "tool_calls: [RunPixel]", type: "response" },
-                        { from: 1, to: 3, label: "execute tool via MCP" },
+                        { from: 2, to: 1, label: "tool_calls: [appId__toolName]", type: "response" },
+                        { from: 1, to: 3, label: "RunMCPToolReactor" },
                         { from: 3, to: 4, label: "insight.runPixel(toolPixel)" },
                         { from: 4, to: 3, label: "result", type: "response" },
                         { from: 3, to: 1, label: "tool result", type: "response" },
@@ -310,31 +300,122 @@ public List<Map<String, Object>> getAllToolsJsonForRoom() {
                     ]
                 )}
                 ${C.callout('All playground reactors enforce RBAC — users can only access rooms they own or have been granted access to.', 'warning')}
-                <h3>Example: Programmatic Playground Interaction</h3>
+                <h3>Example: Programmatic Playground Interaction with MCP Tools</h3>
                 ${C.code(`// 1. Create a playground room
-CreatePlaygroundRoom(
-    roomId="my-custom-room",
-    model=["GPT4_MODEL"]
+CreatePlaygroundRoom();
+
+// 2. Configure room options (model, MCP apps, temperature)
+UpdateRoomOptions(
+    roomId="7aa48f5f-fc80-4d10-b9a3-9ddf33e24024",
+    roomOptions=[{
+        "instructions": "",
+        "mcp": [{
+            "type": "PROJECT",
+            "id": "29e9e371-9243-4293-ad3b-4be08ef95ab5",
+            "name": "MCP"
+        }],
+        "temperature": 0.3,
+        "workspace": null,
+        "modelId": "0d5838c2-24f4-468d-a132-cdbe71b63669"
+    }]
 );
 
-// 2. Ask the LLM a question
+// 3. Ask the LLM a question (LLM will call tools if needed)
 AskPlayground(
-    engine=["GPT4_MODEL"],
-    roomId=["my-custom-room"],
-    command=["What is the weather in New York?"]
+    engine=["0d5838c2-24f4-468d-a132-cdbe71b63669"],
+    roomId=["7aa48f5f-fc80-4d10-b9a3-9ddf33e24024"],
+    command=["<encode>what is the stock price of facebook?</encode>"],
+    context=[],
+    image=[],
+    parentMessageId=["ROOT_PLACEHOLDER_ID"],
+    paramValues=[{"temperature": 0.3}]
+);
+// LLM response: tool_calls: [a29e9e371-9243-4293-ad3b-4be08ef95ab5_get_stock_price]
+
+// 4. Execute the MCP tool
+RunMCPTool(
+    project=["29e9e371-9243-4293-ad3b-4be08ef95ab5"],
+    function=["a29e9e371-9243-4293-ad3b-4be08ef95ab5_get_stock_price"],
+    paramValues=[{"symbol": "META"}]
 );
 
-// 3. Get message history
-GetPlaygroundMessages(
-    roomId=["my-custom-room"],
-    limit=["10"],
-    offset=["0"],
-    sort=["ASC"]
+// 5. Add tool execution result back to conversation
+AddPlaygroundToolExecution(
+    engine=["0d5838c2-24f4-468d-a132-cdbe71b63669"],
+    roomId=["7aa48f5f-fc80-4d10-b9a3-9ddf33e24024"],
+    parentMessageId=["019c8b74-1cdc-7edc-9c3e-4292f8919447"],
+    toolId=["toolu_vrtx_01Qju4Q4e5DYdUinLmAKaUCq"],
+    toolName=["a29e9e371-9243-4293-ad3b-4be08ef95ab5_get_stock_price"],
+    toolExecutionResponse=["<encode>{\\"META\\":642.1699829101562}</encode>"],
+    paramValues=[{}],
+    mcpToolStatus="success",
+    toolParameterValues=[{"symbol": "META"}]
 );
-
-// 4. List all playground rooms
-GetPlaygroundRooms();`, 'pixel', 'Using Playground Reactors')}
+// LLM continues with tool result and provides final answer`, 'pixel', 'Complete MCP Tool Execution Flow')}
                 ${C.callout('The <strong>AskPlaygroundReactor</strong> automatically processes markdown code blocks in LLM responses, extracting executable code for the Pixel console.', 'tip')}
+            `
+        },
+        {
+            id: "playground-default-tools",
+            title: "Default Tools",
+            content: `
+                <h2>Default Tools — Global MCP Tool Configuration</h2>
+                <p class="lead"><strong>Default Tools</strong> are MCP-enabled resources (apps, engines, databases, vectors) that are automatically available in <strong>every</strong> Playground room without manual configuration.</p>
+                <p>This is configured at the <strong>theme level</strong> in the theme database, enabling enterprise-wide tool availability.</p>
+                ${C.flow([
+                    { title: 'Configure in Theme DB', desc: 'Add defaultTools array to theme.playground config' },
+                    { title: 'User Creates Room', desc: 'New Playground room is created', arrow: '→' },
+                    { title: 'Default Tools Injected', desc: 'Room automatically gets defaultTools from theme', arrow: '→' },
+                    { title: 'LLM Sees Tools', desc: 'Tools appear in every LLM request', accent: true },
+                ])}
+                <h3>Theme Configuration</h3>
+` +
+                C.code(`{
+  "playground": {
+    "globalSystemPrompt": "...",
+    "systemPromptVars": {...},
+    "defaultTools": [
+      {
+        "type": "PROJECT",
+        "id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+        "name": "Document Analysis App"
+      },
+      {
+        "type": "VECTOR",
+        "id": "e5f6g7h8-9012-34ij-klmn-5678901234op",
+        "name": "Enterprise Knowledge Base"
+      },
+      {
+        "type": "DATABASE",
+        "id": "q9r0s1t2-3456-78uv-wxyz-9012345678qr",
+        "name": "Sales Database"
+      },
+      {
+        "type": "FUNCTION",
+        "id": "a3b4c5d6-7890-12ef-ghij-3456789012kl",
+        "name": "API Integration Functions"
+      },
+      {
+        "type": "STORAGE",
+        "id": "m7n8o9p0-1234-56qr-stuv-7890123456wx",
+        "name": "Shared File Storage"
+      }
+    ]
+  }
+}`, 'json', 'Theme THEME_MAP') + `
+                <h3>Supported Resource Types</h3>
+                ${C.table(
+                    ['Type', 'Purpose', 'Example Use Case'],
+                    [
+                        ['PROJECT', 'MCP apps with custom tools', 'Document processing, workflow automation'],
+                        ['VECTOR', 'Vector databases for RAG', 'Knowledge base search, semantic lookup'],
+                        ['DATABASE', 'Relational/graph databases', 'Query structured data, reports'],
+                        ['FUNCTION', 'Custom API endpoints', 'External service integrations'],
+                        ['STORAGE', 'File storage engines', 'Read/write files, document management'],
+                    ]
+                )}
+                ${C.callout('Default tools are <strong>merged</strong> with workspace-specific and room-specific tools. Users can override or add additional tools per room.', 'info')}
+                ${C.callout('Use default tools sparingly — every room will load these tools, which increases token usage. Only add tools that should be universally available across the organization.', 'warning')}
             `
         },
         {
