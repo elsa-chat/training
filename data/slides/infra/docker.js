@@ -2,34 +2,92 @@
 const slides_docker = [
         {
             id: "docker-title",
-            title: "Docker Deployment",
+            title: "Infrastructure & Deployment",
             content: C.titleSlide(
-                "Docker Deployment",
-                `Containerizing and deploying ${CONFIG.productName} at scale`,
+                "Infrastructure & Deployment",
+                `CI/CD, Docker builds, and production deployment`,
                 "90 minutes"
             )
         },
         {
-            id: "docker-overview",
-            title: `Why Docker for ${CONFIG.productName}?`,
+            id: "cicd-overview",
+            title: "CI/CD Pipeline",
             content: `
-                <h2>Why Docker for ${CONFIG.productName}?</h2>
-                <p class="lead">Docker enables consistent, reproducible deployments across dev, staging, and production environments.</p>
-                ${C.cards([
-                    { badge: 'Benefit', title: 'Consistency', desc: 'Same image runs on laptops, staging servers, and production clusters' },
-                    { badge: 'Benefit', title: 'Isolation', desc: 'Dependencies (Java, Python, Tomcat, Chrome) bundled inside the image' },
-                    { badge: 'Benefit', title: 'Scalability', desc: 'Horizontal scaling with orchestrators (Kubernetes, Docker Swarm)' },
-                    { badge: 'Benefit', title: 'Fast Rollback', desc: 'Tag images by version and roll back instantly' },
-                    { badge: 'Benefit', title: 'Developer Velocity', desc: 'Dev environment matches production — no "works on my machine"' },
+                <h2>Continuous Integration & Deployment</h2>
+                <p class="lead">Automated build pipeline using GitHub Actions</p>
+                ${C.flow([
+                    { title: 'GitHub Push', desc: 'Code pushed to repository', accent: true, arrow: '↓ triggers' },
+                    { title: 'Build SEMOSS Core', desc: 'Compile Java libraries, run tests', arrow: '↓ publish' },
+                    { title: 'Build Monolith WAR', desc: 'Package servlet application', arrow: '↓ publish' },
+                    { title: 'Build SemossWeb', desc: 'Build React frontend', arrow: '↓ publish' },
+                    { title: 'Publish to Maven', desc: 'Opensource Maven repository', accent: true },
                 ])}
-                ${C.callout(`${CONFIG.productName} provides official Docker images on <strong>quay.io/semoss/semoss-dev</strong> and enterprise registries for production deployments.`, 'info')}
+                ${C.callout('All artifacts are published to <strong>opensource Maven repository</strong> for downstream consumption by Docker builds.', 'info')}
+            `
+        },
+        {
+            id: "github-actions",
+            title: "GitHub Actions Workflows",
+            content: `
+                <h2>GitHub Actions</h2>
+                <p>Three primary build workflows automate the CI/CD pipeline:</p>
+                ${C.table(
+                    ['Workflow', 'Purpose', 'Output'],
+                    [
+                        ['Build SEMOSS', 'Compile SEMOSS core Java libraries and run unit tests', 'semoss-5.0.0-SNAPSHOT.jar published to Maven'],
+                        ['Build Monolith', 'Package Monolith servlet WAR with dependencies', 'Monolith.war published to Maven'],
+                        ['Build SemossWeb', 'Build React frontend with npm/webpack', 'SemossWeb static assets published to Maven'],
+                    ]
+                )}
+                ${C.code(`# Example GitHub Actions workflow
+name: Build SEMOSS Core
+on:
+  push:
+    branches: [main, dev]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+      - name: Build with Maven
+        run: mvn clean install
+      - name: Publish to Maven
+        run: mvn deploy`, 'yaml', '.github/workflows/build-semoss.yml (simplified)')}
+            `
+        },
+        {
+            id: "docker-builds-overview",
+            title: "Docker Build Strategy",
+            content: `
+                <h2>Docker Builds</h2>
+                <p class="lead">Three specialized builder images create the final ${CONFIG.productName} container</p>
+                ${C.cards([
+                    {
+                        badge: 'Builder',
+                        title: 'Python Builder',
+                        desc: 'Creates Python 3.12 virtual environment with all required packages (pandas, numpy, torch, transformers, etc.). Separate CPU and GPU variants.'
+                    },
+                    {
+                        badge: 'Builder',
+                        title: 'Tomcat Builder',
+                        desc: 'Installs Java 21 (Azul Zulu), Tomcat 9.0.112, Maven 3.8.5, and build tooling. Provides foundation for application layer.'
+                    },
+                    {
+                        badge: 'Final',
+                        title: 'SEMOSS Image',
+                        desc: 'Combines artifacts from builders with application code. Pulls latest SEMOSS artifacts from Maven, installs Playwright, configures runtime.'
+                    },
+                ])}
+                ${C.callout('Builder images are tagged and versioned separately (e.g., <code>python-builder:3.12-cpu</code>, <code>tomcat-builder:9.0.112</code>) to enable caching and faster rebuilds.', 'info')}
             `
         },
         {
             id: "docker-architecture",
-            title: `${CONFIG.productName} Docker Architecture`,
+            title: `AI Core Container Architecture`,
             content: `
-                <h2>${CONFIG.productName} Container Architecture</h2>
+                <h2>AI Core Container Architecture</h2>
                 <p>A ${CONFIG.productName} container packages all runtime dependencies into a single deployable unit.</p>
                 ${C.layers([
                     { label: "Application Layer", accent: true, items: [
@@ -52,8 +110,35 @@ const slides_docker = [
             `
         },
         {
+            id: "system-architecture",
+            title: "System Architecture",
+            content: `
+                <h2>AI Core System Architecture</h2>
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="images/architecture.svg" alt="AI Core Architecture" style="max-width: 90%; height: auto; border: 1px solid #ddd; border-radius: 8px;">
+                </div>
+                <h3>Architecture Components</h3>
+                ${C.table(
+                    ['Component', 'Purpose', 'Technology'],
+                    [
+                        ['Azure Load Balancer', 'Entry point for user traffic, SSL termination', 'Azure ALB'],
+                        ['API/WebSocket', 'RESTful API and real-time WebSocket connections', 'Tomcat + Spring'],
+                        ['AI Core Pods', 'Container instances running application logic (2K-1, 2K-2, 2K-3)', 'Kubernetes Pods'],
+                        ['Zookeeper Pods', 'Distributed coordination and configuration management', 'Apache Zookeeper'],
+                        ['Azure Disk PVC', 'Optional self-hosted model storage (large models)', 'Azure Disk'],
+                        ['Databases', 'User data, security, metadata storage', 'PostgreSQL'],
+                        ['Azure Blob Storage', 'Object storage for projects, engines, assets', 'Azure Storage Account'],
+                        ['Google-Hosted Models', 'External LLM APIs (Gemini, etc.)', 'Google AI'],
+                        ['AWS-Hosted Models', 'External LLM APIs (Bedrock, etc.)', 'AWS Bedrock'],
+                        ['Other External Models', 'OpenAI, Anthropic, and other providers', 'External APIs'],
+                    ]
+                )}
+                ${C.callout('The architecture supports <strong>horizontal scaling</strong> with multiple AI Core pods behind a load balancer, shared state in databases and blob storage.', 'info')}
+            `
+        },
+        {
             id: "docker-multi-stage-build",
-            title: "Multi-Stage Dockerfile",
+            title: "Multi-Stage Build Strategy",
             content: `
                 <h2>Multi-Stage Build Strategy</h2>
                 <p>${CONFIG.productName} uses a multi-stage Dockerfile to minimize final image size and separate build tools from runtime.</p>
@@ -88,555 +173,464 @@ CMD ["bash", "-c", "exec $TOMCAT_HOME/bin/start.sh"]`, 'dockerfile', 'docker/Doc
             `
         },
         {
-            id: "docker-image-layers",
-            title: "Image Layers Breakdown",
+            id: "docker-local-testing",
+            title: "Local Development with Docker Compose",
             content: `
-                <h2>What's Inside the SEMOSS Image?</h2>
-                ${C.table(
-                    ['Layer', 'Purpose', 'Size (Approx)', 'Path'],
-                    [
-                        ['Ubuntu 22.04', 'Base OS', '~80MB', '/'],
-                        ['Java 21 (Zulu)', 'JVM runtime', '~200MB', '/usr/lib/jvm/zulu21'],
-                        ['Python 3.12 + venv', 'Python runtime + libs', '~600MB', '/usr/lib/python/semossvenv'],
-                        ['Tomcat 9.0.112', 'Servlet container', '~15MB', '/opt/apache-tomcat-9.0.112'],
-                        ['SEMOSS Core', 'Java libraries', '~150MB', '/opt/semosshome'],
-                        ['SemossWeb', 'React frontend', '~50MB', '/opt/apache-tomcat-9.0.112/webapps/SemossWeb'],
-                        ['Playwright', 'Headless browser', '~300MB', 'System libs'],
-                        ['Codex CLI', 'AI code tools', '~20MB', '/usr/local/bin/codex'],
-                    ]
-                )}
-                <h3>Total Image Size: ~1.4GB</h3>
-                ${C.callout('Use <code>docker images quay.io/semoss/semoss-dev</code> to see actual layer sizes and compressed size on disk.', 'tip')}
-            `
-        },
-        {
-            id: "docker-compose-intro",
-            title: "Docker Compose for Orchestration",
-            content: `
-                <h2>Docker Compose — Multi-Container Orchestration</h2>
-                <p class="lead"><code>docker-compose.yml</code> defines services, networks, volumes, and environment configuration for SEMOSS and its dependencies.</p>
+                <h2>Docker Compose — For Local Testing Only</h2>
+                <p class="lead"><code>docker-compose.yml</code> provides a quick way to run ${CONFIG.productName} locally for development and testing.</p>
                 ${C.split(
                     {
-                        title: 'Why Use Docker Compose?',
+                        title: 'Local Development',
                         content: `
                             <ul>
                                 <li><strong>Single command</strong>: <code>docker-compose up</code> starts everything</li>
-                                <li><strong>Service linking</strong>: SEMOSS, Postgres, MinIO connect via Docker network</li>
-                                <li><strong>Environment config</strong>: Centralized env vars for all features</li>
-                                <li><strong>Volume persistence</strong>: Data survives container restarts</li>
-                                <li><strong>Reproducible</strong>: Same compose file works on any Docker host</li>
+                                <li><strong>Service linking</strong>: SEMOSS, Postgres, MinIO connect automatically</li>
+                                <li><strong>Volume mounting</strong>: Mount local code for hot reload</li>
+                                <li><strong>Rapid iteration</strong>: Test changes without full deployment</li>
                             </ul>
                         `
                     },
                     {
-                        title: 'Typical SEMOSS Stack',
-                        content: C.code(`services:
-  semoss:
-    image: quay.io/semoss/semoss-dev:latest
-    ports:
-      - "9090:8080"
-    environment:
-      # ... env vars ...
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_PASSWORD: postgres
-  minio:
-    image: minio/minio
-    command: server /data
-    ports:
-      - "9091:9000"`, 'yaml', 'docker-compose.yml (simplified)')
+                        title: 'Not For Production',
+                        content: `
+                            <ul>
+                                <li><strong>No auto-scaling</strong>: Single container, no horizontal scale</li>
+                                <li><strong>No high availability</strong>: Container restarts lose state</li>
+                                <li><strong>Limited orchestration</strong>: Use Kubernetes for production</li>
+                                <li><strong>Dev-optimized</strong>: Bind mounts, debug ports, relaxed security</li>
+                            </ul>
+                        `
                     }
                 )}
+                ${C.callout('<strong>Production deployments</strong> use Kubernetes with proper ingress, secrets management, auto-scaling, and monitoring.', 'warning')}
             `
         },
         {
-            id: "docker-compose-semoss-service",
-            title: "docker-compose.yml — SEMOSS Service",
+            id: "docker-environment-overview",
+            title: "Environment Variable Categories",
             content: `
-                <h2>SEMOSS Service Configuration</h2>
-                ${C.code(`version: "3.8"
-services:
-  semoss:
-    image: quay.io/semoss/semoss-dev:5.0.0-alpha-SNAPSHOT-ubuntu22-2025-10-14
-    container_name: semoss
-    pull_policy: always
-    user: "1001:1001"  # non-root for security
-    ports:
-      - "9090:8080"    # Tomcat HTTP port
-      - "5005:5005"    # JDWP debug port (optional)
-    volumes:
-      # Mount local JAR for hot reload during development
-      - ./Semoss/target/semoss-5.0.0-SNAPSHOT.jar:/opt/apache-tomcat-9.0.112/webapps/Monolith/WEB-INF/lib/semoss-5.0.0-SNAPSHOT.jar
-    environment:
-      # Feature flags
-      SETSOCIAL: 'true'
-      ENABLE_NATIVE: 'true'
-      NETTY_PYTHON: 'true'
-      MODEL_INFERENCE_LOGS_ENABLED: 'true'
-      CHROOT_ENABLE: 'true'
-      # ... see next slide for full env vars
-    command: /bin/bash -c "runCS.sh"
-    networks:
-      - mynetwork`, 'yaml', 'docker-compose-examples/docker-compose-kunal.yml (excerpted)')}
-                <h3>Key Fields</h3>
-                <ul>
-                    <li><code>user: "1001:1001"</code> — Run as non-root (matches Dockerfile USER)</li>
-                    <li><code>ports</code> — Map container port 8080 to host port 9090</li>
-                    <li><code>volumes</code> — Mount local JARs for dev hot reload (optional in prod)</li>
-                    <li><code>networks</code> — Enable inter-container communication</li>
-                </ul>
+                <h2>Configuration via Environment Variables</h2>
+                <p>AI Core uses 150+ environment variables organized into categories. The <code>runCS.sh</code> script processes these at startup.</p>
+                ${C.cards([
+                    { badge: 'Category', title: 'Database Connections', desc: 'Security, LocalMaster, Themes, Scheduler, User Tracking, Model Logs, Prompt DB, Audit Logs' },
+                    { badge: 'Category', title: 'Authentication & SSO', desc: 'Microsoft SSO, Native auth, API users, access keys, CSRF/CORS protection' },
+                    { badge: 'Category', title: 'Python & R Runtime', desc: 'Python virtual env, Netty Python server, R configuration, chroot sandboxing' },
+                    { badge: 'Category', title: 'Storage & Clustering', desc: 'Azure Blob, Zookeeper, cluster mode, shared file paths' },
+                    { badge: 'Category', title: 'Admin Permissions', desc: 'Admin-only operations for projects, databases, models, storage, functions, vectors' },
+                    { badge: 'Category', title: 'Performance & Limits', desc: 'File upload limits, frame size limits, memory settings, session timeouts' },
+                    { badge: 'Category', title: 'Security Features', desc: 'Virus scanning, secrets management, header security, terminal access' },
+                    { badge: 'Category', title: 'Feature Flags', desc: 'User tracking, model inference logs, audit logs, activity tracking, widget restrictions' },
+                    { badge: 'Category', title: 'Frontend Config', desc: 'Routes, redirects, cookies, CORS origins, default pages' },
+                ])}
+                ${C.callout('The <code>runCS.sh</code> script checks each variable and calls specific configuration scripts to apply settings to Tomcat, RDF_Map.prop, and web.xml.', 'info')}
             `
         },
         {
-            id: "docker-environment-vars",
-            title: "Environment Variables",
+            id: "env-database-connections",
+            title: "Database Connections",
             content: `
-                <h2>Configuring SEMOSS via Environment Variables</h2>
-                <p>SEMOSS reads configuration from environment variables at startup. This enables <strong>12-factor app</strong> principles.</p>
+                <h2>Database Environment Variables</h2>
+                <p>AI Core supports external PostgreSQL databases for all system components.</p>
                 ${C.table(
-                    ['Category', 'Example Variables', 'Purpose'],
+                    ['Database', 'Required Variables', 'Purpose'],
                     [
-                        ['Auth', 'SETSOCIAL, ENABLE_NATIVE, ENABLE_NATIVE_REGISTRATION', 'Enable social login or native username/password auth'],
-                        ['Python', 'NETTY_PYTHON, NATIVE_PY_SERVER, SMSS_PYTHONHOME', 'Enable Python GAAS server and set venv path'],
-                        ['Security', 'CHROOT_ENABLE, CHROOT_DIR, CHROOT_SYMLINK_PATHS', 'Enable chroot sandbox for Python execution'],
-                        ['Database', 'CUSTOM_LM_CONNECTION_URL, CUSTOM_SECURITY_CONNECTION_URL', 'External Postgres for LocalMaster, Security DB, etc.'],
-                        ['Cloud Storage', 'SEMOSS_IS_CLUSTER, MINIO_ENDPOINT, MINIO_BUCKET', 'Use MinIO/S3 for distributed storage'],
-                        ['Feature Flags', 'MODEL_INFERENCE_LOGS_ENABLED, USER_TRACKING_ENABLED', 'Enable/disable optional features'],
-                        ['Frontend', 'FE_ROUTE, REDIRECT', 'Configure frontend base path and OAuth redirects'],
+                        ['Security DB', 'CUSTOM_SECURITY_CONNECTION_URL<br>CUSTOM_SECURITY_USERNAME<br>CUSTOM_SECURITY_PASSWORD<br>CUSTOM_SECURITY_SCHEMA', 'User authentication, roles, permissions'],
+                        ['LocalMaster', 'CUSTOM_LM_CONNECTION_URL<br>CUSTOM_LM_USERNAME<br>CUSTOM_LM_PASSWORD<br>CUSTOM_LM_SCHEMA', 'Project metadata, engines, models'],
+                        ['Themes', 'CUSTOM_THEMES_CONNECTION_URL<br>CUSTOM_THEMES_USERNAME<br>CUSTOM_THEMES_PASSWORD', 'UI themes and branding'],
+                        ['Scheduler', 'CUSTOM_SCHEDULER_CONNECTION_URL<br>CUSTOM_SCHEDULER_USERNAME<br>CUSTOM_SCHEDULER_PASSWORD', 'Scheduled jobs, cron tasks'],
+                        ['User Tracking', 'CUSTOM_USER_TRACKING_CONNECTION_URL<br>CUSTOM_USER_TRACKING_USERNAME<br>USER_TRACKING_ENABLED=true', 'User activity analytics'],
+                        ['Model Logs', 'CUSTOM_MODEL_INFERENCE_LOGS_CONNECTION_URL<br>MODEL_INFERENCE_LOGS_ENABLED=true', 'LLM inference logging'],
+                        ['Prompt DB', 'CUSTOM_PROMPT_CONNECTION_URL<br>PROMPT_DB_ENABLED=true', 'Prompt templates library'],
+                        ['Audit Logs', 'CUSTOM_AUDITLOGS_CONNECTION_URL<br>AUDIT_LOGS_ENABLED=true', 'Compliance audit trail'],
                     ]
                 )}
-                ${C.callout('Use <code>.env</code> files with <code>env_file:</code> in docker-compose to keep secrets out of version control.', 'warning')}
+                ${C.code(`# Example: Security Database Configuration
+CUSTOM_SECURITY_DRIVER=org.postgresql.Driver
+CUSTOM_SECURITY_RDBMS_TYPE=POSTGRES
+CUSTOM_SECURITY_USERNAME=postgres
+CUSTOM_SECURITY_PASSWORD=<secret>
+CUSTOM_SECURITY_SCHEMA=public
+CUSTOM_SECURITY_DATABASE=security
+CUSTOM_SECURITY_CONNECTION_URL=jdbc:postgresql://db.example.com:5432/security`, 'bash', 'Database connection pattern')}
             `
         },
         {
-            id: "docker-environment-example",
-            title: "Environment Variables (Full Example)",
+            id: "env-authentication",
+            title: "Authentication & SSO",
             content: `
-                <h2>Full Environment Configuration</h2>
-                ${C.code(`environment:
-  # Auth & Frontend
-  SETSOCIAL: 'true'
-  REDIRECT: "http://localhost:9090/#/"
-  ENABLE_NATIVE: 'true'
-  ENABLE_NATIVE_REGISTRATION: 'true'
-  OPTIONAL_COOKIES: 'false'
-  FE_ROUTE: /Monolith
-
-  # Python Server
-  NETTY_PYTHON: 'true'
-  NATIVE_PY_SERVER: 'true'
-  SMSS_PYTHONHOME: /usr/lib/python/semossvenv
-  R_ON: 'false'
-
-  # Feature Flags
-  MODEL_INFERENCE_LOGS_ENABLED: 'true'
-  USER_TRACKING_ENABLED: 'true'
-  PROMPT_DB_ENABLED: 'false'
-
-  # Chroot Security
-  CHROOT_ENABLE: 'true'
-  CHROOT_DIR: /opt/chroot
-  CHROOT_SYMLINK_PATHS: /usr/lib/python
-
-  # Postgres LocalMaster (shared database, unique schema)
-  CUSTOM_LM_RDBMS_TYPE: "postgres"
-  CUSTOM_LM_DRIVER: "org.postgresql.Driver"
-  CUSTOM_LM_DATABASE: "postgres"
-  CUSTOM_LM_SCHEMA: "localmaster"
-  CUSTOM_LM_USERNAME: "postgres"
-  CUSTOM_LM_PASSWORD: "postgres"
-  CUSTOM_LM_CONNECTION_URL: "jdbc:postgresql://host.docker.internal:5432/postgres?currentSchema=localmaster"
-
-  # Postgres Security DB
-  CUSTOM_SECURITY_CONNECTION_URL: "jdbc:postgresql://host.docker.internal:5432/postgres?currentSchema=security"
-
-  # MinIO (S3-compatible cloud storage)
-  SEMOSS_IS_CLUSTER: 'true'
-  SEMOSS_STORAGE_PROVIDER: 'minio'
-  MINIO_REGION: 'us-east'
-  MINIO_BUCKET: 'semoss'
-  MINIO_ACCESS_KEY: 'minioadmin'
-  MINIO_SECRET_KEY: 'minioadmin'
-  MINIO_ENDPOINT: 'http://host.docker.internal:9091'`, 'yaml', 'docker-compose.yml environment block (annotated)')}
-                ${C.callout('Use <code>host.docker.internal</code> to access services running on the host machine from inside the container (Mac/Windows Docker Desktop).', 'tip')}
-            `
-        },
-        {
-            id: "docker-volumes",
-            title: "Volume Mounts & Persistence",
-            content: `
-                <h2>Volume Mounts — Development vs Production</h2>
+                <h2>Authentication Configuration</h2>
                 ${C.split(
                     {
-                        title: 'Development Volumes',
-                        content: C.code(`volumes:
-  # Hot reload for JAR changes
-  - ./Semoss/target/semoss-5.0.0.jar:/opt/apache-tomcat-9.0.112/webapps/Monolith/WEB-INF/lib/semoss-5.0.0.jar
-
-  # Optional: Mount source classes
-  - ./apache-tomcat-9.0.112/webapps/Monolith/WEB-INF/classes:/opt/apache-tomcat-9.0.112/webapps/Monolith/WEB-INF/classes
-
-# Restart Tomcat after JAR update
-# docker-compose restart semoss`, 'yaml', 'Dev: Hot reload with bind mounts')
+                        title: 'Social Login (Microsoft SSO)',
+                        content: `
+                            ${C.code(`SETSOCIAL=true
+ENABLE_MS=true
+MS_DISPLAY_NAME="Deloitte Login"
+MS_AUTHORITY=https://login.microsoftonline.com/<tenant>/
+MS_CLIENT_ID=<client-id>
+MS_REDIRECT=https://example.com/Monolith/api/auth/login/ms
+MS_SECRET_KEY=<secret>
+MS_TENANT=example.onmicrosoft.com
+MS_SCOPE="User.Read openid email"
+MS_ACCESS_KEY_ALLOWED=true
+MS_GRAPHAPI_LOOKUP=false`, 'bash', 'Microsoft SSO variables')}
+                        `
                     },
                     {
-                        title: 'Production Volumes',
-                        content: C.code(`volumes:
-  # Named volume for data persistence
-  semoss-data:
-    driver: local
+                        title: 'Native & API Authentication',
+                        content: `
+                            ${C.code(`ENABLE_NATIVE=true
+ENABLE_NATIVE_REGISTRATION=false
+ENABLE_NATIVE_ACCESS_KEY_ALLOWED=false
 
-services:
-  semoss:
-    volumes:
-      # Persist /opt/semosshome
-      - semoss-data:/opt/semosshome
+# API Users
+ENABLE_API_USER=true
+API_USER_DYNAMIC=false
 
-# Data survives container recreation
-# docker-compose down && docker-compose up`, 'yaml', 'Prod: Named volumes for persistence')
+# Anonymous Access
+ANONYMOUS_USERS=false
+ANONYMOUS_USER_UPLOAD=false`, 'bash', 'Native auth & API users')}
+                        `
                     }
                 )}
-                ${C.callout('<strong>Bind mounts</strong> (host paths like <code>./Semoss/...</code>) are for dev. <strong>Named volumes</strong> are for prod data persistence.', 'info')}
+                ${C.callout('<strong>Best Practice:</strong> Store secrets in Kubernetes secrets, not in plain environment variables. Use <code>valueFrom.secretKeyRef</code> in deployment YAML.', 'warning')}
             `
         },
         {
-            id: "docker-networking",
-            title: "Docker Networking",
+            id: "env-python-runtime",
+            title: "Python & R Runtime",
             content: `
-                <h2>Container Networking</h2>
-                <p>Services in the same docker-compose file can communicate via service names on a private network.</p>
-                ${C.sequence(
-                    ['Client Browser', 'Docker Host', 'semoss Container', 'postgres Container', 'minio Container'],
-                    [
-                        { from: 0, to: 1, label: 'HTTP :9090' },
-                        { from: 1, to: 2, label: 'Forward to :8080 (Tomcat)' },
-                        { from: 2, to: 3, label: 'JDBC postgres:5432' },
-                        { from: 3, to: 2, label: 'ResultSet', type: 'response' },
-                        { from: 2, to: 4, label: 'S3 API minio:9000' },
-                        { from: 4, to: 2, label: 'Object data', type: 'response' },
-                        { from: 2, to: 1, label: 'JSON response', type: 'response' },
-                        { from: 1, to: 0, label: 'HTTP response', type: 'response' },
-                    ]
-                )}
-                ${C.code(`networks:
-  mynetwork:
-    driver: bridge  # default, creates private subnet
-
-services:
-  semoss:
-    networks:
-      - mynetwork
-  postgres:
-    networks:
-      - mynetwork
-  minio:
-    networks:
-      - mynetwork
-
-# Inside semoss container, use "postgres" as hostname
-# CUSTOM_LM_CONNECTION_URL: "jdbc:postgresql://postgres:5432/postgres"`, 'yaml', 'Docker Compose Network')}
-                ${C.callout('Service names (e.g., <code>postgres</code>) are DNS-resolvable within the network. No need for IP addresses.', 'tip')}
-            `
-        },
-        {
-            id: "docker-startup-commands",
-            title: "Startup Commands",
-            content: `
-                <h2>Docker Compose Commands</h2>
+                <h2>Python & R Configuration</h2>
                 ${C.table(
-                    ['Command', 'Description'],
+                    ['Variable', 'Value', 'Purpose'],
                     [
-                        ['docker-compose up', 'Start all services (attached, see logs in terminal)'],
-                        ['docker-compose up -d', 'Start all services in detached mode (background)'],
-                        ['docker-compose down', 'Stop and remove containers (volumes persist unless -v)'],
-                        ['docker-compose logs -f semoss', 'Follow logs for the semoss service'],
-                        ['docker-compose restart semoss', 'Restart the semoss container'],
-                        ['docker-compose exec semoss bash', 'Open a shell inside the running semoss container'],
-                        ['docker-compose ps', 'List running services'],
-                        ['docker-compose pull', 'Pull latest images from registry'],
+                        ['SMSS_PYTHONHOME', '/usr/lib/python/semossvenv', 'Path to Python virtual environment'],
+                        ['NETTY_PYTHON', 'true', 'Enable Netty-based Python server (recommended)'],
+                        ['NATIVE_PY_SERVER', 'true', 'Use native Python server instead of TCP sockets'],
+                        ['USE_TCP_PY', 'false', 'Deprecated: Use TCP sockets for Python (legacy)'],
+                        ['USE_PY_FILE', 'false', 'Deprecated: Use file-based communication (legacy)'],
+                        ['CHROOT_ENABLE', 'true', 'Enable chroot sandbox for Python execution'],
+                        ['CHROOT_DIR', '/opt/chroot', 'Chroot directory for sandbox'],
+                        ['CHROOT_SYMLINK_PATHS', '/usr/lib/python', 'Paths to symlink into chroot'],
+                        ['R_ON', 'false', 'Enable R runtime (optional)'],
+                        ['NETTY_R', 'false', 'Enable Netty-based R server'],
+                        ['R_HOME', '/usr/lib/R', 'Path to R installation'],
+                        ['R_CONNECTION_TYPE', 'JRI', 'R connection method (JRI or Rserve)'],
                     ]
                 )}
-                ${C.code(`# Start SEMOSS stack
-docker-compose up -d
-
-# View logs
-docker-compose logs -f semoss
-
-# Access SEMOSS
-# Open browser: http://localhost:9090
-
-# Stop everything
-docker-compose down`, 'bash', 'Typical workflow')}
+                ${C.callout('<strong>Chroot Security:</strong> Chroot sandboxing isolates Python execution, preventing access to sensitive files. Requires <code>fakechroot</code> and proper symlinks.', 'tip')}
             `
         },
         {
-            id: "docker-cloud-deployment",
-            title: "Cloud Deployment Options",
+            id: "env-storage-clustering",
+            title: "Storage & Clustering",
             content: `
-                <h2>Deploying SEMOSS on Cloud Platforms</h2>
-                ${C.cards([
-                    {
-                        badge: 'AWS',
-                        title: 'Amazon ECS / EKS',
-                        desc: 'ECS for Docker Compose-like orchestration, EKS for Kubernetes-based scaling. Use ECR for private image registry, RDS for Postgres, S3 for storage.'
-                    },
-                    {
-                        badge: 'Azure',
-                        title: 'Azure Container Instances / AKS',
-                        desc: 'ACI for simple container runs, AKS for Kubernetes. Use Azure Container Registry, Azure Database for PostgreSQL, Blob Storage for S3-compatible storage.'
-                    },
-                    {
-                        badge: 'GCP',
-                        title: 'Cloud Run / GKE',
-                        desc: 'Cloud Run for serverless containers, GKE for Kubernetes. Use Artifact Registry, Cloud SQL, GCS for object storage.'
-                    },
-                    {
-                        badge: 'On-Prem',
-                        title: 'Kubernetes / OpenShift',
-                        desc: 'Self-hosted Kubernetes clusters with Helm charts for SEMOSS. Use persistent volumes for data, ingress controllers for HTTPS.'
-                    },
-                ])}
-                ${C.callout('For production, use managed Kubernetes (EKS, AKS, GKE) for auto-scaling, rolling updates, and health checks. For dev/staging, docker-compose is sufficient.', 'info')}
+                <h2>Cloud Storage & Cluster Configuration</h2>
+                <h3>Azure Blob Storage</h3>
+                ${C.code(`SEMOSS_STORAGE_PROVIDER=AZURE
+SEMOSS_IS_CLUSTER=true
+
+# Azure Connection
+AZ_NAME=<storage-account-name>
+AZ_KEY=<storage-account-key>
+AZ_CONN_STRING="DefaultEndpointsProtocol=https;AccountName=...;AccountKey=...;EndpointSuffix=core.windows.net"
+AZ_GENERATE_DYNAMIC_SAS=false`, 'bash', 'Azure Blob configuration')}
+
+                <h3>Zookeeper Clustering</h3>
+                ${C.code(`SEMOSS_IS_CLUSTER_ZK=true
+ZK_SERVER=10.0.90.82:2181
+
+# Pod Identity (Kubernetes)
+POD_IP:
+  valueFrom:
+    fieldRef:
+      fieldPath: status.podIP
+HOST_NAME:
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.name`, 'yaml', 'Zookeeper cluster coordination')}
+                ${C.callout('<strong>Cluster Mode:</strong> When <code>SEMOSS_IS_CLUSTER=true</code>, all file operations use cloud storage (Azure Blob, S3, MinIO) instead of local disk.', 'info')}
             `
         },
         {
-            id: "docker-scaling",
-            title: "Scaling & Load Balancing",
+            id: "env-admin-permissions",
+            title: "Admin Permission Controls",
             content: `
-                <h2>Horizontal Scaling with Docker</h2>
-                <p>SEMOSS can scale horizontally by running multiple container replicas behind a load balancer.</p>
-                ${C.flow([
-                    { title: 'Load Balancer (NGINX, ALB)', desc: 'Distribute requests across replicas', accent: true, arrow: '↓ round-robin' },
-                    { title: 'SEMOSS Replica 1', desc: 'Container running on host A', arrow: '→ shared state' },
-                    { title: 'SEMOSS Replica 2', desc: 'Container running on host B', arrow: '→ shared state' },
-                    { title: 'SEMOSS Replica 3', desc: 'Container running on host C', arrow: '↓' },
-                    { title: 'Shared Storage (S3/MinIO)', desc: 'Engines, projects, assets', arrow: '↓' },
-                    { title: 'Shared Database (Postgres/RDS)', desc: 'Security, LocalMaster, Model Logs', },
-                ])}
-                ${C.code(`# docker-compose scale example (requires swarm mode)
-docker-compose up --scale semoss=3
+                <h2>Admin-Only Operation Flags</h2>
+                <p>Control which operations require admin privileges. Set to <code>true</code> to restrict to admins only.</p>
+                ${C.table(
+                    ['Resource Type', 'Admin-Only Variables', 'Operations Controlled'],
+                    [
+                        ['Projects', 'ADMIN_ONLY_PROJECT_SET_PUBLIC', 'Make projects public'],
+                        ['Databases', 'ADMIN_ONLY_DB_ADD<br>ADMIN_ONLY_DB_DELETE<br>ADMIN_ONLY_DB_ADD_ACCESS<br>ADMIN_ONLY_DB_SET_PUBLIC<br>ADMIN_ONLY_DB_SET_DISCOVERABLE', 'Add, delete, share, publish databases'],
+                        ['Models', 'ADMIN_ONLY_MODEL_ADD<br>ADMIN_ONLY_MODEL_DELETE<br>ADMIN_ONLY_MODEL_ADD_ACCESS<br>ADMIN_ONLY_MODEL_SET_PUBLIC<br>ADMIN_ONLY_MODEL_SET_DISCOVERABLE', 'Add, delete, share, publish models'],
+                        ['Storage', 'ADMIN_ONLY_STORAGE_ADD<br>ADMIN_ONLY_STORAGE_DELETE<br>ADMIN_ONLY_STORAGE_ADD_ACCESS<br>ADMIN_ONLY_STORAGE_SET_PUBLIC', 'Add, delete, share storage connections'],
+                        ['Functions', 'ADMIN_ONLY_FUNCTION_ADD<br>ADMIN_ONLY_FUNCTION_DELETE<br>ADMIN_ONLY_FUNCTION_ADD_ACCESS<br>ADMIN_ONLY_FUNCTION_SET_PUBLIC', 'Add, delete, share functions'],
+                        ['Vectors', 'ADMIN_ONLY_VECTOR_ADD<br>ADMIN_ONLY_VECTOR_DELETE<br>ADMIN_ONLY_VECTOR_ADD_ACCESS<br>ADMIN_ONLY_VECTOR_SET_PUBLIC', 'Add, delete, share vector DBs'],
+                    ]
+                )}
+                ${C.code(`# Example: Lock down model and database operations
+ADMIN_ONLY_MODEL_ADD=true
+ADMIN_ONLY_MODEL_DELETE=true
+ADMIN_ONLY_DB_ADD=false           # Allow users to add databases
+ADMIN_ONLY_DB_DELETE=true         # But only admins can delete`, 'bash', 'Admin permission example')}
+            `
+        },
+        {
+            id: "env-performance-limits",
+            title: "Performance & Resource Limits",
+            content: `
+                <h2>Performance & Limit Configuration</h2>
+                ${C.table(
+                    ['Category', 'Variable', 'Default/Example', 'Purpose'],
+                    [
+                        ['File Uploads', 'FILE_UPLOAD_LIMIT', '500 (MB)', 'Max file upload size'],
+                        ['File Uploads', 'FILE_TRANSFER_LIMIT', '500 (MB)', 'Max file transfer size'],
+                        ['File Uploads', 'SEMOSS_MAX_POST_SIZE', '524288000', 'Max POST request size (bytes)'],
+                        ['Frame Limits', 'FRAME_SIZE_LIMIT', '100000', 'Max rows in generic frame'],
+                        ['Frame Limits', 'FRAME_SIZE_LIMIT_NATIVE', '100000', 'Max rows in native SQL frame'],
+                        ['Frame Limits', 'DEFAULT_FRAME_TYPE', 'NATIVE', 'Default frame implementation (NATIVE or H2)'],
+                        ['Session', 'SESSION_TIMEOUT', '30 (minutes)', 'HTTP session timeout'],
+                        ['Session', 'SESSION_LIMIT', 'unlimited', 'Max concurrent sessions per user'],
+                        ['Memory', 'RESERVED_JAVA_MEM', '2G', 'Reserved memory for JVM'],
+                        ['Memory', 'USER_MEM_LIMIT', '4G', 'Max memory per user'],
+                        ['Memory', 'R_MEM_LIMIT', '2G', 'Max memory for R processes'],
+                        ['Pivot', 'PIVOT_ROW_MAX', '10000', 'Max rows in pivot table'],
+                        ['Pivot', 'PIVOT_COL_MAX', '100', 'Max columns in pivot table'],
+                    ]
+                )}
+            `
+        },
+        {
+            id: "env-security-features",
+            title: "Security Features",
+            content: `
+                <h2>Security & Compliance Configuration</h2>
+                ${C.table(
+                    ['Feature', 'Variables', 'Purpose'],
+                    [
+                        ['Virus Scanning', 'VIRUS_SCANNING_ENABLED=true<br>VIRUS_SCANNING_METHOD=APACHE_TIKA', 'Scan uploaded files for malware'],
+                        ['Secrets Management', 'SECRETS_MANAGER_ENABLED=true<br>SECRETS_MANAGER_TYPE=AZURE_KEY_VAULT', 'Store credentials in Azure Key Vault'],
+                        ['CSRF Protection', 'ENABLE_CSRF=true', 'Enable CSRF tokens for state-changing requests'],
+                        ['CORS', 'ENABLE_CORS=true<br>CORS_ALLOWED_ORIGINS=https://example.com', 'Configure cross-origin requests'],
+                        ['Secure Cookies', 'SAMESITE_COOKIE=Lax<br>MONOLITH_COOKIE_SET_SECURE=true', 'Set cookie security attributes'],
+                        ['Header Security', 'HEADER_SECURITY_ENABLED=true', 'Add security headers (CSP, X-Frame-Options, etc.)'],
+                        ['Git Terminal', 'DISABLE_GIT_TERMINAL=true', 'Disable terminal access in Git operations'],
+                        ['Encryption', 'ENCRYPT_SMSS=true<br>PM_SEMOSS_EXECUTE_SQL_ENCRYPTION_PASSWORD=<secret>', 'Encrypt SMSS files and SQL params'],
+                        ['Trusted Tokens', 'TRUSTED_TOKEN_DOMAIN=example.com', 'Allow JWT tokens from trusted domain'],
+                    ]
+                )}
+                ${C.callout('<strong>Defense in Depth:</strong> Combine chroot sandboxing, virus scanning, CSRF protection, and secrets management for comprehensive security.', 'tip')}
+            `
+        },
+        {
+            id: "env-feature-flags",
+            title: "Feature Flags & Tracking",
+            content: `
+                <h2>Feature Flags & Analytics</h2>
+                ${C.split(
+                    {
+                        title: 'Feature Toggles',
+                        content: `
+                            ${C.code(`# Logging & Analytics
+USER_TRACKING_ENABLED=true
+MODEL_INFERENCE_LOGS_ENABLED=true
+AUDIT_LOGS_ENABLED=true
+ACTIVITY_TRACKING_ENABLED=true
 
-# Kubernetes Deployment with 3 replicas
-apiVersion: apps/v1
+# Feature Controls
+PROMPT_DB_ENABLED=true
+ERROR_REPORT_VALVE_ENABLED=true
+USER_EXISTS_FILTER=true
+SHOW_WELCOME_BANNER=true
+
+# Widget Restrictions
+WIDGET_RESTRICTIONS_ENABLED=true
+
+# External Permission Management
+EXTERNAL_PERMISSION_MANAGEMENT=true`, 'bash', 'Feature flags')}
+                        `
+                    },
+                    {
+                        title: 'Analytics & Monitoring',
+                        content: `
+                            ${C.code(`# Google Analytics
+GOOGLE_ANALYTICS_ID=UA-XXXXXXXXX-X
+
+# Memory Profiling
+CHECK_MEM=true
+MEM_PROFILE_SETTINGS=detailed
+
+# Cache Settings
+X_CACHE=true
+T_ON=true`, 'bash', 'Monitoring configuration')}
+                        `
+                    }
+                )}
+            `
+        },
+        {
+            id: "env-frontend-routing",
+            title: "Frontend Configuration",
+            content: `
+                <h2>Frontend Routes & Redirects</h2>
+                ${C.table(
+                    ['Variable', 'Example Value', 'Purpose'],
+                    [
+                        ['FE_ROUTE', '/Monolith', 'Base path for backend API'],
+                        ['CUSTOM_DEFAULT_PAGE', 'Monolith/login', 'Default landing page'],
+                        ['CUSTOM_DEFAULT_PAGE_URL', 'https://example.com/SemossWeb/#/login', 'Full URL for login redirect'],
+                        ['REDIRECT', 'https://example.com/SemossWeb/#/login', 'OAuth redirect URL after authentication'],
+                        ['MONOLITH_COOKIE', 'ai-core-prd', 'Session cookie name'],
+                        ['MONOLITH_ROUTE', '/Monolith', 'Monolith servlet route'],
+                        ['LOAD_BALANCER_COOKIE_NAME', 'lb-cookie', 'Load balancer affinity cookie'],
+                        ['OPTIONAL_COOKIES', 'false', 'Make cookies optional (privacy mode)'],
+                        ['WHITE_LIST_DOMAINS', 'example.com,trusted.com', 'Allowed domains for CORS'],
+                    ]
+                )}
+                ${C.code(`# Example: Production Frontend Configuration
+FE_ROUTE=/Monolith
+CUSTOM_DEFAULT_PAGE_URL=https://prod.eu.aicore.deloitte.com/SemossWeb/#/login
+REDIRECT=https://prod.eu.aicore.deloitte.com/SemossWeb/#/login
+MONOLITH_COOKIE=ai-core-prd
+OPTIONAL_COOKIES=false`, 'bash', 'Frontend routing example')}
+                ${C.callout('<strong>Note:</strong> The <code>updateFEIndexHtml.sh</code> script updates the frontend index.html with FE_ROUTE at startup.', 'info')}
+            `
+        },
+        {
+            id: "env-deployment-example",
+            title: "Kubernetes Deployment Example",
+            content: `
+                <h2>Kubernetes Deployment with Environment Variables</h2>
+                ${C.code(`apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: semoss
+  name: ai-core-prd
+  namespace: ai-core-prd
 spec:
-  replicas: 3
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ai-core-prd
   template:
     spec:
       containers:
-      - name: semoss
-        image: quay.io/semoss/semoss-dev:latest
+      - name: ai-core
+        image: docker.cfg.deloitte.com/ai_core/ai_core:latest
+        command: ["/bin/bash", "-c", "runCS.sh"]
+        env:
+        # Chroot Security
+        - name: CHROOT_ENABLE
+          value: "true"
+        - name: CHROOT_DIR
+          value: /opt/chroot
+
+        # Python Runtime
+        - name: NETTY_PYTHON
+          value: "true"
+        - name: SMSS_PYTHONHOME
+          value: /usr/lib/python/semossvenv
+
+        # Database - use secrets
+        - name: CUSTOM_SECURITY_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: username
+        - name: CUSTOM_SECURITY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: password
+        - name: CUSTOM_SECURITY_CONNECTION_URL
+          value: jdbc:postgresql://db.example.com:5432/security
+
+        # Storage
+        - name: SEMOSS_IS_CLUSTER
+          value: "true"
+        - name: SEMOSS_STORAGE_PROVIDER
+          value: "AZURE"
+        - name: AZ_CONN_STRING
+          valueFrom:
+            secretKeyRef:
+              name: azure-storage
+              key: connection-string
+
+        # Zookeeper
+        - name: SEMOSS_IS_CLUSTER_ZK
+          value: "true"
+        - name: ZK_SERVER
+          value: "zk-1.svc:2181,zk-2.svc:2181,zk-3.svc:2181"
+
+        # Pod Identity
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: HOST_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+
         ports:
-        - containerPort: 8080`, 'yaml', 'Scaling SEMOSS replicas')}
-                ${C.callout('<strong>Requirements for scaling:</strong> Use external Postgres (not H2), enable <code>SEMOSS_IS_CLUSTER=true</code>, and configure MinIO/S3 for shared file storage.', 'warning')}
-            `
-        },
-        {
-            id: "docker-health-checks",
-            title: "Health Checks & Monitoring",
-            content: `
-                <h2>Container Health Checks</h2>
-                ${C.split(
-                    {
-                        title: 'docker-compose healthcheck',
-                        content: C.code(`services:
-  semoss:
-    image: quay.io/semoss/semoss-dev:latest
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/Monolith/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s`, 'yaml', 'Health check in docker-compose')
-                    },
-                    {
-                        title: 'Kubernetes Liveness/Readiness',
-                        content: C.code(`livenessProbe:
-  httpGet:
-    path: /Monolith/api/health
-    port: 8080
-  initialDelaySeconds: 60
-  periodSeconds: 30
-
-readinessProbe:
-  httpGet:
-    path: /Monolith/api/ready
-    port: 8080
-  initialDelaySeconds: 30
-  periodSeconds: 10`, 'yaml', 'Kubernetes probes')
-                    }
-                )}
-                <h3>Monitoring Best Practices</h3>
-                <ul>
-                    <li><strong>Logs</strong>: Use <code>docker logs</code> or centralized logging (ELK, Splunk, CloudWatch)</li>
-                    <li><strong>Metrics</strong>: Expose JMX metrics, scrape with Prometheus, visualize in Grafana</li>
-                    <li><strong>Alerts</strong>: Set up alerts for container restarts, OOM kills, high CPU/memory</li>
-                </ul>
-            `
-        },
-        {
-            id: "docker-security",
-            title: "Container Security Best Practices",
-            content: `
-                <h2>Securing SEMOSS Containers</h2>
-                ${C.cards([
-                    { badge: 'Practice', title: 'Non-Root User', desc: 'Run as user 1001 (already done in Dockerfile). Never run as root in production.' },
-                    { badge: 'Practice', title: 'Read-Only Filesystem', desc: 'Use --read-only flag and tmpfs for /tmp. Prevents malicious writes to container filesystem.' },
-                    { badge: 'Practice', title: 'Secrets Management', desc: 'Use Docker secrets, Kubernetes secrets, or AWS Secrets Manager. Never hardcode passwords in env vars.' },
-                    { badge: 'Practice', title: 'Image Scanning', desc: 'Scan images for CVEs with Trivy, Snyk, or Clair before deploying to prod.' },
-                    { badge: 'Practice', title: 'Network Policies', desc: 'Restrict inter-container communication with Kubernetes NetworkPolicies or firewall rules.' },
-                    { badge: 'Practice', title: 'Resource Limits', desc: 'Set CPU/memory limits to prevent noisy neighbor issues in shared environments.' },
-                ])}
-                ${C.code(`# Resource limits in docker-compose
-services:
-  semoss:
-    deploy:
-      resources:
-        limits:
-          cpus: '4'
-          memory: 8G
-        reservations:
-          cpus: '2'
-          memory: 4G`, 'yaml', 'Resource limits example')}
-                ${C.callout('<strong>Chroot Security:</strong> SEMOSS supports <code>CHROOT_ENABLE=true</code> to sandbox Python execution. Combined with non-root user, this provides defense-in-depth.', 'tip')}
-            `
-        },
-        {
-            id: "docker-handson",
-            title: "Hands-on: Deploy SEMOSS with Docker",
-            content: `
-                <h2>Hands-on: Deploy SEMOSS with Docker</h2>
-                ${C.handson('Deploy SEMOSS Stack', `
-                    <h4>Step 1: Pull the SEMOSS Image</h4>
-                    ${C.code(`docker pull quay.io/semoss/semoss-dev:latest`, 'bash')}
-                    <p>This downloads the latest SEMOSS development image (~1.4GB).</p>
-
-                    <h4>Step 2: Create docker-compose.yml</h4>
-                    ${C.code(`version: "3.8"
-services:
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-
-  minio:
-    image: minio/minio
-    command: server /data
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-    ports:
-      - "9091:9000"
-    volumes:
-      - minio-data:/data
-
-  semoss:
-    image: quay.io/semoss/semoss-dev:latest
-    container_name: semoss
-    user: "1001:1001"
-    ports:
-      - "9090:8080"
-    environment:
-      SETSOCIAL: 'true'
-      ENABLE_NATIVE: 'true'
-      NETTY_PYTHON: 'true'
-      CHROOT_ENABLE: 'true'
-      SEMOSS_IS_CLUSTER: 'true'
-      SEMOSS_STORAGE_PROVIDER: 'minio'
-      MINIO_ENDPOINT: 'http://minio:9000'
-      MINIO_BUCKET: 'semoss'
-      MINIO_ACCESS_KEY: 'minioadmin'
-      MINIO_SECRET_KEY: 'minioadmin'
-      CUSTOM_LM_CONNECTION_URL: "jdbc:postgresql://postgres:5432/postgres?currentSchema=localmaster"
-      CUSTOM_SECURITY_CONNECTION_URL: "jdbc:postgresql://postgres:5432/postgres?currentSchema=security"
-    depends_on:
-      - postgres
-      - minio
-    networks:
-      - semoss-network
-
-networks:
-  semoss-network:
-
-volumes:
-  postgres-data:
-  minio-data:`, 'yaml', 'docker-compose.yml')}
-
-                    <h4>Step 3: Start the Stack</h4>
-                    ${C.code(`docker-compose up -d`, 'bash')}
-                    <p>This starts Postgres, MinIO, and SEMOSS in detached mode.</p>
-
-                    <h4>Step 4: Watch Startup Logs</h4>
-                    ${C.code(`docker-compose logs -f semoss`, 'bash')}
-                    <p>Wait for "Server startup in [X] milliseconds" — SEMOSS is ready when Tomcat finishes starting.</p>
-
-                    <h4>Step 5: Access SEMOSS</h4>
-                    <p>Open your browser: <strong>http://localhost:9090</strong></p>
-                    <p>Login with native auth (if ENABLE_NATIVE=true, create an admin user on first launch).</p>
-
-                    <h4>Step 6: Verify Cluster Mode</h4>
-                    ${C.code(`# Inside the container, check RDF_Map.prop
-docker-compose exec semoss cat /opt/semosshome/RDF_Map.prop | grep SEMOSS_IS_CLUSTER
-
-# Should show: SEMOSS_IS_CLUSTER true`, 'bash')}
-
-                    <h4>Step 7: Stop the Stack</h4>
-                    ${C.code(`docker-compose down`, 'bash')}
-                    <p>This stops and removes containers, but volumes (postgres-data, minio-data) persist.</p>
-                `)}
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: "8"
+            memory: 24Gi
+        securityContext:
+          runAsUser: 1001
+          capabilities:
+            drop: [NET_RAW]`, 'yaml', 'Kubernetes deployment snippet (sanitized)')}
+                ${C.callout('<strong>Best Practice:</strong> Use Kubernetes secrets for all sensitive values (passwords, keys, connection strings). Never commit secrets to Git.', 'warning')}
             `
         },
         {
             id: "docker-recap",
             title: "Chapter Recap",
             content: `
-                <h2>Chapter Recap: Docker Deployment</h2>
+                <h2>Chapter Recap: Infrastructure & Deployment</h2>
                 ${C.cards([
                     {
+                        badge: 'CI/CD',
+                        title: 'GitHub Actions',
+                        desc: 'Automated builds for SEMOSS core, Monolith WAR, and SemossWeb frontend. All artifacts published to opensource Maven repository.'
+                    },
+                    {
+                        badge: 'Docker Builds',
+                        title: 'Multi-Stage Strategy',
+                        desc: 'Python builder (3.12 venv), Tomcat builder (Java 21 + Tomcat 9), and final SEMOSS image combining all components.'
+                    },
+                    {
                         badge: 'Architecture',
+                        title: 'System Components',
+                        desc: 'Load balancer, AI Core pods, Zookeeper, databases, blob storage, and external LLM providers. Supports horizontal scaling.'
+                    },
+                    {
+                        badge: 'Container',
                         title: 'SEMOSS Container',
-                        desc: 'Ubuntu 22.04 + Java 21 + Python 3.12 + Tomcat 9 + Playwright + Codex. Total image: ~1.4GB. Runs as user 1001 (non-root).'
-                    },
-                    {
-                        badge: 'Multi-Stage Build',
-                        title: 'Dockerfile Strategy',
-                        desc: 'Stage 1: tomcat-builder (build tools). Stage 2: mavenpuller (download SEMOSS). Stage 3: final (runtime only).'
-                    },
-                    {
-                        badge: 'docker-compose',
-                        title: 'Orchestration',
-                        desc: 'Define SEMOSS + Postgres + MinIO in one file. Use <code>docker-compose up</code> to start, <code>docker-compose down</code> to stop.'
+                        desc: 'Ubuntu 22.04 + Java 21 + Python 3.12 + Tomcat 9 + Playwright. Runs as user 1001 (non-root) for security.'
                     },
                     {
                         badge: 'Configuration',
-                        title: 'Environment Variables',
-                        desc: 'Configure auth, Python, chroot, databases, cloud storage via env vars. Follows 12-factor app principles.'
+                        title: '150+ Environment Variables',
+                        desc: '9 categories: Databases, Auth/SSO, Python/R, Storage/Clustering, Admin Permissions, Performance Limits, Security, Feature Flags, Frontend.'
                     },
                     {
-                        badge: 'Scaling',
-                        title: 'Horizontal Scale',
-                        desc: 'Run multiple replicas behind a load balancer. Requires external Postgres, MinIO/S3, and <code>SEMOSS_IS_CLUSTER=true</code>.'
-                    },
-                    {
-                        badge: 'Cloud',
-                        title: 'Deployment Platforms',
-                        desc: 'AWS ECS/EKS, Azure ACI/AKS, GCP Cloud Run/GKE, or on-prem Kubernetes. Use managed services for Postgres and object storage.'
+                        badge: 'Local Development',
+                        title: 'Docker Compose',
+                        desc: 'Use docker-compose for local testing only. Production deployments use Kubernetes with proper orchestration and scaling.'
                     },
                 ])}
                 <h3>Key Takeaways</h3>
                 <ul>
-                    <li>SEMOSS Docker images are production-ready and officially supported</li>
-                    <li>Use bind mounts for dev hot reload, named volumes for prod persistence</li>
-                    <li>Always run containers as non-root (user 1001) for security</li>
-                    <li>Enable cluster mode (<code>SEMOSS_IS_CLUSTER=true</code>) for multi-replica deployments</li>
-                    <li>Use health checks, resource limits, and secrets management in production</li>
+                    <li>CI/CD pipeline automates builds and publishes to Maven for reproducibility</li>
+                    <li>Multi-stage Docker builds separate build tools from runtime, reducing image size</li>
+                    <li>Production architecture supports horizontal scaling with shared state in databases and blob storage</li>
+                    <li>150+ environment variables provide fine-grained control over all AI Core features</li>
+                    <li>runCS.sh startup script processes env vars and configures Tomcat, RDF_Map.prop, and web.xml</li>
+                    <li>Always use Kubernetes secrets for sensitive values (passwords, API keys, connection strings)</li>
+                    <li>Docker Compose is for local development only — use Kubernetes for production</li>
                 </ul>
             `
         },

@@ -254,6 +254,27 @@ body {
     font-weight: 500;
 }
 
+/* ===== Locked Days ===== */
+.nav-day.locked .nav-day-header {
+    opacity: 0.5;
+    cursor: default;
+}
+.nav-day.locked .lock-icon {
+    margin-left: 8px;
+    font-size: 12px;
+}
+.nav-topic.locked,
+.nav-chapter-header.locked {
+    opacity: 0.4;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+.nav-topic.locked:hover,
+.nav-chapter-header.locked:hover {
+    color: var(--sidebar-text-muted);
+    background: transparent;
+}
+
 /* ===== Sidebar Toggle ===== */
 .sidebar-toggle {
     position: fixed;
