@@ -37,7 +37,7 @@ const slides_app_fundamentals = [
                         items: [
                             { title: "React UI", desc: "assets/portals/" },
                             { title: "@semoss/sdk", desc: "API client library" },
-                            { title: "@semoss/renderer", desc: "Embed components" }
+                            // { title: "@semoss/renderer", desc: "Embed components" }
                         ]
                     },
                     {
@@ -367,7 +367,7 @@ git log --oneline`, 'bash')}
                     { badge: 'Context', title: 'SetContext', desc: 'Load an app into the current insight to access its reactors' },
                 ])}
                 <h3>Next Up</h3>
-                <p>Pro-Code Apps — Build sophisticated React portals with <code>@semoss/sdk</code> and <code>@semoss/renderer</code>.</p>
+                <p>Pro-Code Apps — Build sophisticated React portals with <code>@semoss/sdk</code>.</p>
             `
         }
     ];
