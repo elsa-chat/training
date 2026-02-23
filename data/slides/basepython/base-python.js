@@ -1,10 +1,10 @@
-// Topic: Python Foundation in SEMOSS
+// Topic: Python Foundation in ${CONFIG.productName}
 const slides_base_python = [
         {
             id: "python-title",
-            title: "Python Foundation in SEMOSS",
+            title: `Python Foundation in ${CONFIG.productName}`,
             content: C.titleSlide(
-                "Python Foundation in SEMOSS",
+                `Python Foundation in ${CONFIG.productName}`,
                 "Package management, virtual environments, and local development setup",
                 "60 minutes"
             )
@@ -14,7 +14,7 @@ const slides_base_python = [
             title: "Managing Python Packages",
             content: `
                 <h2>Managing Python Packages</h2>
-                <p class="lead">All Python dependencies for SEMOSS are declared in <code>py/install_config/pyproject.toml</code>. This is the single source of truth for what gets installed in your environment.</p>
+                <p class="lead">All Python dependencies for ${CONFIG.productName} are declared in <code>py/install_config/pyproject.toml</code>. This is the single source of truth for what gets installed in your environment.</p>
                 <h3>pyproject.toml Structure</h3>
                 <p>The <code>pyproject.toml</code> file defines base dependencies shared by all environments, plus optional dependency groups for hardware-specific packages.</p>
                 ${C.code(`[project]
@@ -84,25 +84,25 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
             title: "GAAS Python Tools",
             content: `
                 <h2>GAAS Python Tools</h2>
-                <p class="lead"><strong>Generative AI Agent Services (GAAS)</strong> is a collection of modular Python tools that enable AI agents to interact with data, execute code, and access knowledge within SEMOSS.</p>
+                <p class="lead"><strong>Generative AI Agent Services (GAAS)</strong> is a collection of modular Python tools that enable AI agents to interact with data, execute code, and access knowledge within ${CONFIG.productName}.</p>
                 <p>These tools are designed as building blocks that can be invoked by an AI agent or orchestration layer to perform specific tasks. They leverage the <code>genai_client</code> package for interactions with large language models and other AI services.</p>
                 <h3>Core Engine Proxies</h3>
-                <p>Each proxy class gives Python-based agents direct access to a corresponding SEMOSS engine type.</p>
+                <p>Each proxy class gives Python-based agents direct access to a corresponding ${CONFIG.productName} engine type.</p>
                 ${C.table(
                     ['Tool', 'Module', 'Purpose'],
                     [
-                        ['<strong>Database Engine</strong>', '<code>gaas_gpt_database.py</code>', 'Execute queries and data operations against SEMOSS database engines'],
+                        ['<strong>Database Engine</strong>', '<code>gaas_gpt_database.py</code>', \`Execute queries and data operations against \${CONFIG.productName} database engines\`],
                         ['<strong>Model Engine</strong>', '<code>gaas_gpt_model.py</code>', 'Interact with generative models for inference, chat, and completion tasks'],
-                        ['<strong>Function Engine</strong>', '<code>gaas_gpt_function.py</code>', 'Execute pre-defined SEMOSS <code>FUNCTION</code> engines'],
-                        ['<strong>Storage Engine</strong>', '<code>gaas_gpt_storage.py</code>', 'Perform file and object operations on SEMOSS <code>STORAGE</code> engines'],
-                        ['<strong>Vector Engine</strong>', '<code>gaas_gpt_vector.py</code>', 'Add documents to and perform similarity searches on SEMOSS <code>VECTOR</code> engines'],
+                        ['<strong>Function Engine</strong>', '<code>gaas_gpt_function.py</code>', \`Execute pre-defined \${CONFIG.productName} <code>FUNCTION</code> engines\`],
+                        ['<strong>Storage Engine</strong>', '<code>gaas_gpt_storage.py</code>', \`Perform file and object operations on \${CONFIG.productName} <code>STORAGE</code> engines\`],
+                        ['<strong>Vector Engine</strong>', '<code>gaas_gpt_vector.py</code>', \`Add documents to and perform similarity searches on \${CONFIG.productName} <code>VECTOR</code> engines\`],
                     ]
                 )}
                 <h3>Infrastructure & Support Components</h3>
                 ${C.cards([
                     { badge: 'Security', title: 'Prompt Guard', desc: '<code>gaas_prompt_guard.py</code> — Input/output validation and security filtering to enforce guardrails on agent interactions.' },
-                    { badge: 'API', title: 'REST Client', desc: '<code>gaas_rest_server.py</code> — A Python client for interacting with the SEMOSS backend REST API directly.' },
-                    { badge: 'Bridge', title: 'Server Proxy', desc: '<code>gaas_server_proxy.py</code> — Enables Python GAAS components to call back to the SEMOSS Java backend for cross-layer operations.' },
+                    { badge: 'API', title: 'REST Client', desc: \`<code>gaas_rest_server.py</code> — A Python client for interacting with the \${CONFIG.productName} backend REST API directly.\` },
+                    { badge: 'Bridge', title: 'Server Proxy', desc: \`<code>gaas_server_proxy.py</code> — Enables Python GAAS components to call back to the \${CONFIG.productName} Java backend for cross-layer operations.\` },
                     { badge: 'Transport', title: 'TCP Servers', desc: '<code>gaas_tcp_server_handler.py</code> / <code>gaas_tcp_socket_server.py</code> — TCP-based communication layer between the Java server and Python processes.' },
                 ])}
                 <h3>How It All Fits Together</h3>
@@ -110,9 +110,9 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                     { title: 'User / Agent Request', desc: 'A request arrives via the UI or an API call' },
                     { title: 'Orchestration Layer', desc: 'The agent determines which GAAS tool(s) to invoke', arrow: '→' },
                     { title: 'GAAS Tool', desc: 'The appropriate proxy (DB, Model, Vector, etc.) executes the operation', arrow: '→' },
-                    { title: 'SEMOSS Backend', desc: 'Results flow back through the Server Proxy / TCP layer', accent: true },
+                    { title: \`\${CONFIG.productName} Backend\`, desc: 'Results flow back through the Server Proxy / TCP layer', accent: true },
                 ])}
-                ${C.callout('<strong>Key takeaway:</strong> GAAS tools are the bridge between Python-based AI agents and the SEMOSS Java backend. Understanding these tools is essential for extending agent capabilities or building custom agent workflows.', 'info')}
+                ${C.callout(\`<strong>Key takeaway:</strong> GAAS tools are the bridge between Python-based AI agents and the \${CONFIG.productName} Java backend. Understanding these tools is essential for extending agent capabilities or building custom agent workflows.\`, 'info')}
             `
         },
         {
@@ -120,7 +120,7 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
             title: "genai_client — Architecture Overview",
             content: `
                 <h2>genai_client — Architecture Overview</h2>
-                <p class="lead">The <code>genai_client</code> package is SEMOSS's provider-agnostic Python layer for interacting with large language models. It abstracts away the differences between AI providers behind a unified interface.</p>
+                <p class="lead">The <code>genai_client</code> package is ${CONFIG.productName}'s provider-agnostic Python layer for interacting with large language models. It abstracts away the differences between AI providers behind a unified interface.</p>
                 <h3>Supported Provider Clients</h3>
                 ${C.cards([
                     { badge: 'OpenAI', title: 'OpenAiClient', desc: 'Supports <strong>three chat types</strong>: <code>chat-completion</code>, <code>responses</code>, and <code>completions</code>. Also handles Azure OpenAI via <code>AzureOpenAI</code>. Includes sub-clients for image and audio generation.' },
@@ -208,7 +208,7 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
             title: "Debugging Python",
             content: `
                 <h2>Debugging Python</h2>
-                <p class="lead">You can attach a VS Code debugger to SEMOSS's Python TCP server, allowing you to set breakpoints anywhere in the <code>genai_client</code> pipeline — message builders, provider clients, streaming handlers, and more.</p>
+                <p class="lead">You can attach a VS Code debugger to ${CONFIG.productName}'s Python TCP server, allowing you to set breakpoints anywhere in the <code>genai_client</code> pipeline — message builders, provider clients, streaming handlers, and more.</p>
                 <h3>Setup Steps</h3>
                 ${C.flow([
                     { title: '1. Set FORCE_PORT', desc: 'Add FORCE_PORT=9999 to the model\'s SMSS file so the TCP server starts on a predictable port' },
@@ -217,10 +217,10 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                     { title: '4. Set Breakpoints', desc: 'Place breakpoints anywhere in the Python codebase and trigger a model call', accent: true },
                 ])}
                 <h3>Step 1 — Configure FORCE_PORT in the SMSS</h3>
-                <p>In the model's <code>.smss</code> configuration file, set <code>FORCE_PORT</code> to a fixed port number. This tells SEMOSS to start the Python TCP server on that specific port instead of a random one, so your debugger can connect reliably.</p>
-                ${C.code(`# In your model's .smss file
-FORCE_PORT\t9999`, 'properties', 'Setting a fixed TCP port for the model')}
-                ${C.callout('<strong>Why FORCE_PORT?</strong> By default, SEMOSS assigns a random available port to each Python TCP server. Setting a fixed port ensures the VS Code debugger launches the server on the same port that the Java backend expects to connect to.', 'info')}
+                <p>In the model's <code>.smss</code> configuration file, set <code>FORCE_PORT</code> to a fixed port number. This tells ${CONFIG.productName} to start the Python TCP server on that specific port instead of a random one, so your debugger can connect reliably.</p>
+                ${C.code(\`# In your model's .smss file
+FORCE_PORT\t9999\`, 'properties', 'Setting a fixed TCP port for the model')}
+                ${C.callout(\`<strong>Why FORCE_PORT?</strong> By default, \${CONFIG.productName} assigns a random available port to each Python TCP server. Setting a fixed port ensures the VS Code debugger launches the server on the same port that the Java backend expects to connect to.\`, 'info')}
                 <h3>Step 2 — Create the VS Code Launch Configuration</h3>
                 <p>Create a <code>launch.json</code> file in the <code>py/.vscode/</code> directory with the following configuration:</p>
                 ${C.code(`{
@@ -247,7 +247,7 @@ FORCE_PORT\t9999`, 'properties', 'Setting a fixed TCP port for the model')}
                             <ul>
                                 <li><strong>Message Builders</strong> — <code>AnthropicMessageBuilder</code>, <code>OpenAIMessageBuilder</code>, <code>GoogleGenAIMessageBuilder</code></li>
                                 <li><strong>Provider Clients</strong> — <code>ask_call()</code>, streaming handlers, tool call parsing</li>
-                                <li><strong>SEMOSS Message Builder</strong> — Input normalization and param_map processing</li>
+                                <li><strong>${CONFIG.productName} Message Builder</strong> — Input normalization and param_map processing</li>
                                 <li><strong>GAAS Tools</strong> — Database, Vector, Storage, Function engine proxies</li>
                             </ul>
                         `
@@ -263,7 +263,7 @@ FORCE_PORT\t9999`, 'properties', 'Setting a fixed TCP port for the model')}
                         `
                     }
                 )}
-                ${C.callout('<strong>Remember:</strong> The Python TCP server must be running via VS Code <em>before</em> you trigger a model call from the SEMOSS UI or API. The Java backend will connect to FORCE_PORT 9999 and route the request to your debugger-attached process.', 'warning')}
+                ${C.callout(\`<strong>Remember:</strong> The Python TCP server must be running via VS Code <em>before</em> you trigger a model call from the \${CONFIG.productName} UI or API. The Java backend will connect to FORCE_PORT 9999 and route the request to your debugger-attached process.\`, 'warning')}
             `
         },
     ];
