@@ -1,13 +1,106 @@
 // Topic: MCP Fundamentals
 const slides_mcp_fundamentals = [
         {
-            id: "mcp-title",
-            title: "MCP Fundamentals",
-            content: C.titleSlide(
-                "Model Context Protocol (MCP)",
-                `Extending ${CONFIG.productName} with Tools, Resources, and Prompts`,
-                "90 minutes"
-            )
+            id: "mcp-generic-overview",
+            title: "MCP Overview",
+            content: `
+                <h2>Model Context Protocol (MCP)</h2>
+                <p class="lead">An open protocol that standardizes how models access tools, data, and applications.</p>
+                <p>MCP replaces one-off integrations with a consistent interface for discovery, invocation, and results.</p>
+                ${C.cards([
+                    { title: 'Transport', desc: 'Transport-agnostic (stdio, HTTP, WebSockets)' },
+                    { title: 'Messages', desc: 'Structured JSON-RPC messages' },
+                    { title: 'Discovery', desc: 'Tools, resources, prompts are discoverable' },
+                    { title: 'Negotiation', desc: 'Capabilities exchanged on connect' },
+                ])}
+                ${C.callout('Think of MCP like a universal connector for AI tools, similar to USB-C or HTTP for context exchange.', 'info')}
+            `
+        },
+        {
+            id: "mcp-generic-architecture",
+            title: "High-Level Architecture",
+            content: `
+                <h2>Client-Server Architecture</h2>
+                ${C.layers([
+                    { label: 'Model + Client Runtime', items: [
+                        { title: 'Model', desc: 'Requests tool/context access' },
+                        { title: 'MCP Client', desc: 'Routes calls + manages session' },
+                    ]},
+                    { label: 'MCP Server(s)', accent: true, items: [
+                        { title: 'Tools', desc: 'Executable functions' },
+                        { title: 'Resources', desc: 'Read-only context' },
+                        { title: 'Prompts', desc: 'Reusable templates' },
+                    ]},
+                    { label: 'External Systems', items: [
+                        { title: 'APIs', desc: 'SaaS and internal services' },
+                        { title: 'Data Stores', desc: 'Files, DBs, logs' },
+                        { title: 'Apps', desc: 'Business workflows' },
+                    ]},
+                ])}
+                <p class="muted">MCP is transport-agnostic and can run over stdio, HTTP, or WebSockets.</p>
+            `
+        },
+        {
+            id: "mcp-generic-core",
+            title: "Core Concepts",
+            content: `
+                <h2>Tools, Resources, Prompts</h2>
+                ${C.cards([
+                    { badge: 'Tool', title: 'Executable Function', desc: 'Callable actions (search, run SQL, create ticket)' },
+                    { badge: 'Resource', title: 'Read-Only Context', desc: 'Files, records, notebooks, logs' },
+                    { badge: 'Prompt', title: 'Reusable Template', desc: 'Parameterized prompts for consistent output' },
+                    { badge: 'Handshake', title: 'Capabilities', desc: 'Client and server negotiate features' },
+                ])}
+                ${C.code(`{
+  "name": "get_weather",
+  "description": "Get weather for a city",
+  "input_schema": {
+    "type": "object",
+    "properties": { "city": { "type": "string" } },
+    "required": ["city"]
+  }
+}`, 'json', 'Tool Schema Example')}
+            `
+        },
+        {
+            id: "mcp-generic-protocol",
+            title: "Protocol Layer",
+            content: `
+                <h2>JSON-RPC 2.0</h2>
+                ${C.split(
+                    {
+                        title: 'Request',
+                        content: C.code(`{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list"
+}`, 'json')
+                    },
+                    {
+                        title: 'Response',
+                        content: C.code(`{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": [/* tool definitions */]
+}`, 'json')
+                    }
+                )}
+                ${C.callout('MCP uses JSON-RPC for a consistent request/response envelope, regardless of transport.', 'info')}
+            `
+        },
+        {
+            id: "mcp-generic-lifecycle",
+            title: "Session Lifecycle",
+            content: `
+                <h2>Typical MCP Flow</h2>
+                ${C.flow([
+                    { title: '1. Initialize', desc: 'Client connects and exchanges capabilities', accent: true, arrow: '↓' },
+                    { title: '2. Discover', desc: 'Client requests tools/resources', arrow: '↓' },
+                    { title: '3. Call Tool', desc: 'Model calls tools with JSON args', arrow: '↓' },
+                    { title: '4. Execute', desc: 'Server runs tool and returns results', arrow: '↓' },
+                    { title: '5. Iterate', desc: 'Model continues using tools as needed' },
+                ])}
+            `
         },
         {
             id: "mcp-what-is",
