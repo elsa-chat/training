@@ -33,10 +33,12 @@ const slides_mcp_building_consuming = [
                 <h2>Advanced Python MCP Patterns</h2>
                 <p>Beyond simple functions, Python MCPs can implement complex patterns for data processing, async execution, and error handling.</p>
                 ${C.code(`from semoss import Insight
+from ai_server import DatabaseEngine
 import smssutil
 import asyncio
 import base64
 import traceback
+import pandas as pd
 
 @smssutil.mcp_metadata({
     'execution': 'auto',
@@ -46,20 +48,16 @@ import traceback
 def process_dataframe(table_name: str, operation: str = "summary"):
     """
     Processes a database table and returns statistical summary.
-    Operations: 'summary', 'describe', 'head', 'tail'
-    """
-    insight = Insight()
+    Operations: "summary", "describe", "head", "tail".
 
-    # Query database
-    pixel = f"""
-    Database(database="{insight.insight_id}_DATABASE") |
-    Query("SELECT * FROM {table_name}") |
-    Collect(500);
+    table_name: Table name to query.
+    operation: Summary operation to apply.
     """
-
     try:
-        result = insight.run_pixel(pixel=pixel, insight_id=insight.insight_id)
-        df = result[0].get("output")
+        # update to an engine_id you have access to
+        databaseEngine = DatabaseEngine(engine_id="eb403bed-fe69-4cd9-be5b-e7f7a80c0e6f")
+        df = databaseEngine.execQuery(query=f"SELECT * FROM {table_name}")
+        # execQuery returns a pandas DataFrame
 
         if operation == "summary":
             return f"Table '{table_name}': {len(df)} rows, {len(df.columns)} columns"
@@ -84,6 +82,9 @@ def upload_to_vector_db(file_path: str, vector_engine_name: str):
     """
     Uploads a file to a vector database for semantic search.
     Requires user confirmation before execution.
+
+    file_path: Path to the file to embed and upload.
+    vector_engine_name: Target vector engine name.
     """
     insight = Insight()
 
