@@ -101,7 +101,7 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: 'MCP UI & Pre-made MCPs',
+                    title: 'MCP UI Development',
                     slideIds: idsFrom(
                         typeof slides_mcp_ui_premade !== 'undefined' ? slides_mcp_ui_premade : null,
                     )

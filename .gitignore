@@ -39,3 +39,5 @@ Thumbs.db
 playwright-report/
 *.backup
 *.tmp*
+
+.history

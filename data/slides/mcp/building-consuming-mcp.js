@@ -567,7 +567,7 @@ MakeEngineMCP(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");
                         </ul>
                     </li>
                 </ul>
-                ${C.callout('Next chapter: MCP UI customization, displayLocation options, and pre-made MCP examples (Room Shell, Vector PDF).', 'tip')}
+                ${C.callout('Next chapter: MCP UI customization and displayLocation options', 'tip')}
             `
         }
     ];

@@ -2,9 +2,9 @@
 const slides_mcp_ui_premade = [
         {
             id: "ui-title",
-            title: "MCP UI & Pre-made MCPs",
+            title: "MCP UI Development",
             content: C.titleSlide(
-                "MCP UI & Pre-made MCPs",
+                "MCP UI Development",
                 "Custom Portal UIs, Display Locations, and Production MCP Examples",
                 "105 minutes"
             )
@@ -113,223 +113,6 @@ def admin_reset_system():
             `
         },
         {
-            id: "ui-resource-uri",
-            title: "Resource URI & Portal Routing",
-            content: `
-                <h2>Resource URI & Portal Routing</h2>
-                <p>The <code>resourceURI</code> parameter links an MCP tool to a specific React component in your portal UI.</p>
-                ${C.layers([
-                    { label: "MCP Tool Definition", items: [
-                        { title: "@mcp_metadata", desc: "resourceURI: '/code-editor'" },
-                    ]},
-                    { label: "Portal Routing", accent: true, items: [
-                        { title: "routes.constants.tsx", desc: "'/code-editor' → CodeEditorComponent", accent: true },
-                    ]},
-                    { label: "React Component", items: [
-                        { title: "CodeEditor.tsx", desc: "Renders UI, calls runMCPTool()" },
-                    ]},
-                ])}
-                ${C.split(
-                    {
-                        title: 'Python tool with resourceURI',
-                        content: C.code(`@smssutil.mcp_metadata({
-    'execution': 'ask',
-    'displayLocation': 'sidebar',
-    'resourceURI': '/reference-viewer'  # Portal path
-})
-def show_reference_documents():
-    """
-    Opens a reference document viewer in sidebar.
-    """
-    return "Reference viewer opened"`, 'python')
-                    },
-                    {
-                        title: 'Portal route mapping',
-                        content: C.code(`// client/src/pages/routes.constants.tsx
-export const PAGE_TYPES = {
-  '/reference-viewer': ReferenceViewer,
-  '/code-editor': CodeEditor,
-  '/database-query': DatabaseQueryUI,
-};
-
-// When model calls show_reference_documents(),
-// Playground loads ReferenceViewer component`, 'typescript')
-                    }
-                )}
-                ${C.callout('If <code>resourceURI</code> is <code>null</code> or omitted, Playground shows a default JSON view of the tool result.', 'info')}
-            `
-        },
-        {
-            id: "ui-portal-patterns",
-            title: "Portal UI Development Patterns",
-            content: `
-                <h2>Portal UI Development Patterns</h2>
-                <p>Common patterns for building React portal UIs that integrate with MCP tools.</p>
-                ${C.code(`// client/src/components/mcp/ReferenceDocumentsViewer.tsx
-import { useInsight } from '@semoss/sdk/react';
-import { useState, useEffect } from 'react';
-
-export function ReferenceDocumentsViewer() {
-    const { actions, tool } = useInsight();
-    const [documents, setDocuments] = useState([]);
-    const [selectedDoc, setSelectedDoc] = useState(null);
-
-    useEffect(() => {
-        // Immediately acknowledge tool call on load
-        actions.sendMCPResponseToPlayground('Reference viewer opened');
-
-        // Load document list via Pixel (not MCP tool)
-        loadDocuments();
-    }, []);
-
-    const loadDocuments = async () => {
-        const { pixelReturn } = await actions.run(
-            'VectorDatabaseQuery(engine="my-vector-db", query="", limit=100);'
-        );
-        setDocuments(pixelReturn[0].output);
-    };
-
-    const handleDocumentClick = async (doc) => {
-        setSelectedDoc(doc);
-
-        // Download PDF via Pixel
-        const { pixelReturn } = await actions.run(
-            \`DownloadReferenceDocument(fileName="\${doc.fileName}");\`
-        );
-
-        // Display PDF as base64 data URI
-        const pdfBase64 = pixelReturn[0].output;
-        // ... render PDF in iframe
-    };
-
-    return (
-        <div className="reference-viewer">
-            <div className="document-list">
-                {documents.map(doc => (
-                    <div key={doc.id} onClick={() => handleDocumentClick(doc)}>
-                        {doc.title}
-                    </div>
-                ))}
-            </div>
-            <div className="pdf-preview">
-                {selectedDoc && (
-                    <iframe src={\`data:application/pdf;base64,\${selectedDoc.base64}\`} />
-                )}
-            </div>
-        </div>
-    );
-}`, 'typescript', 'Reference document viewer portal pattern')}
-                ${C.callout('Portal UIs use <code>actions.run(pixel)</code> for Pixel execution and <code>actions.runMCPTool(name, params)</code> for calling other MCP tools.', 'tip')}
-            `
-        },
-        {
-            id: "ui-premade-room-shell",
-            title: "Pre-made MCP: Room Shell",
-            content: `
-                <h2>Pre-made MCP: Room Shell</h2>
-                <p class="lead">The <span class="highlight">Room Shell MCP</span> provides secure, room-scoped shell command execution for file operations.</p>
-                ${C.cards([
-                    { badge: 'Tool', title: 'ExecuteRoomShellCommand', desc: 'Run allowlisted shell commands in room folder' },
-                    { badge: 'Tool', title: 'ExtractRoomFiles', desc: 'Extract text from documents in room' },
-                    { badge: 'Tool', title: 'SearchRoomFilesWithContext', desc: 'Word-based context search in extracted text' },
-                    { badge: 'Tool', title: 'GetRoomFileTokenStats', desc: 'Approximate token counts for files' },
-                ])}
-                ${C.code(`// Room Shell MCP allowlisted commands:
-// ls, dir, pwd, cd, cat, head, tail, grep, rg, wc, find,
-// mkdir, rm, cp, mv, git, mvn, pnpm, curl, wget
-
-// Guardrails:
-// - No pipes or redirects (|, >, >>)
-// - No absolute paths or path traversal (/, ~, ..)
-// - & allowed only for curl/wget URLs (must be quoted)
-
-// Example: Model uses room shell
-User: "List all Python files in the room"
-Model calls: ExecuteRoomShellCommand(command="find . -name '*.py'")
-Result: "./mcp_driver.py\\n./utils.py\\n./test.py"
-
-User: "Search for the word 'authentication' in all files"
-Model calls: SearchRoomFilesWithContext(
-    searchTerm="authentication",
-    contextWords=20,
-    maxMatches=5
-)
-Result: [
-    {
-        "file": "mcp_driver.py",
-        "match": "...implements OAuth authentication using...",
-        "line": 45
-    }
-]`, 'pixel', 'Room Shell MCP usage')}
-                ${C.callout('Room Shell executes inside the room folder using <code>CmdExecUtil</code> (chroot when enabled) for security isolation.', 'info')}
-            `
-        },
-        {
-            id: "ui-premade-vector-pdf",
-            title: "Pre-made MCP: Vector PDF Viewer",
-            content: `
-                <h2>Pre-made MCP: Vector PDF Viewer</h2>
-                <p>The Vector PDF Viewer MCP provides document preview with caching and inline viewing.</p>
-                ${C.sequence(
-                    ["Model", "show_reference_documents", "Portal UI", "DownloadReactor"],
-                    [
-                        { from: 0, to: 1, label: "Call show_reference_documents()" },
-                        { from: 1, to: 2, label: "resourceURI: '/' → Portal opens" },
-                        { from: 2, to: 0, label: "mcpToolResult: success", type: "response" },
-                        { from: 2, to: 2, label: "Auto-loads first document" },
-                        { from: 2, to: 3, label: "DownloadReferenceDocument(fileName)" },
-                        { from: 3, to: 2, label: "Base64 PDF data", type: "response" },
-                        { from: 2, to: 2, label: "Cache (vectorDbId::fileName)" },
-                        { from: 2, to: 2, label: "Render PDF as data URI" },
-                    ]
-                )}
-                ${C.code(`// Vector PDF Viewer key behaviors:
-// 1. Tool UI wiring: resourceURI: "/" opens portal instead of default form
-// 2. No auto tool execution: Portal immediately sends mcpToolResult to Playground
-// 3. Per-document download: Clicking a document calls DownloadReferenceDocument() Pixel
-// 4. Caching: Downloads cached by vectorDbId::fileName for repeat views
-// 5. Inline viewing: PDF rendered as base64 data URL (no Save dialog)
-
-// Example Pixel MCP JSON:
-{
-  "name": "ShowReferenceDocuments",
-  "description": "Opens a reference document viewer in sidebar",
-  "_meta": {
-    "SMSS_MCP_EXECUTION": "ask",
-    "SMSS_MCP_UI": {
-      "resourceURI": "/",
-      "displayLocation": "sidebar"
-    }
-  }
-}
-
-// Portal component pattern:
-useEffect(() => {
-    // Immediately acknowledge
-    actions.sendMCPResponseToPlayground('success');
-
-    // Load first document
-    loadFirstDocument();
-}, []);
-
-const handleDocClick = async (doc) => {
-    // Check cache
-    const cacheKey = \`\${vectorDbId}::\${doc.fileName}\`;
-    if (cache[cacheKey]) {
-        displayPDF(cache[cacheKey]);
-        return;
-    }
-
-    // Download via Pixel (not MCP)
-    const result = await actions.run(
-        \`DownloadReferenceDocument(fileName="\${doc.fileName}");\`
-    );
-    cache[cacheKey] = result[0].output;
-    displayPDF(cache[cacheKey]);
-};`, 'javascript', 'Vector PDF Viewer pattern')}
-            `
-        },
-        {
             id: "ui-loading-messages",
             title: "Loading Messages & UX",
             content: `
@@ -380,6 +163,127 @@ def search_large_corpus(query: str):
                 ${C.callout('Good UX: Provide <code>loadingMessage</code> for any tool that takes >2 seconds. Users need to know the tool is working, not frozen.', 'tip')}
             `
         },
+         {
+            id: "ui-portal-sdk",
+            title: "Using @semoss/sdk in Portals",
+            content: `
+                <h2>Frontend SDK: @semoss/sdk</h2>
+                <p>The <code>@semoss/sdk</code> package provides React hooks and utilities for portal development.</p>
+                ${C.code(`import { useInsight } from '@semoss/sdk/react';
+import { useState, useEffect } from 'react';
+
+export function MyToolPortal() {
+    const { actions, tool, insight } = useInsight();
+    const [result, setResult] = useState(null);
+
+
+    // 1. Execute Pixel commands
+    const handlePixelExecution = async () => {
+        const { pixelReturn } = await actions.run(
+            'Frame(engine="my-database") | Query("<encode>SELECT * FROM users</encode>")'
+        );
+        setResult(pixelReturn[0].output);
+    };
+
+    // 2. Call other MCP tools
+    const handleMCPToolCall = async () => {
+        // Perform an action or series of actions and execute e.g. api call
+        ...
+        // Manually send a response to playground
+        actions.sendMCPResponseToPlayground('Successfully executed action');
+         
+         OR
+
+        await actions.runMCPTool(
+            'execute_python_code',
+            { code_b64: btoa('print("Hello from portal")') }
+        );
+      
+    };
+
+    // 4. Access tool metadata
+    const toolParams = tool?.inputSchema?.properties || {};
+
+    return (
+        <div className="p-4">
+            <h2>My Custom Tool UI</h2>
+            <button onClick={handlePixelExecution}>Run Query</button>
+            <button onClick={handleMCPToolCall}>Execute Code</button>
+            {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
+        </div>
+    );
+}`, 'typescript', 'Portal component with SDK')}
+                ${C.table(
+                    ["SDK Hook/Method", "Purpose", "Example"],
+                    [
+                        ["<code>useInsight()</code>", "Main hook providing actions, tool metadata, insight context", "<code>const { actions, tool } = useInsight();</code>"],
+                        ["<code>actions.run(pixel)</code>", "Execute Pixel commands and get results", "<code>await actions.run('LLM(...)');</code>"],
+                        ["<code>actions.runMCPTool(name, params)</code>", "Call other MCP tools from portal", "<code>await actions.runMCPTool('search', {query: 'test'});</code>"],
+                        ["<code>actions.sendMCPResponseToPlayground(result)</code>", "Send tool result back to model", "<code>actions.sendMCPResponseToPlayground('success');</code>"],
+                        ["<code>tool</code>", "Access tool metadata (name, description, inputSchema)", "<code>tool.inputSchema.properties</code>"]
+                    ]
+                )}
+            `
+        },
+        {
+            id: "ui-portal-routing-consolidated",
+            title: "Portal Routing & resourceURI",
+            content: `
+                <h2>Portal Routing with resourceURI Example</h2>
+                <p>The <code>resourceURI</code> parameter maps MCP tools to specific React components in your portal.</p>
+                ${C.split(
+                    {
+                        title: 'Route Configuration',
+                        content: C.code(`// client/src/pages/routes.constants.tsx
+export const PAGE_TYPES = {
+  '/': HomePage,              // resourceURI: '/'
+  '/code-editor': CodeEditor, // resourceURI: '/code-editor'
+  '/pdf-viewer': PDFViewer,   // resourceURI: '/pdf-viewer'
+  '/data-viz': DataViz,       // resourceURI: '/data-viz'
+};
+
+// Python MCP tool with resourceURI
+@smssutil.mcp_metadata({
+    'execution': 'ask',
+    'displayLocation': 'sidebar',
+    'resourceURI': '/code-editor'  # Maps to CodeEditor component
+})
+def open_code_editor():
+    """Opens code editor portal in sidebar"""
+    return "Editor opened"`, 'typescript')
+                    },
+                    {
+                        title: 'displayLocation Options',
+                        content: C.code(`// 'inline' - Renders in chat thread
+@smssutil.mcp_metadata({
+    'displayLocation': 'inline',
+    'resourceURI': '/'
+})
+def quick_calculator():
+    """Small widget in chat"""
+    return "Calculator ready"
+
+// 'sidebar' - Persistent right panel
+@smssutil.mcp_metadata({
+    'displayLocation': 'sidebar',
+    'resourceURI': '/document-viewer'
+})
+def view_document():
+    """Opens in sidebar (stays visible)"""
+    return "Document viewer ready"
+
+// 'hidden' - No UI (background task)
+@smssutil.mcp_metadata({
+    'displayLocation': 'hidden'
+})
+def fetch_data():
+    """Executes silently"""
+    return {"data": [...]}`, 'python')
+                    }
+                )}
+                ${C.callout('Use <code>inline</code> for small, transient UIs. Use <code>sidebar</code> for persistent tools like editors, viewers, or dashboards. Use <code>hidden</code> for data-only operations.', 'tip')}
+            `
+        },
         {
             id: "ui-build-deploy",
             title: "Build & Deploy Workflow",
@@ -399,22 +303,17 @@ def search_large_corpus(query: str):
                 ${C.code(`# Complete build script (run from assets/)
 
 # 1. Generate MCP JSON from Python
-# (Run in SEMOSS Pixel console)
+# (Run in ${CONFIG.productName} Pixel console)
 MakePythonMCP(project="your-project-id");
 
 # 2. Build React portal
 cd client
 pnpm install
 pnpm run build
+# Output: ../portals/index.html + assets/
 
-# Output: portals/index.html, portals/assets/*.js
-
-# 3. Verify portals/
-ls -la ../portals/
-# Should see index.html, assets/, etc.
-
-# 4. In SEMOSS UI:
-# - Click "Publish" button
+# 4. In ${CONFIG.productName} UI:
+# - Click "Publish" button on app
 # - Click "Refresh Files"
 # - Portal now served from public_home/<projectId>/portals/
 
@@ -528,7 +427,7 @@ def execute_python_code(code_b64: str = None):
             id: "ui-summary",
             title: "Summary",
             content: `
-                <h2>Summary: MCP UI & Pre-made MCPs</h2>
+                <h2>Summary: MCP UI Development</h2>
                 <h3>UI Configuration</h3>
                 <ul>
                     <li><strong>displayLocation</strong>:
@@ -547,12 +446,6 @@ def execute_python_code(code_b64: str = None):
                     </li>
                     <li><strong>resourceURI</strong>: Portal path (e.g., <code>'/'</code> for root)</li>
                     <li><strong>loadingMessage</strong>: User feedback during execution</li>
-                </ul>
-                <h3>Pre-made MCPs</h3>
-                <ul>
-                    <li><strong>Room Shell MCP</strong>: Secure file operations (ls, grep, find, extract, search)</li>
-                    <li><strong>Vector PDF Viewer</strong>: Document preview with caching and inline viewing</li>
-                    <li><strong>Reference Pattern</strong>: See AGENTS_MD/REFERENCE_MCP.md and ROOM_SHELL_MCP_TOOLS.md</li>
                 </ul>
                 <h3>Build Workflow</h3>
                 <ol>
