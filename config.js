@@ -9,5 +9,5 @@ const CONFIG = {
   // Day locking configuration
   // Set to empty array [] to unlock all days
   // Day numbers are 1-indexed (Day 1, Day 2, etc.)
-  lockedDays: [2, 3]  // Lock Days 2 and 3
+  lockedDays: [3]  // Lock Days 2 and 3
 };
