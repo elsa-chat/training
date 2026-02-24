@@ -79,7 +79,7 @@ const slides_context_engineering = [
                 }
             )}
 
-            ${C.callout('In ${CONFIG.productName}, context failures often manifest as: <ul><li>Rooms forgetting tool execution results</li><li>Insights accumulating stale variables</li><li>LLMs repeating failed tool calls</li><li>Multi-turn conversations losing coherence</li></ul>', 'warning')}
+            ${C.callout(`In ${CONFIG.productName}, context failures often manifest as: <ul><li>Rooms forgetting tool execution results</li><li>Insights accumulating stale variables</li><li>LLMs repeating failed tool calls</li><li>Multi-turn conversations losing coherence</li></ul>`, 'warning')}
         `
     },
     {
@@ -87,37 +87,36 @@ const slides_context_engineering = [
         title: "Four Context Engineering Strategies",
         content: `
             <h2>Four Context Engineering Strategies</h2>
-            <p>Modern agent systems use four complementary approaches to manage context at scale:</p>
+            <p class="lead">Modern agent systems combine <strong>all four</strong> complementary approaches to manage context at scale. Each strategy addresses different aspects of context management, and they work together simultaneously.</p>
 
-            ${C.flow([
+            ${C.cards([
                 {
-                    title: '1. Write Context',
-                    desc: 'Externalize information to persistent storage (scratchpads, memories, databases)',
-                    accent: true,
-                    arrow: '↓'
+                    badge: '1',
+                    title: 'Write Context',
+                    desc: 'Externalize information to persistent storage (scratchpads, memories, databases)'
                 },
                 {
-                    title: '2. Select Context',
-                    desc: 'Retrieve only relevant information (RAG, tool description search, memory retrieval)',
-                    arrow: '↓'
+                    badge: '2',
+                    title: 'Select Context',
+                    desc: 'Retrieve only relevant information (RAG, tool description search, memory retrieval)'
                 },
                 {
-                    title: '3. Compress Context',
-                    desc: 'Summarize or trim existing context (recursive summarization, message pruning)',
-                    arrow: '↓'
+                    badge: '3',
+                    title: 'Compress Context',
+                    desc: 'Summarize or trim existing context (recursive summarization, message pruning)'
                 },
                 {
-                    title: '4. Isolate Context',
-                    desc: 'Separate contexts into multiple agents or environments (multi-agent, sandboxes)',
-                    accent: true
+                    badge: '4',
+                    title: 'Isolate Context',
+                    desc: 'Separate contexts into multiple agents or environments (multi-agent, sandboxes)'
                 },
             ])}
 
-            ${C.callout('No single strategy is sufficient — production agents typically combine all four approaches simultaneously. The key is choosing the right strategy for each type of information.', 'tip')}
+            ${C.callout('These strategies are <strong>not sequential</strong> — production agents use all four simultaneously. The key is choosing the right strategy for each type of information and combining them effectively.', 'tip')}
 
             <h3>Strategy Trade-offs</h3>
             ${C.table(
-                ["Strategy", "Benefit", "Cost", "${CONFIG.productName} Example"],
+                ["Strategy", "Benefit", "Cost", `${CONFIG.productName} Example`],
                 [
                     ["Write Context", "Infinite persistence", "Retrieval complexity", "Room.options (tools, workspace, system prompt)"],
                     ["Select Context", "Precision control", "Retrieval failures", "Vector engine RAG, MCP tool filtering"],
@@ -144,11 +143,6 @@ const slides_context_engineering = [
                     badge: 'Memories',
                     title: 'Long-term Memories',
                     desc: 'Persistent storage across sessions. Products like ChatGPT, Cursor, and Windsurf auto-generate memories from user-agent interactions.'
-                },
-                {
-                    badge: '${CONFIG.productName}',
-                    title: '${CONFIG.productName} Implementation',
-                    desc: '<strong>Room.options</strong> stores tools, workspace, system prompt as JSON. <strong>Insight.varStore</strong> persists variables across Pixel executions. <strong>MODEL_INFERENCE_LOGS_DB</strong> stores full message history.'
                 },
             ])}
 
@@ -180,7 +174,7 @@ const slides_context_engineering = [
                         <ul>
                             <li><strong>Tool Description Retrieval</strong><br>
                             RAG applied to tool descriptions improves selection accuracy by 3×<br>
-                            <em>${CONFIG.productName}: MCP tool filtering based on conversation</em></li>
+                            <em>Example: Filter available tools dynamically based on conversation context</em></li>
 
                             <li><strong>Hybrid Retrieval</strong><br>
                             Combine embedding search + keyword search + re-ranking<br>
@@ -188,13 +182,11 @@ const slides_context_engineering = [
 
                             <li><strong>Message History Filtering</strong><br>
                             Select relevant past messages instead of full history<br>
-                            <em>${CONFIG.productName}: MessageUtils.getMessageHistoryFromMessageId()</em></li>
+                            <em>Example: Retrieve only messages relevant to current task</em></li>
                         </ul>
                     `
                 }
             )}
-
-            ${C.callout('In ${CONFIG.productName}, <strong>Vector engines</strong> enable semantic selection via RAG. The playground can dynamically filter available MCP tools based on conversation context, reducing tool description tokens by 90%+.', 'tip')}
         `
     },
     {
@@ -215,11 +207,6 @@ const slides_context_engineering = [
                     title: 'Message Pruning',
                     desc: 'Hard-coded heuristics remove older messages or apply trained pruning models like Provence. Trade-off: lose specificity and potentially critical context.'
                 },
-                {
-                    badge: '${CONFIG.productName}',
-                    title: '${CONFIG.productName} Approach',
-                    desc: 'Room message history can be summarized before passing to LLM. Insight.pixelList is bounded (500 entries by default) to prevent unbounded growth. Old messages can be archived to database while keeping summaries in context.'
-                },
             ])}
 
             <h2>Strategy 4: Isolate Context</h2>
@@ -233,12 +220,7 @@ const slides_context_engineering = [
 
                         <p><strong>Trade-off</strong>: Up to 15× more tokens than single-agent chat, but higher accuracy and better context isolation.</p>
 
-                        <p><strong>${CONFIG.productName} Implementation</strong>:</p>
-                        <ul>
-                            <li>Each agent gets its own Insight (isolated varStore, pixelList)</li>
-                            <li>Each agent can have its own Room (isolated message history)</li>
-                            <li>Agents communicate via explicit message passing, not shared context</li>
-                        </ul>
+                        <p><strong>Key Pattern</strong>: Each agent gets its own isolated context and state. Agents communicate via explicit message passing, not shared context.</p>
                     `
                 },
                 {
@@ -248,12 +230,7 @@ const slides_context_engineering = [
 
                         <p><strong>State Objects</strong>: Runtime state schemas (Pydantic) selectively expose fields to the LLM while isolating other information.</p>
 
-                        <p><strong>${CONFIG.productName} Implementation</strong>:</p>
-                        <ul>
-                            <li><strong>insightFolder</strong>: Temporary file storage isolated from LLM context</li>
-                            <li><strong>Frames</strong>: Data stored in Insight but only metadata sent to LLM</li>
-                            <li><strong>Tool execution results</strong>: Can be summarized before adding to Room messages</li>
-                        </ul>
+                        <p><strong>Key Pattern</strong>: Keep token-heavy data (images, large files, full datasets) outside LLM context. Send only metadata, summaries, or return values.</p>
                     `
                 }
             )}
@@ -261,25 +238,25 @@ const slides_context_engineering = [
     },
     {
         id: "context-semoss-patterns",
-        title: "Context Engineering in ${CONFIG.productName}",
+        title: `Context Engineering in ${CONFIG.productName}`,
         content: `
             <h2>Context Engineering Patterns in ${CONFIG.productName}</h2>
             <p>How the four strategies map to ${CONFIG.productName} architecture:</p>
 
             ${C.table(
-                ["Strategy", "${CONFIG.productName} Component", "Implementation Pattern", "Use Case"],
+                ["Strategy", `${CONFIG.productName} Component`, "Implementation Pattern", "Use Case"],
                 [
                     [
                         "<strong>Write Context</strong>",
                         "Room + MODEL_INFERENCE_LOGS_DB",
-                        "Full message history persisted to database, Room.options stores tools/workspace/system prompt",
-                        "Long-running conversations with persistent memory across sessions"
+                        "Full message history persisted to database for long-running conversations",
+                        "Multi-session conversations with full context retention and retrieval"
                     ],
                     [
                         "<strong>Write Context</strong>",
-                        "Insight.varStore",
-                        "Variables persist across Pixel executions within an Insight",
-                        "Multi-step workflows with intermediate state (e.g., data transformations)"
+                        "insightFolder / Room Folder",
+                        "File storage on disk preserved across sessions for document/artifact persistence",
+                        "Save generated files, uploaded documents, or intermediate outputs that persist between sessions"
                     ],
                     [
                         "<strong>Select Context</strong>",
@@ -295,9 +272,9 @@ const slides_context_engineering = [
                     ],
                     [
                         "<strong>Select Context</strong>",
-                        "MessageUtils.getMessageHistoryFromMessageId()",
-                        "Retrieve message history starting from a specific messageId",
-                        "Resume conversation from a specific point without full history"
+                        "Business-Specific MCP Tools",
+                        "Engage MCP tools to retrieve context from enterprise systems (CRM, databases, APIs)",
+                        "Pull customer data, inventory records, or business logic on-demand instead of preloading everything"
                     ],
                     [
                         "<strong>Compress Context</strong>",
@@ -306,33 +283,21 @@ const slides_context_engineering = [
                         "Conversations exceeding 100K tokens — summarize turns 1-50, keep 51+ verbatim"
                     ],
                     [
-                        "<strong>Compress Context</strong>",
-                        "Insight.pixelList (bounded)",
-                        "PixelList limited to 500 entries by default, oldest dropped",
-                        "Prevent unbounded Pixel history growth in long-running Insights"
+                        "<strong>Isolate Context</strong>",
+                        "1-off Messages (non-maintained)",
+                        "Single-use messages added to conversation without database persistence",
+                        "One-time context injection without polluting permanent history (e.g., system hints, temporary instructions)"
                     ],
                     [
                         "<strong>Isolate Context</strong>",
                         "Multi-Agent Teams",
                         "Each agent has isolated Insight + Room, explicit message passing",
                         "Research tasks: one agent searches web, another analyzes, another writes report"
-                    ],
-                    [
-                        "<strong>Isolate Context</strong>",
-                        "Insight.insightFolder",
-                        "File storage isolated from LLM context (only file paths sent to LLM)",
-                        "Image/video processing — LLM sees file path, not full base64 data"
-                    ],
-                    [
-                        "<strong>Isolate Context</strong>",
-                        "Frame Metadata",
-                        "Frames store full data, LLM receives only column names and row counts",
-                        "Data analysis — LLM queries 1M row dataset but only sees schema + sample"
                     ]
                 ]
             )}
 
-            ${C.callout('Best Practice: Combine all four strategies. Example: A research agent might <strong>write</strong> findings to Room.options, <strong>select</strong> relevant docs via vector search, <strong>compress</strong> older messages via summarization, and <strong>isolate</strong> web search + analysis into separate agents.', 'tip')}
+            ${C.callout(`Best Practice: Combine all four strategies. Example: A research agent might <strong>write</strong> findings to Room.options, <strong>select</strong> relevant docs via vector search, <strong>compress</strong> older messages via summarization, and <strong>isolate</strong> web search + analysis into separate agents.`, 'tip')}
         `
     },
     {
@@ -368,7 +333,7 @@ const slides_context_engineering = [
 
             <h3>Decision Matrix</h3>
             ${C.table(
-                ["If You Need...", "Primary Strategy", "Why", "${CONFIG.productName} Pattern"],
+                ["If You Need...", "Primary Strategy", "Why", `${CONFIG.productName} Pattern`],
                 [
                     ["Session persistence across restarts", "<strong>Write Context</strong>", "Database outlives in-memory LLM context", "Room message history in MODEL_INFERENCE_LOGS_DB"],
                     ["Precision retrieval from large knowledge base", "<strong>Select Context</strong>", "Only relevant info sent to LLM", "Vector engine RAG over 10K documents"],
@@ -379,7 +344,7 @@ const slides_context_engineering = [
                 ]
             )}
 
-            ${C.callout('Real-world example: <strong>Windsurf code agent</strong> combines all four strategies:<ul><li><strong>Write</strong>: Saves code edits to files (persistent)</li><li><strong>Select</strong>: Uses grep + knowledge graph + re-ranking for codebase retrieval</li><li><strong>Compress</strong>: Summarizes file diffs instead of sending full files</li><li><strong>Isolate</strong>: Separates code execution sandbox from LLM context</li></ul>', 'tip')}
+            ${C.callout(`Real-world example: <strong>Windsurf code agent</strong> combines all four strategies:<ul><li><strong>Write</strong>: Saves code edits to files (persistent)</li><li><strong>Select</strong>: Uses grep + knowledge graph + re-ranking for codebase retrieval</li><li><strong>Compress</strong>: Summarizes file diffs instead of sending full files</li><li><strong>Isolate</strong>: Separates code execution sandbox from LLM context</li></ul>`, 'tip')}
         `
     },
     {
@@ -414,7 +379,7 @@ const slides_context_engineering = [
                 <li><strong>Iterate on trade-offs</strong> — Balance token cost vs accuracy vs latency for your specific use case</li>
             </ol>
 
-            ${C.callout('Next Steps: In the following sessions, you\'ll apply these context engineering principles to ${CONFIG.productName} Playground (system prompts, tool filtering) and MCP integration (tool description retrieval, multi-agent isolation).', 'tip')}
+            ${C.callout(`Next Steps: In the following sessions, you'll apply these context engineering principles to ${CONFIG.productName} Playground (system prompts, tool filtering) and MCP integration (tool description retrieval, multi-agent isolation).`, 'tip')}
         `
     }
 ];
