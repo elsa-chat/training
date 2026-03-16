@@ -85,9 +85,9 @@ jobs:
         },
         {
             id: "docker-architecture",
-            title: `AI Core Container Architecture`,
+            title: `SEMOSS Container Architecture`,
             content: `
-                <h2>AI Core Container Architecture</h2>
+                <h2>SEMOSS Container Architecture</h2>
                 <p>A ${CONFIG.productName} container packages all runtime dependencies into a single deployable unit.</p>
                 ${C.layers([
                     { label: "Application Layer", accent: true, items: [
@@ -113,9 +113,9 @@ jobs:
             id: "system-architecture",
             title: "System Architecture",
             content: `
-                <h2>AI Core System Architecture</h2>
+                <h2>SEMOSS System Architecture</h2>
                 <div style="text-align: center; margin: 20px 0;">
-                    <img src="images/architecture.svg" alt="AI Core Architecture" style="max-width: 90%; height: auto; border: 1px solid #ddd; border-radius: 8px;">
+                    <img src="images/architecture.svg" alt="SEMOSS Architecture" style="max-width: 90%; height: auto; border: 1px solid #ddd; border-radius: 8px;">
                 </div>
                 <h3>Architecture Components</h3>
                 ${C.table(
@@ -123,7 +123,7 @@ jobs:
                     [
                         ['Azure Load Balancer', 'Entry point for user traffic, SSL termination', 'Azure ALB'],
                         ['API/WebSocket', 'RESTful API and real-time WebSocket connections', 'Tomcat + Spring'],
-                        ['AI Core Pods', 'Container instances running application logic (2K-1, 2K-2, 2K-3)', 'Kubernetes Pods'],
+                        ['SEMOSS Pods', 'Container instances running application logic (2K-1, 2K-2, 2K-3)', 'Kubernetes Pods'],
                         ['Zookeeper Pods', 'Distributed coordination and configuration management', 'Apache Zookeeper'],
                         ['Azure Disk PVC', 'Optional self-hosted model storage (large models)', 'Azure Disk'],
                         ['Databases', 'User data, security, metadata storage', 'PostgreSQL'],
@@ -133,7 +133,7 @@ jobs:
                         ['Other External Models', 'OpenAI, Anthropic, and other providers', 'External APIs'],
                     ]
                 )}
-                ${C.callout('The architecture supports <strong>horizontal scaling</strong> with multiple AI Core pods behind a load balancer, shared state in databases and blob storage.', 'info')}
+                ${C.callout('The architecture supports <strong>horizontal scaling</strong> with multiple SEMOSS pods behind a load balancer, shared state in databases and blob storage.', 'info')}
             `
         },
         {
@@ -210,7 +210,7 @@ CMD ["bash", "-c", "exec $TOMCAT_HOME/bin/start.sh"]`, 'dockerfile', 'docker/Doc
             title: "Environment Variable Categories",
             content: `
                 <h2>Configuration via Environment Variables</h2>
-                <p>AI Core uses 150+ environment variables organized into categories. The <code>runCS.sh</code> script processes these at startup.</p>
+                <p>SEMOSS uses 150+ environment variables organized into categories. The <code>runCS.sh</code> script processes these at startup.</p>
                 ${C.cards([
                     { badge: 'Category', title: 'Database Connections', desc: 'Security, LocalMaster, Themes, Scheduler, User Tracking, Model Logs, Prompt DB, Audit Logs' },
                     { badge: 'Category', title: 'Authentication & SSO', desc: 'Microsoft SSO, Native auth, API users, access keys, CSRF/CORS protection' },
@@ -230,7 +230,7 @@ CMD ["bash", "-c", "exec $TOMCAT_HOME/bin/start.sh"]`, 'dockerfile', 'docker/Doc
             title: "Database Connections",
             content: `
                 <h2>Database Environment Variables</h2>
-                <p>AI Core supports external PostgreSQL databases for all system components.</p>
+                <p>SEMOSS supports external PostgreSQL databases for all system components.</p>
                 ${C.table(
                     ['Database', 'Required Variables', 'Purpose'],
                     [
@@ -604,7 +604,7 @@ spec:
                     {
                         badge: 'Architecture',
                         title: 'System Components',
-                        desc: 'Load balancer, AI Core pods, Zookeeper, databases, blob storage, and external LLM providers. Supports horizontal scaling.'
+                        desc: 'Load balancer, SEMOSS pods, Zookeeper, databases, blob storage, and external LLM providers. Supports horizontal scaling.'
                     },
                     {
                         badge: 'Container',
@@ -627,7 +627,7 @@ spec:
                     <li>CI/CD pipeline automates builds and publishes to Maven for reproducibility</li>
                     <li>Multi-stage Docker builds separate build tools from runtime, reducing image size</li>
                     <li>Production architecture supports horizontal scaling with shared state in databases and blob storage</li>
-                    <li>150+ environment variables provide fine-grained control over all AI Core features</li>
+                    <li>150+ environment variables provide fine-grained control over all SEMOSS features</li>
                     <li>runCS.sh startup script processes env vars and configures Tomcat, RDF_Map.prop, and web.xml</li>
                     <li>Always use Kubernetes secrets for sensitive values (passwords, API keys, connection strings)</li>
                     <li>Docker Compose is for local development only — use Kubernetes for production</li>

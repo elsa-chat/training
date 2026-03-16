@@ -5,7 +5,7 @@ const slides_welcome = [
             title: "Welcome",
             content: C.titleSlide(
                 `Welcome to ${CONFIG.productName} Training`,
-                "Spain 2026 — February 23–25",
+                "Enterprise AI Platform Training",
                 "Day 1 of 3"
             )
         },

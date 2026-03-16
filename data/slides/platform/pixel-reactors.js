@@ -357,13 +357,13 @@ Database(database="00000000-0000-0000-0000-000000000000")
                     <h4>Exercise 1: Basic Commands</h4>
                     <p>Open the Notebook and run:</p>
                     ${C.code(`// Simple echo
-Echo("Hello from Spain!");
+Echo("Hello from SEMOSS!");
 
 // List your engines
 MyEngines();
 
 // Use a variable
-greeting = "Hola, Madrid!";
+greeting = "Hello, World!";
 Echo(greeting);`, 'pixel')}
 
                     <h4>Exercise 2: Query a Database</h4>
@@ -372,7 +372,7 @@ Echo(greeting);`, 'pixel')}
 
                     <h4>Exercise 3: Call an LLM</h4>
                     ${C.code(`LLM(engine="a1b2c3d4-5e6f-7890-abcd-1234567890ab",
-    command="What is the capital of Spain?");`, 'pixel')}
+    command="Summarize what SEMOSS is in one sentence.");`, 'pixel')}
 
                     <h4>Exercise 4: REST API (Bonus)</h4>
                     ${C.code(`curl -u accessKey:secretKey 'https://dev.eu.aicore.deloitte.com/Monolith/api/engine/runPixel' -d 'expression=Echo("Hello from the API!");' -d 'insightId=new'`, 'bash')}

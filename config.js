@@ -1,10 +1,10 @@
 // Global configuration - swap this file at deploy time to change branding
 const CONFIG = {
-  productName: 'AI Core',
+  productName: 'SEMOSS',
   tagline: 'Enterprise AI Platform',
-  sidebarBranding: 'AI Core Training',
-  logoSubtitle: 'AI Core 101',
-  pageTitle: 'AI Core Training',
+  sidebarBranding: 'SEMOSS Training',
+  logoSubtitle: 'SEMOSS 101',
+  pageTitle: 'SEMOSS Training',
 
   // Day locking configuration
   // Set to empty array [] to unlock all days

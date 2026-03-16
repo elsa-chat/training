@@ -325,7 +325,7 @@ SampleApp();`, 'pixel')}
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    expression: 'Echo("Hello, Spain!");',
+                    expression: 'Echo("Hello, World!");',
                     insightId: 'new'
                 })
             });

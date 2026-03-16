@@ -576,7 +576,7 @@ __all__ = ['detect_anomalies']`, 'python', 'py/custom/anomaly_detection.py')}
                     <li>Build more applications — SEMOSS scales from prototypes to enterprise</li>
                 </ol>
 
-                ${C.callout('<strong>Thank you for completing SEMOSS Training Spain 2026!</strong> You now have the skills to build production AI applications. Keep building, keep learning. 🚀', 'tip')}
+                ${C.callout('<strong>Thank you for completing SEMOSS Training!</strong> You now have the skills to build production AI applications. Keep building, keep learning.', 'tip')}
             `
         }
     ];

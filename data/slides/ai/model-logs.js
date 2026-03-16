@@ -203,7 +203,7 @@ ORDER BY AVG_RESPONSE_MS DESC;`, 'sql', 'Direct SQL queries')}
             title: "Troubleshooting with Logs",
             content: `
                 <h2>Common Troubleshooting Scenarios</h2>
-                <p>The Spain team frequently asks these questions — here's how to answer them using logs.</p>
+                <p>These are common questions from operations teams — here's how to answer them using logs.</p>
                 ${C.cards([
                     {
                         badge: 'Question',
@@ -329,7 +329,7 @@ VACUUM FULL MESSAGE;`, 'sql', 'Log retention management')}
                 <h2>Hands-on: Query and Analyze Model Logs</h2>
                 ${C.handson('Investigate Model Usage Patterns', `
                     <h4>Scenario</h4>
-                    <p>The Spain team reports that LLM responses are slow in the afternoon. Use the logs database to investigate.</p>
+                    <p>Users report that LLM responses are slow in the afternoon. Use the logs database to investigate.</p>
 
                     <h4>Step 1: Check Recent Response Times</h4>
                     ${C.code(`Database(database="a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d")
@@ -408,7 +408,7 @@ VACUUM FULL MESSAGE;`, 'sql', 'Log retention management')}
 // 3. Top 10 users by token count (table)
 // 4. Recent errors (table)
 
-// Share with the Spain team for daily monitoring`, 'pixel')}
+// Share with the ops team for daily monitoring`, 'pixel')}
                 `)}
             `
         },
