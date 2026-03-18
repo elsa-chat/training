@@ -303,6 +303,218 @@ function getDayIndexForToday() {
     return null;
 }
 
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function getSlidesForDay(dayLabel) {
+    return allSlides.filter(slide => slide.dayLabel === dayLabel);
+}
+
+function buildDayPdfDocument(dayLabel, slides) {
+    const exportTitle = `${CONFIG.sidebarBranding} - ${dayLabel}`;
+    const generatedAt = new Date().toLocaleString();
+    const baseHref = window.location.href.split('#')[0];
+
+    const slideMarkup = slides.map((slide, idx) => `
+        <section class="pdf-slide">
+            <div class="pdf-slide-meta">
+                <span>Slide ${idx + 1} of ${slides.length}</span>
+                <span>${escapeHtml(slide.chapterLabel || '')}</span>
+            </div>
+            <h2 class="pdf-slide-title">${escapeHtml(slide.title || `Slide ${idx + 1}`)}</h2>
+            <div class="slide-content">${slide.content}</div>
+        </section>
+    `).join('');
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escapeHtml(exportTitle)}</title>
+    <base href="${escapeHtml(baseHref)}">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        html, body {
+            height: auto !important;
+            overflow: visible !important;
+        }
+        body {
+            display: block !important;
+            margin: 0;
+            background: #ffffff;
+            color: #111827;
+        }
+        .pdf-export {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 28px 24px;
+        }
+        .pdf-cover {
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+        }
+        .pdf-cover h1 {
+            font-size: 30px;
+            margin: 0 0 8px;
+            line-height: 1.2;
+        }
+        .pdf-cover p {
+            margin: 0;
+            color: #4b5563;
+            font-size: 14px;
+        }
+        .pdf-slide {
+            padding-top: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            page-break-after: always;
+            break-after: page;
+        }
+        .pdf-slide:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
+        .pdf-slide-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .pdf-slide-title {
+            margin-bottom: 18px;
+            font-size: 28px;
+            color: #111827;
+        }
+        .slide-content {
+            animation: none !important;
+        }
+        .slide-content pre {
+            white-space: pre-wrap !important;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            break-inside: auto;
+            page-break-inside: auto;
+        }
+        .slide-content pre code,
+        .slide-content code {
+            white-space: inherit !important;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+        .slide-content .c-code-header {
+            flex-wrap: wrap;
+            row-gap: 6px;
+        }
+        .slide-content .c-code-title,
+        .slide-content .c-code-lang,
+        .slide-content .c-tree-name,
+        .slide-content .c-tree-desc {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+        .slide-content .c-tree-item {
+            align-items: flex-start;
+        }
+        .slide-content .c-tree-root,
+        .slide-content .c-code,
+        .slide-content .c-grid,
+        .slide-content .c-compare,
+        .slide-content .c-stack,
+        .slide-content .c-split,
+        .slide-content .c-cards,
+        .slide-content .c-callout,
+        .slide-content .c-handson,
+        .slide-content .diagram-box {
+            break-inside: auto;
+            page-break-inside: auto;
+        }
+        .slide-content table,
+        .slide-content blockquote,
+        .slide-content img {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        @page {
+            size: A4 portrait;
+            margin: 0.5in;
+        }
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="pdf-export">
+        <section class="pdf-cover">
+            <h1>${escapeHtml(CONFIG.sidebarBranding || 'Training')}</h1>
+            <p><strong>${escapeHtml(dayLabel)}</strong> - ${slides.length} slides - Generated ${escapeHtml(generatedAt)}</p>
+        </section>
+        ${slideMarkup}
+    </main>
+</body>
+</html>`;
+}
+
+function downloadDayPdf(dayLabel) {
+    const slides = getSlidesForDay(dayLabel);
+    if (!slides.length) {
+        window.alert(`No slides found for ${dayLabel}.`);
+        return;
+    }
+
+    const exportWindow = window.open('', '_blank');
+    if (!exportWindow) {
+        window.alert('Popup blocked. Please allow popups, then try downloading the PDF again.');
+        return;
+    }
+
+    exportWindow.document.open();
+    exportWindow.document.write(buildDayPdfDocument(dayLabel, slides));
+    exportWindow.document.close();
+
+    const triggerPrint = () => {
+        setTimeout(() => {
+            exportWindow.focus();
+            exportWindow.print();
+        }, 250);
+    };
+
+    if (exportWindow.document.readyState === 'complete') {
+        triggerPrint();
+    } else {
+        exportWindow.addEventListener('load', triggerPrint, { once: true });
+    }
+
+    exportWindow.addEventListener('afterprint', () => {
+        exportWindow.close();
+    }, { once: true });
+}
+
+function downloadCurrentDayPdf() {
+    const current = allSlides[currentSlideIndex];
+    if (!current || !current.dayLabel) {
+        window.alert('No active day found to export.');
+        return;
+    }
+    downloadDayPdf(current.dayLabel);
+}
+
 // Toggle day expand/collapse
 function toggleDay(dayIdx) {
     const header = document.querySelectorAll('.nav-day-header')[dayIdx];
