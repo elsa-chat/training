@@ -1,4 +1,4 @@
-// ===== SEMOSS Training — Component Library =====
+// ===== Training Component Library =====
 // Usage: ${C.flow([...])} inside template literals in slide content
 
 const C = {

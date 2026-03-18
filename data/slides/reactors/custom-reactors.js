@@ -318,7 +318,7 @@ logger.warn("Text was truncated from " + original + " to " + maxLength);`, 'java
                 ${C.table(
                     ['Anti-Pattern', 'Why It\'s a Problem', 'Better Approach'],
                     [
-                        ['God reactor (500+ line execute)', 'Hard to test, debug, and reuse', 'Split into smaller reactors composed via Pixel'],
+                        ['"God" reactor (500+ line execute)', 'Hard to test, debug, and reuse', 'Split into smaller reactors composed via Pixel'],
                         ['Swallowing exceptions silently', 'Failures go undetected', 'Log + return error NounMetadata or throw SemossPixelException'],
                         ['Hardcoding engine/project IDs', 'Breaks across environments', 'Accept IDs as input parameters'],
                         ['Ignoring keyRequired', 'Null pointer exceptions at runtime', 'Always define keyRequired array matching keysToGet'],

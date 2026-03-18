@@ -17,7 +17,7 @@ const slides_docker = [
                 <p class="lead">Automated build pipeline using GitHub Actions</p>
                 ${C.flow([
                     { title: 'GitHub Push', desc: 'Code pushed to repository', accent: true, arrow: '↓ triggers' },
-                    { title: 'Build SEMOSS Core', desc: 'Compile Java libraries, run tests', arrow: '↓ publish' },
+                    { title: `Build ${CONFIG.productName} Core`, desc: 'Compile Java libraries, run tests', arrow: '↓ publish' },
                     { title: 'Build Monolith WAR', desc: 'Package servlet application', arrow: '↓ publish' },
                     { title: 'Build SemossWeb', desc: 'Build React frontend', arrow: '↓ publish' },
                     { title: 'Publish to Maven', desc: 'Opensource Maven repository', accent: true },
@@ -34,7 +34,7 @@ const slides_docker = [
                 ${C.table(
                     ['Workflow', 'Purpose', 'Output'],
                     [
-                        ['Build SEMOSS', 'Compile SEMOSS core Java libraries and run unit tests', 'semoss-5.0.0-SNAPSHOT.jar published to Maven'],
+                        [`Build ${CONFIG.productName}`, `Compile ${CONFIG.productName} core Java libraries and run unit tests`, 'semoss-5.0.0-SNAPSHOT.jar published to Maven'],
                         ['Build Monolith', 'Package Monolith servlet WAR with dependencies', 'Monolith.war published to Maven'],
                         ['Build SemossWeb', 'Build React frontend with npm/webpack', 'SemossWeb static assets published to Maven'],
                     ]
@@ -76,8 +76,8 @@ jobs:
                     },
                     {
                         badge: 'Final',
-                        title: 'SEMOSS Image',
-                        desc: 'Combines artifacts from builders with application code. Pulls latest SEMOSS artifacts from Maven, installs Playwright, configures runtime.'
+                        title: `${CONFIG.productName} Image`,
+                        desc: `Combines artifacts from builders with application code. Pulls latest ${CONFIG.productName} artifacts from Maven, installs Playwright, configures runtime.`
                     },
                 ])}
                 ${C.callout('Builder images are tagged and versioned separately (e.g., <code>python-builder:3.12-cpu</code>, <code>tomcat-builder:9.0.112</code>) to enable caching and faster rebuilds.', 'info')}
@@ -85,14 +85,14 @@ jobs:
         },
         {
             id: "docker-architecture",
-            title: `SEMOSS Container Architecture`,
+            title: `${CONFIG.productName} Container Architecture`,
             content: `
-                <h2>SEMOSS Container Architecture</h2>
+                <h2>${CONFIG.productName} Container Architecture</h2>
                 <p>A ${CONFIG.productName} container packages all runtime dependencies into a single deployable unit.</p>
                 ${C.layers([
                     { label: "Application Layer", accent: true, items: [
                         { title: "Tomcat 9", desc: "Servlet container serving Monolith WAR", accent: true },
-                        { title: "Semoss Core", desc: "Java libraries (semoss-5.0.0-SNAPSHOT.jar)" },
+                        { title: "${CONFIG.productName} Core", desc: "Java libraries (semoss-5.0.0-SNAPSHOT.jar)" },
                         { title: "SemossWeb", desc: "React frontend + Node.js assets" },
                     ]},
                     { label: "Runtime Dependencies", items: [
@@ -113,9 +113,9 @@ jobs:
             id: "system-architecture",
             title: "System Architecture",
             content: `
-                <h2>SEMOSS System Architecture</h2>
+                <h2>${CONFIG.productName} System Architecture</h2>
                 <div style="text-align: center; margin: 20px 0;">
-                    <img src="images/architecture.svg" alt="SEMOSS Architecture" style="max-width: 90%; height: auto; border: 1px solid #ddd; border-radius: 8px;">
+                    <img src="images/architecture.svg" alt="${CONFIG.productName} Architecture" style="max-width: 90%; height: auto; border: 1px solid #ddd; border-radius: 8px;">
                 </div>
                 <h3>Architecture Components</h3>
                 ${C.table(
@@ -123,7 +123,7 @@ jobs:
                     [
                         ['Azure Load Balancer', 'Entry point for user traffic, SSL termination', 'Azure ALB'],
                         ['API/WebSocket', 'RESTful API and real-time WebSocket connections', 'Tomcat + Spring'],
-                        ['SEMOSS Pods', 'Container instances running application logic (2K-1, 2K-2, 2K-3)', 'Kubernetes Pods'],
+                        [`${CONFIG.productName} Pods`, 'Container instances running application logic (2K-1, 2K-2, 2K-3)', 'Kubernetes Pods'],
                         ['Zookeeper Pods', 'Distributed coordination and configuration management', 'Apache Zookeeper'],
                         ['Azure Disk PVC', 'Optional self-hosted model storage (large models)', 'Azure Disk'],
                         ['Databases', 'User data, security, metadata storage', 'PostgreSQL'],
@@ -133,7 +133,7 @@ jobs:
                         ['Other External Models', 'OpenAI, Anthropic, and other providers', 'External APIs'],
                     ]
                 )}
-                ${C.callout('The architecture supports <strong>horizontal scaling</strong> with multiple SEMOSS pods behind a load balancer, shared state in databases and blob storage.', 'info')}
+                ${C.callout(`The architecture supports <strong>horizontal scaling</strong> with multiple ${CONFIG.productName} pods behind a load balancer, shared state in databases and blob storage.`, 'info')}
             `
         },
         {
@@ -144,7 +144,7 @@ jobs:
                 <p>${CONFIG.productName} uses a multi-stage Dockerfile to minimize final image size and separate build tools from runtime.</p>
                 ${C.flow([
                     { title: 'Stage 1: tomcat_builder', desc: 'Install Java, Tomcat, Maven, Codex CLI', accent: true, arrow: '↓ built artifacts' },
-                    { title: 'Stage 2: mavenpuller', desc: 'Clone semoss-artifacts, download latest SEMOSS build', arrow: '↓ SEMOSS app files' },
+                    { title: 'Stage 2: mavenpuller', desc: `Clone semoss-artifacts, download latest ${CONFIG.productName} build`, arrow: `↓ ${CONFIG.productName} app files` },
                     { title: 'Stage 3: final', desc: 'Copy runtime binaries + app, install Python + Playwright', accent: true },
                 ])}
                 ${C.code(`# Stage 1: Build tooling (tomcat-builder)
@@ -154,7 +154,7 @@ RUN apt-get update -y && apt-get install -y ca-certificates curl tar
 RUN curl -fsSL https://github.com/openai/codex/releases/...
 RUN install -m 0755 codex /usr/local/bin/codex
 
-# Stage 2: Pull SEMOSS artifacts
+# Stage 2: Pull ${CONFIG.productName} artifacts
 FROM ubuntu:22.04 AS mavenpuller
 COPY --from=tomcat_builder /opt /opt
 RUN mkdir /opt/semosshome
@@ -184,7 +184,7 @@ CMD ["bash", "-c", "exec $TOMCAT_HOME/bin/start.sh"]`, 'dockerfile', 'docker/Doc
                         content: `
                             <ul>
                                 <li><strong>Single command</strong>: <code>docker-compose up</code> starts everything</li>
-                                <li><strong>Service linking</strong>: SEMOSS, Postgres, MinIO connect automatically</li>
+                                <li><strong>Service linking</strong>: ${CONFIG.productName}, Postgres, MinIO connect automatically</li>
                                 <li><strong>Volume mounting</strong>: Mount local code for hot reload</li>
                                 <li><strong>Rapid iteration</strong>: Test changes without full deployment</li>
                             </ul>
@@ -210,7 +210,7 @@ CMD ["bash", "-c", "exec $TOMCAT_HOME/bin/start.sh"]`, 'dockerfile', 'docker/Doc
             title: "Environment Variable Categories",
             content: `
                 <h2>Configuration via Environment Variables</h2>
-                <p>SEMOSS uses 150+ environment variables organized into categories. The <code>runCS.sh</code> script processes these at startup.</p>
+                <p>${CONFIG.productName} uses 150+ environment variables organized into categories. The <code>runCS.sh</code> script processes these at startup.</p>
                 ${C.cards([
                     { badge: 'Category', title: 'Database Connections', desc: 'Security, LocalMaster, Themes, Scheduler, User Tracking, Model Logs, Prompt DB, Audit Logs' },
                     { badge: 'Category', title: 'Authentication & SSO', desc: 'Microsoft SSO, Native auth, API users, access keys, CSRF/CORS protection' },
@@ -230,7 +230,7 @@ CMD ["bash", "-c", "exec $TOMCAT_HOME/bin/start.sh"]`, 'dockerfile', 'docker/Doc
             title: "Database Connections",
             content: `
                 <h2>Database Environment Variables</h2>
-                <p>SEMOSS supports external PostgreSQL databases for all system components.</p>
+                <p>${CONFIG.productName} supports external PostgreSQL databases for all system components.</p>
                 ${C.table(
                     ['Database', 'Required Variables', 'Purpose'],
                     [
@@ -594,21 +594,21 @@ spec:
                     {
                         badge: 'CI/CD',
                         title: 'GitHub Actions',
-                        desc: 'Automated builds for SEMOSS core, Monolith WAR, and SemossWeb frontend. All artifacts published to opensource Maven repository.'
+                        desc: `Automated builds for ${CONFIG.productName} core, Monolith WAR, and SemossWeb frontend. All artifacts published to opensource Maven repository.`
                     },
                     {
                         badge: 'Docker Builds',
                         title: 'Multi-Stage Strategy',
-                        desc: 'Python builder (3.12 venv), Tomcat builder (Java 21 + Tomcat 9), and final SEMOSS image combining all components.'
+                        desc: `Python builder (3.12 venv), Tomcat builder (Java 21 + Tomcat 9), and final ${CONFIG.productName} image combining all components.`
                     },
                     {
                         badge: 'Architecture',
                         title: 'System Components',
-                        desc: 'Load balancer, SEMOSS pods, Zookeeper, databases, blob storage, and external LLM providers. Supports horizontal scaling.'
+                        desc: `Load balancer, ${CONFIG.productName} pods, Zookeeper, databases, blob storage, and external LLM providers. Supports horizontal scaling.`
                     },
                     {
                         badge: 'Container',
-                        title: 'SEMOSS Container',
+                        title: `${CONFIG.productName} Container`,
                         desc: 'Ubuntu 22.04 + Java 21 + Python 3.12 + Tomcat 9 + Playwright. Runs as user 1001 (non-root) for security.'
                     },
                     {
@@ -627,7 +627,7 @@ spec:
                     <li>CI/CD pipeline automates builds and publishes to Maven for reproducibility</li>
                     <li>Multi-stage Docker builds separate build tools from runtime, reducing image size</li>
                     <li>Production architecture supports horizontal scaling with shared state in databases and blob storage</li>
-                    <li>150+ environment variables provide fine-grained control over all SEMOSS features</li>
+                    <li>150+ environment variables provide fine-grained control over all ${CONFIG.productName} features</li>
                     <li>runCS.sh startup script processes env vars and configures Tomcat, RDF_Map.prop, and web.xml</li>
                     <li>Always use Kubernetes secrets for sensitive values (passwords, API keys, connection strings)</li>
                     <li>Docker Compose is for local development only — use Kubernetes for production</li>

@@ -1,4 +1,4 @@
-# SEMOSS Training — Content Generation Guide
+# ${CONFIG.productName} Training — Content Generation Guide
 
 Use this guide to generate new chapter content for the training site. Copy the relevant sections into your prompt when asking Claude to create slides.
 
@@ -73,7 +73,7 @@ C.layers([
     { label: "Presentation", items: [{ title: "React UI", desc: "SemossWeb" }] },
     { label: "Application", accent: true, items: [
         { title: "Monolith", desc: "REST API", accent: true },
-        { title: "Semoss Core", desc: "Engines + Reactors", accent: true },
+        { title: "SEMOSS Core", desc: "Engines + Reactors", accent: true },
     ]},
     { label: "Data", items: [{ title: "Engines", desc: "DB, Model, Vector" }] },
 ])
@@ -275,7 +275,7 @@ C.badge("NEW", "accent")    // gold
 6. **Use `C.flow()`** for step-by-step processes, lifecycles, pipelines
 7. **Use `C.layers()`** for architecture diagrams
 8. **Use `C.cards()`** for listing 3+ related concepts
-9. **Hands-on exercises** should use real Pixel/Java/Python from the SEMOSS codebase
+9. **Hands-on exercises** should use real Pixel/Java/Python from the ${CONFIG.productName} codebase
 10. **Target 4-8 slides per 30 minutes** of training time
 11. **Keep text per slide scannable** — if it needs scrolling, split into two slides
 

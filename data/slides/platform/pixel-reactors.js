@@ -378,23 +378,5 @@ Echo(greeting);`, 'pixel')}
                     ${C.code(`curl -u accessKey:secretKey 'https://dev.eu.aicore.deloitte.com/Monolith/api/engine/runPixel' -d 'expression=Echo("Hello from the API!");' -d 'insightId=new'`, 'bash')}
                 `)}
             `
-        },
-        {
-            id: "recap",
-            title: "Day 1 Recap",
-            content: `
-                ${C.titleSlide("Day 1 Recap", "What we covered today")}
-                ${C.cards([
-                    { badge: 'Chapter 1', title: 'Platform Fundamentals', desc: 'Three-tier architecture: Java + Python GAAS + React frontend' },
-                    { badge: 'Chapter 1', title: 'Repository Structure', desc: 'Semoss (core), Monolith (web), SemossWeb (frontend)' },
-                    { badge: 'Chapter 2', title: 'Engines', desc: 'Six engine types: Database, Model, Vector, Storage, Function, Guardrail' },
-                    { badge: 'Chapter 2', title: '.smss Files', desc: 'Engine configuration, lifecycle, and cloud sync' },
-                    { badge: 'Chapter 3', title: 'Pixel', desc: 'Command language: syntax, chaining, variables, recipes' },
-                    { badge: 'Chapter 3', title: 'Reactors', desc: 'Java execution classes: lifecycle, NounMetadata, ReactorFactory' },
-                ])}
-                <h3>Tomorrow: Day 2</h3>
-                <p>Advanced development — building custom reactors, advanced Pixel patterns, extending the platform.</p>
-                ${C.callout('<strong>Questions?</strong> Ask now or come find us during the evening.', 'tip')}
-            `
         }
     ];

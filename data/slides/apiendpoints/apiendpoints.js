@@ -14,12 +14,12 @@ const slides_api_endpoints = [
             title: "API Endpoints — Architecture Overview",
             content: `
                 <h2>API Endpoints — Architecture Overview</h2>
-                <p class="lead">SEMOSS exposes provider-compatible REST endpoints that allow any OpenAI or Anthropic SDK client to connect directly — including tools like Claude Code, OpenAI Codex, and custom applications.</p>
+                <p class="lead">${CONFIG.productName} exposes provider-compatible REST endpoints that allow any OpenAI or Anthropic SDK client to connect directly — including tools like Claude Code, OpenAI Codex, and custom applications.</p>
                 <h3>How It Works</h3>
                 <p>The Java Tomcat server hosts JAX-RS endpoint classes that accept requests in native provider formats, normalize them internally, route to any registered model engine, and return responses in the expected provider format.</p>
                 ${C.flow([
                     { title: 'External Client', desc: 'OpenAI SDK, Anthropic SDK, Claude Code, Codex, curl, etc.' },
-                    { title: 'SEMOSS REST Endpoint', desc: 'OpenAIEndpoints.java or AnthropicEndpoints.java receives the request', arrow: '→' },
+                    { title: `${CONFIG.productName} REST Endpoint`, desc: 'OpenAIEndpoints.java or AnthropicEndpoints.java receives the request', arrow: '→' },
                     { title: 'Room & Message Pipeline', desc: 'Request is normalized, routed through Room/Insight architecture to the model engine', arrow: '→' },
                     { title: 'Provider Response', desc: 'Response formatted back into OpenAI or Anthropic spec (streaming SSE or JSON)', accent: true },
                 ])}
@@ -58,9 +58,9 @@ const slides_api_endpoints = [
                     ]
                 )}
                 <h3>Request Body</h3>
-                <p>The request body follows the standard OpenAI spec. The <code>model</code> field takes a SEMOSS engine ID instead of an OpenAI model name.</p>
+                <p>The request body follows the standard OpenAI spec. The <code>model</code> field takes a ${CONFIG.productName} engine ID instead of an OpenAI model name.</p>
                 ${C.code(`{
-  "model": "<semoss-engine-id>",
+  "model": "<your-engine-id>",
   "messages": [
     {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": "Hello!"}
@@ -72,7 +72,7 @@ const slides_api_endpoints = [
   "room_id": "<optional-room-id>",
   "tools": [...]
 }`, 'json', 'Chat completions request body')}
-                ${C.callout('<strong>Key fields:</strong> <code>model</code> is the SEMOSS engine ID (UUID). <code>insight_id</code> and <code>room_id</code> are optional — if omitted, SEMOSS creates or reuses one from the session. <code>tools</code>, <code>stream</code>, and all standard OpenAI parameters are supported.', 'info')}
+                ${C.callout(`<strong>Key fields:</strong> <code>model</code> is the ${CONFIG.productName} engine ID (UUID). <code>insight_id</code> and <code>room_id</code> are optional — if omitted, ${CONFIG.productName} creates or reuses one from the session. <code>tools</code>, <code>stream</code>, and all standard OpenAI parameters are supported.`, 'info')}
             `
         },
         {
@@ -90,7 +90,7 @@ const slides_api_endpoints = [
                 )}
                 <h3>Request Body</h3>
                 ${C.code(`{
-  "model": "<semoss-engine-id>",
+  "model": "<your-engine-id>",
   "max_tokens": 1024,
   "system": "You are a helpful assistant.",
   "messages": [
@@ -135,7 +135,7 @@ const slides_api_endpoints = [
                         `
                     }
                 )}
-                ${C.callout('<strong>Claude Code integration:</strong> Point Claude Code\'s base URL to <code>https://your-semoss-instance/model/anthropic</code> and it connects seamlessly. The endpoint handles all streaming events, tool calling round-trips, and thinking blocks that Claude Code expects.', 'tip')}
+                ${C.callout('<strong>Claude Code integration:</strong> Point Claude Code\'s base URL to <code>https://your-instance-dns/model/anthropic</code> and it connects seamlessly. The endpoint handles all streaming events, tool calling round-trips, and thinking blocks that Claude Code expects.', 'tip')}
             `
         },
         {
@@ -171,17 +171,17 @@ const slides_api_endpoints = [
             title: "Connecting to the Endpoints",
             content: `
                 <h2>Connecting to the Endpoints</h2>
-                <p class="lead">Any standard SDK or HTTP client can connect to SEMOSS's provider-compatible endpoints.</p>
+                <p class="lead">Any standard SDK or HTTP client can connect to ${CONFIG.productName}'s provider-compatible endpoints.</p>
                 <h3>Using the OpenAI Python SDK</h3>
                 ${C.code(`from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://your-semoss-instance/model/openai",
+    base_url="https://your-instance-dns/model/openai",
     api_key="<ACCESS_KEY>:<SECRET_KEY>"
 )
 
 response = client.chat.completions.create(
-    model="<semoss-engine-id>",
+    model="<your-engine-id>",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Hello!"}
@@ -192,12 +192,12 @@ print(response.choices[0].message.content)`, 'python', 'Direct connection with O
                 ${C.code(`import anthropic
 
 client = anthropic.Anthropic(
-    base_url="https://your-semoss-instance/model/anthropic",
+    base_url="https://your-instance-dns/model/anthropic",
     api_key="<ACCESS_KEY>:<SECRET_KEY>"
 )
 
 response = client.messages.create(
-    model="<semoss-engine-id>",
+    model="<your-engine-id>",
     max_tokens=1024,
     messages=[
         {"role": "user", "content": "Hello!"}
@@ -209,7 +209,7 @@ print(response.content[0].text)`, 'python', 'Direct connection with Anthropic SD
 from openai import OpenAI
 
 server = ai_server.ServerClient(
-    base="https://your-semoss-instance",
+    base="https://your-instance-dns",
     access_key=ACCESS_KEY,
     secret_key=SECRET_KEY
 )
@@ -238,7 +238,7 @@ client = OpenAI(
                         title: 'Key Parameters',
                         content: `
                             <ul>
-                                <li><strong>model</strong> — SEMOSS engine ID (UUID), not a provider model name</li>
+                                <li><strong>model</strong> — ${CONFIG.productName} engine ID (UUID), not a provider model name</li>
                                 <li><strong>insight_id</strong> — Optional; ties the request to a specific Insight session</li>
                                 <li><strong>room_id</strong> — Optional; maintains conversation history in a specific Room</li>
                                 <li><strong>stream</strong> — Boolean; enables SSE streaming responses</li>

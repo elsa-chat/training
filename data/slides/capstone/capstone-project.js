@@ -352,7 +352,7 @@ __all__ = ['detect_anomalies']`, 'python', 'py/custom/anomaly_detection.py')}
                         <li>Edit <code>social.properties</code>:
                             ${C.code("microsoft=true\nms_oauth_client_id=YOUR_CLIENT_ID\nms_oauth_client_secret=YOUR_SECRET\nms_oauth_redirect_uri=https://analytics.acmecorp.com/callback/microsoft", 'properties')}
                         </li>
-                        <li>Restart SEMOSS</li>
+                        <li>Restart ${CONFIG.productName}</li>
                         <li>Test login with Microsoft account</li>
                     </ol>
 
@@ -488,7 +488,7 @@ __all__ = ['detect_anomalies']`, 'python', 'py/custom/anomaly_detection.py')}
 
                 <h3>Production Hardening</h3>
                 <ul>
-                    <li><strong>High Availability:</strong> Run multiple SEMOSS instances behind load balancer</li>
+                    <li><strong>High Availability:</strong> Run multiple ${CONFIG.productName} instances behind load balancer</li>
                     <li><strong>Database Backups:</strong> Automated Postgres backups to S3, point-in-time recovery</li>
                     <li><strong>Monitoring:</strong> Prometheus + Grafana for metrics, alerting on errors/latency</li>
                     <li><strong>SSL/TLS:</strong> Configure HTTPS, enforce TLS 1.2+</li>
@@ -503,7 +503,7 @@ __all__ = ['detect_anomalies']`, 'python', 'py/custom/anomaly_detection.py')}
             title: "Capstone Summary",
             content: `
                 <h2>Capstone Project Summary</h2>
-                <p class="lead">Congratulations! You've built a production-ready AI-powered sales analytics platform using SEMOSS.</p>
+                <p class="lead">Congratulations! You've built a production-ready AI-powered sales analytics platform using ${CONFIG.productName}.</p>
 
                 <h3>What You Built</h3>
                 ${C.table(
@@ -517,7 +517,7 @@ __all__ = ['detect_anomalies']`, 'python', 'py/custom/anomaly_detection.py')}
                         [
                             '<strong>Business Logic</strong>',
                             'Custom Java Reactor, Python GAAS, Isolation Forest',
-                            'Extending SEMOSS, integrating ML models, reactor development'
+                            `Extending ${CONFIG.productName}, integrating ML models, reactor development`
                         ],
                         [
                             '<strong>AI Integration</strong>',
@@ -544,7 +544,7 @@ __all__ = ['detect_anomalies']`, 'python', 'py/custom/anomaly_detection.py')}
 
                 <h3>Skills Mastered</h3>
                 <ul>
-                    <li><strong>Platform Architecture</strong> — Understanding SEMOSS layers (engines, reactors, UI)</li>
+                    <li><strong>Platform Architecture</strong> — Understanding ${CONFIG.productName} layers (engines, reactors, UI)</li>
                     <li><strong>Data Engineering</strong> — ETL pipelines, data transformation, notebook workflows</li>
                     <li><strong>AI/ML Integration</strong> — LLM tool calling, vector search, anomaly detection, forecasting</li>
                     <li><strong>Full-Stack Development</strong> — Backend reactors, frontend blocks, state management</li>
@@ -553,7 +553,7 @@ __all__ = ['detect_anomalies']`, 'python', 'py/custom/anomaly_detection.py')}
                 </ul>
 
                 <h3>Key Takeaways</h3>
-                ${C.callout('<strong>SEMOSS is a platform, not just a tool.</strong> It provides the building blocks (engines, reactors, blocks, cells) to create sophisticated data applications without writing thousands of lines of code. The key is understanding how components fit together.', 'tip')}
+                ${C.callout(`<strong>${CONFIG.productName} is a platform, not just a tool.</strong> It provides the building blocks (engines, reactors, blocks, cells) to create sophisticated data applications without writing thousands of lines of code. The key is understanding how components fit together.`, 'tip')}
 
                 <p><strong>Think in layers:</strong></p>
                 <ul>
@@ -563,7 +563,7 @@ __all__ = ['detect_anomalies']`, 'python', 'py/custom/anomaly_detection.py')}
                     <li>Security layer (OAuth, permissions) controls access</li>
                 </ul>
 
-                <p><strong>Leverage existing components:</strong> SEMOSS ships with hundreds of reactors and 40+ block types. Always check if a component exists before building custom.</p>
+                <p><strong>Leverage existing components:</strong> ${CONFIG.productName} ships with hundreds of reactors and 40+ block types. Always check if a component exists before building custom.</p>
 
                 <p><strong>Prototype fast, refine later:</strong> Use notebooks for rapid prototyping, then convert to custom reactors for production performance.</p>
 
@@ -572,11 +572,11 @@ __all__ = ['detect_anomalies']`, 'python', 'py/custom/anomaly_detection.py')}
                     <li>Deploy your capstone project to a production environment</li>
                     <li>Gather user feedback and iterate</li>
                     <li>Explore advanced features (MCP servers, custom engines, R integration)</li>
-                    <li>Join the SEMOSS community, contribute reactors/blocks</li>
-                    <li>Build more applications — SEMOSS scales from prototypes to enterprise</li>
+                    <li>Join the ${CONFIG.productName} community, contribute reactors/blocks</li>
+                    <li>Build more applications — ${CONFIG.productName} scales from prototypes to enterprise</li>
                 </ol>
 
-                ${C.callout('<strong>Thank you for completing SEMOSS Training!</strong> You now have the skills to build production AI applications. Keep building, keep learning.', 'tip')}
+                ${C.callout(`<strong>Thank you for completing ${CONFIG.productName} Training!</strong> You now have the skills to build production AI applications. Keep building, keep learning.`, 'tip')}
             `
         }
     ];

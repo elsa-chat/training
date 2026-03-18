@@ -288,7 +288,7 @@ export function CodeEditor() {
             id: "consume-playground",
             title: "Consuming MCP in Playground",
             content: `
-                <h2>Consuming MCP in SEMOSS Playground</h2>
+                <h2>Consuming MCP in ${CONFIG.productName} Playground</h2>
                 <p>Once an MCP is published, configure it in Playground to make tools available to the model.</p>
                 ${C.sequence(
                     ["User", "Playground UI", "MCP App", "Model"],
@@ -332,11 +332,11 @@ Model incorporates result into response`, 'plaintext', 'Playground MCP workflow'
             id: "consume-external",
             title: "Consuming MCP from External Apps",
             content: `
-                <h2>Consuming SEMOSS MCP from External Applications</h2>
-                <p>SEMOSS MCP servers can be consumed by MCP-compatible clients like Claude Code CLI, LangChain, or custom applications.</p>
-                ${C.code(`// Example: Connect Claude Code CLI to SEMOSS MCP
+                <h2>Consuming ${CONFIG.productName} MCP from External Applications</h2>
+                <p>${CONFIG.productName} MCP servers can be consumed by MCP-compatible clients like Claude Code CLI, LangChain, or custom applications.</p>
+                ${C.code(`// Example: Connect Claude Code CLI to ${CONFIG.productName} MCP
 
-// 1. SEMOSS side: Publish your MCP app
+// 1. ${CONFIG.productName} side: Publish your MCP app
 MakePythonMCP(project="your-project-id");
 // Publish files to make MCP accessible
 
@@ -346,26 +346,26 @@ MakePythonMCP(project="your-project-id");
 // 3. Configure Claude Code CLI (~/.config/claude/config.json):
 {
   "mcpServers": {
-    "semoss-tools": {
+    "example-tools": {
       "url": "http://localhost:8080/ext/mcp/your-project-id/comms",
       "headers": {
-        "Authorization": "Bearer <your-semoss-api-key>"
+        "Authorization": "Bearer <your-instance-api-key>"
       }
     }
   }
 }
 
-// 4. Claude Code CLI now has access to your SEMOSS MCP tools
+// 4. Claude Code CLI now has access to your ${CONFIG.productName} MCP tools
 // The model can call execute_python_code, database queries, etc.`, 'json', 'External MCP configuration')}
-                ${C.callout('External MCP consumption requires <strong>authentication</strong>. Use SEMOSS API keys or OAuth tokens in the Authorization header.', 'warning')}
-                ${C.code(`// Example: Using SEMOSS MCP from Python with LangChain
+                ${C.callout(`External MCP consumption requires <strong>authentication</strong>. Use ${CONFIG.productName} API keys or OAuth tokens in the Authorization header.`, 'warning')}
+                ${C.code(`// Example: Using ${CONFIG.productName} MCP from Python with LangChain
 from langchain.agents import initialize_agent
 from langchain.tools import Tool
 from langchain_anthropic import ChatAnthropic
 import requests
 
 def call_semoss_mcp_tool(tool_name: str, params: dict):
-    """Call a SEMOSS MCP tool via REST API"""
+    """Call MCP tool via REST API"""
     response = requests.post(
         "http://localhost:8080/runReactorMCP",
         json={
@@ -384,20 +384,20 @@ def call_semoss_mcp_tool(tool_name: str, params: dict):
     )
     return response.json()
 
-# Define LangChain tool that wraps SEMOSS MCP
+# Define LangChain tool that wraps ${CONFIG.productName} MCP
 execute_code_tool = Tool(
     name="execute_python_code",
     func=lambda code: call_semoss_mcp_tool("execute_python_code", {"code_b64": code}),
     description="Executes Python code and returns the result"
 )
 
-# Create agent with SEMOSS tool
+# Create agent with ${CONFIG.productName} tool
 llm = ChatAnthropic(model="claude-sonnet-4-5")
 agent = initialize_agent([execute_code_tool], llm, agent="zero-shot-react-description")
 
 # Use the agent
 result = agent.run("Calculate the factorial of 5 using Python")
-print(result)`, 'python', 'LangChain integration with SEMOSS MCP')}
+print(result)`, 'python', `LangChain integration with ${CONFIG.productName} MCP`)}
             `
         },
         {
@@ -407,7 +407,7 @@ print(result)`, 'python', 'LangChain integration with SEMOSS MCP')}
                 <h2>MCP Authentication & Security</h2>
                 <p>Securing MCP endpoints is critical when exposing tools to external applications.</p>
                 ${C.cards([
-                    { badge: 'Security', title: 'API Keys', desc: 'Generate SEMOSS API keys for service-to-service authentication' },
+                    { badge: 'Security', title: 'API Keys', desc: `Generate ${CONFIG.productName} API keys for service-to-service authentication` },
                     { badge: 'Security', title: 'OAuth Tokens', desc: 'Use OAuth 2.0 for user-based authentication' },
                     { badge: 'Security', title: 'Tool Permissions', desc: 'execution: ask prevents auto-execution of destructive tools' },
                     { badge: 'Security', title: 'Rate Limiting', desc: 'Configure rate limits on MCP endpoints to prevent abuse' },
@@ -453,7 +453,7 @@ ${C.callout('Always use <code>execution: \'ask\'</code> or <code>execution: \'di
                 ${C.handson('Create an MCP that lets models query databases', `
                     <h4>Part 1: Set Up App Structure</h4>
                     <ol>
-                        <li>Create new app in SEMOSS: "Database Query MCP"</li>
+                        <li>Create new app in ${CONFIG.productName}: "Database Query MCP"</li>
                         <li>Navigate to <code>project/Database_Query_MCP__&lt;uuid&gt;/app_root/version/assets/</code></li>
                         <li>Create <code>py/mcp_driver.py</code></li>
                     </ol>

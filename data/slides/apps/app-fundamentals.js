@@ -194,7 +194,7 @@ def process_data(data):
     return {"processed": True, "count": len(data)}
 
 def call_llm(prompt):
-    """Call an LLM via ${CONFIG.productName}."""
+    """Call an LLM via SEMOSS."""
     # Use GAAS to call engines
     return "LLM response"`, 'python', 'assets/py/my_module.py (example)')}
                 <h3>Loading Python Code</h3>
@@ -308,8 +308,8 @@ SampleApp();`, 'pixel')}
     </style>
 </head>
 <body>
-    <h1>Hello from ${CONFIG.productName}!</h1>
-    <p>This is my first ${CONFIG.productName} app.</p>
+    <h1>Hello from SEMOSS!</h1>
+    <p>This is my first SEMOSS app.</p>
     <button onclick="runPixelCmd()">Run Pixel</button>
     <pre id="output"></pre>
 

@@ -185,7 +185,7 @@ const slides_security_auth = [
             title: "Security Database (SMSS_USER)",
             content: `
                 <h2>Security Database — SMSS_USER</h2>
-                <p>SEMOSS uses a dedicated security database (<code>SMSS_USER</code>) to store users, permissions, and audit logs. Default: H2 embedded database (can be Postgres for production).</p>
+                <p>${CONFIG.productName} uses a dedicated security database (<code>SMSS_USER</code>) to store users, permissions, and audit logs. Default: H2 embedded database (can be Postgres for production).</p>
                 ${C.tree([
                     { name: "SMSS_USER (Security DB)", type: "dir", children: [
                         { name: "SMSSUSER", type: "file", desc: "← User accounts (id, name, email, password_hash)" },
@@ -217,7 +217,7 @@ WHERE p.USERID = 'user@example.com';
             title: "Permission Checks",
             content: `
                 <h2>Permission Checks — Security*Utils Classes</h2>
-                <p>Before allowing any operation, SEMOSS checks user permissions via <code>Security*Utils</code> helper classes.</p>
+                <p>Before allowing any operation, ${CONFIG.productName} checks user permissions via <code>Security*Utils</code> helper classes.</p>
                 ${C.flow([
                     { title: 'API Request', desc: 'User sends POST /api/engine/runPixel', accent: true },
                     { title: 'Extract User', desc: 'HttpSession → User object', arrow: '↓' },
@@ -255,9 +255,9 @@ public class MyReactor extends AbstractReactor {
             title: "Groups & Role-Based Access Control",
             content: `
                 <h2>Groups & Role-Based Access Control</h2>
-                <p>SEMOSS supports group-based permissions, allowing admins to assign permissions to groups rather than individual users.</p>
+                <p>${CONFIG.productName} supports group-based permissions, allowing admins to assign permissions to groups rather than individual users.</p>
                 ${C.sequence(
-                    ["IDP (SAML/OAuth)", "User Logs In", "SEMOSS Backend", "SMSS_USER DB", "Permission Check"],
+                    ["IDP (SAML/OAuth)", "User Logs In", "${CONFIG.productName} Backend", "SMSS_USER DB", "Permission Check"],
                     [
                         { from: 0, to: 1, label: 'User authenticates' },
                         { from: 1, to: 2, label: 'SAML assertion with groups: ["analysts", "admins"]' },
@@ -277,7 +277,7 @@ public static int getUserProjectPermission(User user, String projectId) {
     int groupPermission = getHighestGroupPermission(user, projectId);
     return Math.min(directPermission, groupPermission);  // Lower number = higher permission
 }`, 'java', 'Group permission merge logic')}
-                ${C.callout('Groups are typically synced from external IDPs (SAML, OAuth). SEMOSS also supports local groups managed via admin reactors.', 'tip')}
+                ${C.callout(`Groups are typically synced from external IDPs (SAML, OAuth). ${CONFIG.productName} also supports local groups managed via admin reactors.`, 'tip')}
             `
         },
         {
@@ -285,7 +285,7 @@ public static int getUserProjectPermission(User user, String projectId) {
             title: "Admin Operations",
             content: `
                 <h2>Admin Operations — Reactors for User Management</h2>
-                <p>SEMOSS provides 30+ admin reactors for managing users, permissions, and system configuration.</p>
+                <p>${CONFIG.productName} provides 30+ admin reactors for managing users, permissions, and system configuration.</p>
                 ${C.cards([
                     { badge: 'User Management', title: 'AdminExportAllUsersReactor', desc: 'Export all users as CSV/Excel for auditing' },
                     { badge: 'User Management', title: 'AdminUploadUsersReactor', desc: 'Bulk import users from CSV/Excel' },
@@ -326,7 +326,7 @@ AdminGetSystemInfoReactor();
             title: "API Keys & Access Tokens",
             content: `
                 <h2>API Keys & Programmatic Access</h2>
-                <p>SEMOSS supports API keys for headless/programmatic access (e.g., scripts, CI/CD, integrations).</p>
+                <p>${CONFIG.productName} supports API keys for headless/programmatic access (e.g., scripts, CI/CD, integrations).</p>
                 ${C.split(
                     {
                         title: 'Creating an API Key',
@@ -421,19 +421,19 @@ Content-Type: application/json
                 <h2>Hands-on: Configure OAuth Authentication</h2>
                 ${C.handson('Set up Microsoft OAuth and grant permissions', `
                     <h4>Scenario</h4>
-                    <p>Enable Microsoft OAuth for your SEMOSS instance and configure app permissions for a team.</p>
+                    <p>Enable Microsoft OAuth for your ${CONFIG.productName} instance and configure app permissions for a team.</p>
 
                     <h4>Part 1: Configure Microsoft OAuth</h4>
                     <ol>
                         <li>Register an app in Azure AD:
                             <ul>
                                 <li>Go to <strong>Azure Portal</strong> → <strong>App Registrations</strong> → <strong>New Registration</strong></li>
-                                <li>Name: "SEMOSS Production"</li>
+                                <li>Name: "${CONFIG.productName} Production"</li>
                                 <li>Redirect URI: <code>https://your-semoss.com/callback/microsoft</code></li>
                                 <li>Note the <code>Client ID</code> and <code>Client Secret</code></li>
                             </ul>
                         </li>
-                        <li>Edit <code>social.properties</code> in SEMOSS config:
+                        <li>Edit <code>social.properties</code> in ${CONFIG.productName} config:
                             ${C.code(`# Microsoft OAuth
 microsoft=true
 ms_oauth_client_id=YOUR_CLIENT_ID
@@ -441,13 +441,13 @@ ms_oauth_client_secret=YOUR_CLIENT_SECRET
 ms_oauth_redirect_uri=https://your-semoss.com/callback/microsoft
 ms_oauth_scopes=openid,profile,email,User.Read`, 'properties', 'social.properties')}
                         </li>
-                        <li>Restart SEMOSS server</li>
+                        <li>Restart ${CONFIG.productName} server</li>
                         <li>Test: Go to login page → "Sign in with Microsoft" button should appear</li>
                     </ol>
 
                     <h4>Part 2: Create User Groups</h4>
                     <ol>
-                        <li>In SEMOSS Admin Panel:
+                        <li>In ${CONFIG.productName} Admin Panel:
                             <ul>
                                 <li>Navigate to <strong>Users & Groups</strong></li>
                                 <li>Click <strong>New Group</strong></li>
@@ -493,7 +493,7 @@ ms_oauth_scopes=openid,profile,email,User.Read`, 'properties', 'social.propertie
 
                     <h4>Part 6: Create an API Key</h4>
                     <ol>
-                        <li>In SEMOSS, navigate to <strong>Settings</strong> → <strong>API Keys</strong></li>
+                        <li>In ${CONFIG.productName}, navigate to <strong>Settings</strong> → <strong>API Keys</strong></li>
                         <li>Click <strong>Generate New Key</strong></li>
                         <li>Name: "ETL Pipeline"</li>
                         <li>Expires: 90 days</li>

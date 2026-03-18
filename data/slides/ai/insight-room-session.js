@@ -233,12 +233,12 @@ public PixelRunner runPixel(PixelRunner runner, List<String> pixelList) {
                 )}
 
                 ${C.code(`public abstract class AbstractMessage {
-    /**
+        /**
      * Latest supported message JSON schema version for persisted room messages.
      */
     public static final int LATEST_SCHEMA_VERSION = 2;
 
-    /**
+        /**
      * Message JSON schema version.
      * Version 1 = legacy flat message fields (type/content/imageInfos/tool_responses...)
      * Version 2 = parts-based schema via parts[]
@@ -246,7 +246,7 @@ public PixelRunner runPixel(PixelRunner runner, List<String> pixelList) {
     @SerializedName("schemaVersion")
     protected Integer schemaVersion;
 
-    /**
+        /**
      * Discriminator to support clean deserialization into InputMessage vs ResponseMessage
      */
     @SerializedName("io")
@@ -261,7 +261,7 @@ public PixelRunner runPixel(PixelRunner runner, List<String> pixelList) {
     // ... other fields
 }`, 'java', 'prerna/engine/impl/model/message/AbstractMessage.java')}
 
-                ${C.callout('All new ${CONFIG.productName} code uses <strong>schemaVersion: 2</strong> with parts[]. Legacy messages with schemaVersion: 1 are still supported for backwards compatibility but should be migrated.', 'tip')}
+                ${C.callout(`All new ${CONFIG.productName} code uses <strong>schemaVersion: 2</strong> with parts[]. Legacy messages with schemaVersion: 1 are still supported for backwards compatibility but should be migrated.`, 'tip')}
             `
         },
         {
@@ -320,7 +320,7 @@ public PixelRunner runPixel(PixelRunner runner, List<String> pixelList) {
     @SerializedName("text")
     private String text;  // What the LLM sees
 
-    /**
+        /**
      * Optional UI-only text (legacy inputUIPrompt) when text differs.
      */
     @SerializedName("uiText")

@@ -1,10 +1,12 @@
 // Global configuration - swap this file at deploy time to change branding
+const PRODUCT_NAME = 'SEMOSS';
+
 const CONFIG = {
-  productName: 'SEMOSS',
+  productName: PRODUCT_NAME,
   tagline: 'Enterprise AI Platform',
-  sidebarBranding: 'SEMOSS Training',
-  logoSubtitle: 'SEMOSS 101',
-  pageTitle: 'SEMOSS Training',
+  sidebarBranding: `${PRODUCT_NAME} Training`,
+  logoSubtitle: `${PRODUCT_NAME} 101`,
+  pageTitle: `${PRODUCT_NAME} Training`,
 
   // Day locking configuration
   // Set to empty array [] to unlock all days

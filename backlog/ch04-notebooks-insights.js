@@ -7,7 +7,7 @@ const day4_ch04 = {
             title: "Notebooks & Insights",
             content: C.titleSlide(
                 "Notebooks & Insights",
-                "Orchestrating data workflows and managing execution contexts in SEMOSS apps",
+                "Orchestrating data workflows and managing execution contexts in ${CONFIG.productName} apps",
                 "75 minutes"
             )
         },
@@ -15,9 +15,9 @@ const day4_ch04 = {
             id: "d4-notebooks-what-are",
             title: "What are Notebooks?",
             content: `
-                <h2>What are Notebooks in SEMOSS?</h2>
+                <h2>What are Notebooks in ${CONFIG.productName}?</h2>
                 <p class="lead">A <span class="highlight">Notebook</span> is a named sequence of Cells that execute in order to process data, call APIs, or orchestrate workflows.</p>
-                <p>Notebooks are the <strong>data pipeline layer</strong> in SEMOSS apps — they sit between user interactions (Blocks) and backend execution (Insights).</p>
+                <p>Notebooks are the <strong>data pipeline layer</strong> in ${CONFIG.productName} apps — they sit between user interactions (Blocks) and backend execution (Insights).</p>
                 ${C.cards([
                     { badge: 'Purpose', title: 'Orchestration', desc: 'Define multi-step data processing pipelines with clear execution order' },
                     { badge: 'Purpose', title: 'Reusability', desc: 'Save and reuse workflows across apps and insights' },
@@ -161,7 +161,7 @@ const day4_ch04 = {
             content: `
                 <h2>What are Insights?</h2>
                 <p class="lead">An <span class="highlight">Insight</span> is the backend execution context where Pixel code runs — it holds variables, frames, R/Python environments, and execution history.</p>
-                <p>Every SEMOSS app session is backed by an Insight. When you open an app, SEMOSS creates or retrieves an Insight identified by a unique <code>insightId</code> (UUID).</p>
+                <p>Every ${CONFIG.productName} app session is backed by an Insight. When you open an app, ${CONFIG.productName} creates or retrieves an Insight identified by a unique <code>insightId</code> (UUID).</p>
                 ${C.layers([
                     { label: "Frontend", items: [
                         { title: "Blocks + Cells", desc: "User interface + data logic" }
@@ -187,7 +187,7 @@ const day4_ch04 = {
             title: "Insight Anatomy",
             content: `
                 <h2>Anatomy of an Insight</h2>
-                <p>The <code>Insight</code> class (prerna.om.Insight) is the central execution context for all SEMOSS operations.</p>
+                <p>The <code>Insight</code> class (prerna.om.Insight) is the central execution context for all ${CONFIG.productName} operations.</p>
                 ${C.code(`public class Insight implements Serializable {
     // Core identification
     protected String insightId;           // UUID identifier
@@ -338,7 +338,7 @@ Frame(frame=["salesFrame"])
             title: "Notebooks + Insights Integration",
             content: `
                 <h2>How Notebooks and Insights Work Together</h2>
-                <p>Understanding the data flow between Notebooks (frontend), Insights (backend), and Variables (state synchronization) is key to building SEMOSS apps.</p>
+                <p>Understanding the data flow between Notebooks (frontend), Insights (backend), and Variables (state synchronization) is key to building ${CONFIG.productName} apps.</p>
                 ${C.flow([
                     { title: '1. User Interaction', desc: 'User clicks button → Block onClick event', accent: true },
                     { title: '2. Modify StateStore', desc: 'ModifyVariable action updates frontend state', arrow: '↓' },
@@ -543,7 +543,7 @@ Frame(frame=["salesFrame"])
                         <li>Test: Click button to re-run notebook without changing region</li>
                     </ol>
 
-                    ${C.callout('This pattern — <strong>Notebook for logic + Blocks for UI</strong> — is how most production SEMOSS apps are built. Notebooks handle data, Blocks handle presentation.', 'tip')}
+                    ${C.callout(`This pattern — <strong>Notebook for logic + Blocks for UI</strong> — is how most production ${CONFIG.productName} apps are built. Notebooks handle data, Blocks handle presentation.`, 'tip')}
                 `)}
             `
         },
@@ -608,7 +608,7 @@ Frame(frame=["salesFrame"])
                     <li><strong>InsightId</strong> is the key that links frontend actions to backend execution</li>
                     <li>The <strong>workflow pattern</strong>: Input → ModifyVariable → RunNotebook → Update VarStore → Sync StateStore → Re-render Blocks</li>
                 </ul>
-                ${C.callout('Mastering Notebooks and Insights unlocks the full power of SEMOSS — you can build complex, stateful, data-driven applications with minimal code.', 'tip')}
+                ${C.callout(`Mastering Notebooks and Insights unlocks the full power of ${CONFIG.productName} — you can build complex, stateful, data-driven applications with minimal code.`, 'tip')}
             `
         }
     ]

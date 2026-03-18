@@ -16,7 +16,7 @@ const day4_ch03 = {
             title: "App Lifecycle",
             content: `
                 <h2>App Development Lifecycle</h2>
-                <p class="lead">Building and publishing a SEMOSS app involves several stages from local development to production deployment.</p>
+                <p class="lead">Building and publishing a ${CONFIG.productName} app involves several stages from local development to production deployment.</p>
                 ${C.flow([
                     { title: 'Develop', desc: 'Write custom reactors (Java), Python functions, and React UI', accent: true, arrow: '↓' },
                     { title: 'Compile', desc: 'CompileAppReactors — compile Java, generate classes', arrow: '↓ generates bytecode' },
@@ -60,7 +60,7 @@ const day4_ch03 = {
             title: "Compiling Custom Reactors",
             content: `
                 <h2>CompileAppReactors — Compile Java Code</h2>
-                <p>When you write custom reactors in <code>assets/java/</code>, they need to be compiled to bytecode before SEMOSS can execute them.</p>
+                <p>When you write custom reactors in <code>assets/java/</code>, they need to be compiled to bytecode before ${CONFIG.productName} can execute them.</p>
                 ${C.code(`CompileAppReactors(project="<projectId>", release=false);`, 'pixel', 'Compile Reactors for Local Testing')}
                 ${C.flow([
                     { title: 'Clear Class Cache', desc: 'project.clearClassCache() — unload old classes', arrow: '↓' },
@@ -166,7 +166,7 @@ const day4_ch03 = {
 }`, 'json', 'assets/portals/blocks.json (simplified)')
                     }
                 )}
-                ${C.callout('The <code>IProject.BLOCK_FILE_NAME</code> constant is <code>"blocks.json"</code>. This is the standard name for all SEMOSS apps.', 'tip')}
+                ${C.callout(`The <code>IProject.BLOCK_FILE_NAME</code> constant is <code>"blocks.json"</code>. This is the standard name for all ${CONFIG.productName} apps.`, 'tip')}
             `
         },
         {
@@ -187,7 +187,7 @@ const day4_ch03 = {
                     { title: 'Sync to Cloud', desc: 'ClusterUtil.pushProjectFolder() — if cluster mode', arrow: '↓ cloud backup' },
                     { title: 'Update Dependencies', desc: 'SecurityProjectUtils.updateProjectDependenciesWithoutType()', },
                 ])}
-                ${C.callout('<strong>Git Integration:</strong> Every time you save blocks.json, SEMOSS commits it to the local git repo. This gives you full version history of your UI changes.', 'info')}
+                ${C.callout(`<strong>Git Integration:</strong> Every time you save blocks.json, ${CONFIG.productName} commits it to the local git repo. This gives you full version history of your UI changes.`, 'info')}
             `
         },
         {
@@ -240,7 +240,7 @@ const day4_ch03 = {
             title: "App Versioning & Git",
             content: `
                 <h2>App Versioning with Git</h2>
-                <p>Every SEMOSS app is backed by a Git repository in the <code>app_root/version/</code> folder. This provides automatic version control for your code and configuration.</p>
+                <p>Every ${CONFIG.productName} app is backed by a Git repository in the <code>app_root/version/</code> folder. This provides automatic version control for your code and configuration.</p>
                 ${C.cards([
                     { badge: 'Feature', title: 'Auto-Commit', desc: 'SaveAppBlocksJson and other reactors auto-commit changes' },
                     { badge: 'Feature', title: 'Commit History', desc: 'View past versions with ProjectGitDetails reactor' },
@@ -269,7 +269,7 @@ const day4_ch03 = {
 // specified commit`, 'pixel', 'Restore to Previous Commit')
                     }
                 )}
-                ${C.callout('The git repo is managed internally by SEMOSS. You can access it via <code>ProjectGitDetails</code> and <code>ProjectCommitRestore</code> reactors, but avoid manually editing <code>.git/</code> files.', 'warning')}
+                ${C.callout(`The git repo is managed internally by ${CONFIG.productName}. You can access it via <code>ProjectGitDetails</code> and <code>ProjectCommitRestore</code> reactors, but avoid manually editing <code>.git/</code> files.`, 'warning')}
             `
         },
         {
@@ -281,11 +281,11 @@ const day4_ch03 = {
                 ${C.code(`PublishProject(project="<projectId>", release=false);
 
 // Returns:
-// https://your-semoss-instance.com/public/<projectId>/portals/`, 'pixel', 'Publish App (Local Only)')}
+// https://your-instance-dns.com/public/<projectId>/portals/`, 'pixel', 'Publish App (Local Only)')}
                 ${C.code(`PublishProject(project="<projectId>", release=true);
 
 // Returns:
-// https://your-semoss-instance.com/public/<projectId>/portals/
+// https://your-instance-dns.com/public/<projectId>/portals/
 // + Syncs to cloud storage
 // + Updates catalog visibility`, 'pixel', 'Publish App (With Cloud Sync)')}
                 ${C.flow([
@@ -355,7 +355,7 @@ const day4_ch03 = {
             title: "App Permissions & Sharing",
             content: `
                 <h2>App Permissions & Catalog Discovery</h2>
-                <p>After publishing, you control who can access your app via SEMOSS's permission system.</p>
+                <p>After publishing, you control who can access your app via ${CONFIG.productName}'s permission system.</p>
                 ${C.table(
                     ['Permission Level', 'Capabilities'],
                     [
@@ -401,9 +401,9 @@ AddProjectUserPermission(
             title: "Complete Build & Publish Workflow",
             content: `
                 <h2>Putting It All Together</h2>
-                <p>Here's the complete end-to-end workflow for building and publishing a SEMOSS app:</p>
+                <p>Here's the complete end-to-end workflow for building and publishing a ${CONFIG.productName} app:</p>
                 ${C.sequence(
-                    ['Developer', 'SEMOSS Backend', 'Git Repo', 'Cloud Storage', 'Catalog'],
+                    ['Developer', `${CONFIG.productName} Backend`, 'Git Repo', 'Cloud Storage', 'Catalog'],
                     [
                         { from: 0, to: 1, label: '1. Write code (Java/Python/React)' },
                         { from: 0, to: 1, label: '2. CompileAppReactors(release=false)' },
@@ -428,7 +428,7 @@ AddProjectUserPermission(
                 <h2>Hands-on: Build and Publish an App</h2>
                 ${C.handson('Complete App Build & Publish', `
                     <h4>Step 1: Create a Simple App</h4>
-                    <p>In the SEMOSS UI, create a new app called <strong>"My First App"</strong>. Add a simple page with a Grid cell connected to a database.</p>
+                    <p>In the ${CONFIG.productName} UI, create a new app called <strong>"My First App"</strong>. Add a simple page with a Grid cell connected to a database.</p>
 
                     <h4>Step 2: Add a Custom Reactor</h4>
                     <p>Create a Java reactor in <code>assets/java/</code>:</p>

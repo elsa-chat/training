@@ -271,7 +271,7 @@ DeleteEngine(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");`, 'pixel', 'Engine 
             title: "Log Patterns & MDC",
             content: `
                 <h2>Log Patterns & Mapped Diagnostic Context (MDC)</h2>
-                <p>SEMOSS logs include contextual information via Log4j2's MDC (Mapped Diagnostic Context).</p>
+                <p>${CONFIG.productName} logs include contextual information via Log4j2's MDC (Mapped Diagnostic Context).</p>
                 ${C.table(
                     ['MDC Key', 'Description', 'Example Value'],
                     [
@@ -335,7 +335,7 @@ LIMIT 100;`, 'sql', 'Querying Server Logs')}
             id: "admin-performance-tuning",
             title: "Performance Tuning",
             content: `
-                <h2>Performance Tuning for SEMOSS</h2>
+                <h2>Performance Tuning for ${CONFIG.productName}</h2>
                 ${C.split(
                     {
                         title: 'JVM Settings',
@@ -403,7 +403,7 @@ psql -h postgres -U postgres -d postgres \\
                     },
                     {
                         title: 'File System Backup',
-                        content: C.code(`# Backup SEMOSS home directory
+                        content: C.code(`# Backup ${CONFIG.productName} home directory
 tar -czf semosshome_backup.tar.gz /opt/semosshome
 
 # Restore
@@ -471,7 +471,7 @@ ORDER BY timestamp DESC
 LIMIT 20;`, 'sql')}
 
                     <h4>Step 6: Backup Databases</h4>
-                    ${C.code(`# Backup all SEMOSS schemas
+                    ${C.code(`# Backup all ${CONFIG.productName} schemas
 docker-compose exec postgres pg_dump -U postgres -d postgres \\
   -n localmaster -n security -n modellogs \\
   > semoss_backup_$(date +%Y%m%d).sql

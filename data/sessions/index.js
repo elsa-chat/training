@@ -47,7 +47,7 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: 'Python in SEMOSS',
+                    title: `Python in ${CONFIG.productName}`,
                     slideIds: idsFrom(
                         typeof slides_base_python !== 'undefined' ? slides_base_python : null,
                     )

@@ -7,7 +7,7 @@ const day4_ch02 = {
             title: "Frontend Blocks & Cells",
             content: C.titleSlide(
                 "Frontend Blocks & Cells",
-                "Building reactive UIs and data workflows with SEMOSS's component library",
+                "Building reactive UIs and data workflows with ${CONFIG.productName}'s component library",
                 "90 minutes"
             )
         },
@@ -16,7 +16,7 @@ const day4_ch02 = {
             title: "Blocks vs Cells: What's the Difference?",
             content: `
                 <h2>Blocks vs Cells: What's the Difference?</h2>
-                <p class="lead">SEMOSS provides two complementary component systems: <span class="highlight">Blocks</span> for building reactive UIs and <span class="highlight">Cells</span> for orchestrating data workflows.</p>
+                <p class="lead">${CONFIG.productName} provides two complementary component systems: <span class="highlight">Blocks</span> for building reactive UIs and <span class="highlight">Cells</span> for orchestrating data workflows.</p>
                 ${C.split(
                     {
                         title: 'Blocks',
@@ -99,7 +99,7 @@ export const config: BlockConfig<ButtonBlockDef> = {
             title: "Block Categories",
             content: `
                 <h2>Block Categories — 40+ Built-in Types</h2>
-                <p>SEMOSS ships with a comprehensive library of blocks organized by purpose.</p>
+                <p>${CONFIG.productName} ships with a comprehensive library of blocks organized by purpose.</p>
                 ${C.table(
                     ['Category', 'Blocks', 'Use Cases'],
                     [
@@ -409,7 +409,7 @@ export const CodeCellConfig: CellConfig<CodeCellDef> = {
 
                     <h4>Step 1: Create a Page with Search Input (Block)</h4>
                     <ol>
-                        <li>Open the SEMOSS App Designer (Blocks Workspace)</li>
+                        <li>Open the ${CONFIG.productName} App Designer (Blocks Workspace)</li>
                         <li>Drag an <strong>Input Block</strong> onto the canvas</li>
                         <li>Configure the Input:
                             <ul>
@@ -496,7 +496,7 @@ export const CodeCellConfig: CellConfig<CodeCellDef> = {
                         <li>Clear button resets both input and grid</li>
                         <li>All state managed via StateStore variables</li>
                     </ul>
-                    ${C.callout('This pattern — <strong>Input → ModifyVariable → RunCell → Grid</strong> — is the foundation of most SEMOSS reactive apps.', 'tip')}
+                    ${C.callout(`This pattern — <strong>Input → ModifyVariable → RunCell → Grid</strong> — is the foundation of most ${CONFIG.productName} reactive apps.`, 'tip')}
                 `)}
             `
         },
@@ -555,10 +555,10 @@ export const CodeCellConfig: CellConfig<CodeCellDef> = {
                     <li><strong>toPixel()</strong> converts Cell configurations to executable Pixel code for the backend</li>
                     <li><strong>Notebooks</strong> are sequences of Cells that run in order to process data pipelines</li>
                     <li>The <strong>reactive pattern</strong>: User Interaction → Block Event → Modify State → Run Cell → Update State → Re-render Blocks</li>
-                    <li>SEMOSS ships with <strong>40+ Blocks</strong> and <strong>20+ Cells</strong> covering most common use cases</li>
+                    <li>${CONFIG.productName} ships with <strong>40+ Blocks</strong> and <strong>20+ Cells</strong> covering most common use cases</li>
                     <li>Custom Blocks and Cells can be added by extending the registry</li>
                 </ul>
-                ${C.callout('Blocks + Cells + StateStore = <strong>Reactive Data Applications</strong>. Master this triad and you can build any SEMOSS app.', 'tip')}
+                ${C.callout(`Blocks + Cells + StateStore = <strong>Reactive Data Applications</strong>. Master this triad and you can build any ${CONFIG.productName} app.`, 'tip')}
             `
         }
     ]

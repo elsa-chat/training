@@ -337,13 +337,13 @@ public Map<String, Object> getOrnaments() {
                 )}
                 ${C.code(`// Example: Adding RAG chunks to InputMessage
 InputMessage msg = InputMessage.builder(room)
-    .withInputUIPrompt("What is SEMOSS?")
+    .withInputUIPrompt("What is ${CONFIG.productName}?")
     .withRAGChunks(retrievedChunks)  // Uses setOrnament("chunks", ...)
     .build();
 
 // Example: Adding custom metadata to ResponseMessage
 ResponseMessage resp = ResponseMessage.builder()
-    .withText("SEMOSS is a platform for...")
+    .withText("${CONFIG.productName} is a platform for...")
     .withMetadata("source", "documentation")  // Uses setOrnament(...)
     .build();`, 'java', 'Using ornaments in practice')}
                 ${C.callout('The ornaments pattern allows custom reactors and apps to attach domain-specific metadata without modifying the core AbstractMessage class.', 'tip')}

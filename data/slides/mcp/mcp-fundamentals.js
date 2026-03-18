@@ -143,7 +143,7 @@ const slides_mcp_fundamentals = [
 1. User asks: "Execute this Python code: print('Hello')"
 2. Model sees execute_python_code tool in MCP
 3. Model calls: execute_python_code(code_b64="cHJpbnQoJ0hlbGxvJyk=")
-4. ${CONFIG.productName} routes to py/mcp_driver.py execute_python_code() function
+4. SEMOSS routes to py/mcp_driver.py execute_python_code() function
 5. Function executes code via Py() reactor
 6. Result returned to model: "Hello"
 7. Model incorporates result into response`, 'pixel', 'MCP tool execution flow')}
@@ -237,7 +237,7 @@ const slides_mcp_fundamentals = [
                         [
                             "Java/Pixel MCP",
                             "Custom Java reactors in <code>java/src/reactors/</code>",
-                            "SEMOSS-native operations, engine access, complex business logic",
+                            `${CONFIG.productName}-native operations, engine access, complex business logic`,
                             "<code>MakePixelMCP(projectId, reactor)</code>"
                         ],
                         [
@@ -374,7 +374,7 @@ const slides_mcp_fundamentals = [
                         ]
                     },
                 ])}
-                ${C.callout('The <code>inputSchema</code> follows JSON Schema format and describes tool parameters. SEMOSS extensions like <code>SMSS_MCP_EXECUTION</code> and <code>SMSS_MCP_UI</code> control execution behavior and UI layout.', 'info')}
+                ${C.callout(`The <code>inputSchema</code> follows JSON Schema format and describes tool parameters. ${CONFIG.productName} extensions like <code>SMSS_MCP_EXECUTION</code> and <code>SMSS_MCP_UI</code> control execution behavior and UI layout.`, 'info')}
             `
         },
         {
@@ -382,7 +382,7 @@ const slides_mcp_fundamentals = [
             title: "Python MCP Decorators",
             content: `
                 <h2>Python MCP Metadata Decorators</h2>
-                <p>SEMOSS provides Python decorators to control MCP tool behavior <strong>without editing JSON manually</strong>.</p>
+                <p>${CONFIG.productName} provides Python decorators to control MCP tool behavior <strong>without editing JSON manually</strong>.</p>
                 ${C.code(`from semoss import Insight
 import smssutil
 
@@ -424,7 +424,7 @@ def execute_python_code(code_b64: str = None):
             title: "Make MCP Reactors",
             content: `
                 <h2>Generating MCP JSON Schemas</h2>
-                <p>SEMOSS provides reactors to auto-generate MCP JSON files from your Python/Java code:</p>
+                <p>${CONFIG.productName} provides reactors to auto-generate MCP JSON files from your Python/Java code:</p>
                 ${C.flow([
                     { title: 'Write Code', desc: 'Create Python functions or Java reactors', accent: true, arrow: '↓' },
                     { title: 'Run Make MCP Reactor', desc: 'MakePythonMCP, MakePixelMCP, or MakeEngineMCP', arrow: '↓' },
@@ -481,7 +481,7 @@ MakeEngineMCP(
                 <h2>Hands-on: Build a Simple Python MCP Tool</h2>
                 ${C.handson('Create a "Hello World" MCP tool', `
                     <h4>Part 1: Create an MCP App</h4>
-                    <p>In SEMOSS UI:</p>
+                    <p>In ${CONFIG.productName} UI:</p>
                     <ol>
                         <li>Click <strong>Create App</strong> (or use existing app)</li>
                         <li>Navigate to app folder: <code>project/&lt;YourApp&gt;__&lt;uuid&gt;/app_root/version/assets/</code></li>
@@ -501,7 +501,7 @@ def say_hello(name: str = "World"):
     """
     Returns a friendly greeting to the specified name.
     """
-    return f"Hello, {name}! Welcome to SEMOSS MCP."
+    return f"Hello, {name}! Welcome to ${CONFIG.productName} MCP."
 
 @smssutil.mcp_metadata({
     'execution': 'ask',
@@ -524,7 +524,7 @@ MakePythonMCP(project="your-project-id-here");`, 'pixel')}
 
                     <h4>Part 4: Test in Playground</h4>
                     <ol>
-                        <li>Open Playground in SEMOSS</li>
+                        <li>Open Playground in ${CONFIG.productName}</li>
                         <li>Configure your app as an MCP server in Playground settings</li>
                         <li>Ask the model: <em>"Say hello to Alice"</em></li>
                         <li>Model should call <code>say_hello(name="Alice")</code> automatically</li>
@@ -549,8 +549,8 @@ MakePythonMCP(project="your-project-id-here");`, 'pixel')}
                 <h3>Key Concepts</h3>
                 <ul>
                     <li><strong>MCP = Model Context Protocol</strong>: Standard for connecting AI models to tools, resources, and prompts</li>
-                    <li><strong>SEMOSS MCP Pattern</strong>: Micro-apps with Python/Java/Pixel backends + optional React portals</li>
-                    <li><strong>Three MCP Types</strong>: Python MCP (data/ML), Java/Pixel MCP (SEMOSS-native), Engine MCP (expose engines)</li>
+                    <li><strong>${CONFIG.productName} MCP Pattern</strong>: Micro-apps with Python/Java/Pixel backends + optional React portals</li>
+                    <li><strong>Three MCP Types</strong>: Python MCP (data/ML), Java/Pixel MCP (${CONFIG.productName}-native), Engine MCP (expose engines)</li>
                     <li><strong>Filesystem Rules</strong>:
                         <ul>
                             <li>Edit: <code>py/</code>, <code>java/</code>, <code>client/</code></li>

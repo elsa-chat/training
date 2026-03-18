@@ -1,8 +1,10 @@
-// ===== SEMOSS Training - App Controller =====
+// ===== Training App Controller =====
 
 let currentSlideIndex = 0;
 let allSlides = [];
 let navStructure = [];
+let sidebarSearchQuery = '';
+let slideSearchIndex = new Map();
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+    buildSlideSearchIndex();
+    initSidebarSearch();
 
     // Debug: Log allSlides breakdown by day
     console.log('[DEBUG] allSlides populated:', allSlides.length, 'total slides');
@@ -192,68 +196,169 @@ function isDayLocked(dayIdx) {
     return CONFIG.lockedDays.includes(dayNumber);
 }
 
+function normalizeSearchQuery(value) {
+    return String(value || '').trim().toLowerCase();
+}
+
+function htmlToSearchText(html) {
+    const temp = document.createElement('div');
+    temp.innerHTML = html || '';
+    return (temp.textContent || temp.innerText || '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+}
+
+function buildSlideSearchIndex() {
+    slideSearchIndex = new Map();
+    allSlides.forEach(slide => {
+        const searchable = `${slide.title || ''} ${htmlToSearchText(slide.content)}`;
+        slideSearchIndex.set(slide.id, searchable.toLowerCase());
+    });
+}
+
+function slideMatchesSearch(slide, query = sidebarSearchQuery) {
+    if (!query) return true;
+    const searchable = slideSearchIndex.get(slide.id);
+    if (searchable) return searchable.includes(query);
+    const fallback = `${slide.title || ''} ${htmlToSearchText(slide.content)}`.toLowerCase();
+    return fallback.includes(query);
+}
+
+function highlightMatch(text, query = sidebarSearchQuery) {
+    const source = String(text || '');
+    if (!query) return escapeHtml(source);
+
+    const lowerSource = source.toLowerCase();
+    let index = 0;
+    let output = '';
+
+    while (index < source.length) {
+        const matchAt = lowerSource.indexOf(query, index);
+        if (matchAt === -1) {
+            output += escapeHtml(source.slice(index));
+            break;
+        }
+
+        output += escapeHtml(source.slice(index, matchAt));
+        output += `<mark class="nav-match">${escapeHtml(source.slice(matchAt, matchAt + query.length))}</mark>`;
+        index = matchAt + query.length;
+    }
+
+    return output;
+}
+
+function setSidebarSearchQuery(value) {
+    sidebarSearchQuery = normalizeSearchQuery(value);
+    buildSidebar();
+    updateNav();
+}
+
+function initSidebarSearch() {
+    const input = document.getElementById('sidebarSearchInput');
+    if (!input) return;
+
+    input.addEventListener('input', (event) => {
+        setSidebarSearchQuery(event.target.value);
+    });
+
+    input.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && input.value) {
+            input.value = '';
+            setSidebarSearchQuery('');
+            event.stopPropagation();
+        }
+    });
+}
+
 // Build sidebar HTML
 function buildSidebar() {
     const nav = document.getElementById('sidebarNav');
     let html = '';
+    let hasExpandedDay = false;
 
     navStructure.forEach((day, dayIdx) => {
-        const isFirstDay = dayIdx === 0;
         const locked = isDayLocked(dayIdx);
         const lockedClass = locked ? 'locked' : '';
         const lockIcon = locked ? '<span class="lock-icon">🔒</span>' : '';
-
-        html += `<div class="nav-day ${lockedClass}">`;
-        html += `<div class="nav-day-header ${isFirstDay ? 'expanded' : ''}" onclick="toggleDay(${dayIdx})">`;
-        html += `<span class="arrow">&#9654;</span>`;
-        html += `<span>${day.label}${lockIcon}</span>`;
-        html += `</div>`;
-        html += `<div class="nav-day-chapters ${isFirstDay ? 'expanded' : ''}" id="dayChapters${dayIdx}">`;
+        const expandByDefault = sidebarSearchQuery ? true : !hasExpandedDay;
 
         if (day.display === 'day-only') {
-            const slides = day.chapters[0]?.slides || [];
+            const slides = (day.chapters[0]?.slides || []).filter(slide => slideMatchesSearch(slide));
+            if (sidebarSearchQuery && !slides.length) return;
+
+            html += `<div class="nav-day ${lockedClass}">`;
+            html += `<div class="nav-day-header ${expandByDefault ? 'expanded' : ''}" id="dayHeader${dayIdx}" onclick="toggleDay(${dayIdx})">`;
+            html += `<span class="arrow">&#9654;</span>`;
+            html += `<span>${highlightMatch(day.label)}${lockIcon}</span>`;
+            html += `</div>`;
+            html += `<div class="nav-day-chapters ${expandByDefault ? 'expanded' : ''}" id="dayChapters${dayIdx}">`;
+
             slides.forEach(slide => {
                 const clickHandler = locked ? '' : `onclick="goToSlide('${slide.id}')"`;
-                html += `<div class="nav-topic ${lockedClass}" id="nav-${slide.id}" ${clickHandler}>${slide.title}</div>`;
+                html += `<div class="nav-topic ${lockedClass}" id="nav-${slide.id}" ${clickHandler}>${highlightMatch(slide.title)}</div>`;
             });
-        } else {
-            day.chapters.forEach((chapter, chIdx) => {
-                const chapterId = `day${dayIdx}_ch${chIdx}`;
-                html += `<div class="nav-chapter-header ${lockedClass}" onclick="toggleChapter('${chapterId}')">`;
-                html += `<span class="arrow">&#9654;</span>`;
-                html += `<span>${chapter.title}</span>`;
-                html += `</div>`;
-                html += `<div class="nav-chapter-topics" id="${chapterId}">`;
 
-                chapter.slides.forEach(slide => {
-                    const clickHandler = locked ? '' : `onclick="goToSlide('${slide.id}')"`;
-                    html += `<div class="nav-topic ${lockedClass}" id="nav-${slide.id}" ${clickHandler}>${slide.title}</div>`;
-                });
-
-                html += `</div>`;
-            });
+            html += `</div></div>`;
+            hasExpandedDay = true;
+            return;
         }
 
+        const filteredChapters = day.chapters
+            .map((chapter, chIdx) => ({
+                ...chapter,
+                chIdx,
+                slides: chapter.slides.filter(slide => slideMatchesSearch(slide))
+            }))
+            .filter(chapter => !sidebarSearchQuery || chapter.slides.length > 0);
+
+        if (sidebarSearchQuery && !filteredChapters.length) return;
+
+        html += `<div class="nav-day ${lockedClass}">`;
+        html += `<div class="nav-day-header ${expandByDefault ? 'expanded' : ''}" id="dayHeader${dayIdx}" onclick="toggleDay(${dayIdx})">`;
+        html += `<span class="arrow">&#9654;</span>`;
+        html += `<span>${highlightMatch(day.label)}${lockIcon}</span>`;
+        html += `</div>`;
+        html += `<div class="nav-day-chapters ${expandByDefault ? 'expanded' : ''}" id="dayChapters${dayIdx}">`;
+
+        filteredChapters.forEach((chapter) => {
+            const chapterId = `day${dayIdx}_ch${chapter.chIdx}`;
+            const chapterExpanded = sidebarSearchQuery;
+            html += `<div class="nav-chapter-header ${lockedClass} ${chapterExpanded ? 'expanded' : ''}" onclick="toggleChapter('${chapterId}')">`;
+            html += `<span class="arrow">&#9654;</span>`;
+            html += `<span>${highlightMatch(chapter.title)}</span>`;
+            html += `</div>`;
+            html += `<div class="nav-chapter-topics ${chapterExpanded ? 'expanded' : ''}" id="${chapterId}">`;
+
+            chapter.slides.forEach(slide => {
+                const clickHandler = locked ? '' : `onclick="goToSlide('${slide.id}')"`;
+                html += `<div class="nav-topic ${lockedClass}" id="nav-${slide.id}" ${clickHandler}>${highlightMatch(slide.title)}</div>`;
+            });
+
+            html += `</div>`;
+        });
+
         html += `</div></div>`;
+        hasExpandedDay = true;
     });
 
-    nav.innerHTML = html;
+    nav.innerHTML = html || '<div class="nav-empty">No matching slides</div>';
 }
 
 // Expand/collapse a specific day. If single=true, collapse all others.
 function expandDay(dayIdx, single = false) {
-    const headers = document.querySelectorAll('.nav-day-header');
-    const chapters = document.querySelectorAll('.nav-day-chapters');
-    headers.forEach((header, idx) => {
-        const ch = chapters[idx];
-        if (!ch) return;
+    navStructure.forEach((_, idx) => {
+        const header = document.getElementById(`dayHeader${idx}`);
+        const chapters = document.getElementById(`dayChapters${idx}`);
+        if (!header || !chapters) return;
+
         const shouldExpand = idx === dayIdx;
         if (single) {
             header.classList.toggle('expanded', shouldExpand);
-            ch.classList.toggle('expanded', shouldExpand);
+            chapters.classList.toggle('expanded', shouldExpand);
         } else if (shouldExpand) {
             header.classList.add('expanded');
-            ch.classList.add('expanded');
+            chapters.classList.add('expanded');
         }
     });
 }
@@ -517,8 +622,9 @@ function downloadCurrentDayPdf() {
 
 // Toggle day expand/collapse
 function toggleDay(dayIdx) {
-    const header = document.querySelectorAll('.nav-day-header')[dayIdx];
+    const header = document.getElementById(`dayHeader${dayIdx}`);
     const chapters = document.getElementById(`dayChapters${dayIdx}`);
+    if (!header || !chapters) return;
     header.classList.toggle('expanded');
     chapters.classList.toggle('expanded');
 }
@@ -526,7 +632,9 @@ function toggleDay(dayIdx) {
 // Toggle chapter expand/collapse
 function toggleChapter(chapterId) {
     const el = document.getElementById(chapterId);
+    if (!el) return;
     const header = el.previousElementSibling;
+    if (!header) return;
     header.classList.toggle('expanded');
     el.classList.toggle('expanded');
 }

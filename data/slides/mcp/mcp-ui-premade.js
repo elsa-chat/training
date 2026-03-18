@@ -405,7 +405,7 @@ def execute_python_code(code_b64: str = None):
 
                     <h4>Part 5: Publish & Test</h4>
                     <ol>
-                        <li>In SEMOSS UI: Click "Publish" → "Refresh Files"</li>
+                        <li>In ${CONFIG.productName} UI: Click "Publish" → "Refresh Files"</li>
                         <li>Open Playground → Settings → MCP Servers → Add "Code Execution MCP"</li>
                         <li>Ask model: <em>"Open the code editor"</em></li>
                         <li>Model calls <code>execute_python_code()</code> → Portal opens in sidebar</li>
@@ -452,10 +452,10 @@ def execute_python_code(code_b64: str = None):
                     <li>Write Python/Java backend</li>
                     <li>Generate MCP JSON (MakePythonMCP/MakePixelMCP)</li>
                     <li>Build portal UI (pnpm run build)</li>
-                    <li>Publish in SEMOSS</li>
+                    <li>Publish in ${CONFIG.productName}</li>
                     <li>Test in Playground</li>
                 </ol>
-                ${C.callout('MCP enables SEMOSS to become an AI platform with unlimited extensibility through tools, resources, and custom UIs.', 'tip')}
+                ${C.callout(`MCP enables ${CONFIG.productName} to become an AI platform with unlimited extensibility through tools, resources, and custom UIs.`, 'tip')}
             `
         }
     ];

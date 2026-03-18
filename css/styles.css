@@ -91,6 +91,31 @@ body {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.sidebar-search {
+    margin-top: 14px;
+}
+
+.sidebar-search-input {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--sidebar-text-primary);
+    border-radius: 8px;
+    font-size: 13px;
+    padding: 8px 10px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.sidebar-search-input::placeholder {
+    color: var(--sidebar-text-muted);
+}
+
+.sidebar-search-input:focus {
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.12);
+}
+
 .logo {
     display: flex;
     align-items: center;
@@ -252,6 +277,19 @@ body {
     background: var(--bg-sidebar-active);
     border-left-color: var(--accent);
     font-weight: 500;
+}
+
+.nav-empty {
+    padding: 10px 20px;
+    font-size: 12px;
+    color: var(--sidebar-text-muted);
+}
+
+.nav-match {
+    background: rgba(84, 104, 255, 0.28);
+    color: var(--sidebar-text-primary);
+    border-radius: 3px;
+    padding: 0 2px;
 }
 
 /* ===== Locked Days ===== */

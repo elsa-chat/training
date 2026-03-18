@@ -80,7 +80,7 @@ public interface IModelEngine extends IEngine {
             title: ".smss Configuration Files",
             content: `
                 <h2>.smss Configuration Files</h2>
-                <p>Every engine has its configuration as a <code>.smss</code> (SEMOSS Settings) file — a text based key-value format.</p>
+                <p>Every engine has its configuration as a <code>.smss</code> (${CONFIG.productName} Settings) file — a text based key-value format.</p>
                 <h3>Required Values For Each Engine</h3>
                 <ul>
                     <li><code>ENGINE</code> — <code>&lt;UUID&gt;</code></li>

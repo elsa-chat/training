@@ -14,7 +14,6 @@ const slides_platform_fundamentals = [
             title: `What is ${CONFIG.productName}?`,
             content: `
                 <h2>What is ${CONFIG.productName}?</h2>
-                <p class="lead"><span class="highlight">${CONFIG.productName}</span> — <strong>Semantic Open Source Software</strong></p>
                 <p>A web application platform for building and deploying custom solutions through a lightweight framework providing connectors to:</p>
                 ${C.cards([
                     { title: "Databases", desc: "Relational, graph, document stores via JDBC and native drivers" },
@@ -45,7 +44,7 @@ const slides_platform_fundamentals = [
                         accent: true,
                         items: [
                             { title: 'Monolith', desc: 'REST API, auth, servlets (Tomcat)', accent: true },
-                            { title: 'Semoss Core', desc: 'Engines, reactors, Pixel parser', accent: true },
+                            { title: `SEMOSS Core`, desc: 'Engines, reactors, Pixel parser', accent: true },
                             { title: 'Python GAAS', desc: 'AI/ML via TCP socket bridge', accent: true }
                         ]
                     },
@@ -78,7 +77,7 @@ const slides_platform_fundamentals = [
                         { from: 1, to: 0, label: "HTTP 200 + pixelReturn", type: "response" }
                     ]
                 )}
-                ${C.callout('<strong>Key insight:</strong> The UI never talks to engines directly. Every interaction goes through <strong>Pixel → Reactor → Engine</strong>. The REST API layer (Monolith) handles HTTP/auth, the Reactor Layer (Semoss Core) parses Pixel and executes logic, and the Engine Layer (databases, models, storage) performs the actual operations.', 'info')}
+                ${C.callout(`<strong>Key insight:</strong> The UI never talks to engines directly. Every interaction goes through <strong>Pixel → Reactor → Engine</strong>. The REST API layer (Monolith) handles HTTP/auth, the Reactor Layer (${CONFIG.productName} Core) parses Pixel and executes logic, and the Engine Layer (databases, models, storage) performs the actual operations.`, 'info')}
             `
         },
         {
@@ -88,7 +87,7 @@ const slides_platform_fundamentals = [
                 <h2>Java Backend — Two Repos</h2>
                 ${C.split(
                     {
-                        title: 'Semoss (Core)',
+                        title: `${CONFIG.productName} (Core)`,
                         content: `
                             <p><strong>The engine.</strong> Contains all business logic.</p>
                             <ul>
@@ -193,12 +192,12 @@ const slides_platform_fundamentals = [
                 ${C.table(
                     ['Repo', 'Purpose', 'Key Source Paths'],
                     [
-                        ['<strong>Semoss</strong>', 'Core platform — engines, reactors, Pixel', '<code>src/prerna/engine/</code> <code>src/prerna/reactor/</code> <code>py/</code>'],
+                        [`<strong>SEMOSS</strong>`, 'Core platform — engines, reactors, Pixel', '<code>src/prerna/engine/</code> <code>src/prerna/reactor/</code> <code>py/</code>'],
                         ['<strong>Monolith</strong>', 'Web layer — REST API, auth, servlets', '<code>src/prerna/web/</code> <code>src/prerna/auth/</code>'],
                         ['<strong>SemossWeb</strong>', 'Frontend — React UI, blocks, viz', '<code>packages/client/</code> <code>libs/</code>'],
                     ]
                 )}
-                <h3>Semoss Core — Data Directories</h3>
+                <h3>${CONFIG.productName} Core — Data Directories</h3>
                 ${C.tree([
                     { name: 'Semoss/', type: 'dir', children: [
                         { name: 'db/', type: 'dir', desc: 'Database engines + .smss config' },
@@ -218,12 +217,12 @@ const slides_platform_fundamentals = [
                     {
                         badge: 'Core',
                         title: 'RDF_Map.prop',
-                        desc: 'Main platform configuration file. Contains Kubernetes settings, cloud storage (Azure/MinIO), Python/R integration, engine watcher configurations, file paths, frame types, security, admin restrictions, logging, and scheduler settings. Located in Semoss root.'
+                        desc: `Main platform configuration file. Contains Kubernetes settings, cloud storage (Azure/MinIO), Python/R integration, engine watcher configurations, file paths, frame types, security, admin restrictions, logging, and scheduler settings. Located in ${CONFIG.productName} root.`
                     },
                     {
                         badge: 'Core',
                         title: 'social.properties',
-                        desc: 'Authentication and OAuth configuration file. Defines login providers (Google, GitHub, Microsoft, ADFS, Okta, LDAP, native login), OAuth client IDs, secret keys, redirect URIs, and SMTP email settings. Located in Semoss root.'
+                        desc: `Authentication and OAuth configuration file. Defines login providers (Google, GitHub, Microsoft, ADFS, Okta, LDAP, native login), OAuth client IDs, secret keys, redirect URIs, and SMTP email settings. Located in ${CONFIG.productName} root.`
                     },
                     {
                         badge: 'Monolith',
