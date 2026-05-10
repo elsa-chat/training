@@ -10,10 +10,10 @@
     --text-secondary: #4a5568;
     --text-muted: #a0aec0;
     --text-heading: #0f1419;
-    --text-accent: #5468ff;
-    --accent: #5468ff;
-    --accent-hover: #6c7cff;
-    --accent-light: #ebefff;
+    --text-accent: #C8860A;
+    --accent: #C8860A;
+    --accent-hover: #D4960F;
+    --accent-light: #FDF3E0;
     --border: #e2e8f0;
     --border-light: #cbd5e0;
     --code-bg: #f7fafc;
@@ -134,7 +134,7 @@ body {
     font-family: var(--font-serif);
     font-weight: 700;
     font-size: 20px;
-    box-shadow: 0 2px 8px rgba(84, 104, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(200, 134, 10, 0.3);
 }
 
 .logo-title {
@@ -286,7 +286,7 @@ body {
 }
 
 .nav-match {
-    background: rgba(84, 104, 255, 0.28);
+    background: rgba(200, 134, 10, 0.28);
     color: var(--sidebar-text-primary);
     border-radius: 3px;
     padding: 0 2px;
@@ -568,7 +568,7 @@ body {
 }
 
 .slide-content tr:hover td {
-    background: rgba(84, 104, 255, 0.03);
+    background: rgba(200, 134, 10, 0.03);
 }
 
 /* Tighter tables inside callouts */
@@ -621,7 +621,7 @@ body {
 
 .slide-content .diagram-box.accent {
     border-color: var(--accent);
-    background: rgba(84, 104, 255, 0.04);
+    background: rgba(200, 134, 10, 0.04);
 }
 
 .slide-content .diagram-box .box-title {
@@ -667,8 +667,8 @@ body {
 
 /* Hands-on section */
 .slide-content .hands-on {
-    background: rgba(84, 104, 255, 0.04);
-    border: 1px solid rgba(84, 104, 255, 0.2);
+    background: rgba(200, 134, 10, 0.04);
+    border: 1px solid rgba(200, 134, 10, 0.2);
     border-radius: 10px;
     padding: 28px;
     margin: 28px 0;

@@ -1,572 +1,251 @@
-// Topic: MCP Fundamentals
+// Topic: MCP Fundamentals — Day 2 Morning (10:00 AM)
 const slides_mcp_fundamentals = [
-        {
-            id: "mcp-generic-overview",
-            title: "MCP Overview",
-            content: `
-                <h2>Model Context Protocol (MCP)</h2>
-                <p class="lead">An open protocol that standardizes how models access tools, data, and applications.</p>
-                <p>MCP replaces one-off integrations with a consistent interface for discovery, invocation, and results.</p>
-                ${C.cards([
-                    { title: 'Transport', desc: 'Transport-agnostic (stdio, HTTP, WebSockets)' },
-                    { title: 'Messages', desc: 'Structured JSON-RPC messages' },
-                    { title: 'Discovery', desc: 'Tools, resources, prompts are discoverable' },
-                    { title: 'Negotiation', desc: 'Capabilities exchanged on connect' },
-                ])}
-                ${C.callout('Think of MCP like a universal connector for AI tools, similar to USB-C or HTTP for context exchange.', 'info')}
-            `
-        },
-        {
-            id: "mcp-generic-architecture",
-            title: "High-Level Architecture",
-            content: `
-                <h2>Client-Server Architecture</h2>
-                ${C.layers([
-                    { label: 'Model + Client Runtime', items: [
-                        { title: 'Model', desc: 'Requests tool/context access' },
-                        { title: 'MCP Client', desc: 'Routes calls + manages session' },
-                    ]},
-                    { label: 'MCP Server(s)', accent: true, items: [
-                        { title: 'Tools', desc: 'Executable functions' },
-                        { title: 'Resources', desc: 'Read-only context' },
-                        { title: 'Prompts', desc: 'Reusable templates' },
-                    ]},
-                    { label: 'External Systems', items: [
-                        { title: 'APIs', desc: 'SaaS and internal services' },
-                        { title: 'Data Stores', desc: 'Files, DBs, logs' },
-                        { title: 'Apps', desc: 'Business workflows' },
-                    ]},
-                ])}
-                <p class="muted">MCP is transport-agnostic and can run over stdio, HTTP, or WebSockets.</p>
-            `
-        },
-        {
-            id: "mcp-generic-core",
-            title: "Core Concepts",
-            content: `
-                <h2>Tools, Resources, Prompts</h2>
-                ${C.cards([
-                    { badge: 'Tool', title: 'Executable Function', desc: 'Callable actions (search, run SQL, create ticket)' },
-                    { badge: 'Resource', title: 'Read-Only Context', desc: 'Files, records, notebooks, logs' },
-                    { badge: 'Prompt', title: 'Reusable Template', desc: 'Parameterized prompts for consistent output' },
-                    { badge: 'Handshake', title: 'Capabilities', desc: 'Client and server negotiate features' },
-                ])}
-                ${C.code(`{
-  "name": "get_weather",
-  "description": "Get weather for a city",
-  "input_schema": {
-    "type": "object",
-    "properties": { "city": { "type": "string" } },
-    "required": ["city"]
-  }
-}`, 'json', 'Tool Schema Example')}
-            `
-        },
-        {
-            id: "mcp-generic-protocol",
-            title: "Protocol Layer",
-            content: `
-                <h2>JSON-RPC 2.0</h2>
-                ${C.split(
-                    {
-                        title: 'Request',
-                        content: C.code(`{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/list"
-}`, 'json')
-                    },
-                    {
-                        title: 'Response',
-                        content: C.code(`{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": [/* tool definitions */]
-}`, 'json')
-                    }
-                )}
-                ${C.callout('MCP uses JSON-RPC for a consistent request/response envelope, regardless of transport.', 'info')}
-            `
-        },
-        {
-            id: "mcp-generic-lifecycle",
-            title: "Session Lifecycle",
-            content: `
-                <h2>Typical MCP Flow</h2>
-                ${C.flow([
-                    { title: '1. Initialize', desc: 'Client connects and exchanges capabilities', accent: true, arrow: '↓' },
-                    { title: '2. Discover', desc: 'Client requests tools/resources', arrow: '↓' },
-                    { title: '3. Call Tool', desc: 'Model calls tools with JSON args', arrow: '↓' },
-                    { title: '4. Execute', desc: 'Server runs tool and returns results', arrow: '↓' },
-                    { title: '5. Iterate', desc: 'Model continues using tools as needed' },
-                ])}
-            `
-        },
-        {
-            id: "mcp-what-is",
-            title: `What is MCP in ${CONFIG.productName}?`,
-            content: `
-                <h2>What is Model Context Protocol (MCP)?</h2>
-                <p class="lead">MCP is an open standard that allows <span class="highlight">AI models to securely connect to external tools and data sources</span>.</p>
-                <p>In ${CONFIG.productName}, MCP enables you to extend Playground and Rooms with custom capabilities by exposing app-specific functionality as <strong>tools</strong>, <strong>resources</strong>, and <strong>prompts</strong> that LLMs can discover and use.</p>
-                ${C.cards([
-                    { badge: 'MCP Primitive', title: 'Tools', desc: 'Executable functions the model can call (e.g., search_database, execute_code, send_email)' },
-                    { badge: 'MCP Primitive', title: 'Resources', desc: 'Read-only data sources (e.g., documents, APIs, file trees) the model can access' },
-                    { badge: 'MCP Primitive', title: 'Prompts', desc: 'Reusable prompt templates with variables that guide model behavior' },
-                ])}
-                ${C.callout(`${CONFIG.productName} implements MCP as a <strong>micro-app pattern</strong>: each MCP is a lightweight app (Project) with Python/Java/Pixel backends exposed via JSON schemas, plus optional React portal UIs.`, 'info')}
-            `
-        },
-        {
-            id: "mcp-architecture",
-            title: `MCP Architecture in ${CONFIG.productName}`,
-            content: `
-                <h2>MCP Architecture</h2>
-                <p>${CONFIG.productName} MCP integrates into the Playground and Room system, allowing models to call app-specific tools without leaving the chat interface.</p>
-                ${C.layers([
-                    { label: "Playground / Room", items: [
-                        { title: "LLM Chat", desc: "User conversation" },
-                        { title: "Tool Discovery", desc: "Models see available MCP tools" },
-                    ]},
-                    { label: "MCP Layer", accent: true, items: [
-                        { title: "Tool Schemas (mcp/*.json)", desc: "JSON definitions", accent: true },
-                        { title: "Execution Handlers", desc: "Python/Java/Pixel", accent: true },
-                        { title: "Portal UI (optional)", desc: "React interface", accent: true },
-                    ]},
-                    { label: "App Backend", items: [
-                        { title: "Python (py/mcp_driver.py)", desc: "GAAS functions" },
-                        { title: "Java (java/src/reactors/)", desc: "Custom reactors" },
-                        { title: "Pixel", desc: "Wrapped Pixel scripts" },
-                    ]},
-                ])}
-                ${C.code(`// Example flow: Model calls MCP tool
-1. User asks: "Execute this Python code: print('Hello')"
-2. Model sees execute_python_code tool in MCP
-3. Model calls: execute_python_code(code_b64="cHJpbnQoJ0hlbGxvJyk=")
-4. SEMOSS routes to py/mcp_driver.py execute_python_code() function
-5. Function executes code via Py() reactor
-6. Result returned to model: "Hello"
-7. Model incorporates result into response`, 'pixel', 'MCP tool execution flow')}
-            `
-        },
-        {
-            id: "mcp-filesystem",
-            title: "App Filesystem Structure",
-            content: `
-                <h2>MCP App Filesystem Structure</h2>
-                <p>${CONFIG.productName} apps follow a canonical directory structure. MCP-related files live in specific folders:</p>
-                ${C.tree([
-                    {
-                        name: 'project/',
-                        type: 'dir',
-                        children: [
-                            {
-                                name: '&lt;ProjectName&gt;__&lt;ProjectId&gt;/',
-                                type: 'dir',
-                                children: [
-                                    {
-                                        name: 'app_root/',
-                                        type: 'dir',
-                                        children: [
-                                            {
-                                                name: 'version/',
-                                                type: 'dir',
-                                                children: [
-                                                    {
-                                                        name: 'assets/',
-                                                        type: 'dir',
-                                                        desc: 'This is what you edit',
-                                                        children: [
-                                                            {
-                                                                name: 'py/',
-                                                                type: 'dir',
-                                                                desc: 'Python source code',
-                                                                children: [
-                                                                    { name: 'mcp_driver.py', type: 'file', desc: 'Python MCP tool entrypoint' },
-                                                                ]
-                                                            },
-                                                            {
-                                                                name: 'java/',
-                                                                type: 'dir',
-                                                                desc: 'Java source code',
-                                                                children: [
-                                                                    { name: 'src/reactors/', type: 'dir', desc: 'Custom reactors for MCP' },
-                                                                ]
-                                                            },
-                                                            {
-                                                                name: 'mcp/',
-                                                                type: 'dir',
-                                                                desc: '⚠️ GENERATED - do not edit manually',
-                                                                children: [
-                                                                    { name: 'py_mcp.json', type: 'file', desc: 'Python tool schemas (generated)' },
-                                                                    { name: 'pixel_mcp.json', type: 'file', desc: 'Java/Pixel tool schemas (generated)' },
-                                                                ]
-                                                            },
-                                                            { name: 'classes/', type: 'dir', desc: '⚠️ GENERATED - compiled Java output' },
-                                                            { name: 'portals/', type: 'dir', desc: 'Published web UI (built from client/)' },
-                                                            { name: 'client/', type: 'dir', desc: 'React source (Vite + Tailwind)' },
-                                                        ]
-                                                    },
-                                                ]
-                                            },
-                                        ]
-                                    },
-                                ]
-                            },
-                        ]
-                    },
-                ])}
-                ${C.callout('<strong>⚠️ Key Rule:</strong> Never hand-edit <code>classes/</code> or <code>mcp/</code> — they are generated. Edit <code>java/</code> and <code>py/</code> instead. Platform auto-compiles Java. MCP JSONs can be edited manually but may be overwritten if regenerated via UI.', 'danger')}
-            `
-        },
-        {
-            id: "mcp-patterns",
-            title: "Three MCP Patterns",
-            content: `
-                <h2>Three Ways to Create MCP Tools</h2>
-                <p>${CONFIG.productName} supports three backend patterns for MCP tools, each with different use cases:</p>
-                ${C.table(
-                    ["Pattern", "Backend", "Best For", "Generated By"],
+
+    // ─── DAY 2 RECAP ────────────────────────────────────────────────────────
+    {
+        id: "recap-day2",
+        title: "Day 1 Recap",
+        content: `
+            <h2>Day 1 Recap — Where We Left Off</h2>
+            <p class="lead">Here is the thread we built yesterday. Today we wire it into an AI agent.</p>
+            ${C.flow([
+                { title: 'Vector Engine', desc: 'Ingested FDA guidance documents — chunked, embedded, indexed', accent: true, arrow: '↓' },
+                { title: 'Notebook RAG', desc: 'Pixel + Python queries: search the vector engine, pass results to a model', arrow: '↓' },
+                { title: 'Published App', desc: 'Claude Code generated the UI template; you published a live URL', accent: true },
+            ])}
+            ${C.callout('Open your app now and confirm it\'s still working before we move on. Your vector engine and published URL should be exactly where you left them.', 'tip')}
+            <p class="muted">Open Q&amp;A — 10 minutes. Ask anything that didn\'t click yesterday.</p>
+        `
+    },
+
+    // ─── SECTION 1: MCP FUNDAMENTALS ────────────────────────────────────────
+    {
+        id: "mcp-title",
+        title: "MCP Fundamentals",
+        content: C.titleSlide(
+            "MCP Fundamentals",
+            `Making your app discoverable and callable by AI agents`,
+            "45 minutes"
+        )
+    },
+
+    {
+        id: "mcp-what-is",
+        title: "What is MCP?",
+        content: `
+            <h2>Model Context Protocol</h2>
+            ${C.split(
+                {
+                    title: 'The Problem',
+                    content: `
+                        <p>Your Day 1 app is great — but an AI agent can't discover or call it on its own.</p>
+                        <ul>
+                            <li>The agent doesn't know the app exists</li>
+                            <li>It doesn't know what inputs it needs</li>
+                            <li>It can't interpret the results without structure</li>
+                        </ul>
+                    `
+                },
+                {
+                    title: 'The Solution',
+                    content: `
+                        <p>MCP is the standard that lets agents <strong>discover tools</strong>, call them with <strong>structured inputs</strong>, and get <strong>structured results</strong> back.</p>
+                        <ul>
+                            <li>One JSON schema describes what your tool does</li>
+                            <li>Any MCP-compatible agent can call it</li>
+                            <li>No custom wiring per agent</li>
+                        </ul>
+                    `
+                }
+            )}
+            ${C.callout('Think of MCP like a job listing for AI agents. It describes what a tool does, what inputs it needs, and what it returns — so any agent can use it without custom wiring.', 'info')}
+        `
+    },
+
+    {
+        id: "mcp-why-matters",
+        title: "Why MCP Matters in ${CONFIG.productName}",
+        content: `
+            <h2>Why It Matters in ${CONFIG.productName}</h2>
+            <p class="lead">Without MCP, an agent has no idea your app exists. With MCP, it becomes a tool the agent can reach for automatically.</p>
+            ${C.sequence(
+                ["User in Playground", "AI Agent", "MCP Layer", "Your App Backend"],
+                [
+                    { from: 0, to: 1, label: "Asks a question about FDA regulations" },
+                    { from: 1, to: 2, label: "Discovers available MCP tools" },
+                    { from: 2, to: 1, label: "Returns tool list with schemas", type: "response" },
+                    { from: 1, to: 2, label: "Calls search_documents(question=...)" },
+                    { from: 2, to: 3, label: "Routes call to your app" },
+                    { from: 3, to: 2, label: "Returns matching document passages", type: "response" },
+                    { from: 2, to: 1, label: "Structured result", type: "response" },
+                    { from: 1, to: 0, label: "Incorporates result into final answer", type: "response" },
+                ]
+            )}
+            ${C.callout('Without MCP, the agent has no idea your app exists. With MCP, it becomes a tool the agent can reach for automatically.', 'info')}
+        `
+    },
+
+    {
+        id: "mcp-architecture",
+        title: "MCP Architecture",
+        content: `
+            <h2>How the Layers Connect</h2>
+            <p>You own the bottom two layers. The MCP JSON schema is the contract between them and the agent.</p>
+            ${C.layers([
+                { label: "Playground / Room", items: [
+                    { title: "AI Agent Chat", desc: "Conversation thread, model responses" },
+                    { title: "Tool Discovery", desc: "Agent sees available MCP tools automatically" },
+                ]},
+                { label: "MCP Layer", accent: true, items: [
+                    { title: "JSON Schemas", desc: "Tool definitions (what the agent reads)", accent: true },
+                    { title: "Python / Java Handlers", desc: "Execution (what actually runs)", accent: true },
+                ]},
+                { label: "Your App Backend", items: [
+                    { title: "Vector Engine", desc: "FDA document search" },
+                    { title: "Model Calls", desc: "LLM inference via ${CONFIG.productName}" },
+                    { title: "Pixel Logic", desc: "Reactors and data transforms" },
+                ]},
+            ])}
+            ${C.callout('You own the bottom two layers. The MCP JSON schema is the contract between them and the agent.', 'info')}
+        `
+    },
+
+    {
+        id: "mcp-three-patterns",
+        title: "Three MCP Patterns",
+        content: `
+            <h2>Three Ways to Build MCP Tools — Which to Use?</h2>
+            ${C.table(
+                ["Pattern", "Backend", "Best For"],
+                [
                     [
-                        [
-                            "Python MCP",
-                            "Python functions in <code>py/mcp_driver.py</code>",
-                            "Data processing, API calls, async tasks, ML inference",
-                            "<code>MakePythonMCP(projectId)</code>"
-                        ],
-                        [
-                            "Java/Pixel MCP",
-                            "Custom Java reactors in <code>java/src/reactors/</code>",
-                            `${CONFIG.productName}-native operations, engine access, complex business logic`,
-                            "<code>MakePixelMCP(projectId, reactor)</code>"
-                        ],
-                        [
-                            "Engine MCP",
-                            "Existing engine (Vector, Storage, Function)",
-                            "Exposing vector search, storage ops, or function execution as MCP tools",
-                            "<code>MakeEngineMCP(engineId)</code>"
-                        ]
+                        "Python MCP",
+                        "<code>py/mcp_driver.py</code>",
+                        "Data processing, API calls, most use cases"
+                    ],
+                    [
+                        "Pixel + Java MCP",
+                        "Custom Java reactors in <code>java/src/reactors/</code>",
+                        `${CONFIG.productName}-native operations, complex business logic`
+                    ],
+                    [
+                        "Engine MCP",
+                        "Existing engine (Vector, Storage, Function)",
+                        "Expose vector search or storage operations directly"
                     ]
-                )}
-                ${C.callout('Most modern MCPs use <strong>Python</strong> because it allows rapid iteration without Java recompilation, supports async execution, and integrates easily with ML libraries.', 'tip')}
-            `
-        },
-        {
-            id: "mcp-json-structure",
-            title: "MCP JSON Schema Structure",
-            content: `
-                <h2>MCP JSON Schema Structure</h2>
-                <p>MCP tools are described using a JSON schema that follows the Model Context Protocol standard:</p>
-                <h3>Python MCP JSON (py_mcp.json)</h3>
-                <div class="c-code-wrap">
-                    ${C.code(`{
+                ]
+            )}
+            ${C.callout('For this training, we use <strong>Python MCP</strong>. It\'s the fastest to iterate on and handles 90% of use cases.', 'tip')}
+        `
+    },
+
+    {
+        id: "mcp-json-schema",
+        title: "The MCP Contract",
+        content: `
+            <h2>The MCP Contract — What the JSON Looks Like</h2>
+            <p>This is what the agent reads when it discovers your tool. Every field matters.</p>
+            ${C.code(`{
   "tools": [
     {
-      "name": "execute_python_code",
-      "title": "Execute Python Code",
-      "description": "Executes any given Python code. When calling execute_python_code, pass the script bytes as UTF-8 Base64 in code_b64.",
+      "name": "search_documents",
+      "description": "Search FDA guidance documents and return relevant passages for a given question.",
       "inputSchema": {
         "type": "object",
-        "title": "execute_python_code_Arguments",
         "properties": {
-          "code_b64": {
-            "title": "Code B64",
-            "type": "string"
+          "question": {
+            "type": "string",
+            "description": "The question to search for"
           }
         },
-        "required": ["code_b64"]
-      },
-      "_meta": {
-        "generated_on": "2026-01-21",
-        "SMSS_MCP_EXECUTION": "auto"
-      }
-    }
-  ],
-  "_meta": {
-    "last_modified_date": "2026-01-21",
-    "file_last_modified_date": "2026-01-21"
-   }
-}`, 'json')}
-                </div>
-                <h3>Pixel MCP JSON (pixel_mcp.json)</h3>
-                ${C.code(`{
-  "_meta": { "last_modified_date": "2025-11-24" },
-  "tools": [
-    {
-      "name": "OpenMCPApp",
-      "title": "Open MCP App",
-      "description": "This tool allows the user to interact with the SEMOSS Template application.",
-      "inputSchema": {
-        "type": "object",
-        "title": "OpenMCPApp_Arguments",
-        "properties": {},
-        "required": []
-      },
-      "_meta": {
-        "SMSS_MCP_EXECUTION": "ask",
-        "SMSS_MCP_UI": {
-          "resourceURI": "/",
-          "displayLocation": "sidebar"
-        }
+        "required": ["question"]
       }
     }
   ]
-}`, 'json')}
-                <h3>Schema Breakdown</h3>
-                <h4>Root</h4>
-                ${C.tree([
-                    {
-                        name: 'Root',
-                        type: 'dir',
-                        children: [
-                            { name: 'tools[]', type: 'dir', desc: 'Array of tool objects (each follows the Tool schema below)' },
-                            { name: '_meta', type: 'file', desc: 'File-level metadata (timestamps, source file)' },
-                        ]
-                    },
-                ])}
-                <h4>Tool Schema (tools[] items)</h4>
-                ${C.tree([
-                    {
-                        name: 'Tool',
-                        type: 'dir',
-                        children: [
-                            { name: 'name', type: 'file', desc: 'Stable tool identifier' },
-                            { name: 'title', type: 'file', desc: 'UI label' },
-                            { name: 'description', type: 'file', desc: 'Usage guidance' },
-                            {
-                                name: 'inputSchema',
-                                type: 'dir',
-                                desc: 'JSON Schema for arguments',
-                                children: [
-                                    { name: 'type', type: 'file', desc: 'Usually object' },
-                                    { name: 'title', type: 'file', desc: 'Schema name' },
-                                    { name: 'properties', type: 'dir', desc: 'Argument definitions' },
-                                    { name: 'required[]', type: 'file', desc: 'Required argument keys' },
-                                ]
-                            },
-                            { name: '_meta', type: 'dir', desc: 'Tool-level metadata (execution/UI hints)' },
-                        ]
-                    },
-                ])}
-                <h4>Property Schema (inputSchema.properties.*)</h4>
-                ${C.tree([
-                    {
-                        name: 'Property',
-                        type: 'dir',
-                        children: [
-                            { name: 'type', type: 'file', desc: 'Argument data type' },
-                            { name: 'title', type: 'file', desc: 'Display label' },
-                            { name: 'description', type: 'file', desc: 'How it is used' },
-                            { name: 'enum / default', type: 'file', desc: 'Allowed values or default (optional)' },
-                        ]
-                    },
-                ])}
-                <h4>${CONFIG.productName} Meta MCP Extensions</h4>
-                ${C.tree([
-                    {
-                        name: `${CONFIG.productName} Meta MCP Extensions`,
-                        type: 'dir',
-                        children: [
-                            { name: 'SMSS_MCP_EXECUTION', type: 'file', desc: 'Execution hint (ask/auto/disabled)' },
-                            { name: 'SMSS_MCP_UI', type: 'dir', desc: 'UI hint block' },
-                            { name: 'SMSS_MCP_UI.resourceURI', type: 'file', desc: 'UI resource path' },
-                            { name: 'SMSS_MCP_UI.displayLocation', type: 'file', desc: 'UI placement (e.g., sidebar)' },
-                        ]
-                    },
-                ])}
-                ${C.callout(`The <code>inputSchema</code> follows JSON Schema format and describes tool parameters. ${CONFIG.productName} extensions like <code>SMSS_MCP_EXECUTION</code> and <code>SMSS_MCP_UI</code> control execution behavior and UI layout.`, 'info')}
-            `
-        },
-        {
-            id: "mcp-python-decorators",
-            title: "Python MCP Decorators",
-            content: `
-                <h2>Python MCP Metadata Decorators</h2>
-                <p>${CONFIG.productName} provides Python decorators to control MCP tool behavior <strong>without editing JSON manually</strong>.</p>
-                ${C.code(`from semoss import Insight
-import smssutil
+}`, 'json', 'assets/mcp/py_mcp.json')}
+            ${C.callout('The <code>description</code> field is critical — it\'s how the agent decides <em>when</em> to call this tool. Write it as if you\'re instructing a person.', 'info')}
+        `
+    },
 
-@smssutil.mcp_metadata({
-    'execution': 'auto',          # 'auto' | 'ask' | 'disabled'
-    'displayLocation': 'inline',  # 'inline' | 'sidebar' | 'hidden'
-    'loadingMessage': 'Executing code...',
-    'resourceURI': None           # Portal path (e.g., '/' for custom UI)
-})
-def execute_python_code(code_b64: str = None):
+    {
+        id: "mcp-make-python",
+        title: "MakePythonMCP",
+        content: `
+            <h2>From Python Function to Callable Tool</h2>
+            <p>You write a function with a docstring. ${CONFIG.productName} does the rest.</p>
+            ${C.flow([
+                { title: 'Write Python function', desc: 'Include a clear docstring — the agent reads it', accent: true, arrow: '↓' },
+                { title: 'Run MakePythonMCP(project=["..."])', desc: 'One Pixel command in the Notebook or console', arrow: '↓' },
+                { title: '${CONFIG.productName} reads function signatures and docstrings', desc: 'Introspects your mcp_driver.py automatically', arrow: '↓' },
+                { title: 'Generates mcp/py_mcp.json automatically', desc: 'Produces the JSON schema the agent will see', accent: true, arrow: '↓' },
+                { title: 'Agent can discover and call it', desc: 'Tool is live in Playground immediately', accent: true },
+            ])}
+            ${C.code(`def search_documents(question: str) -> str:
     """
-    Executes any given Python code. When calling execute_python_code,
-    pass the script bytes as UTF-8 Base64 in code_b64.
+    Search FDA guidance documents and return relevant passages.
+    Use this when the user asks a question about FDA regulations or guidance.
     """
-    if not code_b64:
-        return "Error: no code_b64 provided."
+    # Implementation in next section
+    pass`, 'python', 'assets/py/mcp_driver.py')}
+            ${C.callout('The docstring becomes the tool description. Write it for the agent, not for a human developer.', 'tip')}
+        `
+    },
 
-    import base64
-    raw = base64.b64decode(code_b64)
-    source = raw.decode("utf-8", errors="replace")
-
-    pixel = f"Py('<encode>{source}</encode>')"
-    insight = Insight()
-    result = insight.run_pixel(pixel=pixel, insight_id=insight.insight_id)
-    return result[0].get("output")`, 'python', 'py/mcp_driver.py')}
-                ${C.table(
-                    ["Decorator Key", "Values", "Description"],
+    {
+        id: "mcp-meta-variables",
+        title: "Meta Variables",
+        content: `
+            <h2>Controlling Agent Behavior — Meta Variables</h2>
+            <p>Two meta variables control how the agent and Playground UI interact with your tool.</p>
+            ${C.table(
+                ["Variable", "What it controls"],
+                [
                     [
-                        ["execution", "<code>'auto'</code> <code>'ask'</code> <code>'disabled'</code>", "Auto-execute tool, ask user first, or hide from model"],
-                        ["displayLocation", "<code>'inline'</code> <code>'sidebar'</code> <code>'hidden'</code>", "Where to show portal UI in Playground"],
-                        ["loadingMessage", "string", "Message shown while tool executes"],
-                        ["resourceURI", "string or null", "Path to portal UI (e.g., <code>'/'</code> for root)"]
+                        "<code>SMSS_MCP_EXECUTION</code>",
+                        "<code>auto</code> — agent calls silently &nbsp;|&nbsp; <code>ask</code> — agent confirms with user first &nbsp;|&nbsp; <code>disabled</code> — hidden from agent"
+                    ],
+                    [
+                        "<code>SMSS_MCP_UI</code>",
+                        "Where the tool's portal UI appears in Playground — <code>sidebar</code>, <code>inline</code>, or <code>hidden</code>"
                     ]
-                )}
-            `
-        },
-        {
-            id: "mcp-make-reactors",
-            title: "Make MCP Reactors",
-            content: `
-                <h2>Generating MCP JSON Schemas</h2>
-                <p>${CONFIG.productName} provides reactors to auto-generate MCP JSON files from your Python/Java code:</p>
-                ${C.flow([
-                    { title: 'Write Code', desc: 'Create Python functions or Java reactors', accent: true, arrow: '↓' },
-                    { title: 'Run Make MCP Reactor', desc: 'MakePythonMCP, MakePixelMCP, or MakeEngineMCP', arrow: '↓' },
-                    { title: 'JSON Generated', desc: 'mcp/py_mcp.json or mcp/pixel_mcp.json created', accent: true, arrow: '↓' },
-                    { title: 'Refresh MCP', desc: 'Playground auto-discovers new tools', arrow: '↓' },
-                    { title: 'Model Uses Tools', desc: 'LLM calls tools during conversation', accent: true },
-                ])}
-                ${C.split(
-                    {
-                        title: 'MakePythonMCP',
-                        content: C.code(`// Generate py_mcp.json from py/mcp_driver.py
-MakePythonMCP(
-  project="a1b2c3d4-5e6f-7890-abcd-ef1234567890"
-);
+                ]
+            )}
+            ${C.callout('Start with <code>execution: "auto"</code> for search tools, <code>execution: "ask"</code> for anything that writes or sends data.', 'info')}
+        `
+    },
 
-// Reads py/mcp_driver.py (or legacy py/smss_driver.py)
-// Extracts function signatures and docstrings
-// Generates mcp/py_mcp.json with inputSchema
-// Includes @mcp_metadata decorator settings`, 'pixel')
-                    },
-                    {
-                        title: 'MakePixelMCP',
-                        content: C.code(`// Generate pixel_mcp.json from Java reactors
-MakePixelMCP(
-  project="a1b2c3d4-5e6f-7890-abcd-ef1234567890",
-  reactor=["OpenMCPAppReactor", "DownloadDocumentReactor"]
-);
+    {
+        id: "mcp-file-persistence",
+        title: "File Persistence — What You Edit vs. What Gets Generated",
+        content: `
+            <h2>File Persistence — What You Edit vs. What Gets Generated</h2>
+            ${C.tree([
+                {
+                    name: 'assets/',
+                    type: 'dir',
+                    desc: 'This is what you edit',
+                    children: [
+                        {
+                            name: 'py/',
+                            type: 'dir',
+                            children: [
+                                { name: 'mcp_driver.py', type: 'file', desc: 'YOU EDIT THIS — your Python tool functions' }
+                            ]
+                        },
+                        {
+                            name: 'mcp/',
+                            type: 'dir',
+                            desc: 'GENERATED — do not hand-edit',
+                            children: [
+                                { name: 'py_mcp.json', type: 'file', desc: 'GENERATED by MakePythonMCP()' },
+                                { name: 'pixel_mcp.json', type: 'file', desc: 'GENERATED by MakePixelMCP()' },
+                            ]
+                        },
+                    ]
+                }
+            ])}
+            ${C.callout('<strong>Never hand-edit the <code>mcp/</code> folder.</strong> Always edit <code>py/</code> or <code>java/</code> and regenerate. Hand-edits will be overwritten the next time you run MakePythonMCP.', 'warning')}
+        `
+    },
 
-// Reads reactor metadata (inputs, descriptions)
-// Generates mcp/pixel_mcp.json with inputSchema
-// Uses reactor ReactorKeysEnum for parameters`, 'pixel')
-                    }
-                )}
-                ${C.code(`// MakeEngineMCP - Expose engine as MCP tool
-MakeEngineMCP(
-  engine="bd1dea64-ec6b-49af-9308-94b05551c83d"  // Vector DB, Database, etc.
-);
-
-// Generates MCP tools for engine operations:
-// - ListDocumentsInVectorDatabase
-// - CreateEmbeddingsFromDocuments
-// - VectorDatabaseQuery
-// - RemoveDocumentFromVectorDatabase
-// - VectorFileDownload
-// - ListStoragePath / ListStoragePathDetails
-// - PullFromStorage / PushToStorage / DeleteFromStorage
-// - ExecuteFunctionEngine`, 'pixel', 'Exposing engines as MCP')}
-            `
-        },
-        {
-            id: "mcp-handson",
-            title: "Hands-on: Create Your First MCP",
-            content: `
-                <h2>Hands-on: Build a Simple Python MCP Tool</h2>
-                ${C.handson('Create a "Hello World" MCP tool', `
-                    <h4>Part 1: Create an MCP App</h4>
-                    <p>In ${CONFIG.productName} UI:</p>
-                    <ol>
-                        <li>Click <strong>Create App</strong> (or use existing app)</li>
-                        <li>Navigate to app folder: <code>project/&lt;YourApp&gt;__&lt;uuid&gt;/app_root/version/assets/</code></li>
-                        <li>Create <code>py/</code> folder if it doesn't exist</li>
-                    </ol>
-
-                    <h4>Part 2: Write Python MCP Driver</h4>
-                    <p>Create <code>py/mcp_driver.py</code>:</p>
-                    ${C.code(`from semoss import Insight
-import smssutil
-
-@smssutil.mcp_metadata({
-    'execution': 'auto',
-    'displayLocation': 'inline'
-})
-def say_hello(name: str = "World"):
-    """
-    Returns a friendly greeting to the specified name.
-    """
-    return f"Hello, {name}! Welcome to ${CONFIG.productName} MCP."
-
-@smssutil.mcp_metadata({
-    'execution': 'ask',
-    'loadingMessage': 'Counting...'
-})
-def count_to_n(n: int = 10):
-    """
-    Counts from 1 to n and returns the result.
-    """
-    if n > 100:
-        return "Error: n must be <= 100"
-
-    return "\\n".join(str(i) for i in range(1, n + 1))`, 'python')}
-
-                    <h4>Part 3: Generate MCP JSON</h4>
-                    <p>In Pixel console:</p>
-                    ${C.code(`// Replace with your project ID
-MakePythonMCP(project="your-project-id-here");`, 'pixel')}
-                    <p>This creates <code>mcp/py_mcp.json</code> with your two tools.</p>
-
-                    <h4>Part 4: Test in Playground</h4>
-                    <ol>
-                        <li>Open Playground in ${CONFIG.productName}</li>
-                        <li>Configure your app as an MCP server in Playground settings</li>
-                        <li>Ask the model: <em>"Say hello to Alice"</em></li>
-                        <li>Model should call <code>say_hello(name="Alice")</code> automatically</li>
-                        <li>Ask: <em>"Count to 5"</em></li>
-                        <li>Model should call <code>count_to_n(n=5)</code> and show numbers 1-5</li>
-                    </ol>
-
-                    <h4>Expected Outcomes</h4>
-                    <ul>
-                        <li>Part 2: <code>py/mcp_driver.py</code> exists with two functions</li>
-                        <li>Part 3: <code>mcp/py_mcp.json</code> generated with 2 tools</li>
-                        <li>Part 4: Model successfully calls both tools</li>
-                    </ul>
-                `)}
-            `
-        },
-        {
-            id: "mcp-summary",
-            title: "Summary",
-            content: `
-                <h2>Summary: MCP Fundamentals</h2>
-                <h3>Key Concepts</h3>
-                <ul>
-                    <li><strong>MCP = Model Context Protocol</strong>: Standard for connecting AI models to tools, resources, and prompts</li>
-                    <li><strong>${CONFIG.productName} MCP Pattern</strong>: Micro-apps with Python/Java/Pixel backends + optional React portals</li>
-                    <li><strong>Three MCP Types</strong>: Python MCP (data/ML), Java/Pixel MCP (${CONFIG.productName}-native), Engine MCP (expose engines)</li>
-                    <li><strong>Filesystem Rules</strong>:
-                        <ul>
-                            <li>Edit: <code>py/</code>, <code>java/</code>, <code>client/</code></li>
-                            <li>Never edit: <code>classes/</code>, <code>mcp/</code> (generated)</li>
-                        </ul>
-                    </li>
-                    <li><strong>Python Decorators</strong>: <code>@mcp_metadata({'execution', 'displayLocation', 'loadingMessage', 'resourceURI'})</code></li>
-                    <li><strong>Make MCP Reactors</strong>:
-                        <ul>
-                            <li><code>MakePythonMCP(project)</code> → py_mcp.json</li>
-                            <li><code>MakePixelMCP(project, reactor)</code> → pixel_mcp.json</li>
-                            <li><code>MakeEngineMCP(engine)</code> → engine tools</li>
-                        </ul>
-                    </li>
-                </ul>
-                ${C.callout('Next chapter: Building complete MCP tools with custom UIs, consuming MCP from external apps, and advanced patterns.', 'tip')}
-            `
-        }
-    ];
+];

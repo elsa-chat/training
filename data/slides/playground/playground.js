@@ -1,583 +1,165 @@
-// Topic: Playground
+// Topic: Playground — Day 2 Morning (11:00 AM)
 const slides_playground = [
-        {
-            id: "playground-title",
-            title: "Playground",
-            content: C.titleSlide(
-                "Playground",
-                `The conversational AI interface in ${CONFIG.productName} — Rooms, Workspaces, and Enterprise Customization`,
-                "90 minutes"
-            )
-        },
-        {
-            id: "playground-overview",
-            title: "What is Playground?",
-            content: `
-                <h2>What is Playground?</h2>
-                <p class="lead"><span class="highlight">Playground</span> is where ${CONFIG.productName} is putting its largest effort — not “just ChatGPT,” but a harmonization layer between business apps and LLMs.</p>
-                <p>It brings together models, apps, vectors, and functions so user-driven computation can happen while you move between tools to complete real work.</p>
-                ${C.cards([
-                    { badge: 'Feature', title: 'Rooms', desc: 'Persistent conversation threads with message history and tool execution' },
-                    { badge: 'Feature', title: 'Workspaces', desc: 'Reusable configurations for system prompts, tools, and resources' },
-                    { badge: 'Feature', title: 'Room Folders', desc: 'File storage scoped to each Room for document uploads and outputs' },
-                    { badge: 'Feature', title: 'MCP Integration', desc: 'Connect Apps and Engines as tools accessible to the LLM' },
-                    { badge: 'Feature', title: 'Business Context', desc: 'Capture domain-specific inputs alongside AI automation' },
-                    { badge: 'Feature', title: 'Enterprise Themes', desc: 'Customize system prompts globally with Pixel-backed variables' },
-                ])}
-                ${C.callout('Playground is built on top of the <strong>Room</strong> architecture we studied in Day 3, adding a user-friendly interface and enterprise governance features.', 'info')}
-            `
-        },
-        {
-            id: "playground-why-use",
-            title: "Why Use Playground?",
-            content: `
-                <h2>Why Use Playground?</h2>
-                <p class="lead">Playground is the operating layer where business context meets models, apps, vectors, and functions — so real work can happen end‑to‑end.</p>
-                ${C.split(
-                    {
-                        title: 'What It Replaces',
-                        content: `
-                            <ul>
-                                <li>Fragmented tools (chat, CRM, docs, search) with no shared context</li>
-                                <li>Manual handoffs between steps (research → draft → review)</li>
-                                <li>Copy/paste workflows that break governance and audit trails</li>
-                            </ul>
-                        `
-                    },
-                    {
-                        title: 'What It Enables',
-                        content: `
-                            <ul>
-                                <li>One workspace that holds <strong>business inputs</strong> + <strong>LLM outputs</strong></li>
-                                <li>Tool orchestration across Apps, Engines, Vectors, Functions</li>
-                                <li>Human-in-the-loop review with traceable outputs</li>
-                            </ul>
-                        `
-                    }
-                )}
-                <h3>Value Stack (Why It Matters)</h3>
-                ${C.cards([
-                    { badge: 'Context', title: 'Business-Grade Inputs', desc: 'Users add domain signals, scores, and constraints instead of raw prompts.' },
-                    { badge: 'Orchestration', title: 'Tools + Data in One Flow', desc: 'LLMs call engines, apps, vectors, and functions inside one insight.' },
-                    { badge: 'Governance', title: 'Audit + Control', desc: 'Traceable steps, reusable workspaces, and standardized prompts.' },
-                    { badge: 'Velocity', title: 'Faster End-to-End', desc: 'From intake to approved response without app switching.' },
-                ])}
-                ${C.callout('Playground is not just chat — it is a <strong>workflow layer</strong> that binds business context, tools, and approvals into one governed experience.', 'info')}
-            `
-        },
-        {
-            id: "playground-why-use-demo",
-            title: "Why Use Playground? (CRM Demo Flow)",
-            content: `
-                <h2>Example: CRM Request → Approved Response</h2>
-                <p class="lead">A real workflow that combines user input, historical knowledge, and automated actions.</p>
-                ${C.cards([
-                    { badge: '1', title: 'Request Intake', desc: 'Customer email or CRM entry arrives.' },
-                    { badge: '2', title: 'Context + Scoring', desc: 'Compare to past requests, evaluate value/fit, capture scores in CRM.' },
-                    { badge: '3', title: 'Research & Examples', desc: 'Pull prior responses, qualifications, and similar cases.' },
-                    { badge: '4', title: 'Draft Response', desc: 'Generate a tailored reply based on priorities and constraints.' },
-                    { badge: '5', title: 'Human Review', desc: 'Send draft for approval before sending.' },
-                    { badge: '6', title: 'Auto-Send', desc: 'Approved response is sent automatically.' },
-                ])}
-                <h3>What the User Sees</h3>
-                ${C.table(
-                    ['UI Surface', 'Purpose'],
-                    [
-                        ['CRM Panel', 'Enter scores, priorities, and context'],
-                        ['Playground Chat', 'Draft and iterate with the LLM'],
-                        ['Tools Panel', 'Search prior cases, pull docs, query engines (tools exposed to the LLM)'],
-                        ['Approval Queue', 'Review + approve outbound response']
-                    ]
-                )}
-                ${C.callout('All steps occur in one Room with shared context — no switching tabs or losing state.', 'tip')}
-                ${C.callout('Every action is exposed as a tool you can invoke, and it all runs under the same RBAC + permissions model used across the platform.', 'info')}
-            `
-        },
-        {
-            id: "playground-architecture",
-            title: "Playground Architecture",
-            content: `
-                <h2>Playground Architecture</h2>
-                <p>Playground combines several ${CONFIG.productName} components to deliver a cohesive conversational AI experience.</p>
-                ${C.layers([
-                    { label: "Frontend", items: [
-                        { title: "React UI", desc: "SemossWeb Playground interface" },
-                        { title: "@semoss/sdk", desc: "JavaScript SDK for API calls" },
-                    ]},
-                    { label: "Application Layer", accent: true, items: [
-                        { title: "Room", desc: "Message history + LLM context", accent: true },
-                        { title: "Workspace", desc: "Shared config (system prompt, tools)", accent: true },
-                        { title: "Insight", desc: "Execution context for tool calls" },
-                    ]},
-                    { label: "Storage", items: [
-                        { title: "MODEL_INFERENCE_LOGS_DB", desc: "Room messages + workspace config" },
-                        { title: "Room Folder", desc: "File storage per Room" },
-                        { title: "Cloud Sync", desc: "Optional sync to central storage" },
-                    ]},
-                    { label: "Tools & Resources", items: [
-                        { title: "MCP Apps", desc: "Apps with MCP tools exposed" },
-                        { title: "MCP Engines", desc: "Engines (databases, models) with tools" },
-                        { title: "Built-in Tools", desc: "Shell, file search, web search" },
-                    ]},
-                ])}
-                ${C.callout('Each Room is backed by an <strong>Insight</strong> for tool execution, and optionally associated with a <strong>Workspace</strong> for reusable configuration.', 'tip')}
-            `
-        },
-        {
-            id: "playground-room-folder",
-            title: "Room Folders",
-            content: `
-                <h2>Room Folders — Scoped File Storage</h2>
-                <p>Each Room has its own <strong>Room Folder</strong> where uploaded documents and tool outputs are stored.</p>
-                <p><strong>By default, rooms are empty.</strong> Files are added to a room folder when:</p>
-                <ul>
-                    <li><strong>You upload an image or document</strong> — The file is both sent to the model AND saved to the room folder</li>
-                    <li><strong>MCP tools write outputs</strong> — Tools should write their results to the room folder for persistence</li>
-                </ul>
-                <p>The <strong>Insight context</strong> for a Room is mapped directly to this folder — the same storage used by apps/MCP tools.</p>
-                <p>So writing to the Room is just like writing to the Insight when using the app normally — no bifurcation between a user using the app and an LLM using it via MCP.</p>
-                <h3>Example Room Folder Structure</h3>
-                <p class="text-muted">The structure below shows an example of how room folders might be organized after files are added:</p>
-                ${C.tree([
-                    { name: "BASE_FOLDER/", type: "dir", children: [
-                        { name: "room/", type: "dir", desc: "← Room folders root", children: [
-                            { name: "abc-123-room-id/", type: "dir", desc: "← One room", children: [
-                                { name: "uploaded/", type: "dir", desc: "← User-uploaded files" },
-                                { name: "extracted/", type: "dir", desc: "← Text extracted for search" },
-                                { name: "outputs/", type: "dir", desc: "← Tool-generated files" },
-                                { name: "metadata.json", type: "file", desc: "← Room folder metadata" },
-                            ]},
-                            { name: "def-456-room-id/", type: "dir", desc: "← Another room" },
-                        ]},
-                    ]}
-                ])}
-                ${C.callout('Room folders use <strong>chroot isolation</strong> when enabled — shell commands cannot access files outside the room folder.', 'warning')}
-            `
-        },
-        {
-            id: "playground-workspace",
-            title: "Workspaces",
-            content: `
-                <h2>Workspaces — Reusable Configuration</h2>
-                <p class="lead">A <span class="highlight">Workspace</span> is a named configuration defining system prompts, MCP tools, and resources that can be shared across multiple Rooms.</p>
-                <p>Workspaces enable teams to standardize LLM behavior and tool access without reconfiguring each Room.</p>
-                ${C.flow([
-                    { title: 'Create Workspace', desc: 'Define system prompt + tools + resources', accent: true, arrow: '↓' },
-                    { title: 'Share Workspace', desc: 'Grant access to users or teams', arrow: '↓' },
-                    { title: 'Attach to Room', desc: 'Room inherits workspace config', arrow: '↓' },
-                    { title: 'LLM Uses Config', desc: 'System prompt + tools applied automatically', accent: true },
-                ])}
-                ${C.split(
-                    {
-                        title: 'Workspace Structure',
-                        content: C.code(`{
-  "workspace_id": "ws-123",
-  "name": "Sales Assistant",
-  "system_prompt": "You are a helpful sales assistant...",
-  "resources": [
-    { "type": "PROJECT", "id": "crm-app" },
-    { "type": "DATABASE", "id": "sales-db" }
-  ],
-  "is_active": true,
-  "owner": "user@example.com"
-}`, 'json', 'Workspace in MODEL_INFERENCE_LOGS_DB')
-                    },
-                    {
-                        title: 'Room References Workspace',
-                        content: C.code(`{
-  "room_id": "room-456",
-  "options": {
-    "workspace": {
-      "workspace_id": "ws-123"
-    }
-  }
-}
 
-// Room inherits:
-// - system_prompt from workspace
-// - MCP tools from resources
-// - Can override with options.instructions`, 'json', 'Room with workspace')
-                    }
-                )}
-            `
+    // ─── SECTION 2: PLAYGROUND DEEP DIVE ────────────────────────────────────
+    {
+        id: "playground-title",
+        title: "Playground",
+        content: C.titleSlide(
+            "Playground — Wiring Your App into an AI Agent",
+            "Where MCP tools become agent capabilities",
+            "45 minutes"
+        )
+    },
+
+    {
+        id: "playground-architecture",
+        title: "Playground Architecture",
+        content: `
+            <h2>Playground Architecture — Three Layers</h2>
+            <p>Understanding what a Room is versus a Room Folder saves you debugging time later.</p>
+            ${C.layers([
+                { label: "Room", items: [
+                    { title: "Conversation Thread", desc: "Message history, tool call history" },
+                    { title: "Model Responses", desc: "What the agent says and does" },
+                ]},
+                { label: "Room Folder / Workspace", accent: true, items: [
+                    { title: "System Prompt", desc: "Agent persona and constraints", accent: true },
+                    { title: "Model Selection", desc: "Which LLM powers this room", accent: true },
+                    { title: "MCP Tools Available", desc: "Which of your apps the agent can call", accent: true },
+                ]},
+                { label: "MCP Apps + Engines", items: [
+                    { title: "Your App's Tools", desc: "search_documents and anything else in mcp_driver.py" },
+                    { title: "Shared Vector Engines", desc: "FDA document vector engine from Day 1" },
+                    { title: "Function Engines", desc: "Other callable backends" },
+                ]},
+            ])}
+            ${C.callout('A <strong>Room</strong> is a conversation. A <strong>Room Folder</strong> is the configuration that controls how that conversation behaves. You set up the folder once; every Room inside it inherits the settings.', 'info')}
+        `
+    },
+
+    {
+        id: "playground-agent-config",
+        title: "Agent Configuration",
+        content: `
+            <h2>What You Configure in a Room Folder</h2>
+            ${C.table(
+                ["Setting", "What It Does"],
+                [
+                    ["System Prompt", "Gives the agent its persona, constraints, and instructions for using tools"],
+                    ["Model", "Which LLM processes the conversation (Claude, GPT-4, etc.)"],
+                    ["MCP Tools", "Which apps are exposed as callable tools — your project goes here"],
+                    ["Engine Access", "Which vector engines, databases, and functions the agent can reach"],
+                ]
+            )}
+            ${C.callout(`The system prompt is where you give the agent its persona and constraints. <em>"You are an FDA regulatory assistant. Use the search_documents tool to answer questions based only on official FDA guidance."</em><br><br>[SCREENSHOT: Room Folder config UI]`, 'tip')}
+        `
+    },
+
+    {
+        id: "playground-handson-1",
+        title: "Hands-on: Generate MCP JSON",
+        content: `
+            <h2>Hands-on: Step 1 — Generate Your MCP Tool Definition</h2>
+            ${C.handson("Step 1: Generate Your MCP Tool Definition", `
+                <ol>
+                    <li>Open the Pixel console or Notebook in ${CONFIG.productName}</li>
+                    <li>Run the following, replacing the ID with your project ID:
+                        ${C.code(`MakePythonMCP(project=["<your-project-id>"]);`, 'pixel')}
+                    </li>
+                    <li>Navigate to your project's <code>assets/mcp/</code> folder and open <code>py_mcp.json</code></li>
+                    <li>Verify your function appears as a tool with <code>name</code>, <code>description</code>, and <code>inputSchema</code></li>
+                </ol>
+                <h4>Expected Result</h4>
+                ${C.code(`{
+  "tools": [
+    {
+      "name": "search_documents",
+      "description": "Search FDA guidance documents and return relevant passages...",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "question": { "type": "string", "description": "The question to search for" }
         },
-        {
-            id: "playground-mcp-integration",
-            title: "MCP Apps & Engines",
-            content: `
-                <h2>MCP Apps & Engines Integration</h2>
-                <p>Playground integrates with <strong>MCP (Model Context Protocol)</strong> to expose tools from Apps and Engines to the LLM.</p>
-                <p>When a Workspace or Room references an MCP-enabled App or Engine, its tools become available for the LLM to call.</p>
-                ${C.sequence(
-                    ["User Message", "Room.ask()", "LLM API", "Tool Execution", "Insight"],
-                    [
-                        { from: 0, to: 1, label: "\"Query the sales database\"" },
-                        { from: 1, to: 2, label: "message + tools list" },
-                        { from: 2, to: 1, label: "tool_calls: [appId__toolName]", type: "response" },
-                        { from: 1, to: 3, label: "RunMCPToolReactor" },
-                        { from: 3, to: 4, label: "insight.runPixel(toolPixel)" },
-                        { from: 4, to: 3, label: "result", type: "response" },
-                        { from: 3, to: 1, label: "tool result", type: "response" },
-                        { from: 1, to: 2, label: "message + tool result" },
-                        { from: 2, to: 1, label: "final LLM response", type: "response" },
-                        { from: 1, to: 0, label: "display to user", type: "response" },
-                    ]
-                )}
-                ${C.code(`// Room.getAllToolsJsonForRoom() aggregates tools from:
-// 1. Workspace resources (apps/engines)
-// 2. Room options.mcp (additional apps/engines)
-
-public List<Map<String, Object>> getAllToolsJsonForRoom() {
-    List<Map<String, Object>> aggregated = new ArrayList<>();
-    Map<String, Object> options = getOptionsMap();
-
-        // From options.mcp
-        if (options.containsKey("mcp")) {
-            List<Map<String, Object>> mcpList = (List) options.get("mcp");
-            for (Map<String, Object> mcpMap : mcpList) {
-                String type = (String) mcpMap.get("type");  // CATALOG_TYPE (PROJECT, DATABASE, VECTOR, ...)
-                String id = (String) mcpMap.get("id");
-                aggregated.addAll(getToolJson(id)); // getToolJson filters out tools with SMSS_MCP_EXECUTION=disabled
-            }
-        }
-
-    // From workspace resources
-    if (options.containsKey("workspace")) {
-        Map<String, Object> workspace = (Map) options.get("workspace");
-        String workspaceId = (String) workspace.get("workspace_id");
-        List<Map<String, Object>> resources = ModelInferenceLogsUtils
-            .getWorkspaceResourcesByType(workspaceId, null);
-        for (Map<String, Object> resource : resources) {
-            String resourceId = (String) resource.get("resource_id");
-            aggregated.addAll(getToolJson(resourceId));
-        }
-    }
-
-    return aggregated;
-}`, 'java', 'prerna/engine/impl/model/Room.java')}
-            `
-        },
-        {
-            id: "playground-reactors",
-            title: "Playground Reactors",
-            content: `
-                <h2>Playground Reactors</h2>
-                <p>Playground provides several specialized reactors for programmatic interaction with rooms and conversations.</p>
-                <p>These reactors enable custom integrations and automation beyond the standard UI.</p>
-                ${C.table(
-                    ["Reactor", "Purpose", "Key Inputs", "Key Outputs"],
-                    [
-                        [
-                            "AskPlaygroundReactor",
-                            "Run an LLM text-generation call with full message context",
-                            "engine, roomId, command (prompt), image, paramValuesMap",
-                            "{ inputMessage, responseMessage }"
-                        ],
-                        [
-                            "CreatePlaygroundRoomReactor",
-                            "Create a new playground room with automatic playground project association",
-                            "roomId (optional), model, systemPrompt",
-                            "Room object with PLAYGROUND_PROJECT_ID set"
-                        ],
-                        [
-                            "GetPlaygroundMessagesReactor",
-                            "Retrieve message history from a room with pagination and sorting",
-                            "roomId, limit, offset, sort (ASC/DESC)",
-                            "Array of message objects (InputMessage + ResponseMessage)"
-                        ],
-                        [
-                            "GetPlaygroundRoomsReactor",
-                            "Get all playground rooms for the current user",
-                            "projectId (auto-set to PLAYGROUND_PROJECT_ID)",
-                            "Array of room objects with metadata"
-                        ],
-                        [
-                            "AddPlaygroundToolExecutionReactor",
-                            "Add tool execution results to message history and continue LLM conversation",
-                            "engine, roomId, toolId, toolName, toolExecutionResponse, toolParameterValues",
-                            "{ responseMessage } OR confirmation string if more tools needed"
-                        ]
-                    ]
-                )}
-                ${C.callout('All playground reactors enforce RBAC — users can only access rooms they own or have been granted access to.', 'warning')}
-                <h3>Example: Programmatic Playground Interaction with MCP Tools</h3>
-                ${C.code(`// 1. Create a playground room
-CreatePlaygroundRoom();
-
-// 2. Configure room options (model, MCP apps, temperature)
-UpdateRoomOptions(
-    roomId="7aa48f5f-fc80-4d10-b9a3-9ddf33e24024",
-    roomOptions=[{
-        "instructions": "",
-        "mcp": [{
-            "type": "PROJECT",
-            "id": "29e9e371-9243-4293-ad3b-4be08ef95ab5",
-            "name": "MCP"
-        }],
-        "temperature": 0.3,
-        "workspace": null,
-        "modelId": "0d5838c2-24f4-468d-a132-cdbe71b63669"
-    }]
-);
-
-// 3. Ask the LLM a question (LLM will call tools if needed)
-AskPlayground(
-    engine=["0d5838c2-24f4-468d-a132-cdbe71b63669"],
-    roomId=["7aa48f5f-fc80-4d10-b9a3-9ddf33e24024"],
-    command=["<encode>what is the stock price of facebook?</encode>"],
-    context=[],
-    image=[],
-    parentMessageId=["ROOT_PLACEHOLDER_ID"],
-    paramValues=[{"temperature": 0.3}]
-);
-// LLM response: tool_calls: [a29e9e371-9243-4293-ad3b-4be08ef95ab5_get_stock_price]
-
-// 4. Execute the MCP tool
-RunMCPTool(
-    project=["29e9e371-9243-4293-ad3b-4be08ef95ab5"],
-    function=["a29e9e371-9243-4293-ad3b-4be08ef95ab5_get_stock_price"],
-    paramValues=[{"symbol": "META"}]
-);
-
-// 5. Add tool execution result back to conversation
-AddPlaygroundToolExecution(
-    engine=["0d5838c2-24f4-468d-a132-cdbe71b63669"],
-    roomId=["7aa48f5f-fc80-4d10-b9a3-9ddf33e24024"],
-    parentMessageId=["019c8b74-1cdc-7edc-9c3e-4292f8919447"],
-    toolId=["toolu_vrtx_01Qju4Q4e5DYdUinLmAKaUCq"],
-    toolName=["a29e9e371-9243-4293-ad3b-4be08ef95ab5_get_stock_price"],
-    toolExecutionResponse=["<encode>{\\"META\\":642.1699829101562}</encode>"],
-    paramValues=[{}],
-    mcpToolStatus="success",
-    toolParameterValues=[{"symbol": "META"}]
-);
-// LLM continues with tool result and provides final answer`, 'pixel', 'Complete MCP Tool Execution Flow')}
-                ${C.callout('The <strong>AskPlaygroundReactor</strong> automatically processes markdown code blocks in LLM responses, extracting executable code for the Pixel console.', 'tip')}
-            `
-        },
-        {
-            id: "playground-default-tools",
-            title: "Default Tools",
-            content: `
-                <h2>Default Tools — Global MCP Tool Configuration</h2>
-                <p class="lead"><strong>Default Tools</strong> are MCP-enabled resources (apps, engines, databases, vectors) that are automatically available in <strong>every</strong> Playground room without manual configuration.</p>
-                <p>This is configured at the <strong>theme level</strong> in the theme database, enabling enterprise-wide tool availability.</p>
-                ${C.flow([
-                    { title: 'Configure in Theme DB', desc: 'Add defaultTools array to theme.playground config' },
-                    { title: 'User Creates Room', desc: 'New Playground room is created', arrow: '→' },
-                    { title: 'Default Tools Injected', desc: 'Room automatically gets defaultTools from theme', arrow: '→' },
-                    { title: 'LLM Sees Tools', desc: 'Tools appear in every LLM request', accent: true },
-                ])}
-                <h3>Theme Configuration</h3>
-` +
-                C.code(`{
-  "playground": {
-    "globalSystemPrompt": "...",
-    "systemPromptVars": {...},
-    "defaultTools": [
-      {
-        "type": "PROJECT",
-        "id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
-        "name": "Document Analysis App"
-      },
-      {
-        "type": "VECTOR",
-        "id": "e5f6g7h8-9012-34ij-klmn-5678901234op",
-        "name": "Enterprise Knowledge Base"
-      },
-      {
-        "type": "DATABASE",
-        "id": "q9r0s1t2-3456-78uv-wxyz-9012345678qr",
-        "name": "Sales Database"
-      },
-      {
-        "type": "FUNCTION",
-        "id": "a3b4c5d6-7890-12ef-ghij-3456789012kl",
-        "name": "API Integration Functions"
-      },
-      {
-        "type": "STORAGE",
-        "id": "m7n8o9p0-1234-56qr-stuv-7890123456wx",
-        "name": "Shared File Storage"
+        "required": ["question"]
       }
-    ]
-  }
-}`, 'json', 'Theme THEME_MAP') + `
-                <h3>Supported Resource Types</h3>
-                ${C.table(
-                    ['Type', 'Purpose', 'Example Use Case'],
-                    [
-                        ['PROJECT', 'MCP apps with custom tools', 'Document processing, workflow automation'],
-                        ['VECTOR', 'Vector databases for RAG', 'Knowledge base search, semantic lookup'],
-                        ['DATABASE', 'Relational/graph databases', 'Query structured data, reports'],
-                        ['FUNCTION', 'Custom API endpoints', 'External service integrations'],
-                        ['STORAGE', 'File storage engines', 'Read/write files, document management'],
-                    ]
-                )}
-                ${C.callout('Default tools are <strong>merged</strong> with workspace-specific and room-specific tools. Users can override or add additional tools per room.', 'info')}
-                ${C.callout('Use default tools sparingly — every room will load these tools, which increases token usage. Only add tools that should be universally available across the organization.', 'warning')}
-            `
-        },
-        {
-            id: "playground-enterprise-prompt",
-            title: "Enterprise System Prompt",
-            content: `
-                <h2>Enterprise System Prompt Customization</h2>
-                <p>Playground supports <strong>enterprise-wide system prompt templates</strong> with Pixel-backed variables via the active theme configuration.</p>
-                <p>This enables global policies, dynamic context injection, and centralized governance.</p>
-                ${C.flow([
-                    { title: 'Base System Prompt', desc: 'options.instructions OR workspace.system_prompt', arrow: '↓' },
-                    { title: 'Apply Enterprise Template', desc: 'playground.globalSystemPrompt from theme', arrow: '↓ wraps base prompt' },
-                    { title: 'Expand {{VARS}}', desc: 'playground.systemPromptVars → run Pixel expressions', arrow: '↓ injects dynamic data' },
-                    { title: 'Final Effective Prompt', desc: 'Sent to LLM with every message', accent: true },
-                ])}
-                ${C.split(
-                    {
-                        title: 'Theme Configuration',
-                        content: C.code(`{
-  "playground": {
-    "globalSystemPrompt": "You are Acme Corp assistant.\\n\\nBase prompt:\\n{{SYSTEM_PROMPT}}\\n\\nToday: {{DATE}}\\nUser: {{USERINFO.MICROSOFT.email}}",
-    "systemPromptVars": {
-      "DATE": "Date();",
-      "USERINFO": "GetUserInfo();"
     }
-  }
-}`, 'json', 'Theme THEME_MAP')
-                    },
-                    {
-                        title: 'Variable Syntax',
-                        content: `
-                            <ul>
-                                <li><code>{{VAR_NAME}}</code> — Basic substitution</li>
-                                <li><code>{{VAR.key}}</code> — Object property access</li>
-                                <li><code>{{VAR[0]}}</code> — Array indexing</li>
-                                <li><code>{{VAR.items[0].name}}</code> — Nested access</li>
-                            </ul>
-                            <p>Pixel expressions must be <strong>single statements</strong> ending with <code>;</code></p>
-                            ${C.callout('Variable expansion runs as <code>META|Pixel</code> so it doesn\'t pollute the user\'s Pixel history.', 'tip')}
-                        `
-                    }
-                )}
-            `
-        },
-        {
-            id: "playground-handson",
-            title: "Hands-on: Create a Workspace",
-            content: `
-                <h2>Hands-on: Explore Playground via UI</h2>
-                ${C.handson('Create and test a custom Workspace', `
-                    <h4>Part 1: Create a Workspace in the UI</h4>
-                    <ol>
-                        <li>Open the ${CONFIG.productName} Playground interface</li>
-                        <li>Navigate to <strong>Workspaces</strong> → <strong>New Workspace</strong></li>
-                        <li>Configure the workspace:
-                            <ul>
-                                <li><strong>Name:</strong> "Data Analyst Assistant"</li>
-                                <li><strong>System Prompt:</strong> "You are a data analyst specializing in SQL and visualization."</li>
-                                <li><strong>Resources:</strong> Add a database (e.g., "sales-db") and an app (e.g., "analytics-app")</li>
-                            </ul>
-                        </li>
-                        <li>Save the workspace — note the generated <code>workspace_id</code></li>
-                    </ol>
+  ]
+}`, 'json', 'assets/mcp/py_mcp.json — what you should see')}
+                ${C.callout('If the file is empty or missing, check that <code>mcp_driver.py</code> has at least one function with a docstring.', 'tip')}
+            `)}
+        `
+    },
 
-                    <h4>Part 2: Create a Room using the Workspace</h4>
-                    <ol>
-                        <li>Navigate to <strong>Rooms</strong> → <strong>New Room</strong></li>
-                        <li>Configure the room:
-                            <ul>
-                                <li><strong>Room Name:</strong> "Sales Analysis"</li>
-                                <li><strong>Model:</strong> Select your GPT-4 or Claude model engine</li>
-                                <li><strong>Workspace:</strong> Select "Data Analyst Assistant" from the dropdown</li>
-                            </ul>
-                        </li>
-                        <li>The room will inherit the workspace's system prompt and have access to its resources</li>
-                    </ol>
+    {
+        id: "playground-handson-2",
+        title: "Hands-on: Wire into Playground",
+        content: `
+            <h2>Hands-on: Step 2 — Add Your Tool to a Playground Room</h2>
+            ${C.handson("Step 2: Add Your Tool to a Playground Room", `
+                <ol>
+                    <li>Open <strong>Playground</strong> in ${CONFIG.productName}</li>
+                    <li>Create a new Room Folder (or open an existing one)</li>
+                    <li>In <strong>Settings</strong>: add your project as an MCP server
+                        <ul>
+                            <li>Type: <code>PROJECT</code></li>
+                            <li>ID: your project ID from Step 1</li>
+                        </ul>
+                    </li>
+                    <li>Set a system prompt:
+                        ${C.code(`You are an FDA regulatory assistant.
+Use the search_documents tool to answer questions based only on official FDA guidance.
+Always cite the document passage you found before giving your answer.`, 'properties', 'System Prompt')}
+                    </li>
+                    <li>Save the Room Folder</li>
+                </ol>
+            `)}
+        `
+    },
 
-                    <h4>Part 3: Test Tool Calling</h4>
-                    <ol>
-                        <li>Send a message: <strong>"Query the sales database for total revenue"</strong></li>
-                        <li>Observe the LLM's response — it should recognize the database tool from the workspace</li>
-                        <li>Check the tool execution panel to see which tools were called</li>
-                        <li>Try additional queries that require database or app access</li>
-                    </ol>
+    {
+        id: "playground-handson-3",
+        title: "Hands-on: The Payoff",
+        content: `
+            <h2>Hands-on: Step 3 — Ask the Agent a Question</h2>
+            ${C.handson("Step 3: Ask the Agent a Question", `
+                <ol>
+                    <li>Open a <strong>new Room</strong> inside your Room Folder</li>
+                    <li>Ask: <em>"What does the guidance say about [topic from your documents]?"</em></li>
+                    <li>Watch the agent:
+                        <ul>
+                            <li>Call your <code>search_documents</code> tool with a structured input</li>
+                            <li>Receive the passages your vector engine returns</li>
+                            <li>Incorporate them into a coherent answer</li>
+                        </ul>
+                    </li>
+                    <li>Ask a follow-up question to see multi-turn behavior</li>
+                </ol>
+                ${C.callout('If the agent answers without calling the tool, refine your system prompt to be more directive: <em>"Always use the search_documents tool before answering any question about FDA regulations."</em>', 'tip')}
+                <h4>What Success Looks Like</h4>
+                ${C.flow([
+                    { title: 'You ask a question', desc: 'In plain English — no Pixel, no code', accent: true, arrow: '↓' },
+                    { title: 'Agent calls search_documents', desc: 'You see the tool call in the conversation log', arrow: '↓' },
+                    { title: 'Vector engine returns passages', desc: 'Your Day 1 work doing its job', arrow: '↓' },
+                    { title: 'Agent synthesizes an answer', desc: 'Grounded in real FDA documents', accent: true },
+                ])}
+            `)}
+        `
+    },
 
-                    <h4>Part 4: Upload and Analyze a File</h4>
-                    <ol>
-                        <li>In the room interface, click <strong>Upload File</strong></li>
-                        <li>Upload a CSV file (e.g., <code>data.csv</code>)</li>
-                        <li>Send a message: <strong>"Analyze the data.csv file I just uploaded"</strong></li>
-                        <li>The LLM should use Room Folder MCP tools (ExtractRoomFiles, SearchRoomFilesWithContext) to access the file</li>
-                        <li>Check the Room Folder directory to see the uploaded file: <code>BASE_FOLDER/room/&lt;room_id&gt;/data.csv</code></li>
-                    </ol>
+    {
+        id: "playground-summary",
+        title: "Section Summary",
+        content: `
+            <h2>Morning Summary — What You Built</h2>
+            ${C.cards([
+                { badge: 'Day 1', title: 'The App', desc: 'Vector engine ingesting FDA docs + published app with RAG notebook' },
+                { badge: 'Step 1', title: 'MCP Exposed', desc: 'Python function + MakePythonMCP() = discoverable tool with a JSON schema' },
+                { badge: 'Step 2', title: 'Playground Wired', desc: 'Room Folder connects your tool to an AI agent with a targeted system prompt' },
+                { badge: 'Step 3', title: 'Agent Works', desc: 'Ask a question in plain English — agent calls your tool, gets results, answers correctly' },
+            ])}
+            ${C.callout('After lunch: <strong>Security</strong> (who can use this), <strong>API Endpoints</strong> (how to call it from outside ${CONFIG.productName}), then open build time.', 'info')}
+        `
+    }
 
-                    <h4>Expected Outcomes</h4>
-                    <ul>
-                        <li>Part 1: Workspace created with custom system prompt and resources</li>
-                        <li>Part 2: Room inherits workspace configuration and shows available tools</li>
-                        <li>Part 3: LLM successfully calls workspace resources (database, app) as tools</li>
-                        <li>Part 4: File uploaded to room folder, LLM reads and analyzes it using MCP tools</li>
-                    </ul>
-                    ${C.callout('This hands-on demonstrates the full Playground workflow: Workspace → Room → Tools → Files. For programmatic access, use the Playground room reactors (e.g., <code>AskPlayground</code>) rather than a non-existent <code>RunRoomPixel</code> call.', 'tip')}
-                `)}
-            `
-        },
-        {
-            id: "playground-summary",
-            title: "Summary",
-            content: `
-                <h2>Summary: Playground Architecture</h2>
-                ${C.table(
-                    ["Component", "Purpose", "Storage", "Key Features"],
-                    [
-                        [
-                            "Room",
-                            "Conversation thread",
-                            "MODEL_INFERENCE_LOGS_DB",
-                            "Message history, tool execution context"
-                        ],
-                        [
-                            "Room Folder",
-                            "File storage per Room",
-                            "BASE_FOLDER/room/<room_id>/",
-                            "Uploads, extracted text, outputs"
-                        ],
-                        [
-                            "Workspace",
-                            "Reusable config",
-                            "MODEL_INFERENCE_LOGS_DB",
-                            "System prompt, tools, resources"
-                        ],
-                        [
-                            "MCP Integration",
-                            "Tool provisioning",
-                            "App/Engine mcp.json",
-                            "Exposes tools to LLM via workspace"
-                        ],
-                        [
-                            "Enterprise Theme",
-                            "Global prompt template",
-                            "Theme THEME_MAP",
-                            "{{VARS}} with Pixel-backed expansion"
-                        ],
-                        [
-                            "Cloud Sync",
-                            "Cross-device + sharing",
-                            "Central cluster storage",
-                            "Automatic push/pull of rooms + files"
-                        ]
-                    ]
-                )}
-                <h3>Key Takeaways</h3>
-                <ul>
-                    <li><strong>Playground</strong> is built on the Room architecture with added UI and governance</li>
-                    <li><strong>Room Folders</strong> provide isolated file storage per conversation</li>
-                    <li><strong>Workspaces</strong> enable reusable configuration and team standardization</li>
-                    <li><strong>MCP integration</strong> exposes tools from Apps and Engines to the LLM</li>
-                    <li><strong>Enterprise themes</strong> allow global system prompt customization with Pixel-backed variables</li>
-                    <li><strong>Cloud sync</strong> enables cross-device access and real-time collaboration</li>
-                    <li>All Room messages are logged in <code>MODEL_INFERENCE_LOGS_DB</code> for compliance and analytics</li>
-                </ul>
-                ${C.callout(`Playground combines conversational AI, enterprise governance, and tool integration into a cohesive user experience — all built on ${CONFIG.productName}'s core Room and MCP architecture.`, 'tip')}
-            `
-        }
-    ];
+];
