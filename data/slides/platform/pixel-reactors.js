@@ -14,38 +14,24 @@ const slides_platform_pixel_reactors = [
         title: "Pixel — The Expression Language",
         content: `
             <h2>Pixel — The Expression Language</h2>
-            ${C.split(
-                {
-                    title: "What Pixel Is",
-                    content: `
-                        <ul>
-                            <li><strong>Expression language</strong> — not a general-purpose programming language, purpose-built for ${CONFIG.productName}</li>
-                            <li><strong>Everything chains</strong> — the output of one command flows into the next</li>
-                            <li><strong>Human-readable</strong> — commands read like plain English verbs</li>
-                            <li><strong>Runs server-side</strong> — executes on the ${CONFIG.productName} backend, not in your browser</li>
-                        </ul>
-                    `
-                },
-                {
-                    title: "Simple Examples",
-                    content: C.code(`// Ask a question to a model engine
-AskModelEngine(
-    engine=["<engine-id>"],
-    command=["What is ELSA?"]
+            <ul>
+                <li><strong>Expression language</strong> — not a general-purpose programming language, purpose-built for ${CONFIG.productName}</li>
+                <li><strong>Everything chains</strong> — the output of one command flows into the next</li>
+                <li><strong>Human-readable</strong> — commands read like plain English verbs</li>
+                <li><strong>Runs server-side</strong> — executes on the ${CONFIG.productName} backend, not in your browser</li>
+            </ul>
+            ${C.code(`## Ask a question to a model ##
+LLM(
+    engine=["<model-id>"],
+    command=["<encode>What is ELSA?</encode>"]
 );
 
-// Chain: search vector DB then ask model
-context = VectorDatabaseQuery(
+## Search a vector database for relevant document chunks ##
+VectorDatabaseQuery(
     engine=["<vector-id>"],
-    searchStatement=["ELSA architecture"],
+    command=["<your question>"],
     limit=[3]
-);
-AskModelEngine(
-    engine=["<model-id>"],
-    command=["Explain this: " + context]
-);`, "pixel")
-                }
-            )}
+);`, "pixel")}
             ${C.callout(`You already ran Pixel when you used the Q&A tab on your vector engine. Now you'll write it yourself.`, "info")}
         `
     },
@@ -61,14 +47,14 @@ AskModelEngine(
                 },
                 {
                     title: "What you do",
-                    desc: `Call them by name with parameters — you don't write them. <code>AskModelEngine(...)</code> calls the AskModelEngine reactor.`
+                    desc: `Call them by name with parameters — you don't write them. <code>LLM(engine=["id"], command=["hello"])</code> calls the LLM reactor.`
                 },
                 {
                     title: "Why it matters",
                     desc: `Every capability in ${CONFIG.productName} is a reactor. Knowing they exist tells you what's possible.`
                 }
             ])}
-            ${C.callout(`There are 1000+ built-in reactors. The ones you'll use most: <code>AskModelEngine</code>, <code>VectorDatabaseQuery</code>, <code>Py</code>, <code>Database</code>, <code>SaveAsset</code>.`, "tip")}
+            ${C.callout(`There are 1000+ built-in reactors. The ones you'll use most: <code>LLM</code>, <code>VectorDatabaseQuery</code>, <code>Py</code>, <code>Database</code>, <code>SaveAsset</code>.`, "tip")}
         `
     },
     {
@@ -101,7 +87,7 @@ AskModelEngine(
                 <p>Add a Pixel cell and run:</p>
                 ${C.code(`VectorDatabaseQuery(
     engine=["<your-vector-engine-id>"],
-    searchStatement=["<type a question about your documents>"],
+    command=["<type a question about your documents>"],
     limit=[5]
 );`, "pixel")}
                 <h4>What to observe</h4>
@@ -122,9 +108,9 @@ AskModelEngine(
             ${C.handson("Exercise 2: Call the Shared Model Engine", `
                 <p><strong>Goal:</strong> Send a plain prompt to the shared LLM and observe the response.</p>
                 <p>Add a new Pixel cell and run:</p>
-                ${C.code(`AskModelEngine(
+                ${C.code(`LLM(
     engine=["<shared-model-engine-id>"],
-    command=["In one paragraph, what is retrieval-augmented generation?"]
+    command=["<encode>In one paragraph, what is retrieval-augmented generation?</encode>"]
 );`, "pixel")}
                 <h4>What to observe</h4>
                 <ul>
@@ -142,21 +128,24 @@ AskModelEngine(
             <h2>Hands-on: Exercise 3 — Your First RAG Pipeline</h2>
             ${C.handson("Exercise 3: Your First RAG Pipeline", `
                 <p><strong>Goal:</strong> Chain vector search into a model call — this is the core pattern behind every AI Q&A app.</p>
-                ${C.code(`// Step 1: get relevant context from your vector engine
+                <p>Add a Pixel cell and run — replace <strong>both</strong> instances of <code>YOUR QUESTION</code> with the same question:</p>
+                ${C.code(`## Step 1: get relevant context from your vector engine ##
 context = VectorDatabaseQuery(
     engine=["<your-vector-engine-id>"],
-    searchStatement=["<your question>"],
+    command=["YOUR QUESTION"],
     limit=[3]
 );
 
-// Step 2: pass context + question to the model
-AskModelEngine(
+## Step 2: pass the retrieved chunks as system prompt, question as command ##
+LLM(
     engine=["<shared-model-engine-id>"],
-    command=["Using only the following context, answer the question.\\n\\nContext: " + context + "\\n\\nQuestion: <your question>"]
+    context=[context],
+    command=["<encode>Using only the provided context, answer: YOUR QUESTION</encode>"]
 );`, "pixel")}
                 <h4>What to observe</h4>
                 <ul>
-                    <li>How the <code>context</code> variable bridges the two steps</li>
+                    <li>The <code>context</code> parameter sends the retrieved chunks to the model as its system prompt</li>
+                    <li>The <code>command</code> parameter is your question — the model sees context first, then the question</li>
                     <li>Compare the answer quality to Exercise 2 — the model now has your documents</li>
                 </ul>
                 ${C.callout(`This is exactly what the Q&A tab does under the hood — now you're driving it directly.`, "info")}
@@ -206,7 +195,7 @@ print(f"First 100 chars: {result[:100]}")`, "python")}
                 },
                 {
                     title: "RAG Pattern",
-                    desc: "<code>VectorDatabaseQuery</code> → <code>AskModelEngine</code>. This two-step chain is the foundation of every AI Q&A application."
+                    desc: "<code>VectorDatabaseQuery</code> → <code>LLM</code>. This two-step chain is the foundation of every AI Q&A application."
                 }
             ])}
             ${C.callout(`Tomorrow you'll wrap this RAG chain into an MCP tool so an AI agent can call it on demand.`, "info")}
