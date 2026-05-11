@@ -128,10 +128,11 @@ VectorDatabaseQuery(
             <h2>Hands-on: Exercise 3 — Your First RAG Pipeline</h2>
             ${C.handson("Exercise 3: Your First RAG Pipeline", `
                 <p><strong>Goal:</strong> Chain vector search into a model call — this is the core pattern behind every AI Q&A app.</p>
+                <p>Add a Pixel cell and run — replace <strong>both</strong> instances of <code>YOUR QUESTION</code> with the same question:</p>
                 ${C.code(`## Step 1: get relevant context from your vector engine ##
 context = VectorDatabaseQuery(
     engine=["<your-vector-engine-id>"],
-    command=["<your question>"],
+    command=["YOUR QUESTION"],
     limit=[3]
 );
 
@@ -139,7 +140,7 @@ context = VectorDatabaseQuery(
 LLM(
     engine=["<shared-model-engine-id>"],
     context=[context],
-    command=["<encode>Using only the provided context, answer: <your question></encode>"]
+    command=["<encode>Using only the provided context, answer: YOUR QUESTION</encode>"]
 );`, "pixel")}
                 <h4>What to observe</h4>
                 <ul>
