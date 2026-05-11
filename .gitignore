@@ -26,6 +26,10 @@ Thumbs.db
 *.jpg
 *.jpeg
 
+# Intentional slide assets — tracked in git
+!assets/
+!assets/**
+
 # IDE
 .vscode/
 .idea/

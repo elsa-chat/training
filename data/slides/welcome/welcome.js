@@ -11,16 +11,105 @@ const slides_welcome = [
     },
     {
         id: "welcome-introductions",
-        title: "Introductions",
+        title: "ELSA: Year One",
         content: `
-            <h2>Introductions</h2>
-            <p>Let's get to know each other.</p>
-            <ul>
-                <li><strong>Your name</strong> and team / role</li>
-                <li><strong>Your background</strong> — technical, non-technical, or business</li>
-                <li><strong>One thing you want to walk away able to do</strong> in ${CONFIG.productName}</li>
-            </ul>
-            ${C.callout('No coding experience required to get value from this training. Every session has activities for all skill levels.', 'tip')}
+            <h2>${CONFIG.productName}: Year One</h2>
+            <p>Launched June 2, 2025. Here is what has changed in twelve months.</p>
+            ${C.flow([
+                {
+                    title: 'Launch — June 2025',
+                    desc: 'Chat interface + document Q&amp;A. Ask questions, get answers. The AI was a destination you went to.'
+                },
+                {
+                    title: 'Integrations',
+                    desc: 'Enterprise document repositories and PubMed connected. Your data, not just uploaded files.'
+                },
+                {
+                    title: CONFIG.productName + ' 4.0',
+                    desc: 'MCP integration ships. The AI stops being a chatbot and starts being an agent — it calls your tools for you.'
+                }
+            ])}
+            ${C.split(
+                {
+                    title: 'Old Way',
+                    content: `
+                        <ol>
+                            <li>Open your documents across multiple systems</li>
+                            <li>Manually copy the right context into the chat window</li>
+                            <li>Get an answer — then go back and do the work yourself</li>
+                        </ol>
+                        <p class="muted">You go to the AI. You carry the context. You execute the result.</p>
+                    `
+                },
+                {
+                    title: 'ELSA 4.0 Way',
+                    content: `
+                        <ol>
+                            <li>Describe what you need in plain English</li>
+                            <li>The agent finds the documents, calls the tools, runs the workflow</li>
+                            <li>You review and decide — the AI does the legwork</li>
+                        </ol>
+                        <p class="muted">The AI comes to your work. You stay in control.</p>
+                    `
+                }
+            )}
+            ${C.callout(`This training shows you how to build on that foundation — not just use ${CONFIG.productName}, but extend it for your team's specific workflows.`, 'tip')}
+        `
+    },
+    {
+        id: "welcome-paradigm",
+        title: "The Paradigm Shift",
+        content: `
+            <h2>The Paradigm Shift</h2>
+            <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:1.5rem;align-items:start;margin-top:1rem;">
+
+                <!-- OLD -->
+                <div style="background:#f8f9fa;border-radius:12px;padding:1.25rem;">
+                    <div style="font-size:0.7rem;font-weight:700;letter-spacing:.1em;color:#888;margin-bottom:.75rem;">OLD PARADIGM</div>
+                    <div style="font-size:1.5rem;text-align:center;margin-bottom:.5rem;">🧑‍💼</div>
+                    <p style="font-size:.85rem;color:#555;text-align:center;margin:0 0 .75rem;">You navigate every system yourself.<br>You construct the context. You copy-paste.</p>
+                    <div style="display:flex;flex-direction:column;gap:.35rem;">
+                        ${['Listings System','Document Repo','Approval System','SharePoint','Research Hub','Search 360','ServiceNow','Appian','Email'].map(t =>
+                            `<div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:.3rem .65rem;font-size:.78rem;color:#444;">${t}</div>`
+                        ).join('')}
+                    </div>
+                    <div style="text-align:center;margin:.75rem 0 .25rem;font-size:.8rem;color:#aaa;">↓ manual effort</div>
+                    <div style="background:#e2e8f0;border-radius:6px;padding:.35rem .65rem;font-size:.78rem;color:#666;text-align:center;">AI (one of many tabs)</div>
+                </div>
+
+                <!-- ARROW -->
+                <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--accent);padding-top:4rem;">→</div>
+
+                <!-- NEW -->
+                <div style="background:#FDF3E0;border:2px solid var(--accent);border-radius:12px;padding:1.25rem;">
+                    <div style="font-size:0.7rem;font-weight:700;letter-spacing:.1em;color:var(--accent);margin-bottom:.75rem;">NEW PARADIGM — ELSA 4.0</div>
+                    <div style="font-size:1.5rem;text-align:center;margin-bottom:.5rem;">🧑‍💼</div>
+                    <p style="font-size:.85rem;color:#555;text-align:center;margin:0 0 .75rem;"><em>"Find the guidance on X and summarize it for my review."</em><br><span style="font-size:.75rem;color:#888;">Plain English. One interface.</span></p>
+                    <div style="background:var(--accent);border-radius:8px;padding:.5rem .75rem;font-size:.85rem;font-weight:600;color:#fff;text-align:center;margin-bottom:.75rem;">AI Agent (ELSA)</div>
+                    <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:#888;text-align:center;margin-bottom:.5rem;">via Model Context Protocol</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.35rem;">
+                        ${['Listings System','Document Repo','Approval System','SharePoint','Research Hub','Search 360','ServiceNow','Appian'].map(t =>
+                            `<div style="background:#fff;border:1px solid #f0c97a;border-radius:6px;padding:.3rem .5rem;font-size:.72rem;color:#444;">${t}</div>`
+                        ).join('')}
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:1rem;">
+                ${C.callout('1 UI &nbsp;·&nbsp; Plain English &nbsp;·&nbsp; AI finds the context, runs the workflow, brings you the result &nbsp;·&nbsp; You stay in control', 'tip')}
+            </div>
+        `
+    },
+    {
+        id: "welcome-paradigm-img",
+        title: "The Paradigm Shift (cont.)",
+        content: `
+            <img
+                src="assets/paradigm-shift.png"
+                alt="Old vs New Paradigm"
+                style="position:absolute;top:3rem;left:0;width:100%;height:auto;border-radius:6px;"
+                onerror="this.replaceWith(Object.assign(document.createElement('div'),{innerHTML:'<div style=\'padding:3rem;border:2px dashed #ddd;border-radius:8px;text-align:center;color:#aaa\'><p style=\'font-size:1rem;margin:0\'>📁 Drop <code>paradigm-shift.png</code> in <code>training/assets/</code></p></div>'}));"
+            >
         `
     },
     {
