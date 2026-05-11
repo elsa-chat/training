@@ -52,7 +52,20 @@ const slides_playground = [
                     ["Engine Access", "Which vector engines, databases, and functions the agent can reach"],
                 ]
             )}
-            ${C.callout(`The system prompt is where you give the agent its persona and constraints. <em>"You are an FDA regulatory assistant. Use the search_documents tool to answer questions based only on official FDA guidance."</em><br><br>[SCREENSHOT: Room Folder config UI]`, 'tip')}
+            ${C.callout(`The system prompt is where you give the agent its persona and constraints. <em>"You are an FDA regulatory assistant. Use the search_documents tool to answer questions based only on official FDA guidance."</em>`, 'tip')}
+            <div id="pg-agent-carousel" data-idx="0" style="margin-top:16px; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--surface);">
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface-2);">
+                    <span class="pg-car-label" style="font-weight:600; font-size:0.95rem;">1 — Agent Instructions</span>
+                    <span class="pg-car-counter" style="font-size:0.85rem; color:var(--muted);">1 / 3</span>
+                </div>
+                <img data-slide="0" src="images/playground/agent/Agent Instruction Page.png" alt="Agent Instructions" style="display:block; width:100%; height:auto;">
+                <img data-slide="1" src="images/playground/agent/Agent Knowledge Page.png"   alt="Agent Knowledge"     style="display:none;  width:100%; height:auto;">
+                <img data-slide="2" src="images/playground/agent/Agent Toolbox Page.png"     alt="Agent Toolbox"       style="display:none;  width:100%; height:auto;">
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 16px; border-top:1px solid var(--border); background:var(--surface-2);">
+                    <button onclick="var c=document.getElementById('pg-agent-carousel'),imgs=c.querySelectorAll('img[data-slide]'),labels=['1 — Agent Instructions','2 — Knowledge','3 — Toolbox'],idx=+c.dataset.idx;imgs[idx].style.display='none';idx=(idx-1+imgs.length)%imgs.length;imgs[idx].style.display='block';c.dataset.idx=idx;c.querySelector('.pg-car-label').textContent=labels[idx];c.querySelector('.pg-car-counter').textContent=(idx+1)+' / '+imgs.length;" style="padding:6px 18px; border-radius:5px; border:1px solid var(--border); background:var(--surface); color:var(--text); cursor:pointer; font-size:0.9rem;">← Prev</button>
+                    <button onclick="var c=document.getElementById('pg-agent-carousel'),imgs=c.querySelectorAll('img[data-slide]'),labels=['1 — Agent Instructions','2 — Knowledge','3 — Toolbox'],idx=+c.dataset.idx;imgs[idx].style.display='none';idx=(idx+1)%imgs.length;imgs[idx].style.display='block';c.dataset.idx=idx;c.querySelector('.pg-car-label').textContent=labels[idx];c.querySelector('.pg-car-counter').textContent=(idx+1)+' / '+imgs.length;" style="padding:6px 18px; border-radius:5px; border:1px solid var(--border); background:var(--surface); color:var(--text); cursor:pointer; font-size:0.9rem;">Next →</button>
+                </div>
+            </div>
         `
     },
 
