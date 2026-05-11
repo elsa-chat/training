@@ -1,6 +1,14 @@
 // ===== Training Component Library =====
 // Usage: ${C.flow([...])} inside template literals in slide content
 
+function copyCode(btn) {
+    const code = btn.closest('.c-code').querySelector('pre code');
+    navigator.clipboard.writeText(code.innerText).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+    });
+}
+
 const C = {
 
     // ── Vertical flow diagram with labeled arrows ──
@@ -77,8 +85,9 @@ const C = {
     code(code, lang, title) {
         const trimmed = code.replace(/^\n+/, '').replace(/\n+$/, '');
         const escaped = trimmed.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        const copyBtn = `<button class="c-code-copy" onclick="copyCode(this)" title="Copy code">Copy</button>`;
         return `<div class="c-code">
-            ${title ? `<div class="c-code-header"><span class="c-code-title">${title}</span><span class="c-code-lang">${lang || ''}</span></div>` : `<div class="c-code-header"><span class="c-code-lang">${lang || ''}</span></div>`}
+            ${title ? `<div class="c-code-header"><span class="c-code-title">${title}</span><span class="c-code-lang">${lang || ''}</span>${copyBtn}</div>` : `<div class="c-code-header"><span class="c-code-lang">${lang || ''}</span>${copyBtn}</div>`}
             <pre><code>${escaped}</code></pre>
         </div>`;
     },
