@@ -20,16 +20,16 @@ const slides_platform_pixel_reactors = [
                 <li><strong>Human-readable</strong> — commands read like plain English verbs</li>
                 <li><strong>Runs server-side</strong> — executes on the ${CONFIG.productName} backend, not in your browser</li>
             </ul>
-            ${C.code(`// Ask a question to a model
+            ${C.code(`## Ask a question to a model ##
 LLM(
     engine=["<model-id>"],
     command=["<encode>What is ELSA?</encode>"]
 );
 
-// Search a vector database for relevant document chunks
+## Search a vector database for relevant document chunks ##
 VectorDatabaseQuery(
     engine=["<vector-id>"],
-    searchStatement=["<your question>"],
+    command=["<your question>"],
     limit=[3]
 );`, "pixel")}
             ${C.callout(`You already ran Pixel when you used the Q&A tab on your vector engine. Now you'll write it yourself.`, "info")}
@@ -87,7 +87,7 @@ VectorDatabaseQuery(
                 <p>Add a Pixel cell and run:</p>
                 ${C.code(`VectorDatabaseQuery(
     engine=["<your-vector-engine-id>"],
-    searchStatement=["<type a question about your documents>"],
+    command=["<type a question about your documents>"],
     limit=[5]
 );`, "pixel")}
                 <h4>What to observe</h4>
@@ -128,21 +128,23 @@ VectorDatabaseQuery(
             <h2>Hands-on: Exercise 3 — Your First RAG Pipeline</h2>
             ${C.handson("Exercise 3: Your First RAG Pipeline", `
                 <p><strong>Goal:</strong> Chain vector search into a model call — this is the core pattern behind every AI Q&A app.</p>
-                ${C.code(`// Step 1: get relevant context from your vector engine
+                ${C.code(`## Step 1: get relevant context from your vector engine ##
 context = VectorDatabaseQuery(
     engine=["<your-vector-engine-id>"],
-    searchStatement=["<your question>"],
+    command=["<your question>"],
     limit=[3]
 );
 
-// Step 2: pass context + question to the model
+## Step 2: pass the retrieved chunks as system prompt, question as command ##
 LLM(
     engine=["<shared-model-engine-id>"],
-    command=["Using only the following context, answer the question.\\n\\nContext: " + context + "\\n\\nQuestion: <your question>"]
+    context=[context],
+    command=["<encode>Using only the provided context, answer: <your question></encode>"]
 );`, "pixel")}
                 <h4>What to observe</h4>
                 <ul>
-                    <li>How the <code>context</code> variable bridges the two steps</li>
+                    <li>The <code>context</code> parameter sends the retrieved chunks to the model as its system prompt</li>
+                    <li>The <code>command</code> parameter is your question — the model sees context first, then the question</li>
                     <li>Compare the answer quality to Exercise 2 — the model now has your documents</li>
                 </ul>
                 ${C.callout(`This is exactly what the Q&A tab does under the hood — now you're driving it directly.`, "info")}
