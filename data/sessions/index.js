@@ -176,6 +176,12 @@ const SESSION_PLAN = {
                         typeof slides_mcp_ui_premade !== 'undefined' ? slides_mcp_ui_premade : null,
                     )
                 },
+                {
+                    title: 'Agentic App Builder — What\'s Next (Day 2 closer, 15 min)',
+                    slideIds: idsFrom(
+                        typeof slides_agent47 !== 'undefined' ? slides_agent47 : null,
+                    )
+                },
             ]
         }
     ]

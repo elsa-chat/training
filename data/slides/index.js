@@ -35,6 +35,7 @@ registerSlideCollection('Vibe Coding', typeof slides_vibe_coding !== 'undefined'
 registerSlideCollection('Python SDK', typeof slides_python_sdk !== 'undefined' ? slides_python_sdk : null);
 registerSlideCollection('Day 1 Activity', typeof slides_day1_activity !== 'undefined' ? slides_day1_activity : null);
 
+registerSlideCollection('Agent47', typeof slides_agent47 !== 'undefined' ? slides_agent47 : null);
 registerSlideCollection('Insight Room Session', typeof slides_insight_room_session !== 'undefined' ? slides_insight_room_session : null);
 registerSlideCollection('Context Engineering', typeof slides_context_engineering !== 'undefined' ? slides_context_engineering : null);
 registerSlideCollection('Message Structure', typeof slides_message_structure !== 'undefined' ? slides_message_structure : null);
