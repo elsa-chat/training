@@ -55,7 +55,7 @@ const slides_vibe_coding = [
 
                 <h4>Run these commands in your terminal:</h4>
                 ${C.code(`git clone ${CONFIG.templateRepoUrl}`, 'bash', 'Clone the template')}
-                ${C.code(`cd <project-folder>`, 'bash', 'Enter the project')}
+                ${C.code(`cd ${CONFIG.templateFolderName}`, 'bash', 'Enter the project')}
 
                 ${C.callout('Raise your hand if cloning fails — helpers will share the zip.', 'warning')}
             `)}
@@ -72,6 +72,7 @@ const slides_vibe_coding = [
                     <li>Click <strong>Settings</strong> in the left sidebar</li>
                     <li>Click <strong>My Profile</strong></li>
                     <li>Scroll down to the <strong>Personal Access Tokens</strong> section and click <strong>+ New Key</strong></li>
+                    <li>Give the key a <strong>name</strong> (e.g. <code>vibe-coding</code>), add an optional description, and click <strong>Generate</strong></li>
                     <li>Copy both the <strong>Access Key</strong> and <strong>Secret Key</strong> immediately — the Secret is shown only once</li>
                 </ol>
 
@@ -89,26 +90,20 @@ const slides_vibe_coding = [
 
                 ${C.code(`{
   "env": {
+    "ANTHROPIC_AUTH_TOKEN": "<your-access-key>:<your-secret-key>",
     "ANTHROPIC_BASE_URL": "${CONFIG.anthropicEndpoint}",
-    "ANTHROPIC_API_KEY": "<your-access-key>:<your-secret-key>",
-    "ANTHROPIC_MODEL": "claude-sonnet-4-5"
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "true"
   },
-  "permissions": {
-    "allow": [
-      "Bash(npm:*)",
-      "Bash(git:*)",
-      "Edit(*)",
-      "Read(*)",
-      "Write(*)"
-    ]
-  }
+  "model": "${CONFIG.claudeCodeModelId}",
+  "effortLevel": "medium"
 }`, 'json', '.claude/settings.json')}
 
                 <ul>
+                    <li><code>ANTHROPIC_AUTH_TOKEN</code> — your access key + secret, separated by a colon</li>
                     <li><code>ANTHROPIC_BASE_URL</code> — routes all model calls to ${CONFIG.productName}</li>
-                    <li><code>ANTHROPIC_API_KEY</code> — your access key + secret, separated by a colon</li>
-                    <li><code>ANTHROPIC_MODEL</code> — the model alias configured in your ${CONFIG.productName} model engine</li>
-                    <li><code>permissions.allow</code> — pre-approves common tools so Claude Code doesn't prompt for every action</li>
+                    <li><code>CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC</code> — turns off telemetry and other non-essential outbound calls</li>
+                    <li><code>model</code> — the model engine ID from your ${CONFIG.productName} catalog (ask your presenter)</li>
+                    <li><code>effortLevel</code> — how hard Claude Code thinks before responding (<code>low</code> / <code>medium</code> / <code>high</code>)</li>
                 </ul>
 
                 ${C.callout(`The models you're calling are hosted inside your ${CONFIG.productName} environment — no traffic leaves your infrastructure.`, 'info')}
