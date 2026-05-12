@@ -162,7 +162,6 @@ Requirements:
         content: `
             <h2>Hands-on: Build Your App</h2>
             ${C.handson("Build Your App", `
-                <h4>Everyone (start here)</h4>
                 <ol>
                     <li>Open Claude Code in the project folder you cloned</li>
                     <li>Write a prompt describing your app — include the vector engine ID, the question users will ask, and what the output should look like</li>
@@ -170,20 +169,36 @@ Requirements:
                     <li>Publish it from ${CONFIG.productName} and share the live URL in the chat</li>
                 </ol>
 
-                <h4>Tier 2 — go further</h4>
+                ${C.callout(`Stuck on the prompt? Start with the presenter's prompt from the previous slide and tweak the requirements for your own data.`, 'tip')}
+
+                <h4>Troubleshooting</h4>
+                <ul>
+                    <li><strong>Updated <code>.mcp.json</code> or <code>settings.json</code>?</strong> Quit Claude Code (<code>/exit</code> or Ctrl+C) and re-run <code>claude</code> — config changes only load on launch</li>
+                    <li><strong>Auth error after pasting keys?</strong> Make sure your token is formatted <code>access-key:secret-key</code> — single colon, no spaces</li>
+                    <li><strong>Tools not appearing?</strong> Use <code>/mcp</code> inside Claude Code to list connected MCP servers and confirm they're loaded</li>
+                </ul>
+            `)}
+        `
+    },
+    {
+        id: "vibe-extensions",
+        title: "Extensions — Go Further",
+        content: `
+            <h2>Extensions — Once Your App Works</h2>
+            <p>Done with the base exercise? Pick a tier and keep building.</p>
+            ${C.handson("Extensions", `
+                <h4>Tier 2 — Refine with follow-up prompts</h4>
                 <ol>
                     <li>Send a follow-up prompt to change the UI or behavior (layout, labels, filters, styling)</li>
                     <li>Re-publish and confirm the change is live</li>
                 </ol>
 
-                <h4>Tier 3 — go deeper</h4>
+                <h4>Tier 3 — Edit the Pixel directly</h4>
                 <ol>
                     <li>Open a generated file and find the Pixel command that runs on submit</li>
                     <li>Edit it directly — add a filter, change a parameter, or chain a second query</li>
                     <li>Re-publish and confirm the manual edit took effect</li>
                 </ol>
-
-                ${C.callout(`Stuck on the prompt? Start with the presenter's prompt from the previous slide and tweak the requirements for your own data.`, 'tip')}
             `)}
         `
     },
