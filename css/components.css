@@ -284,6 +284,28 @@
     margin-left: auto;
 }
 
+.c-code-copy {
+    margin-left: 10px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    background: transparent;
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    font-family: var(--font-mono);
+    flex-shrink: 0;
+}
+
+.c-code-copy:hover {
+    background: var(--accent);
+    color: var(--bg-primary);
+    border-color: var(--accent);
+}
+
 .c-code pre {
     margin: 0;
     border: none;

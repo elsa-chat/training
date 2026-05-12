@@ -64,11 +64,11 @@ const slides_api_endpoints = [
 
 client = OpenAI(
     api_key="<your-access-key>:<your-secret-key>",
-    base_url="<presenter will share ${CONFIG.productName} endpoint URL>"
+    base_url="${CONFIG.openaiEndpoint}"
 )
 
 response = client.chat.completions.create(
-    model="<model-engine-id>",
+    model="${CONFIG.sharedModelEngineId}",
     messages=[
         {"role": "user", "content": "Summarize the key points of FDA 21 CFR Part 11"}
     ]
@@ -88,13 +88,13 @@ print(response.choices[0].message.content)`, 'python', 'Call ${CONFIG.productNam
             ${C.code(`from ai_server import ServerClient
 
 client = ServerClient(
-    base="<your-${CONFIG.productName}-url>",
+    base="${CONFIG.elsaUrl}",
     access_key="<your-access-key>",
     secret_key="<your-secret-key>"
 )
 
 # Run any Pixel expression
-result = client.run_pixel('AskModelEngine(engine=["<id>"], command=["Hello"]);')`, 'python', 'ai-server-sdk basic connection')}
+result = client.run_pixel('AskModelEngine(engine=["${CONFIG.sharedModelEngineId}"], command=["Hello"]);')`, 'python', 'ai-server-sdk basic connection')}
             ${C.callout('Use the PyPI SDK when you need more than just chat — running Pixel, querying engines, managing insights programmatically.', 'tip')}
         `
     },
