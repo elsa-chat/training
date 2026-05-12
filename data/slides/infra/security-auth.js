@@ -53,18 +53,18 @@ const slides_security_auth = [
                 [
                     ['<strong>Owner</strong>', 'Create, edit, delete, manage permissions — full control', 'N/A — full control'],
                     ['<strong>Edit</strong>', 'Use and modify engines and apps', 'Cannot delete or change who has access'],
-                    ['<strong>Read-Only</strong>', 'View and use', 'Cannot modify anything']
+                    ['<strong>Viewer</strong>', 'View and use', 'Cannot modify anything']
                 ]
             )}
             <h3>Permissions Apply Per Resource — Not Globally</h3>
             ${C.table(
                 ['Resource Type', 'Permissions Are Set Independently'],
                 [
-                    ['Engines (models, databases, vector stores)', 'Owner / Edit / Read-Only — set per engine'],
-                    ['Apps', 'Owner / Edit / Read-Only — set per app']
+                    ['Engines (models, databases, vector stores)', 'Owner / Edit / Viewer — set per engine'],
+                    ['Apps', 'Owner / Edit / Viewer — set per app']
                 ]
             )}
-            ${C.callout('You can be Owner of an engine but Read-Only on an app. Permissions are per resource, not global.', 'info')}
+            ${C.callout('You can be Owner of an engine but Viewer on an app. Permissions are per resource, not global.', 'info')}
         `
     },
     {

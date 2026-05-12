@@ -116,7 +116,7 @@ const slides_platform_fundamentals = [
                             'Edit content and cells, run, save changes'
                         ],
                         [
-                            '<strong>Read-Only</strong>',
+                            '<strong>Viewer</strong>',
                             'Run queries and inference — no config changes',
                             'View and interact with the app — no editing'
                         ]
