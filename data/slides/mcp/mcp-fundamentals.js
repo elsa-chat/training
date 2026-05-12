@@ -135,7 +135,6 @@ const slides_mcp_fundamentals = [
                     ]
                 ]
             )}
-            ${C.callout('For this training, we use <strong>Python MCP</strong>. It\'s the fastest to iterate on and handles 90% of use cases.', 'tip')}
         `
     },
 
