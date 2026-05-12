@@ -128,6 +128,12 @@ VectorDatabaseQuery(
             <h2>Hands-on: Exercise 3  -  Your First RAG Pipeline in Python</h2>
             ${C.handson("Exercise 3: RAG Pipeline across Python Cells", `
                 <p><strong>Goal:</strong> Run the full RAG chain across three Python cells  -  fetch context from your vector engine and pass it inline to the LLM.</p>
+
+                <p><strong>Step 1 - Create a new App</strong><br><small>Go to the left sidebar and click <strong>Apps</strong>. Click <strong>Create App</strong> and choose the <strong>Drag &amp; Drop</strong> template. Give it a name and click <strong>Create</strong>.</small></p>
+
+                <p><strong>Step 2 - Open the Notebook</strong><br><small>Inside your new app, click the <strong>Notebook</strong> tab in the side navigation. This is where you will write and run Python cells. Add a new cell by clicking <strong>+ Add Cell</strong> and selecting <strong>Python</strong>.</small></p>
+                ${C.callout('<strong>No autosave.</strong> Click <strong>Save</strong> before refreshing or navigating away  -  unsaved cells will be lost on reload.', 'warning')}
+
                 <p><strong>Cell 1 - Setup</strong><br><small>Import the Insight client, set your engine IDs and question, then instantiate the connection to the platform.</small></p>
                 ${C.code(`from semoss import Insight
 
