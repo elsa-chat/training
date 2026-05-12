@@ -5,83 +5,42 @@ const slides_app_fundamentals = [
         title: "App Fundamentals",
         content: C.titleSlide(
             "App Fundamentals",
-            `From engines and Pixel to a published, shareable app`,
+            `Going from engines and Pixel to a published, shareable app`,
             "30 minutes"
         )
     },
     {
-        id: "appfund-live-demo-setup",
-        title: "This Training Site Is an ELSA App",
-        content: `
-            <h2>This Training Site Is an ${CONFIG.productName} App</h2>
-            ${C.callout(`The site you've been using all morning was built and deployed using \${CONFIG.productName}. In the next section you'll build your own.`, 'tip')}
-            <p>When the presenter opens this project in ${CONFIG.productName}, notice:</p>
-            <ul>
-                <li><strong>The project folder</strong> — every app lives in a <code>project/&lt;Name&gt;__&lt;UUID&gt;/</code> directory</li>
-                <li><strong>The portal files</strong> — <code>assets/portals/</code> holds the HTML, CSS, and JS served to you right now</li>
-                <li><strong>The published URL</strong> — one click made this page live and shareable</li>
-                <li><strong>The version history</strong> — every publish is a saved version; you can roll back to any of them</li>
-            </ul>
-        `
-    },
-    {
         id: "appfund-what-is-app",
-        title: "What Is an App?",
+        title: "What is an App?",
         content: `
-            <h2>What Is an App in ${CONFIG.productName}?</h2>
+            <h2>What is an App in ${CONFIG.productName}?</h2>
+            <p>A <strong>published experience</strong> — UI and logic packaged together and shared with users as a live URL. Every app lives in a project folder on the ${CONFIG.productName} server.</p>
             ${C.split(
                 {
-                    title: `An App in ${CONFIG.productName} is...`,
+                    title: "What it gives users",
                     content: `
-                        <p>A <strong>published experience</strong> — engines, logic, and UI packaged together and shared with users as a live URL.</p>
                         <ul>
-                            <li>Backed by the data and models you've already built</li>
-                            <li>Versioned so you can iterate safely</li>
-                            <li>Accessible to anyone you grant access — no install required</li>
+                            <li>A live URL — no install required</li>
+                            <li>Access to your data and models through a built UI</li>
+                            <li>Versioned — you can iterate and roll back safely</li>
+                            <li>Shareable with anyone you grant access</li>
                         </ul>
                     `
                 },
                 {
-                    title: "How the pieces connect",
-                    content: C.flow([
-                        { title: "Engines (data)", desc: "Vector DB, LLM model, relational database", accent: true },
-                        { title: "Pixel / Python (logic)", desc: "Commands that query engines, transform data, call models", arrow: "↓" },
-                        { title: "Portal / Blocks (UI)", desc: "The web interface users interact with", arrow: "↓" },
-                        { title: "Published URL", desc: "Live, shareable link — one click away", accent: true, arrow: "↓" },
-                    ])
+                    title: "Where it lives on disk",
+                    content: C.code(`assets/
+  portals/           ← HTML, CSS, JS served to users
+    index.html
+  java/              ← custom Java reactors
+  py/                ← custom Python functions
+  classes/           ← compiled reactor output
+  mcp/               ← MCP tool definitions
+    pixel_mcp.json
+    py_mcp.json`, "", "Folder Structure")
                 }
             )}
-            ${C.callout('Apps can be no-code block builders, Vibe-coded, or fully custom React portals. All three produce the same publishable output.', 'info')}
-        `
-    },
-    {
-        id: "appfund-three-layers",
-        title: "Three Layers of Every App",
-        content: `
-            <h2>Three Layers of Every App</h2>
-            ${C.layers([
-                {
-                    label: "Frontend",
-                    items: [
-                        { title: "Portal", desc: "React / blocks UI served to the user" }
-                    ]
-                },
-                {
-                    label: "Logic",
-                    accent: true,
-                    items: [
-                        { title: "Pixel commands", desc: "Orchestration and queries", accent: true },
-                        { title: "Python GAAS", desc: "Custom functions and ML logic", accent: true }
-                    ]
-                },
-                {
-                    label: "Data",
-                    items: [
-                        { title: "Engines", desc: "Vector DB, LLM model, database" }
-                    ]
-                }
-            ])}
-            ${C.callout('Vibe Coding generates all three layers from a plain-English description. You can inspect and edit any layer after generation.', 'tip')}
+            ${C.callout(`The training site you've been using all morning is itself an ${CONFIG.productName} app — built, published, and shared using exactly this structure.`, 'tip')}
         `
     },
     {
@@ -90,17 +49,38 @@ const slides_app_fundamentals = [
         content: `
             <h2>Publishing Workflow</h2>
             ${C.flow([
-                { title: "Draft", desc: `Edit your app in the ${CONFIG.productName} editor`, accent: true },
-                { title: "Save", desc: "Persists changes to your workspace — only you see them", arrow: "↓" },
-                { title: "Publish", desc: "Makes the current version live for anyone with access", arrow: "↓" },
-                { title: "Versioned URL", desc: "Every publish creates a version — you can roll back to any of them", accent: true, arrow: "↓" },
+                { title: "Build", desc: "Create your app — add blocks, wire Pixel logic, configure settings", accent: true },
+                { title: "Save", desc: "Persists your changes to the project folder — only visible to you", arrow: "↓" },
+                { title: "Publish", desc: "Deploys the current version and makes the URL live for anyone with access", arrow: "↓" },
+                { title: "Share", desc: "Send the live URL — anyone you've granted access can open it immediately", accent: true, arrow: "↓" },
             ])}
+            ${C.callout('To control who can access your app, go to App Settings → Access Control and assign Owner, Edit, or Viewer roles.', 'info')}
             ${C.table(
                 ['Action', 'Who sees the change', 'When to use it'],
                 [
-                    ['<strong>Save</strong>', 'Only you', 'Frequently — save as you work'],
+                    ['<strong>Save</strong>', 'Only you (draft)', 'Frequently — save as you work'],
                     ['<strong>Publish</strong>', 'Anyone with app access', 'When a change is ready for others'],
-                    ['<strong>Version History</strong>', 'Admins / OWNER role', 'To review or roll back to a prior publish'],
+                    ['<strong>Version History</strong>', 'Owner role', 'Review or roll back to any prior publish'],
+                ]
+            )}
+        `
+    },
+    {
+        id: "appfund-app-settings",
+        title: "App Settings",
+        content: `
+            <h2>App Settings</h2>
+            <p>From the App Catalog, open any app you own. The tabs give you full control over the app's configuration.</p>
+            ${C.table(
+                ['Tab', 'What it does'],
+                [
+                    ['<strong>Overview</strong>', 'App name, ID, description, tags, published by, last updated'],
+                    ['<strong>Dependencies</strong>', 'Engines this app depends on — databases, models, vector stores'],
+                    ['<strong>MCP Usage</strong>', 'MCP tools exposed by this app + connection snippets for VS Code, Claude Desktop, and API clients'],
+                    ['<strong>Commits</strong>', 'Full commit history — every save is a version you can revert to'],
+                    ['<strong>Settings</strong>', 'Enable publishing, publish the portal to generate a live URL, compile/deploy custom reactors, upload a project zip'],
+                    ['<strong>Access Control</strong>', 'Set Private / Non Discoverable, add members with Owner / Edit / Viewer permissions'],
+                    ['<strong>SMSS</strong>', 'Raw config file for the project — UUID, alias, type, database connection. Edit only if you know what you\'re doing'],
                 ]
             )}
         `
