@@ -4,8 +4,8 @@ const slides_api_endpoints = [
         id: "api-title",
         title: "Consuming ELSA from Your Existing Workflows",
         content: C.titleSlide(
-            "Consuming ${CONFIG.productName} from Your Existing Workflows",
-            "If it speaks OpenAI, it can speak ${CONFIG.productName}",
+            `Consuming ${CONFIG.productName} from Your Existing Workflows`,
+            `If it speaks OpenAI, it can speak ${CONFIG.productName}`,
             "30 minutes"
         )
     },

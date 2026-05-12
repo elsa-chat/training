@@ -42,7 +42,7 @@ const slides_platform_engines = [
                         desc: 'Call large language models  -  OpenAI, Claude, Gemini, Bedrock, Azure OpenAI, or locally-hosted models.'
                     },
                     {
-                        badge: 'AI',
+                        badge: 'RAG',
                         title: 'Vector',
                         desc: 'Store document embeddings and run semantic search via FAISS, Weaviate, PGVector, or Azure AI Search.'
                     },

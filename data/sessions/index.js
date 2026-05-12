@@ -51,17 +51,17 @@ const SESSION_PLAN = {
                     slideIds: []
                 },
                 {
-                    title: 'Pixel & Reactors',
-                    time: '1:00 – 1:40 PM',
+                    title: 'App Fundamentals',
+                    time: '1:00 – 1:30 PM',
                     slideIds: idsFrom(
-                        typeof slides_platform_pixel_reactors !== 'undefined' ? slides_platform_pixel_reactors : null,
+                        typeof slides_app_fundamentals !== 'undefined' ? slides_app_fundamentals : null,
                     )
                 },
                 {
-                    title: 'App Fundamentals',
-                    time: '1:40 – 2:10 PM',
+                    title: 'Pixel & Reactors',
+                    time: '1:30 – 2:10 PM',
                     slideIds: idsFrom(
-                        typeof slides_app_fundamentals !== 'undefined' ? slides_app_fundamentals : null,
+                        typeof slides_platform_pixel_reactors !== 'undefined' ? slides_platform_pixel_reactors : null,
                     )
                 },
                 {
