@@ -127,15 +127,15 @@ const slides_platform_engines = [
         },
         {
             id: "engines-qa-tab",
-            title: "Zero-Code AI: The Q&A Tab",
+            title: "Vector Search Example",
             content: `
-                <h2>Zero-Code AI — The Q&amp;A Tab</h2>
-                <p>Your vector engine has a built-in Q&amp;A interface. No app building required.</p>
+                <h2>Vector Search Example - The Q&amp;A Tab</h2>
+                <p>Every Knowledge Repository has a built-in Q&amp;A interface. No app building required.</p>
                 ${C.flow([
-                    { title: 'Open your Vector Engine', desc: 'Find it in the Engine Catalog and click to open' },
-                    { title: 'Click the Q&A Tab', desc: 'Built into every vector engine automatically', arrow: '↓' },
-                    { title: 'Type a question', desc: 'Ask about something covered in your uploaded documents', arrow: '↓' },
-                    { title: 'See the AI answer', desc: 'Grounded in your documents — with source citations', arrow: '↓' }
+                    { title: 'Open your Knowledge Repository', desc: 'Find it under Vector in the Engine Catalog and click to open' },
+                    { title: 'Click the Q&A Tab', desc: 'Built into every Knowledge Repository automatically', arrow: '↓' },
+                    { title: 'Enter a question and click Generate Answer', desc: 'Ask about anything covered in your uploaded documents', arrow: '↓' },
+                    { title: 'Review the Policy Extraction Response', desc: 'The platform retrieves relevant passages and generates a grounded conclusion', arrow: '↓' }
                 ])}
                 ${C.callout('You just got an AI-powered answer from your own documents with zero code. This is the foundation everything else builds on — every RAG workflow, every document Q&A app, starts here.', 'tip')}
             `

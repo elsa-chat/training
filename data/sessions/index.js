@@ -144,6 +144,37 @@ const SESSION_PLAN = {
         // ─────────────────────────────────────────────────────────────────────
         {
             id: '3',
+            label: 'Appendix',
+            chapters: [
+                {
+                    title: 'Files — Where They Go & How to Add Them',
+                    slideIds: idsFrom(
+                        typeof slides_appendix !== 'undefined'
+                            ? slides_appendix.filter(s => s.id === 'appendix-title' || s.id.startsWith('appendix-files'))
+                            : null,
+                    )
+                },
+                {
+                    title: 'Rooms & Chat Session History',
+                    slideIds: idsFrom(
+                        typeof slides_appendix !== 'undefined'
+                            ? slides_appendix.filter(s => s.id.startsWith('appendix-rooms'))
+                            : null,
+                    )
+                },
+                {
+                    title: 'Developer Troubleshooting',
+                    slideIds: idsFrom(
+                        typeof slides_appendix !== 'undefined'
+                            ? slides_appendix.filter(s => s.id.startsWith('appendix-dev'))
+                            : null,
+                    )
+                },
+            ]
+        },
+
+        {
+            id: '4',
             label: 'Backup / Optional Sections',
             chapters: [
                 {
