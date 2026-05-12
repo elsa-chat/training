@@ -166,7 +166,7 @@ print(answer[0]['pixelReturn'][0]['output']['response'])`, "python")}
             ${C.cards([
                 {
                     title: "Pixel",
-                    desc: "The expression language of ${CONFIG.productName}. Human-readable, chainable, runs server-side. Every UI action generates Pixel under the hood."
+                    desc: `The expression language of ${CONFIG.productName}. Human-readable, chainable, runs server-side. Every UI action generates Pixel under the hood.`
                 },
                 {
                     title: "Reactors",

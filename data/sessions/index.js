@@ -51,17 +51,17 @@ const SESSION_PLAN = {
                     slideIds: []
                 },
                 {
-                    title: 'Pixel & Reactors',
-                    time: '1:00 – 1:40 PM',
+                    title: 'App Fundamentals',
+                    time: '1:00 – 1:30 PM',
                     slideIds: idsFrom(
-                        typeof slides_platform_pixel_reactors !== 'undefined' ? slides_platform_pixel_reactors : null,
+                        typeof slides_app_fundamentals !== 'undefined' ? slides_app_fundamentals : null,
                     )
                 },
                 {
-                    title: 'App Fundamentals',
-                    time: '1:40 – 2:10 PM',
+                    title: 'Pixel & Reactors',
+                    time: '1:30 – 2:10 PM',
                     slideIds: idsFrom(
-                        typeof slides_app_fundamentals !== 'undefined' ? slides_app_fundamentals : null,
+                        typeof slides_platform_pixel_reactors !== 'undefined' ? slides_platform_pixel_reactors : null,
                     )
                 },
                 {
@@ -88,45 +88,40 @@ const SESSION_PLAN = {
             chapters: [
                 {
                     title: 'MCP Fundamentals',
-                    time: '10:00 – 10:45 AM',
+                    time: '10:15 – 11:15 AM',
                     slideIds: idsFrom(
                         typeof slides_mcp_fundamentals !== 'undefined' ? slides_mcp_fundamentals : null,
                     )
                 },
                 {
                     title: 'Playground Deep Dive',
-                    time: '10:45 – 11:30 AM',
+                    time: '11:15 AM – 12:00 PM',
                     slideIds: idsFrom(
                         typeof slides_playground !== 'undefined' ? slides_playground : null,
                     )
                 },
                 {
-                    title: ' -  BREAK  - ',
-                    time: '11:30 – 11:45 AM',
-                    slideIds: []
-                },
-                {
-                    title: ' -  LUNCH  - ',
-                    time: '11:45 AM – 12:30 PM',
+                    title: '— LUNCH —',
+                    time: '12:00 – 1:00 PM',
                     slideIds: []
                 },
                 {
                     title: 'API Endpoints',
-                    time: '12:30 – 1:00 PM',
+                    time: '1:00 – 1:30 PM',
                     slideIds: idsFrom(
                         typeof slides_api_endpoints !== 'undefined' ? slides_api_endpoints : null,
                     )
                 },
                 {
                     title: 'Security & RBAC',
-                    time: '1:00 – 1:30 PM',
+                    time: '1:30 – 2:00 PM',
                     slideIds: idsFrom(
                         typeof slides_security_auth !== 'undefined' ? slides_security_auth : null,
                     )
                 },
                 {
                     title: 'Capstone: End-to-End App Build',
-                    time: '1:30 – 2:45 PM',
+                    time: '2:00 – 2:45 PM',
                     slideIds: idsFrom(
                         typeof slides_capstone_project !== 'undefined' ? slides_capstone_project : null,
                     )

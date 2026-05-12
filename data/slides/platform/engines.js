@@ -42,7 +42,7 @@ const slides_platform_engines = [
                         desc: 'Call large language models  -  OpenAI, Claude, Gemini, Bedrock, Azure OpenAI, or locally-hosted models.'
                     },
                     {
-                        badge: 'AI',
+                        badge: 'RAG',
                         title: 'Vector',
                         desc: 'Store document embeddings and run semantic search via FAISS, Weaviate, PGVector, or Azure AI Search.'
                     },
@@ -70,12 +70,12 @@ const slides_platform_engines = [
             content: `
                 <h2>Model Engines in This Training</h2>
                 ${C.callout('<strong>Note:</strong> Model engines in this training environment are pre-configured and shared. You will <em>call</em> them but not create them. This is by design  -  model engine credentials and compute are managed by your ' + CONFIG.productName + ' admin.', 'warning')}
-                <p>When you use the Q&amp;A tab or build a prompt in the Playground, you are using one of these pre-configured model engines behind the scenes. You will see them listed in the Engine Catalog as read-only.</p>
+                <p>Any time you are chatting inside ${CONFIG.productName}, you are using a model engine. They also power the Q&amp;A tab, the Playground, and any app that calls a model.</p>
                 ${C.table(
                     ['What you will do today', 'What your admin handles'],
                     [
-                        ['Call model engines from the Q&A tab and Playground', 'Create model engine records and store API credentials'],
-                        ['Select a model when building apps', 'Manage compute quotas and provider billing'],
+                        ['Chat inside ' + CONFIG.productName + ' (Q&A, Playground)', 'Create model engine records and store API credentials'],
+                        ['Call models via API from your apps', 'Manage compute quotas and provider billing'],
                         ['View model engine details in the Catalog', 'Rotate keys and upgrade model versions']
                     ]
                 )}
@@ -86,19 +86,22 @@ const slides_platform_engines = [
             title: "Hands-on: Create Your Vector Engine",
             content: `
                 <h2>Hands-on: Create Your Vector Engine</h2>
-                ${C.handson('Navigate to Engine Catalog and add a Vector Engine', `
+                ${C.handson('Create a FAISS Vector Engine', `
                     <ol>
-                        <li>Open ${CONFIG.productName} in your browser and click <strong>Engines</strong> in the left navigation.</li>
-                        <li>Click <strong>Add Engine</strong> (top-right button).</li>
-                        <li>Select the <strong>Vector</strong> engine type from the list.</li>
-                        <li>Choose the vector database type available in your environment.<br>
-                            <em>[Presenter will confirm which vector DB type is available in your environment]</em></li>
-                        <li>Give your engine a unique name  -  for example: <code>MyVectorDB_[YourInitials]</code></li>
-                        <li>Fill in any required connection fields as directed by the presenter.</li>
-                        <li>Click <strong>Save</strong>. Your engine will appear in the Catalog.</li>
+                        <li>In the left sidebar, click <strong>Vector</strong>.</li>
+                        <li>Click <strong>Add Vector</strong> (top-right button).</li>
+                        <li>On the "Connect to Vector Database" page, select <strong>FAISS</strong>.</li>
+                        <li>Fill in the form:
+                            <ul>
+                                <li><strong>Catalog Name</strong>  -  use something unique, e.g. <code>FDA_Docs_[YourInitials]</code></li>
+                                <li><strong>Embedder</strong>  -  select the embedding model from the dropdown (there should be one available)</li>
+                                <li>Leave <strong>Chunking Strategy</strong>, <strong>Content Length</strong>, and <strong>Content Overlap</strong> at their defaults</li>
+                            </ul>
+                        </li>
+                        <li>Click <strong>Save</strong>. Your vector engine will appear in the Vector Catalog.</li>
                         <li>Open your engine from the Catalog, go to <strong>Settings</strong>, and copy the <strong>Engine ID</strong>  -  you will need it in later exercises.</li>
                     </ol>
-                    <p><strong>What just happened?</strong> ${CONFIG.productName} wrote a <code>.smss</code> config file for your engine, registered it in the platform's metadata database, and it is now available to any app or workflow you build.</p>
+                    <p><strong>What just happened?</strong> ${CONFIG.productName} created a FAISS index backed by your chosen embedding model. Any documents you add will be chunked, embedded, and stored here  -  ready for semantic search across your apps.</p>
                 `)}
             `
         },
@@ -110,8 +113,8 @@ const slides_platform_engines = [
                 ${C.handson('Upload FDA guidance documents into your vector engine', `
                     <ol>
                         <li>In the Engine Catalog, find and open the vector engine you just created.</li>
-                        <li>Click the <strong>Documents</strong> tab (or <strong>Upload</strong> button).</li>
                         <li>Click <strong>Add Files</strong> and select the sample FDA guidance documents provided by your presenter.</li>
+                        <li>Click <strong>Embed New Document</strong> to start ingestion.</li>
                         <li>Wait for ingestion to complete  -  the platform will chunk, embed, and index each document automatically.</li>
                         <li>When finished, the document list will show your files with a green status indicator.</li>
                     </ol>

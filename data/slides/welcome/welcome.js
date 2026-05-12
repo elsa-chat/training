@@ -160,17 +160,16 @@ const slides_welcome = [
                 ['Time', 'Topic'],
                 [
                     ['10:00 – 10:15', 'Day 1 Recap & Q&A'],
-                    ['10:15 – 11:00', 'MCP Fundamentals'],
-                    ['11:00 – 11:45', 'Playground Deep Dive + Hands-on'],
-                    ['11:45 – 12:00', '☕ Break'],
-                    ['12:00 – 12:45', '🍽 Lunch'],
-                    ['12:45 – 1:15',  'OpenAI / Anthropic API Endpoints'],
-                    ['1:15 – 1:45',   'Security & RBAC'],
-                    ['1:45 – 2:45',   'Capstone: End-to-End App Build'],
+                    ['10:15 – 11:15', 'MCP Fundamentals'],
+                    ['11:15 – 12:00', 'Playground Deep Dive + Hands-on'],
+                    ['12:00 – 1:00',  '🍽 Lunch'],
+                    ['1:00 – 1:30',   'OpenAI / Anthropic API Endpoints'],
+                    ['1:30 – 2:00',   'Security & RBAC'],
+                    ['2:00 – 2:45',   'Capstone: End-to-End App Build'],
                     ['2:45 – 3:00',   'Wrap-up, Q&A & Feedback'],
                 ]
             )}
             ${C.callout('Backup sections (Python SDK, structured output, image processing, model logs) are ready if either day moves faster than planned.', 'tip')}
         `
-    }
+    },
 ];

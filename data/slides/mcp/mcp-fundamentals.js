@@ -64,7 +64,7 @@ const slides_mcp_fundamentals = [
 
     {
         id: "mcp-why-matters",
-        title: "Why MCP Matters in ${CONFIG.productName}",
+        title: `Why MCP Matters in ${CONFIG.productName}`,
         content: `
             <h2>Why It Matters in ${CONFIG.productName}</h2>
             <p class="lead">Without MCP, an agent has no idea your app exists. With MCP, it becomes a tool the agent can reach for automatically.</p>
@@ -102,7 +102,7 @@ const slides_mcp_fundamentals = [
                 ]},
                 { label: "Your App Backend", items: [
                     { title: "Vector Engine", desc: "FDA document search" },
-                    { title: "Model Calls", desc: "LLM inference via ${CONFIG.productName}" },
+                    { title: "Model Calls", desc: `LLM inference via ${CONFIG.productName}` },
                     { title: "Pixel Logic", desc: "Reactors and data transforms" },
                 ]},
             ])}
