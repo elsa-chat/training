@@ -136,72 +136,41 @@ const slides_platform_fundamentals = [
         `
     },
 
-    // ── NAVIGATION ────────────────────────────────────────────────────────────
+    // ── LIVE WALKTHROUGH ──────────────────────────────────────────────────────
     {
-        id: "platform-navigation",
-        title: "Navigation Walkthrough",
+        id: "platform-live-walkthrough",
+        title: "Live Walkthrough",
         content: `
-            <h2>The Five Main Areas</h2>
-            <p>Before we dive in, let's orient ourselves. ${CONFIG.productName} is organized around five navigation areas  -  each with a distinct purpose.</p>
+            <h2>Live Walkthrough — Follow Along</h2>
+            <p class="lead">The presenter will navigate the platform live. Open ${CONFIG.productName} in your browser and follow along.</p>
+            ${C.callout(`Open <strong>${CONFIG.elsaUrl}</strong> now if you haven't already.`, 'info')}
             ${C.cards([
                 {
-                    badge: 'Discover',
+                    badge: 'Stop 1',
                     title: 'Catalog',
-                    desc: 'Browse and search all engines, apps, and projects shared with you. Your starting point for finding what already exists.'
+                    desc: 'Browse engines, apps, and projects shared with you. Your starting point for finding what already exists.'
                 },
                 {
-                    badge: 'Connect',
+                    badge: 'Stop 2',
                     title: 'Engines',
-                    desc: 'Create and manage connections to databases, AI models, vector stores, storage, and more. The data layer lives here.'
+                    desc: 'Connect databases, AI models, vector stores, and storage. The data layer lives here — you\'ll build one today.'
                 },
                 {
-                    badge: 'Build',
+                    badge: 'Stop 3',
                     title: 'Apps',
-                    desc: `Create, edit, and run applications. Choose from drag-and-drop, vibe coding, or pro-code  -  all publishing to the same platform.`
+                    desc: 'Create and publish applications. Drag-and-drop, vibe coding, or pro-code — all deploy to the same platform.'
                 },
                 {
-                    badge: 'Experiment',
+                    badge: 'Stop 4',
                     title: 'Playground',
-                    desc: 'Interactive sandbox for testing AI models, running ad-hoc queries, and exploring data before building a full app.'
+                    desc: 'Test models, run ad-hoc queries, and wire up agents interactively. You\'ll spend time here on Day 2.'
                 },
                 {
-                    badge: 'Admin',
+                    badge: 'Stop 5',
                     title: 'Settings',
-                    desc: `Manage users, permissions, and platform configuration. Typically handled by your ${CONFIG.productName} admin.`
+                    desc: 'User profile, API keys, and admin config. You\'ll need Settings today to generate your access key.'
                 }
             ])}
-            ${C.callout('Follow along in your browser as the presenter navigates each area.', 'tip')}
-        `
-    },
-
-    // ── RBAC ──────────────────────────────────────────────────────────────────
-    {
-        id: "platform-rbac",
-        title: "Access & Permissions",
-        content: `
-            <h2>Role-Based Access Control</h2>
-            <p>${CONFIG.productName} uses three permission levels that apply consistently to both <strong>Engines</strong> and <strong>Apps</strong>.</p>
-            ${C.table(
-                ['Role', 'Engines', 'Apps'],
-                [
-                    [
-                        '<strong>Owner</strong>',
-                        'Create, edit config, delete, share with others',
-                        'Create, edit layout & logic, publish, delete, share'
-                    ],
-                    [
-                        '<strong>Edit</strong>',
-                        'View details, upload documents, run queries',
-                        'Edit content and cells, run, save changes'
-                    ],
-                    [
-                        '<strong>Read-Only</strong>',
-                        'Run queries and inference  -  no config changes',
-                        'View and interact with the app  -  no editing'
-                    ]
-                ]
-            )}
-            ${C.callout('If you cannot find an engine or app, you may not have been granted access  -  ask your admin. Full permission management is covered on Day 2.', 'warning')}
         `
     }
 ];
