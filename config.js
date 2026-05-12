@@ -26,9 +26,11 @@ const CONFIG = {
   // templateRepoUrl   -  git clone URL attendees use in the Vibe Coding exercise
   // sharedModelEngineId  -  model engine ID shown in Pixel and API code examples
   // ─────────────────────────────────────────────────────────────────────────────
-  elsaUrl:             'SET_BEFORE_TRAINING',
-  openaiEndpoint:      'SET_BEFORE_TRAINING/api/engine/openai/v1',
-  anthropicEndpoint:   'SET_BEFORE_TRAINING/api/engine/anthropic/v1',
-  templateRepoUrl:     'https://github.com/SET_BEFORE_TRAINING',
+  elsaUrl:             'https://elsa.dev.fda.gov/Monolith',
+  openaiEndpoint:      'https://elsa.dev.fda.gov/Monolith/api/model/openai',
+  anthropicEndpoint:   'https://elsa.dev.fda.gov/Monolith/api/model/anthropic',
+  templateRepoUrl:     'https://github.com/elsa-chat/vibe-setup.git',
+  templateFolderName:  'vibe-setup',
   sharedModelEngineId: '8405ac40-89c6-4613-848c-3d89986fbc01',
+  claudeCodeModelId:   'SET_BEFORE_TRAINING',
 };
