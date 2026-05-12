@@ -192,7 +192,7 @@ const slides_vibe_coding = [
                 {
                     badge: "Tomorrow",
                     title: "Playground",
-                    desc: "Wire your MCP tool into an AI agent in the ${CONFIG.productName} Playground and watch it reason"
+                    desc: `Wire your MCP tool into an AI agent in the ${CONFIG.productName} Playground and watch it reason`
                 },
                 {
                     badge: "Tomorrow",

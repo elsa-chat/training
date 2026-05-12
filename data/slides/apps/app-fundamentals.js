@@ -90,7 +90,7 @@ const slides_app_fundamentals = [
         content: `
             <h2>Publishing Workflow</h2>
             ${C.flow([
-                { title: "Draft", desc: "Edit your app in the ${CONFIG.productName} editor", accent: true },
+                { title: "Draft", desc: `Edit your app in the ${CONFIG.productName} editor`, accent: true },
                 { title: "Save", desc: "Persists changes to your workspace — only you see them", arrow: "↓" },
                 { title: "Publish", desc: "Makes the current version live for anyone with access", arrow: "↓" },
                 { title: "Versioned URL", desc: "Every publish creates a version — you can roll back to any of them", accent: true, arrow: "↓" },

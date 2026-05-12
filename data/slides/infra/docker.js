@@ -92,7 +92,7 @@ jobs:
                 ${C.layers([
                     { label: "Application Layer", accent: true, items: [
                         { title: "Tomcat 9", desc: "Servlet container serving Monolith WAR", accent: true },
-                        { title: "${CONFIG.productName} Core", desc: "Java libraries (semoss-5.0.0-SNAPSHOT.jar)" },
+                        { title: `${CONFIG.productName} Core`, desc: "Java libraries (semoss-5.0.0-SNAPSHOT.jar)" },
                         { title: "SemossWeb", desc: "React frontend + Node.js assets" },
                     ]},
                     { label: "Runtime Dependencies", items: [

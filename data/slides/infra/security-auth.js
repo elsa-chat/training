@@ -28,7 +28,7 @@ const slides_security_auth = [
                     `
                 },
                 {
-                    title: "Logical (RBAC inside ${CONFIG.productName})",
+                    title: `Logical (RBAC inside ${CONFIG.productName})`,
                     content: `
                         <ul>
                             <li>Who can see which engines and apps</li>
