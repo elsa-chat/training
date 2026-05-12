@@ -171,7 +171,7 @@ Always cite the document passage you found before giving your answer.`, 'propert
                 { badge: 'Step 2', title: 'Playground Wired', desc: 'Room Folder connects your tool to an AI agent with a targeted system prompt' },
                 { badge: 'Step 3', title: 'Agent Works', desc: 'Ask a question in plain English  -  agent calls your tool, gets results, answers correctly' },
             ])}
-            ${C.callout('After lunch: <strong>Security</strong> (who can use this), <strong>API Endpoints</strong> (how to call it from outside ${CONFIG.productName}), then open build time.', 'info')}
+            ${C.callout(`After lunch: <strong>Security</strong> (who can use this), <strong>API Endpoints</strong> (how to call it from outside ${CONFIG.productName}), then open build time.`, 'info')}
         `
     }
 

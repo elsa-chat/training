@@ -5,7 +5,7 @@ const slides_vibe_coding = [
         title: "Vibe Coding",
         content: C.titleSlide(
             "Vibe Coding",
-            `Build a working app with Claude Code + \${CONFIG.productName}`,
+            `Build a working app with Claude Code + ${CONFIG.productName}`,
             "45 minutes"
         )
     },
