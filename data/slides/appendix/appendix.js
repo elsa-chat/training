@@ -14,99 +14,40 @@ const slides_appendix = [
 
     {
         id: "appendix-files-overview",
-        title: "Where Do Files Go?",
+        title: "Adding Files to a Playground Chat",
         content: `
-            <h2>Where Do Files Go?</h2>
-            <p class="lead">Every file you upload lands in a <span class="highlight">Storage Engine</span>. The engine config (<code>.smss</code>) tells the platform <em>which</em> backend holds those bytes.</p>
-            ${C.layers([
-                {
-                    label: 'You Upload a File',
-                    items: [
-                        { title: 'UI drag-and-drop' },
-                        { title: 'API call' },
-                        { title: 'Pixel command' }
-                    ]
-                },
-                {
-                    label: 'Storage Engine (smss config)',
-                    items: [
-                        { title: 'Local filesystem' },
-                        { title: 'S3 / Azure Blob / GCS' },
-                        { title: 'MinIO / SFTP' }
-                    ]
-                },
-                {
-                    label: 'Platform Metadata',
-                    items: [
-                        { title: 'File record in DB' },
-                        { title: 'Engine association' },
-                        { title: 'Access control' }
-                    ]
-                }
+            <h2>Adding Files to a Playground Chat</h2>
+            <p class="lead">In the Playground, you can attach files directly to your conversation. The file is sent as context for that message  -  the model can read and reason over it inline.</p>
+            ${C.flow([
+                { title: 'Open Playground', desc: 'Go to the Playground from the left sidebar and open or start a Room.' },
+                { title: 'Click the Attachment Icon', desc: 'In the chat input bar, click the paperclip / attachment icon next to the message box.', arrow: '↓' },
+                { title: 'Select Your File', desc: 'Choose a file from your computer. Supported types include PDF, DOCX, TXT, CSV, and images.', arrow: '↓' },
+                { title: 'Send with Your Message', desc: 'Type your question and hit Send. The file contents are included as context in that turn of the conversation.', arrow: '↓' }
             ])}
             ${C.split(
                 {
-                    title: 'Vector / RAG Engine',
+                    title: 'What the Model Sees',
                     content: `
-                        <p>Uploaded documents are automatically:</p>
-                        <ol>
-                            <li>Chunked into passages</li>
-                            <li>Embedded via your configured model</li>
-                            <li>Indexed (FAISS, Weaviate, PGVector…)</li>
-                        </ol>
-                        <p class="muted">Raw file lives in storage; index lives in the vector store.</p>
+                        <ul>
+                            <li>The file is extracted and passed as text context alongside your message</li>
+                            <li>The model can summarize, answer questions about, or extract data from it</li>
+                            <li>Each message attachment is scoped to that turn  -  re-attach if you want it in a follow-up</li>
+                        </ul>
                     `
                 },
                 {
-                    title: 'Database Engine (CSV)',
+                    title: 'What It Does Not Do',
                     content: `
-                        <p>CSV uploads are automatically:</p>
-                        <ol>
-                            <li>Parsed and schema-inferred</li>
-                            <li>Loaded into an H2 (or configured) database</li>
-                            <li>OWL ontology generated</li>
-                        </ol>
-                        <p class="muted">The <code>.smss</code> file points to the resulting DB file.</p>
+                        <ul>
+                            <li>Does not permanently store the file in the platform</li>
+                            <li>Does not index or embed the file into a Knowledge Repository</li>
+                            <li>Does not make the file available to other rooms or users</li>
+                        </ul>
+                        <p class="muted">For persistent, searchable storage use a Vector Engine instead.</p>
                     `
                 }
             )}
-            ${C.callout('The storage location is set <strong>when you create the engine</strong>. To change it later, update the engine\'s <code>.smss</code> config and migrate the files.', 'tip')}
-        `
-    },
-
-    {
-        id: "appendix-files-how-to-add",
-        title: "How Do I Add Files?",
-        content: `
-            <h2>How Do I Add Files?</h2>
-            <p class="lead">Three ways  -  pick the one that fits your workflow.</p>
-            ${C.flow([
-                {
-                    title: '1 · Platform UI',
-                    desc: 'Navigate to <strong>Engines</strong> in the left sidebar → select your engine → click <strong>Add Files</strong> or drag-and-drop. Works for any engine type.'
-                },
-                {
-                    title: '2 · Pixel Command (in Playground)',
-                    desc: 'Use <code>UploadFile</code> reactor to upload programmatically from a Pixel script.'
-                },
-                {
-                    title: '3 · REST API',
-                    desc: 'POST to <code>/api/engine/{engineId}/uploadFile</code> with a multipart form body. Useful for batch ingestion pipelines.'
-                }
-            ])}
-            ${C.code(`// Pixel  -  upload a local file to a storage or vector engine
-UploadFile(engine=["my-vector-engine"], filePath=["/path/to/doc.pdf"]);
-
-// After upload to a vector engine, trigger re-indexing:
-VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel  -  Upload & Index')}
-            ${C.table(
-                ['Method', 'Best For', 'Requires'],
-                [
-                    ['UI drag-and-drop', 'One-off uploads during setup', 'Browser access'],
-                    ['Pixel command', 'Scripted workflows inside the platform', 'Engine access permission'],
-                    ['REST API', 'External pipelines, CI/CD ingestion', 'API token + engine permission']
-                ]
-            )}
+            ${C.callout('File attachments in the Playground are session-scoped. If you need the document available across multiple sessions or apps, upload it to your Vector Engine instead.', 'info')}
         `
     },
 
@@ -126,7 +67,6 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel  - 
                             <li>Every message you send and every AI response</li>
                             <li>Tool calls and their results (MCP, Pixel)</li>
                             <li>Room name (auto-generated from first message)</li>
-                            <li>Associated Insight state at time of each message</li>
                         </ul>
                     `
                 },
@@ -134,8 +74,6 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel  - 
                     title: 'What Does NOT Persist',
                     content: `
                         <ul>
-                            <li>In-memory variable bindings (cleared when Insight closes)</li>
-                            <li>Temporary file uploads (unless saved to an engine)</li>
                             <li>Browser-only UI state (open panels, scroll position)</li>
                             <li>Unsubmitted draft messages</li>
                         </ul>
@@ -166,7 +104,7 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel  - 
                     ['Search history', 'Search bar at top of Rooms list', 'Full-text search across all your rooms']
                 ]
             )}
-            ${C.callout(`Rooms belong to the user who created them. Admins can view all rooms via the Admin panel under <strong>Monitoring → Rooms</strong>.`, 'info')}
+            ${C.callout(`Rooms belong to the user who created them. Admins can query room and message history via the <strong>ModelInferenceLogsUtils</strong> database.`, 'info')}
             <h3 style="margin-top: 1.5rem;">Room vs. New Chat</h3>
             ${C.split(
                 {

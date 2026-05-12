@@ -142,74 +142,26 @@ const SESSION_PLAN = {
             label: 'Appendix',
             chapters: [
                 {
-                    title: 'Files  -  Where They Go & How to Add Them',
+                    title: 'Reference & Troubleshooting',
                     slideIds: idsFrom(
-                        typeof slides_appendix !== 'undefined'
-                            ? slides_appendix.filter(s => s.id === 'appendix-title' || s.id.startsWith('appendix-files'))
-                            : null,
-                    )
-                },
-                {
-                    title: 'Rooms & Chat Session History',
-                    slideIds: idsFrom(
-                        typeof slides_appendix !== 'undefined'
-                            ? slides_appendix.filter(s => s.id.startsWith('appendix-rooms'))
-                            : null,
-                    )
-                },
-                {
-                    title: 'Developer Troubleshooting',
-                    slideIds: idsFrom(
-                        typeof slides_appendix !== 'undefined'
-                            ? slides_appendix.filter(s => s.id.startsWith('appendix-dev'))
-                            : null,
+                        typeof slides_appendix !== 'undefined' ? slides_appendix : null,
                     )
                 },
             ]
         },
 
-        {
-            id: '4',
-            label: 'Backup / Optional Sections',
-            chapters: [
-                {
-                    title: 'Python SDK (30 min)  -  best after App Fundamentals, Day 1',
-                    slideIds: idsFrom(
-                        typeof slides_python_sdk !== 'undefined' ? slides_python_sdk : null,
-                    )
-                },
-                {
-                    title: 'MCP Building & Consuming (Day 2 deep-dive)',
-                    slideIds: idsFrom(
-                        typeof slides_mcp_building_consuming !== 'undefined' ? slides_mcp_building_consuming : null,
-                    )
-                },
-                {
-                    title: 'Context Engineering for Agents (Day 2)',
-                    slideIds: idsFrom(
-                        typeof slides_context_engineering !== 'undefined' ? slides_context_engineering : null,
-                    )
-                },
-                {
-                    title: 'Model Logs (15 min)  -  fold into Engines or Security',
-                    slideIds: idsFrom(
-                        typeof slides_model_logs !== 'undefined' ? slides_model_logs : null,
-                    )
-                },
-                {
-                    title: 'MCP UI & Premade Tools',
-                    slideIds: idsFrom(
-                        typeof slides_mcp_ui_premade !== 'undefined' ? slides_mcp_ui_premade : null,
-                    )
-                },
-                {
-                    title: 'Agentic App Builder  -  What\'s Next (Day 2 closer, 15 min)',
-                    slideIds: idsFrom(
-                        typeof slides_agent47 !== 'undefined' ? slides_agent47 : null,
-                    )
-                },
-            ]
-        }
+        // {
+        //     id: '4',
+        //     label: 'Backup / Optional Sections',
+        //     chapters: [
+        //         { title: 'Python SDK (30 min)  -  best after App Fundamentals, Day 1', slideIds: idsFrom(typeof slides_python_sdk !== 'undefined' ? slides_python_sdk : null) },
+        //         { title: 'MCP Building & Consuming (Day 2 deep-dive)', slideIds: idsFrom(typeof slides_mcp_building_consuming !== 'undefined' ? slides_mcp_building_consuming : null) },
+        //         { title: 'Context Engineering for Agents (Day 2)', slideIds: idsFrom(typeof slides_context_engineering !== 'undefined' ? slides_context_engineering : null) },
+        //         { title: 'Model Logs (15 min)  -  fold into Engines or Security', slideIds: idsFrom(typeof slides_model_logs !== 'undefined' ? slides_model_logs : null) },
+        //         { title: 'MCP UI & Premade Tools', slideIds: idsFrom(typeof slides_mcp_ui_premade !== 'undefined' ? slides_mcp_ui_premade : null) },
+        //         { title: 'Agentic App Builder  -  What\'s Next (Day 2 closer, 15 min)', slideIds: idsFrom(typeof slides_agent47 !== 'undefined' ? slides_agent47 : null) },
+        //     ]
+        // }
     ]
 };
 

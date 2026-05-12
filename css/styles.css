@@ -447,6 +447,12 @@ body {
     font-weight: 400;
 }
 
+.slide-content .muted {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
 .slide-content .subtitle {
     font-size: 17px;
     color: var(--text-muted);
