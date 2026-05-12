@@ -1,4 +1,4 @@
-// Topic: Vibe Coding — Build Your First App
+// Topic: Vibe Coding  -  Build Your First App
 const slides_vibe_coding = [
     {
         id: "vibe-title",
@@ -16,7 +16,7 @@ const slides_vibe_coding = [
             <h2>What is Vibe Coding?</h2>
             ${C.split(
                 {
-                    title: "Old Way — Code Everything",
+                    title: "Old Way  -  Code Everything",
                     content: `
                         <ol>
                             <li>Define the data model</li>
@@ -29,7 +29,7 @@ const slides_vibe_coding = [
                     `
                 },
                 {
-                    title: "Vibe Coding — Describe and Build",
+                    title: "Vibe Coding  -  Describe and Build",
                     content: `
                         <ol>
                             <li>Open Claude Code in your project</li>
@@ -42,7 +42,7 @@ const slides_vibe_coding = [
                     `
                 }
             )}
-            ${C.callout(`Claude Code is connected to your ${CONFIG.productName} instance — so the AI assistant generating your app is running on ${CONFIG.productName}'s models, not an external service.`, 'tip')}
+            ${C.callout(`Claude Code is connected to your ${CONFIG.productName} instance  -  so the AI assistant generating your app is running on ${CONFIG.productName}'s models, not an external service.`, 'tip')}
         `
     },
     {
@@ -64,7 +64,7 @@ const slides_vibe_coding = [
                     { name: "README.md", type: "file", desc: "setup instructions" },
                 ])}
 
-                ${C.callout('Raise your hand if you hit an error — helpers are circulating.', 'warning')}
+                ${C.callout('Raise your hand if you hit an error  -  helpers are circulating.', 'warning')}
             `)}
         `
     },
@@ -78,10 +78,10 @@ const slides_vibe_coding = [
                     <li>Open ${CONFIG.productName} in your browser</li>
                     <li>Click your profile icon (top-right) &rarr; <strong>Settings</strong> &rarr; <strong>API Keys</strong></li>
                     <li>Click <strong>Generate New Key</strong></li>
-                    <li>Copy both the <strong>Access Key</strong> and <strong>Secret Key</strong> and save them somewhere safe — the Secret is shown only once</li>
+                    <li>Copy both the <strong>Access Key</strong> and <strong>Secret Key</strong> and save them somewhere safe  -  the Secret is shown only once</li>
                 </ol>
 
-                ${C.callout('Keep these private — treat them like a password. Do not paste them into chat or share your screen while they are visible.', 'warning')}
+                ${C.callout('Keep these private  -  treat them like a password. Do not paste them into chat or share your screen while they are visible.', 'warning')}
             `)}
         `
     },
@@ -126,7 +126,7 @@ const slides_vibe_coding = [
                     </li>
                 </ol>
 
-                ${C.callout(`If it works, you're ready. If not, raise your hand now — don't wait until the build exercise to discover an issue.`, 'tip')}
+                ${C.callout(`If it works, you're ready. If not, raise your hand now  -  don't wait until the build exercise to discover an issue.`, 'tip')}
             `)}
         `
     },
@@ -139,12 +139,12 @@ const slides_vibe_coding = [
             <ul>
                 <li>Open Claude Code in the template project</li>
                 <li>Give it a prompt describing the Q&A app (using the vector engine from the Engines section)</li>
-                <li>Watch it generate the app structure — files, UI, Pixel logic</li>
+                <li>Watch it generate the app structure  -  files, UI, Pixel logic</li>
                 <li>Run it, ask it a question, see the answer with source documents</li>
                 <li>Send one follow-up prompt to refine the UI or behavior</li>
                 <li>Publish and open the live URL</li>
             </ul>
-            ${C.callout('Watch how the presenter phrases the prompt — specificity matters. A clear description of the data source, the question input, and the output format gets you much further than a vague request.', 'tip')}
+            ${C.callout('Watch how the presenter phrases the prompt  -  specificity matters. A clear description of the data source, the question input, and the output format gets you much further than a vague request.', 'tip')}
         `
     },
     {
@@ -156,21 +156,21 @@ const slides_vibe_coding = [
                 <h4>Everyone (start here)</h4>
                 <ol>
                     <li>Open Claude Code in the project folder you cloned</li>
-                    <li>Describe an app that uses your vector engine — include what question users should ask, and what the output should look like</li>
+                    <li>Describe an app that uses your vector engine  -  include what question users should ask, and what the output should look like</li>
                     <li>Run the app and confirm it works</li>
-                    <li>Publish it — copy the live URL and share it in the chat</li>
+                    <li>Publish it  -  copy the live URL and share it in the chat</li>
                 </ol>
 
-                <h4>Tier 2 — go further</h4>
+                <h4>Tier 2  -  go further</h4>
                 <ol>
                     <li>Send at least one follow-up prompt to change something about the UI or behavior (layout, labels, filters, styling)</li>
                     <li>Re-publish and verify the change is live</li>
                 </ol>
 
-                <h4>Tier 3 — go deeper</h4>
+                <h4>Tier 3  -  go deeper</h4>
                 <ol>
                     <li>Open a generated file and find the Pixel command that runs on submit</li>
-                    <li>Edit it directly — add a filter, change a parameter, or add a second query</li>
+                    <li>Edit it directly  -  add a filter, change a parameter, or add a second query</li>
                     <li>Publish and confirm the manual edit took effect</li>
                 </ol>
 
@@ -180,14 +180,14 @@ const slides_vibe_coding = [
     },
     {
         id: "vibe-day2-bridge",
-        title: "Day 1 Complete — What's Next",
+        title: "Day 1 Complete  -  What's Next",
         content: `
-            <h2>Day 1 Complete — What's Next</h2>
+            <h2>Day 1 Complete  -  What's Next</h2>
             ${C.cards([
                 {
                     badge: "Tomorrow",
                     title: "MCP",
-                    desc: "Turn your app into a tool that an AI agent can call — expose it as an MCP endpoint"
+                    desc: "Turn your app into a tool that an AI agent can call  -  expose it as an MCP endpoint"
                 },
                 {
                     badge: "Tomorrow",
@@ -197,10 +197,10 @@ const slides_vibe_coding = [
                 {
                     badge: "Tomorrow",
                     title: "Capstone",
-                    desc: "Build something real for your team — combine engines, tools, and agents into a complete workflow"
+                    desc: "Build something real for your team  -  combine engines, tools, and agents into a complete workflow"
                 },
             ])}
-            ${C.callout(`Keep your ${CONFIG.productName} session active overnight — your vector engine, access keys, and published app will all be there tomorrow.`, 'info')}
+            ${C.callout(`Keep your ${CONFIG.productName} session active overnight  -  your vector engine, access keys, and published app will all be there tomorrow.`, 'info')}
         `
     }
 ];

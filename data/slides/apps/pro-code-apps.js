@@ -144,14 +144,14 @@ const slides_apps_pro_code = [
 										],
 									},
 								])}
-                ${C.callout("<strong>Never edit</strong> <code>portals/</code> directly in a pro-code app — it gets overwritten on each build. Edit <code>client/src/</code> instead.", "warning")}
+                ${C.callout("<strong>Never edit</strong> <code>portals/</code> directly in a pro-code app  -  it gets overwritten on each build. Edit <code>client/src/</code> instead.", "warning")}
             `,
 	},
 	{
 		id: "procode-sdk",
 		title: "@semoss/sdk",
 		content: `
-                <h2>@semoss/sdk — The ${CONFIG.productName} API Client</h2>
+                <h2>@semoss/sdk  -  The ${CONFIG.productName} API Client</h2>
                 <p>The <code>@semoss/sdk</code> package provides TypeScript functions to interact with the ${CONFIG.productName} backend.</p>
                 ${C.code(
 									`import { runPixel, Env } from '@semoss/sdk/react';
@@ -200,7 +200,7 @@ console.log(result.pixelReturn[0].output);  // "Hello!"`,
 		id: "procode-insight-provider",
 		title: "InsightProvider & SDK Integration",
 		content: `
-                <h2>InsightProvider — App Context</h2>
+                <h2>InsightProvider  -  App Context</h2>
                 <p>The <code>InsightProvider</code> wraps your React app to provide insight context and SDK access.</p>
                 ${C.code(
 									`import { InsightProvider, Env } from '@semoss/sdk/react';
@@ -217,7 +217,7 @@ ReactDOM.render(
 									"typescript",
 									"client/src/main.tsx",
 								)}
-                <h3>useInsight() Hook — Accessing SDK Actions</h3>
+                <h3>useInsight() Hook  -  Accessing SDK Actions</h3>
                 ${C.code(
 									`import { useState } from 'react';
 import { useInsight } from '@semoss/sdk/react';
@@ -423,7 +423,7 @@ function App() {
 	//     id: "procode-renderer",
 	//     title: "@semoss/renderer",
 	//     content: `
-	//         <h2>@semoss/renderer — Block-Based UI Components</h2>
+	//         <h2>@semoss/renderer  -  Block-Based UI Components</h2>
 	//         <p>The <code>@semoss/renderer</code> package provides the <strong>Renderer</strong> component for embedding ${CONFIG.productName} block-based UIs.</p>
 	//         ${C.code(\`import { Renderer } from '@semoss/renderer';
 	//
@@ -722,14 +722,14 @@ export function QueryRunner() {
 									"typescript",
 									"client/src/components/QueryRunner.tsx",
 								)}
-                ${C.callout("This example demonstrates error handling, loading states, toasts, and responsive data display—all common patterns in production portals.", "tip")}
+                ${C.callout("This example demonstrates error handling, loading states, toasts, and responsive data display - all common patterns in production portals.", "tip")}
             `,
 	},
 	{
 		id: "procode-recap",
 		title: "Recap",
 		content: `
-                <h2>Pro-Code Apps — Recap</h2>
+                <h2>Pro-Code Apps  -  Recap</h2>
                 ${C.cards([
 									{
 										badge: "Stack",
@@ -769,7 +769,7 @@ export function QueryRunner() {
                     <li>Build → Publish workflow deploys to <code>public_home/&lt;projectId&gt;/portals/</code></li>
                 </ul>
                 <h3>Next Up</h3>
-                <p>Custom Reactors — Extend ${CONFIG.productName} functionality with Java backend logic.</p>
+                <p>Custom Reactors  -  Extend ${CONFIG.productName} functionality with Java backend logic.</p>
             `,
 	},
 ];

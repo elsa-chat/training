@@ -93,7 +93,7 @@ const slides_platform_fundamentals = [
                 <!-- STORAGE -->
                 <div style="background:#f0faf5;border:1.5px solid #68d391;border-radius:8px;padding:.75rem;">
                     <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:#276749;margin-bottom:.3rem;">STORAGE</div>
-                    <p style="font-size:.78rem;color:#444;margin:0 0 .3rem;">Access unstructured data — audio, video, images, documents, and code.</p>
+                    <p style="font-size:.78rem;color:#444;margin:0 0 .3rem;">Access unstructured data  -  audio, video, images, documents, and code.</p>
                     <p style="font-size:.75rem;color:#2d6a4f;font-weight:600;margin:0;">S3, Azure Blob, Google Cloud, SharePoint, OneDrive, SFTP…</p>
                 </div>
             </div>
@@ -157,7 +157,7 @@ const slides_platform_fundamentals = [
         title: "Navigation Walkthrough",
         content: `
             <h2>The Five Main Areas</h2>
-            <p>Before we dive in, let's orient ourselves. ${CONFIG.productName} is organized around five navigation areas — each with a distinct purpose.</p>
+            <p>Before we dive in, let's orient ourselves. ${CONFIG.productName} is organized around five navigation areas  -  each with a distinct purpose.</p>
             ${C.cards([
                 {
                     badge: 'Discover',
@@ -172,7 +172,7 @@ const slides_platform_fundamentals = [
                 {
                     badge: 'Build',
                     title: 'Apps',
-                    desc: `Create, edit, and run applications. Choose from drag-and-drop, vibe coding, or pro-code — all publishing to the same platform.`
+                    desc: `Create, edit, and run applications. Choose from drag-and-drop, vibe coding, or pro-code  -  all publishing to the same platform.`
                 },
                 {
                     badge: 'Experiment',
@@ -211,12 +211,12 @@ const slides_platform_fundamentals = [
                     ],
                     [
                         '<strong>Read-Only</strong>',
-                        'Run queries and inference — no config changes',
-                        'View and interact with the app — no editing'
+                        'Run queries and inference  -  no config changes',
+                        'View and interact with the app  -  no editing'
                     ]
                 ]
             )}
-            ${C.callout('If you cannot find an engine or app, you may not have been granted access — ask your admin. Full permission management is covered on Day 2.', 'warning')}
+            ${C.callout('If you cannot find an engine or app, you may not have been granted access  -  ask your admin. Full permission management is covered on Day 2.', 'warning')}
         `
     }
 ];

@@ -14,16 +14,16 @@ const slides_custom_reactors = [
             title: "Reactor Interface & Implementation",
             content: `
                 <h2>Reactor Interface & Implementation</h2>
-                <p class="lead">Every reactor implements <code>IReactor</code>, but in practice you always extend <span class="highlight">AbstractReactor</span> — it handles noun management, planner integration, and error utilities for you.</p>
+                <p class="lead">Every reactor implements <code>IReactor</code>, but in practice you always extend <span class="highlight">AbstractReactor</span>  -  it handles noun management, planner integration, and error utilities for you.</p>
                 ${C.split(
                     {
                         title: 'IReactor (Interface)',
                         content: `
                             <p>Defines the contract every reactor must fulfill:</p>
                             <ul>
-                                <li><code>execute()</code> — Run logic, return result</li>
-                                <li><code>getNounStore()</code> — Access input parameters</li>
-                                <li><code>mergeUp()</code> — Push data to parent reactor</li>
+                                <li><code>execute()</code>  -  Run logic, return result</li>
+                                <li><code>getNounStore()</code>  -  Access input parameters</li>
+                                <li><code>mergeUp()</code>  -  Push data to parent reactor</li>
                                 <li><code>getInputs()</code> / <code>getOutputs()</code></li>
                                 <li><code>setInsight()</code> / <code>setPixelPlanner()</code></li>
                                 <li><code>getHelp()</code> / <code>getSignature()</code></li>
@@ -35,11 +35,11 @@ const slides_custom_reactors = [
                         content: `
                             <p>Provides all the plumbing so you focus on logic:</p>
                             <ul>
-                                <li><code>keysToGet</code> — Declare expected inputs</li>
-                                <li><code>keyRequired</code> — Mark required vs optional</li>
-                                <li><code>organizeKeys()</code> — Auto-map inputs to <code>keyValue</code></li>
-                                <li><code>NounStore store</code> — Full access to raw inputs</li>
-                                <li><code>Insight insight</code> — Current session context</li>
+                                <li><code>keysToGet</code>  -  Declare expected inputs</li>
+                                <li><code>keyRequired</code>  -  Mark required vs optional</li>
+                                <li><code>organizeKeys()</code>  -  Auto-map inputs to <code>keyValue</code></li>
+                                <li><code>NounStore store</code>  -  Full access to raw inputs</li>
+                                <li><code>Insight insight</code>  -  Current session context</li>
                                 <li>Typed getters: <code>getString()</code>, <code>getInt()</code>, <code>getBoolean()</code>, <code>getMap()</code>, <code>getList()</code></li>
                             </ul>
                         `
@@ -104,9 +104,9 @@ public class MyCustomReactor extends AbstractReactor {
         },
         {
             id: "reactor-inputs-nounstore",
-            title: "Inputs — NounStore Deep Dive",
+            title: "Inputs  -  NounStore Deep Dive",
             content: `
-                <h2>Inputs — NounStore Deep Dive</h2>
+                <h2>Inputs  -  NounStore Deep Dive</h2>
                 <p>When Pixel calls your reactor, all arguments are placed in the <code>NounStore</code> as <code>GenRowStruct</code> containers, each holding one or more <code>NounMetadata</code> objects.</p>
                 <h3>How Input Flows</h3>
                 ${C.flow([
@@ -138,14 +138,14 @@ if (grs != null && !grs.isEmpty()) {
         },
         {
             id: "reactor-outputs-nounmetadata",
-            title: "Outputs — NounMetadata",
+            title: "Outputs  -  NounMetadata",
             content: `
-                <h2>Outputs — NounMetadata</h2>
+                <h2>Outputs  -  NounMetadata</h2>
                 <p>Every reactor returns a <code>NounMetadata</code> object that wraps the result with type classification and operation signals.</p>
                 ${C.table(
                     ['Field', 'Type', 'Purpose'],
                     [
-                        ['<code>value</code>', 'Object', 'The actual result — String, Map, List, ITableDataFrame, etc.'],
+                        ['<code>value</code>', 'Object', 'The actual result  -  String, Map, List, ITableDataFrame, etc.'],
                         ['<code>nounType</code>', '<code>PixelDataType</code>', 'Classifies the data for downstream consumers'],
                         ['<code>opType</code>', '<code>PixelOperationType</code>', 'Signals how the system and UI should handle the result'],
                     ]
@@ -174,7 +174,7 @@ return NounMetadata.getWarningNounMessage("3 rows skipped");`, 'java', 'Return p
                 ${C.table(
                     ['PixelOperationType', 'When to Use'],
                     [
-                        ['<code>OPERATION</code>', 'Generic successful result — default for most reactors'],
+                        ['<code>OPERATION</code>', 'Generic successful result  -  default for most reactors'],
                         ['<code>VIZ_DATA</code>', 'Returning data that should render in a UI panel (chart, grid)'],
                         ['<code>NEW_FRAME</code>', 'You created a new ITableDataFrame'],
                         ['<code>FRAME_DATA_CHANGE</code>', 'You modified an existing frame\'s data'],
@@ -309,7 +309,7 @@ logger.warn("Text was truncated from " + original + " to " + maxLength);`, 'java
                 ${C.cards([
                     { badge: 'Single Purpose', title: 'One Reactor, One Job', desc: 'Keep reactors focused on a single task. For complex operations, compose multiple reactors via Pixel rather than building monolithic execute() methods.' },
                     { badge: 'Validation', title: 'Validate Inputs Early', desc: 'Check required parameters, types, and value ranges at the top of execute(). Use keyRequired for basics, then add custom checks with clear error messages.' },
-                    { badge: 'Typing', title: 'Use Precise Return Types', desc: 'Always use the most specific PixelDataType and PixelOperationType. Don\'t return a Map as CONST_STRING — downstream consumers and the UI depend on accurate types.' },
+                    { badge: 'Typing', title: 'Use Precise Return Types', desc: 'Always use the most specific PixelDataType and PixelOperationType. Don\'t return a Map as CONST_STRING  -  downstream consumers and the UI depend on accurate types.' },
                     { badge: 'Descriptions', title: 'Document Everything', desc: 'Override getReactorDescription() and getDescriptionForKey() for every reactor. This powers Help(), MCP tool generation, and onboarding for other developers.' },
                     { badge: 'Errors', title: 'Fail Gracefully', desc: 'Use try-catch blocks and return NounMetadata.getErrorNounMessage() with actionable messages. Throw SemossPixelException for hard failures that should halt execution.' },
                     { badge: 'Naming', title: 'Clear, Consistent Names', desc: 'Use descriptive class names that read as verbs: AddMovieReactor, ExportReportReactor, ValidateSchemaReactor. The "Reactor" suffix is stripped for the Pixel command.' },
@@ -415,7 +415,7 @@ AddMovie(engine=["my_db"], title=["Inception"]);
 
 // Test: optional genre defaults
 AddMovie(engine=["my_db"], title=["Tenet"], year=[2020]);
-// Success: "Added movie: Tenet (2020)" — genre = "Unknown"
+// Success: "Added movie: Tenet (2020)"  -  genre = "Unknown"
 
 // Check help and MCP schema
 Help(reactor=["AddMovie"]);`, 'pixel')}
@@ -426,12 +426,12 @@ Help(reactor=["AddMovie"]);`, 'pixel')}
             id: "reactor-recap",
             title: "Recap",
             content: `
-                <h2>Building Your Own Reactor — Recap</h2>
+                <h2>Building Your Own Reactor  -  Recap</h2>
                 ${C.cards([
-                    { badge: 'Interface', title: 'AbstractReactor', desc: 'Always extend AbstractReactor — it handles NounStore, organizeKeys(), typed getters, and error utilities' },
+                    { badge: 'Interface', title: 'AbstractReactor', desc: 'Always extend AbstractReactor  -  it handles NounStore, organizeKeys(), typed getters, and error utilities' },
                     { badge: 'Inputs', title: 'keysToGet + NounStore', desc: 'Declare parameters with keysToGet/keyRequired, retrieve via getString(), getInt(), getMap(), etc.' },
                     { badge: 'Outputs', title: 'NounMetadata', desc: 'Wrap results with PixelDataType + PixelOperationType for typed, actionable returns' },
-                    { badge: 'Deploy', title: 'Hot Reload', desc: 'Place .class files in project/version/assets/java/, then ReloadInsightClasses() — no restart' },
+                    { badge: 'Deploy', title: 'Hot Reload', desc: 'Place .class files in project/version/assets/java/, then ReloadInsightClasses()  -  no restart' },
                     { badge: 'Register', title: 'Auto-Discovery', desc: 'Class name minus "Reactor" suffix = Pixel command. MCP tool schema generated automatically.' },
                     { badge: 'Debug', title: 'Console + Logger', desc: 'Test from Pixel console, use getLogger() for tracing, attach IDE debugger for complex issues' },
                     { badge: 'Design', title: 'Best Practices', desc: 'Single purpose, validate early, precise types, document with getReactorDescription()' },

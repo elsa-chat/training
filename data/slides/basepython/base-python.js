@@ -31,7 +31,7 @@ cpu = [
     "torch>=2.0+cpu",
     # ... CPU-only packages
 ]`, 'toml', 'Simplified pyproject.toml showing optional dependency groups')}
-                ${C.callout('<strong>Why pyproject.toml?</strong> It is the modern Python packaging standard (PEP 621). All dependencies, metadata, and optional extras live in one declarative file — no more juggling multiple requirements.txt files.', 'info')}
+                ${C.callout('<strong>Why pyproject.toml?</strong> It is the modern Python packaging standard (PEP 621). All dependencies, metadata, and optional extras live in one declarative file  -  no more juggling multiple requirements.txt files.', 'info')}
 
                 <h3>Local Development Setup with UV</h3>
                 <p>For local development, it is recommended to use <span class="highlight">uv</span> to create and manage your virtual environment. UV is an extremely fast Python package manager written in Rust.</p>
@@ -50,7 +50,7 @@ uv venv
 # Install with GPU support
 uv pip install .[gpu]
 
-# — OR — Install with CPU-only support
+#  -  OR  -  Install with CPU-only support
 uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                 ${C.split(
                     {
@@ -76,7 +76,7 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                         `
                     }
                 )}
-                ${C.callout('<strong>Why UV?</strong> UV resolves and installs packages significantly faster than pip. It also handles virtual environment creation natively — no need for a separate <code>python -m venv</code> step.', 'tip')}
+                ${C.callout('<strong>Why UV?</strong> UV resolves and installs packages significantly faster than pip. It also handles virtual environment creation natively  -  no need for a separate <code>python -m venv</code> step.', 'tip')}
             `
         },
         {
@@ -100,10 +100,10 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                 )}
                 <h3>Infrastructure & Support Components</h3>
                 ${C.cards([
-                    { badge: 'Security', title: 'Prompt Guard', desc: '<code>gaas_prompt_guard.py</code> — Input/output validation and security filtering to enforce guardrails on agent interactions.' },
-                    { badge: 'API', title: 'REST Client', desc: `<code>gaas_rest_server.py</code> — A Python client for interacting with the ${CONFIG.productName} backend REST API directly.` },
-                    { badge: 'Bridge', title: 'Server Proxy', desc: `<code>gaas_server_proxy.py</code> — Enables Python GAAS components to call back to the ${CONFIG.productName} Java backend for cross-layer operations.` },
-                    { badge: 'Transport', title: 'TCP Servers', desc: '<code>gaas_tcp_server_handler.py</code> / <code>gaas_tcp_socket_server.py</code> — TCP-based communication layer between the Java server and Python processes.' },
+                    { badge: 'Security', title: 'Prompt Guard', desc: '<code>gaas_prompt_guard.py</code>  -  Input/output validation and security filtering to enforce guardrails on agent interactions.' },
+                    { badge: 'API', title: 'REST Client', desc: `<code>gaas_rest_server.py</code>  -  A Python client for interacting with the ${CONFIG.productName} backend REST API directly.` },
+                    { badge: 'Bridge', title: 'Server Proxy', desc: `<code>gaas_server_proxy.py</code>  -  Enables Python GAAS components to call back to the ${CONFIG.productName} Java backend for cross-layer operations.` },
+                    { badge: 'Transport', title: 'TCP Servers', desc: '<code>gaas_tcp_server_handler.py</code> / <code>gaas_tcp_socket_server.py</code>  -  TCP-based communication layer between the Java server and Python processes.' },
                 ])}
                 <h3>How It All Fits Together</h3>
                 ${C.flow([
@@ -117,9 +117,9 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
         },
         {
             id: "python-genai-client-architecture",
-            title: "genai_client — Architecture Overview",
+            title: "genai_client  -  Architecture Overview",
             content: `
-                <h2>genai_client — Architecture Overview</h2>
+                <h2>genai_client  -  Architecture Overview</h2>
                 <p class="lead">The <code>genai_client</code> package is ${CONFIG.productName}'s provider-agnostic Python layer for interacting with large language models. It abstracts away the differences between AI providers behind a unified interface.</p>
                 <h3>Supported Provider Clients</h3>
                 ${C.cards([
@@ -140,14 +140,14 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                         ['<code>StreamUtil</code>', '<code>semoss_streaming_util.py</code>', 'Shared helpers for creating consistent streaming chunks across all providers (content, tool calls, finish reasons)'],
                     ]
                 )}
-                ${C.callout('<strong>Key design principle:</strong> The Java backend sends a provider-agnostic message format. The <code>SEMOSSMessageBuilder</code> normalizes it, and each provider\'s <code>MessageBuilder</code> converts it to the provider-specific API format. This means adding a new provider only requires a new client + message builder — no Java changes.', 'tip')}
+                ${C.callout('<strong>Key design principle:</strong> The Java backend sends a provider-agnostic message format. The <code>SEMOSSMessageBuilder</code> normalizes it, and each provider\'s <code>MessageBuilder</code> converts it to the provider-specific API format. This means adding a new provider only requires a new client + message builder  -  no Java changes.', 'tip')}
             `
         },
         {
             id: "python-genai-message-builder",
-            title: "genai_client — Message Builder Pipeline",
+            title: "genai_client  -  Message Builder Pipeline",
             content: `
-                <h2>genai_client — Message Builder Pipeline</h2>
+                <h2>genai_client  -  Message Builder Pipeline</h2>
                 <p class="lead">Every request flows through a two-stage message building pipeline that normalizes inputs and then transforms them to provider-specific formats.</p>
                 <h3>The Two-Stage Pipeline</h3>
                 ${C.flow([
@@ -156,7 +156,7 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                     { title: '3. Provider MessageBuilder', desc: 'Transforms SEMOSSMessages into provider-specific format (e.g., AnthropicMessage, OpenAIMessage)', arrow: '→' },
                     { title: '4. API Call', desc: 'Provider client sends the formatted request and handles streaming/non-streaming responses' },
                 ])}
-                <h3>SEMOSSMessage — The Universal Format</h3>
+                <h3>SEMOSSMessage  -  The Universal Format</h3>
                 <p>The <code>SEMOSSMessage</code> is the intermediate representation that all providers consume. It supports two schema versions.</p>
                 ${C.split(
                     {
@@ -164,12 +164,12 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                         content: `
                             <p>Flat message structure with top-level fields:</p>
                             <ul>
-                                <li><code>type</code> — INPUT_TEXT, RESPONSE_TEXT, RESPONSE_TOOL, INPUT_TOOL_EXEC, etc.</li>
-                                <li><code>content</code> — Text string</li>
-                                <li><code>media_content</code> — List of media attachments</li>
-                                <li><code>tool_calls</code> — List of tool call dicts</li>
-                                <li><code>tool_call_id</code> — ID for tool results</li>
-                                <li><code>param_map</code> — Request parameters</li>
+                                <li><code>type</code>  -  INPUT_TEXT, RESPONSE_TEXT, RESPONSE_TOOL, INPUT_TOOL_EXEC, etc.</li>
+                                <li><code>content</code>  -  Text string</li>
+                                <li><code>media_content</code>  -  List of media attachments</li>
+                                <li><code>tool_calls</code>  -  List of tool call dicts</li>
+                                <li><code>tool_call_id</code>  -  ID for tool results</li>
+                                <li><code>param_map</code>  -  Request parameters</li>
                             </ul>
                         `
                     },
@@ -178,12 +178,12 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                         content: `
                             <p>Structured parts array for multi-modal messages:</p>
                             <ul>
-                                <li><code>TEXT</code> — Text content part</li>
-                                <li><code>MEDIA</code> — Image/document with mediaInfo</li>
-                                <li><code>TOOL_CALL</code> — Function invocation</li>
-                                <li><code>TOOL_RESULT</code> — Tool execution output</li>
-                                <li><code>THINKING</code> — Reasoning/thinking block</li>
-                                <li><code>SYSTEM</code> — System prompt part</li>
+                                <li><code>TEXT</code>  -  Text content part</li>
+                                <li><code>MEDIA</code>  -  Image/document with mediaInfo</li>
+                                <li><code>TOOL_CALL</code>  -  Function invocation</li>
+                                <li><code>TOOL_RESULT</code>  -  Tool execution output</li>
+                                <li><code>THINKING</code>  -  Reasoning/thinking block</li>
+                                <li><code>SYSTEM</code>  -  System prompt part</li>
                             </ul>
                         `
                     }
@@ -208,7 +208,7 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
             title: "Debugging Python",
             content: `
                 <h2>Debugging Python</h2>
-                <p class="lead">You can attach a VS Code debugger to ${CONFIG.productName}'s Python TCP server, allowing you to set breakpoints anywhere in the <code>genai_client</code> pipeline — message builders, provider clients, streaming handlers, and more.</p>
+                <p class="lead">You can attach a VS Code debugger to ${CONFIG.productName}'s Python TCP server, allowing you to set breakpoints anywhere in the <code>genai_client</code> pipeline  -  message builders, provider clients, streaming handlers, and more.</p>
                 <h3>Setup Steps</h3>
                 ${C.flow([
                     { title: '1. Set FORCE_PORT', desc: 'Add FORCE_PORT=9999 to the model\'s SMSS file so the TCP server starts on a predictable port' },
@@ -216,12 +216,12 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                     { title: '3. Launch in VS Code', desc: 'Start the socket server from the VS Code debug panel', arrow: '→' },
                     { title: '4. Set Breakpoints', desc: 'Place breakpoints anywhere in the Python codebase and trigger a model call' },
                 ])}
-                <h3>Step 1 — Configure FORCE_PORT in the SMSS</h3>
+                <h3>Step 1  -  Configure FORCE_PORT in the SMSS</h3>
                 <p>In the model's <code>.smss</code> configuration file, set <code>FORCE_PORT</code> to a fixed port number. This tells ${CONFIG.productName} to start the Python TCP server on that specific port instead of a random one, so your debugger can connect reliably.</p>
                 ${C.code(`# In your model's .smss file
 FORCE_PORT\t9999`, 'properties', 'Setting a fixed TCP port for the model')}
                 ${C.callout(`<strong>Why FORCE_PORT?</strong> By default, ${CONFIG.productName} assigns a random available port to each Python TCP server. Setting a fixed port ensures the VS Code debugger launches the server on the same port that the Java backend expects to connect to.`, 'info')}
-                <h3>Step 2 — Create the VS Code Launch Configuration</h3>
+                <h3>Step 2  -  Create the VS Code Launch Configuration</h3>
                 <p>Create a <code>launch.json</code> file in the <code>py/.vscode/</code> directory with the following configuration:</p>
                 ${C.code(`{
   "version": "0.2.0",
@@ -238,17 +238,17 @@ FORCE_PORT\t9999`, 'properties', 'Setting a fixed TCP port for the model')}
     }
   ]
 }`, 'json', 'py/.vscode/launch.json')}
-                <h3>Step 3 — Debug</h3>
+                <h3>Step 3  -  Debug</h3>
                 <p>With the debugger running, you can set breakpoints anywhere in the Python codebase that the model's request will touch.</p>
                 ${C.split(
                     {
                         title: 'Where to Set Breakpoints',
                         content: `
                             <ul>
-                                <li><strong>Message Builders</strong> — <code>AnthropicMessageBuilder</code>, <code>OpenAIMessageBuilder</code>, <code>GoogleGenAIMessageBuilder</code></li>
-                                <li><strong>Provider Clients</strong> — <code>ask_call()</code>, streaming handlers, tool call parsing</li>
-                                <li><strong>${CONFIG.productName} Message Builder</strong> — Input normalization and param_map processing</li>
-                                <li><strong>GAAS Tools</strong> — Database, Vector, Storage, Function engine proxies</li>
+                                <li><strong>Message Builders</strong>  -  <code>AnthropicMessageBuilder</code>, <code>OpenAIMessageBuilder</code>, <code>GoogleGenAIMessageBuilder</code></li>
+                                <li><strong>Provider Clients</strong>  -  <code>ask_call()</code>, streaming handlers, tool call parsing</li>
+                                <li><strong>${CONFIG.productName} Message Builder</strong>  -  Input normalization and param_map processing</li>
+                                <li><strong>GAAS Tools</strong>  -  Database, Vector, Storage, Function engine proxies</li>
                             </ul>
                         `
                     },

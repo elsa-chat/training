@@ -176,7 +176,7 @@ CMD ["bash", "-c", "exec $TOMCAT_HOME/bin/start.sh"]`, 'dockerfile', 'docker/Doc
             id: "docker-local-testing",
             title: "Local Development with Docker Compose",
             content: `
-                <h2>Docker Compose — For Local Testing Only</h2>
+                <h2>Docker Compose  -  For Local Testing Only</h2>
                 <p class="lead"><code>docker-compose.yml</code> provides a quick way to run ${CONFIG.productName} locally for development and testing.</p>
                 ${C.split(
                     {
@@ -630,7 +630,7 @@ spec:
                     <li>150+ environment variables provide fine-grained control over all ${CONFIG.productName} features</li>
                     <li>runCS.sh startup script processes env vars and configures Tomcat, RDF_Map.prop, and web.xml</li>
                     <li>Always use Kubernetes secrets for sensitive values (passwords, API keys, connection strings)</li>
-                    <li>Docker Compose is for local development only — use Kubernetes for production</li>
+                    <li>Docker Compose is for local development only  -  use Kubernetes for production</li>
                 </ul>
             `
         },

@@ -1,4 +1,4 @@
-// Topic: Agent47 — Agentic App Builder (Backup / Optional)
+// Topic: Agent47  -  Agentic App Builder (Backup / Optional)
 const slides_agent47 = [
 
     {
@@ -6,17 +6,17 @@ const slides_agent47 = [
         title: "What's Next: Agentic App Builder",
         content: C.titleSlide(
             "What's Next",
-            `Agentic App Builder — Build and Deploy Agents Without Leaving ${CONFIG.productName}`,
+            `Agentic App Builder  -  Build and Deploy Agents Without Leaving ${CONFIG.productName}`,
             "Early Preview · Name TBD"
         )
     },
 
     {
         id: "agent47-what-is",
-        title: "Agentic App Builder — What It Is",
+        title: "Agentic App Builder  -  What It Is",
         content: `
             <h2>Agentic App Builder</h2>
-            <p class="lead">Everything you built this week — engines, MCP tools, apps — comes together in a single visual workspace.</p>
+            <p class="lead">Everything you built this week  -  engines, MCP tools, apps  -  comes together in a single visual workspace.</p>
             ${C.cards([
                 {
                     badge: 'Visual',
@@ -31,15 +31,15 @@ const slides_agent47 = [
                 {
                     badge: 'Model-Agnostic',
                     title: 'Pick Your Model',
-                    desc: 'GPT, Claude, Gemini — select per project. The platform wires the model to your agent automatically.'
+                    desc: 'GPT, Claude, Gemini  -  select per project. The platform wires the model to your agent automatically.'
                 },
                 {
                     badge: 'Native MCP',
                     title: 'Tools Built In',
-                    desc: 'Your MCP tools are first-class citizens. Connect engines, APIs, and custom reactors with a settings panel — not config files.'
+                    desc: 'Your MCP tools are first-class citizens. Connect engines, APIs, and custom reactors with a settings panel  -  not config files.'
                 },
             ])}
-            ${C.callout(`This is the next evolution of what you practiced in Playground today — structured, native, and deployable.`, 'tip')}
+            ${C.callout(`This is the next evolution of what you practiced in Playground today  -  structured, native, and deployable.`, 'tip')}
         `
     },
 
@@ -48,13 +48,13 @@ const slides_agent47 = [
         title: "Ways to Build Apps",
         content: `
             <h2>Ways to Build Apps on ${CONFIG.productName}</h2>
-            <p class="lead">Three paths — pick the one that fits your team and skill level.</p>
+            <p class="lead">Three paths  -  pick the one that fits your team and skill level.</p>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:0.75rem;">
 
                 <div style="background:#f8f9fa;border-radius:10px;padding:1rem;">
                     <div style="font-size:0.65rem;font-weight:700;letter-spacing:.08em;color:#888;margin-bottom:.5rem;">OPTION 1</div>
                     <div style="font-weight:700;font-size:.95rem;margin-bottom:.4rem;">Low-Code / Drag &amp; Drop</div>
-                    <p style="font-size:.8rem;color:#555;margin:0 0 .6rem;">Visual builder — drag components onto a canvas, wire up data, publish. No code required.</p>
+                    <p style="font-size:.8rem;color:#555;margin:0 0 .6rem;">Visual builder  -  drag components onto a canvas, wire up data, publish. No code required.</p>
                     <ul style="font-size:.78rem;color:#444;margin:0;padding-left:1.1rem;line-height:1.7;">
                         <li>Point-and-click component layout</li>
                         <li>Connect engines without writing Pixel</li>
@@ -66,7 +66,7 @@ const slides_agent47 = [
                 <div style="background:#f8f9fa;border-radius:10px;padding:1rem;">
                     <div style="font-size:0.65rem;font-weight:700;letter-spacing:.08em;color:#888;margin-bottom:.5rem;">OPTION 2</div>
                     <div style="font-weight:700;font-size:.95rem;margin-bottom:.4rem;">Pro-Code + Vibe Coding</div>
-                    <p style="font-size:.8rem;color:#555;margin:0 0 .6rem;">Write Pixel and React directly — or describe what you want and let the AI generate it for you.</p>
+                    <p style="font-size:.8rem;color:#555;margin:0 0 .6rem;">Write Pixel and React directly  -  or describe what you want and let the AI generate it for you.</p>
                     <ul style="font-size:.78rem;color:#444;margin:0;padding-left:1.1rem;line-height:1.7;">
                         <li>Full control over logic and layout</li>
                         <li>Vibe Coding generates the scaffold</li>
@@ -76,9 +76,9 @@ const slides_agent47 = [
                 </div>
 
                 <div style="background:#FDF3E0;border:2px solid var(--accent);border-radius:10px;padding:1rem;">
-                    <div style="font-size:0.65rem;font-weight:700;letter-spacing:.08em;color:var(--accent);margin-bottom:.5rem;">OPTION 3 — COMING SOON</div>
+                    <div style="font-size:0.65rem;font-weight:700;letter-spacing:.08em;color:var(--accent);margin-bottom:.5rem;">OPTION 3  -  COMING SOON</div>
                     <div style="font-weight:700;font-size:.95rem;margin-bottom:.4rem;">Agentic App Builder</div>
-                    <p style="font-size:.8rem;color:#555;margin:0 0 .6rem;">Build an app where the AI is the engine — not just a widget. Connect engines, tools, and models from a visual workspace.</p>
+                    <p style="font-size:.8rem;color:#555;margin:0 0 .6rem;">Build an app where the AI is the engine  -  not just a widget. Connect engines, tools, and models from a visual workspace.</p>
                     <ul style="font-size:.78rem;color:#444;margin:0;padding-left:1.1rem;line-height:1.7;">
                         <li>Visual agent configuration</li>
                         <li>MCP tools wired in natively</li>
@@ -88,7 +88,7 @@ const slides_agent47 = [
                 </div>
 
             </div>
-            ${C.callout('Same platform, same engines, same models — three different entry points depending on what you need to build.', 'info')}
+            ${C.callout('Same platform, same engines, same models  -  three different entry points depending on what you need to build.', 'info')}
         `
     },
 
@@ -113,16 +113,16 @@ const slides_agent47 = [
         id: "agent47-closes-loop",
         title: "Why It Matters",
         content: `
-            <h2>Why It Matters — Closing the Loop</h2>
+            <h2>Why It Matters  -  Closing the Loop</h2>
             <p class="lead">This week you built each layer separately. The Agentic App Builder is where they converge.</p>
             ${C.flow([
                 {
                     title: 'Engines',
-                    desc: 'Vector, LLM, and data engines you built are directly connectable — no config file, just pick from the Engines tab.',
+                    desc: 'Vector, LLM, and data engines you built are directly connectable  -  no config file, just pick from the Engines tab.',
                 },
                 {
                     title: 'MCP Tools',
-                    desc: 'The tools you wrote and consumed today become the agent\'s callable actions — wired in through the workspace settings panel.'
+                    desc: 'The tools you wrote and consumed today become the agent\'s callable actions  -  wired in through the workspace settings panel.'
                 },
                 {
                     title: 'Apps',
@@ -130,10 +130,10 @@ const slides_agent47 = [
                 },
                 {
                     title: 'You Stay in Control',
-                    desc: 'History tab, Issues tab, model selection, assistant selection — full observability and configurability without leaving the platform.',
+                    desc: 'History tab, Issues tab, model selection, assistant selection  -  full observability and configurability without leaving the platform.',
                 },
             ])}
-            ${C.callout(`The paradigm shift we talked about on Day 1 — this is the platform experience that makes it real.`, 'tip')}
+            ${C.callout(`The paradigm shift we talked about on Day 1  -  this is the platform experience that makes it real.`, 'tip')}
         `
     },
 

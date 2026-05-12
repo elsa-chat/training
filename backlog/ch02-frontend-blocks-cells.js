@@ -29,7 +29,7 @@ const day4_ch02 = {
                                 <li><strong>Visual:</strong> Rendered in the app UI</li>
                                 <li><strong>Count:</strong> 40+ built-in types</li>
                             </ul>
-                            ${C.callout('Think of Blocks as <strong>frontend components</strong> — the visual building blocks of your application.', 'info')}
+                            ${C.callout('Think of Blocks as <strong>frontend components</strong>  -  the visual building blocks of your application.', 'info')}
                         `
                     },
                     {
@@ -43,7 +43,7 @@ const day4_ch02 = {
                                 <li><strong>Functional:</strong> Transform data, not UI</li>
                                 <li><strong>Count:</strong> 20+ built-in types</li>
                             </ul>
-                            ${C.callout('Think of Cells as <strong>pipeline steps</strong> — the data transformation units of your workflow.', 'tip')}
+                            ${C.callout('Think of Cells as <strong>pipeline steps</strong>  -  the data transformation units of your workflow.', 'tip')}
                         `
                     }
                 )}
@@ -86,11 +86,11 @@ export const config: BlockConfig<ButtonBlockDef> = {
 };`, 'typescript', 'libs/renderer/src/components/block-defaults/button-block/config.tsx')}
                 <h3>Key Concepts</h3>
                 <ul>
-                    <li><code>widget</code> — Unique identifier used in block registry</li>
-                    <li><code>type</code> — Categorizes blocks for UI organization (Action, Display, Input, Layout, Visualization)</li>
-                    <li><code>data</code> — Default properties; can be overridden per-instance</li>
-                    <li><code>listeners</code> — Event handlers with ordered action chains</li>
-                    <li><code>render</code> — React component that receives <code>data</code> and triggers listeners</li>
+                    <li><code>widget</code>  -  Unique identifier used in block registry</li>
+                    <li><code>type</code>  -  Categorizes blocks for UI organization (Action, Display, Input, Layout, Visualization)</li>
+                    <li><code>data</code>  -  Default properties; can be overridden per-instance</li>
+                    <li><code>listeners</code>  -  Event handlers with ordered action chains</li>
+                    <li><code>render</code>  -  React component that receives <code>data</code> and triggers listeners</li>
                 </ul>
             `
         },
@@ -98,7 +98,7 @@ export const config: BlockConfig<ButtonBlockDef> = {
             id: "d4-blocks-categories",
             title: "Block Categories",
             content: `
-                <h2>Block Categories — 40+ Built-in Types</h2>
+                <h2>Block Categories  -  40+ Built-in Types</h2>
                 <p>${CONFIG.productName} ships with a comprehensive library of blocks organized by purpose.</p>
                 ${C.table(
                     ['Category', 'Blocks', 'Use Cases'],
@@ -142,8 +142,8 @@ export const config: BlockConfig<ButtonBlockDef> = {
             id: "d4-blocks-event-system",
             title: "Block Event System",
             content: `
-                <h2>Block Event System — Reactive Behavior</h2>
-                <p class="lead">Blocks support event listeners that trigger <span class="highlight">action chains</span> — ordered sequences of operations like running Pixel, modifying variables, or navigating pages.</p>
+                <h2>Block Event System  -  Reactive Behavior</h2>
+                <p class="lead">Blocks support event listeners that trigger <span class="highlight">action chains</span>  -  ordered sequences of operations like running Pixel, modifying variables, or navigating pages.</p>
                 ${C.flow([
                     { title: 'User Interaction', desc: 'User clicks a button or changes input value', accent: true },
                     { title: 'Trigger Event Listener', desc: 'onClick, onChange, onSubmit, etc.', arrow: '↓' },
@@ -247,7 +247,7 @@ export const config: BlockConfig<ButtonBlockDef> = {
             title: "Cell Architecture",
             content: `
                 <h2>Cell Architecture</h2>
-                <p>Cells are execution units in <strong>Notebooks</strong> — they transform data, run code, or call AI tools. Each cell converts to executable <strong>Pixel code</strong> via its <code>toPixel()</code> function.</p>
+                <p>Cells are execution units in <strong>Notebooks</strong>  -  they transform data, run code, or call AI tools. Each cell converts to executable <strong>Pixel code</strong> via its <code>toPixel()</code> function.</p>
                 ${C.code(`import type { CellConfig } from "@semoss/renderer";
 
 // Cell configuration structure
@@ -276,9 +276,9 @@ export const CodeCellConfig: CellConfig<CodeCellDef> = {
 };`, 'typescript', 'libs/renderer/src/components/cell-defaults/code-cell/config.ts')}
                 <h3>Key Concepts</h3>
                 <ul>
-                    <li><code>parameters</code> — Cell-specific config (varies by cell type)</li>
-                    <li><code>toPixel()</code> — Converts cell definition to executable Pixel code</li>
-                    <li><code>view</code> — React component for editing cell in Notebook UI</li>
+                    <li><code>parameters</code>  -  Cell-specific config (varies by cell type)</li>
+                    <li><code>toPixel()</code>  -  Converts cell definition to executable Pixel code</li>
+                    <li><code>view</code>  -  React component for editing cell in Notebook UI</li>
                 </ul>
             `
         },
@@ -286,7 +286,7 @@ export const CodeCellConfig: CellConfig<CodeCellDef> = {
             id: "d4-cells-types",
             title: "Cell Types",
             content: `
-                <h2>Cell Types — Data Workflow Building Blocks</h2>
+                <h2>Cell Types  -  Data Workflow Building Blocks</h2>
                 <p>Cells are organized by their role in data processing pipelines.</p>
                 ${C.cards([
                     { badge: 'Code Execution', title: 'Code Cell', desc: 'Run Pixel, Python, or R code. Supports variables and multi-line scripts.' },
@@ -405,7 +405,7 @@ export const CodeCellConfig: CellConfig<CodeCellDef> = {
                 <h2>Hands-on: Build a Search Interface</h2>
                 ${C.handson('Create a reactive search app using Blocks + Cells', `
                     <h4>Scenario</h4>
-                    <p>Build an app where users can search a database, filter results, and view them in a grid — all using Blocks and Cells.</p>
+                    <p>Build an app where users can search a database, filter results, and view them in a grid  -  all using Blocks and Cells.</p>
 
                     <h4>Step 1: Create a Page with Search Input (Block)</h4>
                     <ol>
@@ -496,7 +496,7 @@ export const CodeCellConfig: CellConfig<CodeCellDef> = {
                         <li>Clear button resets both input and grid</li>
                         <li>All state managed via StateStore variables</li>
                     </ul>
-                    ${C.callout(`This pattern — <strong>Input → ModifyVariable → RunCell → Grid</strong> — is the foundation of most ${CONFIG.productName} reactive apps.`, 'tip')}
+                    ${C.callout(`This pattern  -  <strong>Input → ModifyVariable → RunCell → Grid</strong>  -  is the foundation of most ${CONFIG.productName} reactive apps.`, 'tip')}
                 `)}
             `
         },
@@ -548,8 +548,8 @@ export const CodeCellConfig: CellConfig<CodeCellDef> = {
                 )}
                 <h3>Key Takeaways</h3>
                 <ul>
-                    <li><strong>Blocks</strong> are for UI — they render components and handle user interactions</li>
-                    <li><strong>Cells</strong> are for data — they execute code, transform data, and call AI tools</li>
+                    <li><strong>Blocks</strong> are for UI  -  they render components and handle user interactions</li>
+                    <li><strong>Cells</strong> are for data  -  they execute code, transform data, and call AI tools</li>
                     <li><strong>StateStore</strong> binds Blocks and Cells via variables using <code>{{ }}</code> syntax</li>
                     <li><strong>Event listeners</strong> on Blocks trigger action chains (RunCell, ModifyVariable, Redirect)</li>
                     <li><strong>toPixel()</strong> converts Cell configurations to executable Pixel code for the backend</li>

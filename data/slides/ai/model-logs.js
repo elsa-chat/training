@@ -15,14 +15,14 @@ const slides_model_logs = [
             content: `
                 <h2>What are Model Logs?</h2>
                 <p class="lead">${CONFIG.productName} maintains a comprehensive <span class="highlight">Model Inference Logs Database</span> that captures every LLM interaction for analytics, compliance, and troubleshooting.</p>
-                <p>Every time a user interacts with an LLM in ${CONFIG.productName} — whether through chat, Pixel commands, or API calls — the system logs detailed information about the interaction.</p>
+                <p>Every time a user interacts with an LLM in ${CONFIG.productName}  -  whether through chat, Pixel commands, or API calls  -  the system logs detailed information about the interaction.</p>
                 ${C.cards([
                     { badge: 'Why Log?', title: 'Cost Tracking', desc: 'Monitor token usage and API costs per user, project, and model' },
                     { badge: 'Why Log?', title: 'Troubleshooting', desc: 'Debug failed requests, track response times, identify bottlenecks' },
                     { badge: 'Why Log?', title: 'Analytics', desc: 'Understand usage patterns, popular models, user behavior' },
                     { badge: 'Why Log?', title: 'Compliance', desc: 'Audit trail for governance, data privacy, and regulatory requirements' },
                 ])}
-                ${C.callout('The logs database is <code>MODEL_INFERENCE_LOGS_DB</code> — a dedicated H2/PostgreSQL database separate from your app data.', 'info')}
+                ${C.callout('The logs database is <code>MODEL_INFERENCE_LOGS_DB</code>  -  a dedicated H2/PostgreSQL database separate from your app data.', 'info')}
             `
         },
         {
@@ -202,7 +202,7 @@ ORDER BY AVG_RESPONSE_MS DESC;`, 'sql', 'Direct SQL queries')}
             title: "Troubleshooting with Logs",
             content: `
                 <h2>Common Troubleshooting Scenarios</h2>
-                <p>These are common questions from operations teams — here's how to answer them using logs.</p>
+                <p>These are common questions from operations teams  -  here's how to answer them using logs.</p>
                 ${C.cards([
                     {
                         badge: 'Question',
@@ -291,7 +291,7 @@ ORDER BY HOUR_OF_DAY;`, 'sql', 'Performance analytics')}
             title: "Log Retention & Management",
             content: `
                 <h2>Log Retention and Management</h2>
-                <p>Model logs grow rapidly — a busy ${CONFIG.productName} instance can generate millions of records per month.</p>
+                <p>Model logs grow rapidly  -  a busy ${CONFIG.productName} instance can generate millions of records per month.</p>
                 ${C.flow([
                     { title: 'Monitor Size', desc: 'Check database size regularly' },
                     { title: 'Define Policy', desc: 'Decide retention period (30 days? 90 days? 1 year?)', arrow: '↓' },
@@ -423,10 +423,10 @@ VACUUM FULL MESSAGE;`, 'sql', 'Log retention management')}
                         content: `
                             <h4>What It Tracks</h4>
                             <ul>
-                                <li><strong>LLM Conversations</strong> — User messages, assistant responses, system prompts</li>
-                                <li><strong>Chat Context</strong> — Rooms (conversation sessions), feedback (thumbs up/down)</li>
-                                <li><strong>Token Usage</strong> — MESSAGE_TOKENS for cost tracking</li>
-                                <li><strong>User Behavior</strong> — Conversation history, model preferences</li>
+                                <li><strong>LLM Conversations</strong>  -  User messages, assistant responses, system prompts</li>
+                                <li><strong>Chat Context</strong>  -  Rooms (conversation sessions), feedback (thumbs up/down)</li>
+                                <li><strong>Token Usage</strong>  -  MESSAGE_TOKENS for cost tracking</li>
+                                <li><strong>User Behavior</strong>  -  Conversation history, model preferences</li>
                             </ul>
                             <h4>Primary Use Case</h4>
                             <p><strong>Chat history and user experience analytics</strong></p>
@@ -437,11 +437,11 @@ VACUUM FULL MESSAGE;`, 'sql', 'Log retention management')}
                         content: `
                             <h4>What It Tracks</h4>
                             <ul>
-                                <li><strong>Engine Operations</strong> — Every database query, model inference, vector search, function call</li>
-                                <li><strong>Request/Response Payloads</strong> — Full REQUEST and RESPONSE CLOBs for debugging</li>
-                                <li><strong>Reactor Names</strong> — INPUT_REACTOR_NAME, OUTPUT_REACTOR_NAME, METHOD_NAME</li>
-                                <li><strong>Success/Failure</strong> — IS_SUCCESS flag, error messages</li>
-                                <li><strong>Performance</strong> — REQUEST_START_TIME, RESPONSE_END_TIME</li>
+                                <li><strong>Engine Operations</strong>  -  Every database query, model inference, vector search, function call</li>
+                                <li><strong>Request/Response Payloads</strong>  -  Full REQUEST and RESPONSE CLOBs for debugging</li>
+                                <li><strong>Reactor Names</strong>  -  INPUT_REACTOR_NAME, OUTPUT_REACTOR_NAME, METHOD_NAME</li>
+                                <li><strong>Success/Failure</strong>  -  IS_SUCCESS flag, error messages</li>
+                                <li><strong>Performance</strong>  -  REQUEST_START_TIME, RESPONSE_END_TIME</li>
                             </ul>
                             <h4>Primary Use Case</h4>
                             <p><strong>Operational telemetry, debugging, compliance auditing</strong></p>
@@ -578,7 +578,7 @@ AuditLogReport(paramValuesMap={
     "endDate": "2024-12-31T23:59:59Z"     // Required if dateRangeType="custom"
 }, limit=100, offset=0);
 // Returns: { totalCount: 1234, logs: [ {logId, requestId, isSuccess, ...}, ... ] }`, 'pixel', 'src/prerna/logging/AuditLogReportReactor.java')}
-                ${C.callout('These reactors query the logs for you — <strong>no raw SQL needed</strong> for common usage reports. They handle permission checks and return formatted data ready for dashboards.', 'tip')}
+                ${C.callout('These reactors query the logs for you  -  <strong>no raw SQL needed</strong> for common usage reports. They handle permission checks and return formatted data ready for dashboards.', 'tip')}
             `
         },
         {
@@ -628,7 +628,7 @@ AuditLogReport(paramValuesMap={
                 <p>Model and vector engines have a <code>keepInputOutput()</code> flag in their <code>.smss</code> configuration:</p>
                 ${C.code(`# In .smss file for a model engine
 ENGINE_KEEP_INPUT_OUTPUT = true   # Store full prompt/response in model logs
-ENGINE_KEEP_INPUT_OUTPUT = false  # Only store metadata (tokens, timing) — no content`, 'properties', 'Model engine .smss configuration')}
+ENGINE_KEEP_INPUT_OUTPUT = false  # Only store metadata (tokens, timing)  -  no content`, 'properties', 'Model engine .smss configuration')}
                 ${C.callout('<strong>Privacy note:</strong> When <code>keepInputOutput=false</code>, prompt/response content is <em>not</em> stored in MODEL_INFERENCE_LOGS_DB (only tokens and timing). However, AUDIT_LOGS may still capture REQUEST/RESPONSE payloads depending on log level. Configure both for full privacy compliance.', 'warning')}
             `
         },
@@ -661,7 +661,7 @@ ENGINE_KEEP_INPUT_OUTPUT = false  # Only store metadata (tokens, timing) — no 
                     {
                         badge: 'Built-in Reactors',
                         title: 'No SQL Needed',
-                        desc: 'GetAllEngineUsage(), GetEngineUsagePerUser(), GetEngineUsagePerProject(), AuditLogReport() — all handle permission checks and return formatted data.'
+                        desc: 'GetAllEngineUsage(), GetEngineUsagePerUser(), GetEngineUsagePerProject(), AuditLogReport()  -  all handle permission checks and return formatted data.'
                     },
                     {
                         badge: 'Infrastructure',

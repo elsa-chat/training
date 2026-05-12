@@ -19,9 +19,9 @@ const slides_message_structure = [
         },
         {
             id: "msg-abstractmessage",
-            title: "AbstractMessage — Base Class",
+            title: "AbstractMessage  -  Base Class",
             content: `
-                <h2>AbstractMessage — The Foundation</h2>
+                <h2>AbstractMessage  -  The Foundation</h2>
                 <p class="lead"><code>AbstractMessage</code> is the abstract base class that represents a single message in an LLM conversation.</p>
                 <p>Every user prompt, system message, tool execution, and LLM response extends this class.</p>
                 ${C.code(`public abstract class AbstractMessage implements Serializable {
@@ -66,7 +66,7 @@ const slides_message_structure = [
             id: "msg-messagetype",
             title: "MessageType Enum",
             content: `
-                <h2>MessageType — Classifying Messages</h2>
+                <h2>MessageType  -  Classifying Messages</h2>
                 <p>The <code>MessageType</code> enum defines the six types of messages in an LLM conversation.</p>
                 ${C.code(`public enum MessageType {
     // Input message types (user → LLM)
@@ -104,9 +104,9 @@ const slides_message_structure = [
         },
         {
             id: "msg-inputmessage",
-            title: "InputMessage — User Input",
+            title: "InputMessage  -  User Input",
             content: `
-                <h2>InputMessage — Capturing User Input</h2>
+                <h2>InputMessage  -  Capturing User Input</h2>
                 <p class="lead"><code>InputMessage</code> extends <code>AbstractMessage</code> to represent input from the user (or system) to the LLM.</p>
                 <p>It handles text prompts, system prompts, media inputs (images/audio/video), and tool execution results.</p>
                 ${C.code(`public class InputMessage extends AbstractMessage {
@@ -141,9 +141,9 @@ const slides_message_structure = [
                         title: 'Text Content',
                         content: `
                             <ul>
-                                <li><code>inputUIPrompt</code> — Original user text</li>
-                                <li><code>inputPrompt</code> — Augmented prompt (RAG chunks added)</li>
-                                <li><code>systemPrompt</code> — System instructions</li>
+                                <li><code>inputUIPrompt</code>  -  Original user text</li>
+                                <li><code>inputPrompt</code>  -  Augmented prompt (RAG chunks added)</li>
+                                <li><code>systemPrompt</code>  -  System instructions</li>
                             </ul>
                         `
                     },
@@ -151,10 +151,10 @@ const slides_message_structure = [
                         title: 'Tool Execution',
                         content: `
                             <ul>
-                                <li><code>toolCallId</code> — Links to LLM's request</li>
-                                <li><code>toolName</code> — Which tool ran</li>
-                                <li><code>toolStatus</code> — "success" or "error"</li>
-                                <li><code>toolParameterValues</code> — Tool inputs</li>
+                                <li><code>toolCallId</code>  -  Links to LLM's request</li>
+                                <li><code>toolName</code>  -  Which tool ran</li>
+                                <li><code>toolStatus</code>  -  "success" or "error"</li>
+                                <li><code>toolParameterValues</code>  -  Tool inputs</li>
                             </ul>
                         `
                     }
@@ -163,9 +163,9 @@ const slides_message_structure = [
         },
         {
             id: "msg-responsemessage",
-            title: "ResponseMessage — LLM Output",
+            title: "ResponseMessage  -  LLM Output",
             content: `
-                <h2>ResponseMessage — LLM Responses</h2>
+                <h2>ResponseMessage  -  LLM Responses</h2>
                 <p class="lead"><code>ResponseMessage</code> extends <code>AbstractMessage</code> to represent output from the LLM.</p>
                 <p>It captures text responses, tool calls, thinking traces, and media generation.</p>
                 ${C.code(`public class ResponseMessage extends AbstractMessage {
@@ -200,8 +200,8 @@ const slides_message_structure = [
 }`, 'java', 'prerna/engine/impl/model/message/ResponseMessage.java')}
                 <h3>Response Types</h3>
                 ${C.cards([
-                    { badge: 'RESPONSE_TEXT', title: 'Text Response', desc: 'LLM returns text content — most common type' },
-                    { badge: 'RESPONSE_TOOL', title: 'Tool Call Request', desc: 'LLM wants to execute tool(s) — triggers tool execution loop' },
+                    { badge: 'RESPONSE_TEXT', title: 'Text Response', desc: 'LLM returns text content  -  most common type' },
+                    { badge: 'RESPONSE_TOOL', title: 'Tool Call Request', desc: 'LLM wants to execute tool(s)  -  triggers tool execution loop' },
                     { badge: 'RESPONSE_MEDIA', title: 'Media Generation', desc: 'LLM generates images or audio (DALL-E, etc.)' },
                 ])}
             `
@@ -265,7 +265,7 @@ ResponseMessage fromLLM = ResponseMessage.Builder
             id: "msg-model-logs",
             title: "Persistence to Model Logs",
             content: `
-                <h2>Model Logs Database — Conversation History</h2>
+                <h2>Model Logs Database  -  Conversation History</h2>
                 <p class="lead">Every <code>AbstractMessage</code> instance is persisted to the <strong>model logs database</strong>, creating a permanent conversation history.</p>
                 <p>This enables features like conversation replay, feedback tracking, token accounting, and RAG chunk auditing.</p>
                 ${C.flow([
@@ -299,9 +299,9 @@ ORDER BY date_created ASC;`, 'sql', 'Model logs schema and query')}
         },
         {
             id: "msg-ornaments",
-            title: "Ornaments — Flexible Metadata",
+            title: "Ornaments  -  Flexible Metadata",
             content: `
-                <h2>Ornaments Pattern — Flexible Metadata Storage</h2>
+                <h2>Ornaments Pattern  -  Flexible Metadata Storage</h2>
                 <p class="lead">The <code>ornaments</code> field in <code>AbstractMessage</code> is a <code>Map&lt;String, Object&gt;</code> that stores flexible metadata.</p>
                 <p>This pattern enables extensibility without adding new fields to the base class.</p>
                 ${C.code(`// AbstractMessage.java - Ornaments field and methods
@@ -361,7 +361,7 @@ ResponseMessage resp = ResponseMessage.builder()
                             "<code>AbstractMessage</code>",
                             "Base class for all LLM messages",
                             "messageId (UUID v7), transactionId, modelId, tokens, ornaments",
-                            "Abstract — defined by subclasses"
+                            "Abstract  -  defined by subclasses"
                         ],
                         [
                             "<code>InputMessage</code>",

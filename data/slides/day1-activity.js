@@ -1,4 +1,4 @@
-// Topic: Day 1 Activity — Pro-Code App Build
+// Topic: Day 1 Activity  -  Pro-Code App Build
 const slides_day1_activity = [
         {
             id: "custom-reactors-handson",

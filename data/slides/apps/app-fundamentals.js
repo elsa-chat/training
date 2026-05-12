@@ -17,10 +17,10 @@ const slides_app_fundamentals = [
             ${C.callout(`The site you've been using all morning was built and deployed using \${CONFIG.productName}. In the next section you'll build your own.`, 'tip')}
             <p>When the presenter opens this project in ${CONFIG.productName}, notice:</p>
             <ul>
-                <li><strong>The project folder</strong> — every app lives in a <code>project/&lt;Name&gt;__&lt;UUID&gt;/</code> directory</li>
-                <li><strong>The portal files</strong> — <code>assets/portals/</code> holds the HTML, CSS, and JS served to you right now</li>
-                <li><strong>The published URL</strong> — one click made this page live and shareable</li>
-                <li><strong>The version history</strong> — every publish is a saved version; you can roll back to any of them</li>
+                <li><strong>The project folder</strong>  -  every app lives in a <code>project/&lt;Name&gt;__&lt;UUID&gt;/</code> directory</li>
+                <li><strong>The portal files</strong>  -  <code>assets/portals/</code> holds the HTML, CSS, and JS served to you right now</li>
+                <li><strong>The published URL</strong>  -  one click made this page live and shareable</li>
+                <li><strong>The version history</strong>  -  every publish is a saved version; you can roll back to any of them</li>
             </ul>
         `
     },
@@ -33,11 +33,11 @@ const slides_app_fundamentals = [
                 {
                     title: `An App in ${CONFIG.productName} is...`,
                     content: `
-                        <p>A <strong>published experience</strong> — engines, logic, and UI packaged together and shared with users as a live URL.</p>
+                        <p>A <strong>published experience</strong>  -  engines, logic, and UI packaged together and shared with users as a live URL.</p>
                         <ul>
                             <li>Backed by the data and models you've already built</li>
                             <li>Versioned so you can iterate safely</li>
-                            <li>Accessible to anyone you grant access — no install required</li>
+                            <li>Accessible to anyone you grant access  -  no install required</li>
                         </ul>
                     `
                 },
@@ -47,7 +47,7 @@ const slides_app_fundamentals = [
                         { title: "Engines (data)", desc: "Vector DB, LLM model, relational database" },
                         { title: "Pixel / Python (logic)", desc: "Commands that query engines, transform data, call models", arrow: "↓" },
                         { title: "Portal / Blocks (UI)", desc: "The web interface users interact with", arrow: "↓" },
-                        { title: "Published URL", desc: "Live, shareable link — one click away", arrow: "↓" },
+                        { title: "Published URL", desc: "Live, shareable link  -  one click away", arrow: "↓" },
                     ])
                 }
             )}
@@ -90,14 +90,14 @@ const slides_app_fundamentals = [
             <h2>Publishing Workflow</h2>
             ${C.flow([
                 { title: "Draft", desc: "Edit your app in the ${CONFIG.productName} editor" },
-                { title: "Save", desc: "Persists changes to your workspace — only you see them", arrow: "↓" },
+                { title: "Save", desc: "Persists changes to your workspace  -  only you see them", arrow: "↓" },
                 { title: "Publish", desc: "Makes the current version live for anyone with access", arrow: "↓" },
-                { title: "Versioned URL", desc: "Every publish creates a version — you can roll back to any of them", arrow: "↓" },
+                { title: "Versioned URL", desc: "Every publish creates a version  -  you can roll back to any of them", arrow: "↓" },
             ])}
             ${C.table(
                 ['Action', 'Who sees the change', 'When to use it'],
                 [
-                    ['<strong>Save</strong>', 'Only you', 'Frequently — save as you work'],
+                    ['<strong>Save</strong>', 'Only you', 'Frequently  -  save as you work'],
                     ['<strong>Publish</strong>', 'Anyone with app access', 'When a change is ready for others'],
                     ['<strong>Version History</strong>', 'Admins / OWNER role', 'To review or roll back to a prior publish'],
                 ]

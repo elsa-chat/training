@@ -14,22 +14,22 @@ const slides_context_engineering = [
         title: "What is Context Engineering?",
         content: `
             <h2>What is Context Engineering?</h2>
-            <p class="lead">"The delicate art and science of filling the context window with just the right information for the next step" — <strong>Andrej Karpathy</strong></p>
+            <p class="lead">"The delicate art and science of filling the context window with just the right information for the next step"  -  <strong>Andrej Karpathy</strong></p>
 
-            ${C.callout('Think of the LLM context window like <strong>RAM in a computer</strong> — a finite resource that requires careful curation. What you put in the context directly determines what the LLM can do.', 'tip')}
+            ${C.callout('Think of the LLM context window like <strong>RAM in a computer</strong>  -  a finite resource that requires careful curation. What you put in the context directly determines what the LLM can do.', 'tip')}
 
             <h3>Three Types of Context</h3>
             ${C.cards([
-                { badge: 'Instructions', title: 'Instructions', desc: 'System prompts, few-shot examples, tool descriptions, user memories — how the agent should behave' },
-                { badge: 'Knowledge', title: 'Knowledge', desc: 'Facts, historical information, RAG results, documentation — what the agent needs to know' },
-                { badge: 'Tools', title: 'Tools', desc: 'Tool execution results, feedback from previous steps, intermediate outputs — what the agent has learned' },
+                { badge: 'Instructions', title: 'Instructions', desc: 'System prompts, few-shot examples, tool descriptions, user memories  -  how the agent should behave' },
+                { badge: 'Knowledge', title: 'Knowledge', desc: 'Facts, historical information, RAG results, documentation  -  what the agent needs to know' },
+                { badge: 'Tools', title: 'Tools', desc: 'Tool execution results, feedback from previous steps, intermediate outputs  -  what the agent has learned' },
             ])}
 
             <h3>Why Context Engineering Matters</h3>
             <ul>
-                <li><strong>Long-running agents accumulate tokens rapidly</strong> — A multi-step task can fill a 200K context window in minutes</li>
-                <li><strong>Context quality determines reliability</strong> — Wrong context = hallucinations, failures, wasted API calls</li>
-                <li><strong>Production viability depends on it</strong> — Cognition states it's "effectively the #1 job of engineers building AI agents"</li>
+                <li><strong>Long-running agents accumulate tokens rapidly</strong>  -  A multi-step task can fill a 200K context window in minutes</li>
+                <li><strong>Context quality determines reliability</strong>  -  Wrong context = hallucinations, failures, wasted API calls</li>
+                <li><strong>Production viability depends on it</strong>  -  Cognition states it's "effectively the #1 job of engineers building AI agents"</li>
             </ul>
         `
     },
@@ -112,7 +112,7 @@ const slides_context_engineering = [
                 },
             ])}
 
-            ${C.callout('These strategies are <strong>not sequential</strong> — production agents use all four simultaneously. The key is choosing the right strategy for each type of information and combining them effectively.', 'tip')}
+            ${C.callout('These strategies are <strong>not sequential</strong>  -  production agents use all four simultaneously. The key is choosing the right strategy for each type of information and combining them effectively.', 'tip')}
 
             <h3>Strategy Trade-offs</h3>
             ${C.table(
@@ -268,7 +268,7 @@ const slides_context_engineering = [
                         "<strong>Select Context</strong>",
                         "MCP Tool Filtering",
                         "Dynamically filter available tools based on conversation context",
-                        "Playground with 100+ MCP tools — only show relevant 10-15"
+                        "Playground with 100+ MCP tools  -  only show relevant 10-15"
                     ],
                     [
                         "<strong>Select Context</strong>",
@@ -280,7 +280,7 @@ const slides_context_engineering = [
                         "<strong>Compress Context</strong>",
                         "Message History Summarization",
                         "Summarize older Room messages before passing to LLM",
-                        "Conversations exceeding 100K tokens — summarize turns 1-50, keep 51+ verbatim"
+                        "Conversations exceeding 100K tokens  -  summarize turns 1-50, keep 51+ verbatim"
                     ],
                     [
                         "<strong>Isolate Context</strong>",
@@ -353,11 +353,11 @@ const slides_context_engineering = [
 
             <h3>Key Takeaways</h3>
             <ul>
-                <li><strong>Context engineering is critical infrastructure</strong> — Cognition calls it "the #1 job of engineers building AI agents"</li>
-                <li><strong>Four complementary strategies</strong> — Write (persist), Select (retrieve), Compress (summarize), Isolate (separate)</li>
-                <li><strong>No single solution</strong> — Production agents combine multiple strategies simultaneously</li>
-                <li><strong>Trade-offs matter</strong> — Multi-agent improves accuracy but costs 15× more tokens; summarization saves tokens but loses specificity</li>
-                <li><strong>${CONFIG.productName} provides primitives for all four strategies</strong> — Room (write), Vector engines (select), message summarization (compress), multi-agent teams (isolate)</li>
+                <li><strong>Context engineering is critical infrastructure</strong>  -  Cognition calls it "the #1 job of engineers building AI agents"</li>
+                <li><strong>Four complementary strategies</strong>  -  Write (persist), Select (retrieve), Compress (summarize), Isolate (separate)</li>
+                <li><strong>No single solution</strong>  -  Production agents combine multiple strategies simultaneously</li>
+                <li><strong>Trade-offs matter</strong>  -  Multi-agent improves accuracy but costs 15× more tokens; summarization saves tokens but loses specificity</li>
+                <li><strong>${CONFIG.productName} provides primitives for all four strategies</strong>  -  Room (write), Vector engines (select), message summarization (compress), multi-agent teams (isolate)</li>
             </ul>
 
             <h3>Context Failure Modes to Avoid</h3>
@@ -370,11 +370,11 @@ const slides_context_engineering = [
 
             <h3>Practical Implementation Checklist</h3>
             <ol>
-                <li><strong>Audit your context growth</strong> — Track tokens per turn, identify growth patterns</li>
-                <li><strong>Classify your context</strong> — Label each piece as Instructions, Knowledge, or Tools</li>
-                <li><strong>Apply appropriate strategies</strong> — Write for persistence, Select for precision, Compress for efficiency, Isolate for clarity</li>
-                <li><strong>Monitor failure modes</strong> — Watch for poisoning, distraction, confusion, clash in production</li>
-                <li><strong>Iterate on trade-offs</strong> — Balance token cost vs accuracy vs latency for your specific use case</li>
+                <li><strong>Audit your context growth</strong>  -  Track tokens per turn, identify growth patterns</li>
+                <li><strong>Classify your context</strong>  -  Label each piece as Instructions, Knowledge, or Tools</li>
+                <li><strong>Apply appropriate strategies</strong>  -  Write for persistence, Select for precision, Compress for efficiency, Isolate for clarity</li>
+                <li><strong>Monitor failure modes</strong>  -  Watch for poisoning, distraction, confusion, clash in production</li>
+                <li><strong>Iterate on trade-offs</strong>  -  Balance token cost vs accuracy vs latency for your specific use case</li>
             </ol>
 
             ${C.callout(`Next Steps: In the following sessions, you'll apply these context engineering principles to ${CONFIG.productName} Playground (system prompts, tool filtering) and MCP integration (tool description retrieval, multi-agent isolation).`, 'tip')}

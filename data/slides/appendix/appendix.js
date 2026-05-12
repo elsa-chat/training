@@ -1,4 +1,4 @@
-// Topic: Appendix — Reference & Troubleshooting
+// Topic: Appendix  -  Reference & Troubleshooting
 const slides_appendix = [
     {
         id: "appendix-title",
@@ -79,7 +79,7 @@ const slides_appendix = [
         title: "How Do I Add Files?",
         content: `
             <h2>How Do I Add Files?</h2>
-            <p class="lead">Three ways — pick the one that fits your workflow.</p>
+            <p class="lead">Three ways  -  pick the one that fits your workflow.</p>
             ${C.flow([
                 {
                     title: '1 · Platform UI',
@@ -94,11 +94,11 @@ const slides_appendix = [
                     desc: 'POST to <code>/api/engine/{engineId}/uploadFile</code> with a multipart form body. Useful for batch ingestion pipelines.'
                 }
             ])}
-            ${C.code(`// Pixel — upload a local file to a storage or vector engine
+            ${C.code(`// Pixel  -  upload a local file to a storage or vector engine
 UploadFile(engine=["my-vector-engine"], filePath=["/path/to/doc.pdf"]);
 
 // After upload to a vector engine, trigger re-indexing:
-VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel — Upload & Index')}
+VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel  -  Upload & Index')}
             ${C.table(
                 ['Method', 'Best For', 'Requires'],
                 [
@@ -117,7 +117,7 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel —
         title: "Rooms & Chat Session History",
         content: `
             <h2>Rooms &amp; Chat Session History</h2>
-            <p class="lead">A <span class="highlight">Room</span> is a persistent conversation thread. History is saved automatically — you can return to any past conversation.</p>
+            <p class="lead">A <span class="highlight">Room</span> is a persistent conversation thread. History is saved automatically  -  you can return to any past conversation.</p>
             ${C.split(
                 {
                     title: 'What Gets Saved',
@@ -143,7 +143,7 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel —
                 }
             )}
             ${C.flow([
-                { title: 'Open Playground', desc: 'Left sidebar shows your Room list — most recent at top' },
+                { title: 'Open Playground', desc: 'Left sidebar shows your Room list  -  most recent at top' },
                 { title: 'Select a Past Room', desc: 'Full message history reloads. A new Insight is created for continued execution.' },
                 { title: 'Continue the Conversation', desc: 'New messages append to the existing thread. History is always preserved.' }
             ])}
@@ -161,7 +161,7 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel —
                 [
                     ['View past rooms', 'Left sidebar in Playground → Rooms list', 'Sorted by last activity'],
                     ['Rename a room', 'Click the room name → edit inline', 'Helps organize long-running projects'],
-                    ['Delete a room', 'Room context menu → Delete', 'Permanent — deletes all message history'],
+                    ['Delete a room', 'Room context menu → Delete', 'Permanent  -  deletes all message history'],
                     ['Share a room', 'Room context menu → Share Link', 'Recipient must have platform access'],
                     ['Search history', 'Search bar at top of Rooms list', 'Full-text search across all your rooms']
                 ]
@@ -173,7 +173,7 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel —
                     title: '+ New Chat (fresh Room)',
                     content: `
                         <ul>
-                            <li>Blank context — LLM starts with no conversation history</li>
+                            <li>Blank context  -  LLM starts with no conversation history</li>
                             <li>Use when starting a completely different task</li>
                             <li>Good for performance: shorter context = faster responses</li>
                         </ul>
@@ -205,12 +205,12 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel —
                 {
                     badge: '#1 Fix',
                     title: 'VS Code: Reload Window',
-                    desc: '<kbd>Cmd+Shift+P</kbd> → <strong>Developer: Reload Window</strong> — restarts the VS Code renderer process. Fixes stuck extensions, broken IntelliSense, and unresponsive panels without closing your workspace.'
+                    desc: '<kbd>Cmd+Shift+P</kbd> → <strong>Developer: Reload Window</strong>  -  restarts the VS Code renderer process. Fixes stuck extensions, broken IntelliSense, and unresponsive panels without closing your workspace.'
                 },
                 {
                     badge: '#2 Fix',
                     title: 'Browser: Hard Refresh',
-                    desc: '<kbd>Cmd+Shift+R</kbd> (Mac) or <kbd>Ctrl+Shift+R</kbd> (Windows) — bypasses the browser cache and re-fetches all assets. Use when you\'ve deployed new code and still see the old UI.'
+                    desc: '<kbd>Cmd+Shift+R</kbd> (Mac) or <kbd>Ctrl+Shift+R</kbd> (Windows)  -  bypasses the browser cache and re-fetches all assets. Use when you\'ve deployed new code and still see the old UI.'
                 },
                 {
                     badge: '#3 Fix',
@@ -223,7 +223,7 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel —
                     desc: 'If an app cell is stuck or shows stale data, re-execute the Pixel block. Insight state can get out of sync if a previous execution partially failed.'
                 }
             ])}
-            ${C.callout('VS Code acting up? Always try <strong>Developer: Reload Window</strong> first — it restarts the editor without closing any files or losing your workspace state.', 'tip')}
+            ${C.callout('VS Code acting up? Always try <strong>Developer: Reload Window</strong> first  -  it restarts the editor without closing any files or losing your workspace state.', 'tip')}
         `
     },
 
@@ -232,7 +232,7 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel —
         title: "VS Code: Developer: Reload Window",
         content: `
             <h2>VS Code: Developer: Reload Window</h2>
-            <p class="lead">Restarts the VS Code renderer process in place — all your open files and workspace state are preserved.</p>
+            <p class="lead">Restarts the VS Code renderer process in place  -  all your open files and workspace state are preserved.</p>
             ${C.split(
                 {
                     title: 'When to Use It',
