@@ -17,7 +17,7 @@ const slides_platform_fundamentals = [
         title: "What ELSA Delivers",
         content: `
             <h2>${CONFIG.productName} Delivers a Secure AI Sandbox on Day 1</h2>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-top:1rem;">
                 ${[
                     {
                         title: 'Quickly prototype AI applications',
@@ -28,11 +28,6 @@ const slides_platform_fundamentals = [
                         title: 'Clear abstraction layer',
                         desc: 'Curtail incremental complexity with open source, multi-model, and multi-cloud integration. The platform adapts as models and providers evolve.',
                         badges: ['AI for Anyone','Vendor Agnostic','Adaptive']
-                    },
-                    {
-                        title: 'Simplify DevOps & scale data science',
-                        desc: 'Secure, flexible deployment methods move workflows from notebooks to production business applications without a re-architecture.',
-                        badges: ['Private Cloud Deployment','Optimize Workflow']
                     },
                     {
                         title: 'Controls & guardrails built in',
