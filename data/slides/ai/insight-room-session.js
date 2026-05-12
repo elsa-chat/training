@@ -34,9 +34,9 @@ const slides_insight_room_session = [
                         { title: "Browser", desc: "Holds sessionId cookie" },
                         { title: "REST API", desc: "Receives insightId in requests" },
                     ]},
-                    { label: "Session Management", accent: true, items: [
-                        { title: "InsightStore", desc: "Singleton map: insightId → Insight", accent: true },
-                        { title: "RoomUtils", desc: "Manages Room persistence", accent: true },
+                    { label: "Session Management", items: [
+                        { title: "InsightStore", desc: "Singleton map: insightId → Insight" },
+                        { title: "RoomUtils", desc: "Manages Room persistence" },
                     ]},
                     { label: "Execution Context", items: [
                         { title: "Insight", desc: "VarStore, PixelList, TaskStore, Frames" },
@@ -87,12 +87,12 @@ public Insight() {
                         title: 'Core State',
                         content: `
                             <ul>
-                                <li><code>insightId</code> — UUID identifier</li>
-                                <li><code>user</code> — User object (auth context)</li>
-                                <li><code>projectId</code> — Associated app/project</li>
-                                <li><code>varStore</code> — Variable assignments</li>
-                                <li><code>pixelList</code> — Pixel execution history</li>
-                                <li><code>taskStore</code> — Async task tracking</li>
+                                <li><code>insightId</code>  -  UUID identifier</li>
+                                <li><code>user</code>  -  User object (auth context)</li>
+                                <li><code>projectId</code>  -  Associated app/project</li>
+                                <li><code>varStore</code>  -  Variable assignments</li>
+                                <li><code>pixelList</code>  -  Pixel execution history</li>
+                                <li><code>taskStore</code>  -  Async task tracking</li>
                             </ul>
                         `
                     },
@@ -100,12 +100,12 @@ public Insight() {
                         title: 'Advanced State',
                         content: `
                             <ul>
-                                <li><code>insightSheets</code> — UI sheet tabs</li>
-                                <li><code>insightPanels</code> — Visual panels</li>
-                                <li><code>rJavaTranslator</code> — R environment</li>
-                                <li><code>pyTranslator</code> — Python GAAS connection</li>
-                                <li><code>roomId</code> — Associated Room (if any)</li>
-                                <li><code>insightFolder</code> — Temp file storage</li>
+                                <li><code>insightSheets</code>  -  UI sheet tabs</li>
+                                <li><code>insightPanels</code>  -  Visual panels</li>
+                                <li><code>rJavaTranslator</code>  -  R environment</li>
+                                <li><code>pyTranslator</code>  -  Python GAAS connection</li>
+                                <li><code>roomId</code>  -  Associated Room (if any)</li>
+                                <li><code>insightFolder</code>  -  Temp file storage</li>
                             </ul>
                         `
                     }
@@ -347,15 +347,15 @@ public PixelRunner runPixel(PixelRunner runner, List<String> pixelList) {
                 <h2>Room ↔ Insight Connection</h2>
                 <p>Rooms and Insights are complementary: <strong>Rooms</strong> manage LLM conversation history, while <strong>Insights</strong> provide execution context for tools.</p>
                 ${C.flow([
-                    { title: 'User sends message to Room', desc: 'InputMessage with prompt text', accent: true, arrow: '↓' },
+                    { title: 'User sends message to Room', desc: 'InputMessage with prompt text', arrow: '↓' },
                     { title: 'Room calls LLM with history', desc: 'room.ask(message, modelEngine)', arrow: '↓ LLM decides to use a tool' },
                     { title: 'LLM returns tool_calls[]', desc: 'ResponseMessage with tool_calls metadata', arrow: '↓' },
-                    { title: 'Room uses Insight to execute tool', desc: 'insight.runPixel(toolPixel) — runs in Insight context', accent: true, arrow: '↓' },
+                    { title: 'Room uses Insight to execute tool', desc: 'insight.runPixel(toolPixel)  -  runs in Insight context', arrow: '↓' },
                     { title: 'Tool result added as InputMessage', desc: 'toolExecution message with result', arrow: '↓' },
                     { title: 'Room calls LLM again with result', desc: 'Full history including tool execution', arrow: '↓' },
-                    { title: 'LLM generates final response', desc: 'ResponseMessage with final answer', accent: true },
+                    { title: 'LLM generates final response', desc: 'ResponseMessage with final answer' },
                 ])}
-                ${C.callout('The <code>Insight</code> attached to a Room provides variable persistence, frame storage, and access to engines — essential for tool execution.', 'tip')}
+                ${C.callout('The <code>Insight</code> attached to a Room provides variable persistence, frame storage, and access to engines  -  essential for tool execution.', 'tip')}
             `
         },
         {
@@ -442,15 +442,15 @@ public PixelRunner runPixel(PixelRunner runner, List<String> pixelList) {
                 )}
                 <h3>Key Takeaways</h3>
                 <ul>
-                    <li><strong>Insights</strong> are stateful execution contexts — variables, frames, and Pixel history persist within them</li>
+                    <li><strong>Insights</strong> are stateful execution contexts  -  variables, frames, and Pixel history persist within them</li>
                     <li><strong>Rooms</strong> provide persistent LLM conversation history with tool execution support via an attached Insight</li>
                     <li><strong>Sessions</strong> bind users to their active Insights through the <code>InsightStore</code> singleton</li>
-                    <li>Insights are <strong>temporary by default</strong> — they're lost on server restart unless explicitly saved</li>
-                    <li>Rooms are <strong>persistent</strong> — stored in the database and survive restarts</li>
+                    <li>Insights are <strong>temporary by default</strong>  -  they're lost on server restart unless explicitly saved</li>
+                    <li>Rooms are <strong>persistent</strong>  -  stored in the database and survive restarts</li>
                     <li>The <code>insightId</code> is the <strong>primary key</strong> for managing state across REST API calls</li>
                     <li>Rooms use Insights to execute tools, giving LLMs access to data, engines, and application state</li>
                 </ul>
-                ${C.callout(`Understanding Insights and Rooms is critical for building stateful ${CONFIG.productName} apps — whether you're managing user sessions, implementing LLM chat, or building multi-step workflows.`, 'tip')}
+                ${C.callout(`Understanding Insights and Rooms is critical for building stateful ${CONFIG.productName} apps  -  whether you're managing user sessions, implementing LLM chat, or building multi-step workflows.`, 'tip')}
             `
         }
     ];

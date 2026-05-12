@@ -81,12 +81,12 @@ def show_pdf_viewer(file_path: str):
                 <h2>Execution Modes</h2>
                 <p>The <code>execution</code> parameter controls whether tools run automatically or require user approval.</p>
                 ${C.flow([
-                    { title: 'Model calls tool', desc: 'Tool requested by LLM', accent: true, arrow: '↓' },
+                    { title: 'Model calls tool', desc: 'Tool requested by LLM', arrow: '↓' },
                     { title: 'Check execution mode', desc: 'auto | ask | disabled', arrow: '↓' },
                     { title: 'auto: Execute immediately', desc: 'No user prompt', arrow: '↓ OR' },
                     { title: 'ask: Show confirmation', desc: 'User approves or rejects', arrow: '↓ OR' },
                     { title: 'disabled: Tool not callable', desc: 'Error returned to model', arrow: '↓' },
-                    { title: 'Return result', desc: 'Tool output sent to model', accent: true },
+                    { title: 'Return result', desc: 'Tool output sent to model' },
                 ])}
                 ${C.code(`# Execution mode examples
 
@@ -291,14 +291,14 @@ def fetch_data():
                 <h2>MCP Build & Deploy Workflow</h2>
                 <p>Full workflow for developing, building, and deploying MCP apps with portal UIs.</p>
                 ${C.flow([
-                    { title: '1. Develop Backend', desc: 'py/mcp_driver.py or java/src/reactors/', accent: true, arrow: '↓' },
+                    { title: '1. Develop Backend', desc: 'py/mcp_driver.py or java/src/reactors/', arrow: '↓' },
                     { title: '2. Develop Portal', desc: 'client/src/ (React components)', arrow: '↓' },
-                    { title: '3. Generate MCP JSON', desc: 'MakePythonMCP() or MakePixelMCP()', accent: true, arrow: '↓' },
+                    { title: '3. Generate MCP JSON', desc: 'MakePythonMCP() or MakePixelMCP()', arrow: '↓' },
                     { title: '4. Build Portal', desc: 'cd client/ && pnpm run build', arrow: '↓' },
                     { title: '5. Verify Output', desc: 'Check portals/ folder has index.html', arrow: '↓' },
-                    { title: `6. Publish in ${CONFIG.productName}`, desc: 'Publish → Refresh Files', accent: true, arrow: '↓' },
+                    { title: `6. Publish in ${CONFIG.productName}`, desc: 'Publish → Refresh Files', arrow: '↓' },
                     { title: '7. Test in Playground', desc: 'Add MCP server, test tools', arrow: '↓' },
-                    { title: '8. Deploy', desc: 'Publish to production environment', accent: true },
+                    { title: '8. Deploy', desc: 'Publish to production environment' },
                 ])}
                 ${C.code(`# Complete build script (run from assets/)
 

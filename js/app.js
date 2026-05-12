@@ -324,6 +324,16 @@ function buildSidebar() {
         filteredChapters.forEach((chapter) => {
             const chapterId = `day${dayIdx}_ch${chapter.chIdx}`;
             const chapterExpanded = sidebarSearchQuery;
+            const hasSlides = chapter.slides.length > 0;
+
+            if (!hasSlides) {
+                // No slides — render as a plain non-interactive label, no caret
+                html += `<div class="nav-chapter-header no-slides ${lockedClass}">`;
+                html += `<span>${chapter.title}</span>`;
+                html += `</div>`;
+                return;
+            }
+
             html += `<div class="nav-chapter-header ${lockedClass} ${chapterExpanded ? 'expanded' : ''}" onclick="toggleChapter('${chapterId}')">`;
             html += `<span class="arrow">&#9654;</span>`;
             html += `<span>${highlightMatch(chapter.title)}</span>`;
@@ -363,7 +373,7 @@ function expandDay(dayIdx, single = false) {
     });
 }
 
-// Parse a label like "Day 4 — Thursday, Feb 27" and return a Date (year from today)
+// Parse a label like "Day 4  -  Thursday, Feb 27" and return a Date (year from today)
 function parseDayLabelDate(label) {
     if (!label) return null;
     const m = label.match(/\b([A-Za-z]{3,9})\s+(\d{1,2})\b/);

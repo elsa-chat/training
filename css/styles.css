@@ -236,6 +236,16 @@ body {
     color: var(--sidebar-text-primary);
     background: var(--bg-sidebar-hover);
 }
+.nav-chapter-header.no-slides {
+    cursor: default;
+    opacity: 0.45;
+    font-style: italic;
+    padding-left: 20px;
+}
+.nav-chapter-header.no-slides:hover {
+    background: none;
+    color: var(--sidebar-text-secondary);
+}
 
 .nav-chapter-header .arrow {
     font-size: 8px;

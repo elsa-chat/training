@@ -17,7 +17,7 @@ const slides_welcome = [
             <p>Launched June 2, 2025. Here is what has changed in twelve months.</p>
             ${C.flow([
                 {
-                    title: 'Launch — June 2025',
+                    title: 'Launch  -  June 2025',
                     desc: 'Chat interface + document Q&amp;A. Ask questions, get answers. The AI was a destination you went to.'
                 },
                 {
@@ -26,7 +26,7 @@ const slides_welcome = [
                 },
                 {
                     title: CONFIG.productName + ' 4.0',
-                    desc: 'MCP integration ships. The AI stops being a chatbot and starts being an agent — it calls your tools for you.'
+                    desc: 'MCP integration ships. The AI stops being a chatbot and starts being an agent  -  it calls your tools for you.'
                 }
             ])}
             ${C.split(
@@ -36,7 +36,7 @@ const slides_welcome = [
                         <ol>
                             <li>Open your documents across multiple systems</li>
                             <li>Manually copy the right context into the chat window</li>
-                            <li>Get an answer — then go back and do the work yourself</li>
+                            <li>Get an answer  -  then go back and do the work yourself</li>
                         </ol>
                         <p class="muted">You go to the AI. You carry the context. You execute the result.</p>
                     `
@@ -47,13 +47,13 @@ const slides_welcome = [
                         <ol>
                             <li>Describe what you need in plain English</li>
                             <li>The agent finds the documents, calls the tools, runs the workflow</li>
-                            <li>You review and decide — the AI does the legwork</li>
+                            <li>You review and decide  -  the AI does the legwork</li>
                         </ol>
                         <p class="muted">The AI comes to your work. You stay in control.</p>
                     `
                 }
             )}
-            ${C.callout(`This training shows you how to build on that foundation — not just use ${CONFIG.productName}, but extend it for your team's specific workflows.`, 'tip')}
+            ${C.callout(`This training shows you how to build on that foundation  -  not just use ${CONFIG.productName}, but extend it for your team's specific workflows.`, 'tip')}
         `
     },
     {
@@ -82,7 +82,7 @@ const slides_welcome = [
 
                 <!-- NEW -->
                 <div style="background:#FDF3E0;border:2px solid var(--accent);border-radius:12px;padding:1.25rem;">
-                    <div style="font-size:0.7rem;font-weight:700;letter-spacing:.1em;color:var(--accent);margin-bottom:.75rem;">NEW PARADIGM — ELSA 4.0</div>
+                    <div style="font-size:0.7rem;font-weight:700;letter-spacing:.1em;color:var(--accent);margin-bottom:.75rem;">NEW PARADIGM  -  ELSA 4.0</div>
                     <div style="font-size:1.5rem;text-align:center;margin-bottom:.5rem;">🧑‍💼</div>
                     <p style="font-size:.85rem;color:#555;text-align:center;margin:0 0 .75rem;"><em>"Find the guidance on X and summarize it for my review."</em><br><span style="font-size:.75rem;color:#888;">Plain English. One interface.</span></p>
                     <div style="background:var(--accent);border-radius:8px;padding:.5rem .75rem;font-size:.85rem;font-weight:600;color:#fff;text-align:center;margin-bottom:.75rem;">AI Agent (ELSA)</div>
@@ -113,40 +113,6 @@ const slides_welcome = [
         `
     },
     {
-        id: "welcome-overview",
-        title: "Two-Day Overview",
-        content: `
-            <h2>Training Overview</h2>
-            ${C.table(
-                ['Day', 'Date', 'Focus', 'Key Outcome'],
-                [
-                    [
-                        '<strong>Day 1</strong>',
-                        'Wed, May 13',
-                        'Platform Foundations + Your First App',
-                        'Understand ELSA end-to-end; publish a working app using Vibe Coding'
-                    ],
-                    [
-                        '<strong>Day 2</strong>',
-                        'Thu, May 14',
-                        'MCP, Playground & Production',
-                        'Turn your app into an AI agent; connect APIs; apply security; capstone build'
-                    ],
-                ]
-            )}
-            <h3>Daily Schedule</h3>
-            ${C.table(
-                ['Block', 'Time'],
-                [
-                    ['Morning session', '10:00 AM – 12:15 PM'],
-                    ['Lunch', '12:15 – 1:00 PM'],
-                    ['Afternoon session', '1:00 – 3:00 PM'],
-                ]
-            )}
-            ${C.callout('One 15-minute break each morning. All hands-on exercises are tiered — do as much or as little as fits your background.', 'info')}
-        `
-    },
-    {
         id: "welcome-goals",
         title: "Training Goals",
         content: `
@@ -154,32 +120,31 @@ const slides_welcome = [
             <h3>By the end of Day 2 you will be able to:</h3>
             ${C.cards([
                 { badge: 'Everyone', title: 'Navigate ELSA', desc: 'Understand the platform, find engines, open Playground, and use pre-built apps' },
-                { badge: 'Everyone', title: 'Vibe Code an App', desc: 'Use AI-assisted generation to describe and publish a working app — no coding required' },
+                { badge: 'Everyone', title: 'Vibe Code an App', desc: 'Use AI-assisted generation to describe and publish a working app  -  no coding required' },
                 { badge: 'Everyone', title: 'Use MCP in Playground', desc: 'Connect tools to an AI agent and run a multi-step workflow' },
                 { badge: 'Technical', title: 'Write Pixel', desc: 'Chain Pixel commands to query engines, call LLMs, and drive app logic' },
                 { badge: 'Technical', title: 'Build MCP Tools', desc: 'Expose Python functions as tools an agent can call via the MCP pattern' },
                 { badge: 'Technical', title: 'Integrate APIs', desc: 'Configure OpenAI/Anthropic endpoints and hit them from your app' },
             ])}
-            ${C.callout('Ask questions anytime — raise your hand or drop it in chat. There are no wrong questions here.', 'tip')}
+            ${C.callout('Ask questions anytime  -  raise your hand or drop it in chat. There are no wrong questions here.', 'tip')}
         `
     },
     {
         id: "welcome-logistics",
-        title: "Logistics",
+        title: "Day 1 Logistics",
         content: `
-            <h2>Logistics</h2>
-            <h3>Today's Agenda — Day 1 (Wed, May 13)</h3>
+            <h2>Day 1 Logistics — Wed, May 13</h2>
             ${C.table(
                 ['Time', 'Topic'],
                 [
                     ['10:00 – 10:30', 'Welcome & Introductions'],
                     ['10:30 – 11:15', 'Platform Fundamentals'],
                     ['11:15 – 11:30', '☕ Break'],
-                    ['11:30 – 12:15', 'Engines — The Data Layer'],
+                    ['11:30 – 12:15', 'Engines  -  The Data Layer'],
                     ['12:15 – 1:00',  '🍽 Lunch'],
-                    ['1:00 – 1:40',   'Pixel & Reactors — Concepts & Demo'],
+                    ['1:00 – 1:40',   'Pixel & Reactors  -  Concepts & Demo'],
                     ['1:40 – 2:10',   'App Fundamentals'],
-                    ['2:10 – 2:55',   'Vibe Coding — Build Your First App'],
+                    ['2:10 – 2:55',   'Vibe Coding  -  Build Your First App'],
                     ['2:55 – 3:00',   'Day 1 Wrap-up'],
                 ]
             )}
@@ -188,9 +153,9 @@ const slides_welcome = [
     },
     {
         id: "welcome-day2-logistics",
-        title: "Day 2 Agenda",
+        title: "Day 2 Logistics",
         content: `
-            <h2>Day 2 Agenda — Thu, May 14</h2>
+            <h2>Day 2 Logistics — Thu, May 14</h2>
             ${C.table(
                 ['Time', 'Topic'],
                 [

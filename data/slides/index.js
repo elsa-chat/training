@@ -52,4 +52,6 @@ registerSlideCollection('Security & Auth', typeof slides_security_auth !== 'unde
 registerSlideCollection('Admin', typeof slides_admin !== 'undefined' ? slides_admin : null);
 registerSlideCollection('Capstone Project', typeof slides_capstone_project !== 'undefined' ? slides_capstone_project : null);
 
+registerSlideCollection('Appendix', typeof slides_appendix !== 'undefined' ? slides_appendix : null);
+
 console.log('[DEBUG] Slide library initialized:', SLIDE_LIBRARY.length, 'slides');

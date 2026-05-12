@@ -1,4 +1,4 @@
-// Topic: MCP Fundamentals — Day 2 Morning (10:00 AM)
+// Topic: MCP Fundamentals  -  Day 2 Morning (10:00 AM)
 const slides_mcp_fundamentals = [
 
     // ─── DAY 2 RECAP ────────────────────────────────────────────────────────
@@ -6,15 +6,15 @@ const slides_mcp_fundamentals = [
         id: "recap-day2",
         title: "Day 1 Recap",
         content: `
-            <h2>Day 1 Recap — Where We Left Off</h2>
+            <h2>Day 1 Recap  -  Where We Left Off</h2>
             <p class="lead">Here is the thread we built yesterday. Today we wire it into an AI agent.</p>
             ${C.flow([
-                { title: 'Vector Engine', desc: 'Ingested FDA guidance documents — chunked, embedded, indexed', accent: true, arrow: '↓' },
+                { title: 'Vector Engine', desc: 'Ingested FDA guidance documents  -  chunked, embedded, indexed', arrow: '↓' },
                 { title: 'Notebook RAG', desc: 'Pixel + Python queries: search the vector engine, pass results to a model', arrow: '↓' },
-                { title: 'Published App', desc: 'Claude Code generated the UI template; you published a live URL', accent: true },
+                { title: 'Published App', desc: 'Claude Code generated the UI template; you published a live URL' },
             ])}
             ${C.callout('Open your app now and confirm it\'s still working before we move on. Your vector engine and published URL should be exactly where you left them.', 'tip')}
-            <p class="muted">Open Q&amp;A — 10 minutes. Ask anything that didn\'t click yesterday.</p>
+            <p class="muted">Open Q&amp;A  -  10 minutes. Ask anything that didn\'t click yesterday.</p>
         `
     },
 
@@ -38,7 +38,7 @@ const slides_mcp_fundamentals = [
                 {
                     title: 'The Problem',
                     content: `
-                        <p>Your Day 1 app is great — but an AI agent can't discover or call it on its own.</p>
+                        <p>Your Day 1 app is great  -  but an AI agent can't discover or call it on its own.</p>
                         <ul>
                             <li>The agent doesn't know the app exists</li>
                             <li>It doesn't know what inputs it needs</li>
@@ -58,7 +58,7 @@ const slides_mcp_fundamentals = [
                     `
                 }
             )}
-            ${C.callout('Think of MCP like a job listing for AI agents. It describes what a tool does, what inputs it needs, and what it returns — so any agent can use it without custom wiring.', 'info')}
+            ${C.callout('Think of MCP like a job listing for AI agents. It describes what a tool does, what inputs it needs, and what it returns  -  so any agent can use it without custom wiring.', 'info')}
         `
     },
 
@@ -96,9 +96,9 @@ const slides_mcp_fundamentals = [
                     { title: "AI Agent Chat", desc: "Conversation thread, model responses" },
                     { title: "Tool Discovery", desc: "Agent sees available MCP tools automatically" },
                 ]},
-                { label: "MCP Layer", accent: true, items: [
-                    { title: "JSON Schemas", desc: "Tool definitions (what the agent reads)", accent: true },
-                    { title: "Python / Java Handlers", desc: "Execution (what actually runs)", accent: true },
+                { label: "MCP Layer", items: [
+                    { title: "JSON Schemas", desc: "Tool definitions (what the agent reads)" },
+                    { title: "Python / Java Handlers", desc: "Execution (what actually runs)" },
                 ]},
                 { label: "Your App Backend", items: [
                     { title: "Vector Engine", desc: "FDA document search" },
@@ -114,7 +114,7 @@ const slides_mcp_fundamentals = [
         id: "mcp-three-patterns",
         title: "Three MCP Patterns",
         content: `
-            <h2>Three Ways to Build MCP Tools — Which to Use?</h2>
+            <h2>Three Ways to Build MCP Tools  -  Which to Use?</h2>
             ${C.table(
                 ["Pattern", "Backend", "Best For"],
                 [
@@ -143,7 +143,7 @@ const slides_mcp_fundamentals = [
         id: "mcp-json-schema",
         title: "The MCP Contract",
         content: `
-            <h2>The MCP Contract — What the JSON Looks Like</h2>
+            <h2>The MCP Contract  -  What the JSON Looks Like</h2>
             <p>This is what the agent reads when it discovers your tool. Every field matters.</p>
             ${C.code(`{
   "tools": [
@@ -163,7 +163,7 @@ const slides_mcp_fundamentals = [
     }
   ]
 }`, 'json', 'assets/mcp/py_mcp.json')}
-            ${C.callout('The <code>description</code> field is critical — it\'s how the agent decides <em>when</em> to call this tool. Write it as if you\'re instructing a person.', 'info')}
+            ${C.callout('The <code>description</code> field is critical  -  it\'s how the agent decides <em>when</em> to call this tool. Write it as if you\'re instructing a person.', 'info')}
         `
     },
 
@@ -174,11 +174,11 @@ const slides_mcp_fundamentals = [
             <h2>From Python Function to Callable Tool</h2>
             <p>You write a function with a docstring. ${CONFIG.productName} does the rest.</p>
             ${C.flow([
-                { title: 'Write Python function', desc: 'Include a clear docstring — the agent reads it', accent: true, arrow: '↓' },
+                { title: 'Write Python function', desc: 'Include a clear docstring  -  the agent reads it', arrow: '↓' },
                 { title: 'Run MakePythonMCP(project=["..."])', desc: 'One Pixel command in the Notebook or console', arrow: '↓' },
                 { title: '${CONFIG.productName} reads function signatures and docstrings', desc: 'Introspects your mcp_driver.py automatically', arrow: '↓' },
-                { title: 'Generates mcp/py_mcp.json automatically', desc: 'Produces the JSON schema the agent will see', accent: true, arrow: '↓' },
-                { title: 'Agent can discover and call it', desc: 'Tool is live in Playground immediately', accent: true },
+                { title: 'Generates mcp/py_mcp.json automatically', desc: 'Produces the JSON schema the agent will see', arrow: '↓' },
+                { title: 'Agent can discover and call it', desc: 'Tool is live in Playground immediately' },
             ])}
             ${C.code(`def search_documents(question: str) -> str:
     """
@@ -195,18 +195,18 @@ const slides_mcp_fundamentals = [
         id: "mcp-meta-variables",
         title: "Meta Variables",
         content: `
-            <h2>Controlling Agent Behavior — Meta Variables</h2>
+            <h2>Controlling Agent Behavior  -  Meta Variables</h2>
             <p>Two meta variables control how the agent and Playground UI interact with your tool.</p>
             ${C.table(
                 ["Variable", "What it controls"],
                 [
                     [
                         "<code>SMSS_MCP_EXECUTION</code>",
-                        "<code>auto</code> — agent calls silently &nbsp;|&nbsp; <code>ask</code> — agent confirms with user first &nbsp;|&nbsp; <code>disabled</code> — hidden from agent"
+                        "<code>auto</code>  -  agent calls silently &nbsp;|&nbsp; <code>ask</code>  -  agent confirms with user first &nbsp;|&nbsp; <code>disabled</code>  -  hidden from agent"
                     ],
                     [
                         "<code>SMSS_MCP_UI</code>",
-                        "Where the tool's portal UI appears in Playground — <code>sidebar</code>, <code>inline</code>, or <code>hidden</code>"
+                        "Where the tool's portal UI appears in Playground  -  <code>sidebar</code>, <code>inline</code>, or <code>hidden</code>"
                     ]
                 ]
             )}
@@ -216,9 +216,9 @@ const slides_mcp_fundamentals = [
 
     {
         id: "mcp-file-persistence",
-        title: "File Persistence — What You Edit vs. What Gets Generated",
+        title: "File Persistence  -  What You Edit vs. What Gets Generated",
         content: `
-            <h2>File Persistence — What You Edit vs. What Gets Generated</h2>
+            <h2>File Persistence  -  What You Edit vs. What Gets Generated</h2>
             ${C.tree([
                 {
                     name: 'assets/',
@@ -229,13 +229,13 @@ const slides_mcp_fundamentals = [
                             name: 'py/',
                             type: 'dir',
                             children: [
-                                { name: 'mcp_driver.py', type: 'file', desc: 'YOU EDIT THIS — your Python tool functions' }
+                                { name: 'mcp_driver.py', type: 'file', desc: 'YOU EDIT THIS  -  your Python tool functions' }
                             ]
                         },
                         {
                             name: 'mcp/',
                             type: 'dir',
-                            desc: 'GENERATED — do not hand-edit',
+                            desc: 'GENERATED  -  do not hand-edit',
                             children: [
                                 { name: 'py_mcp.json', type: 'file', desc: 'GENERATED by MakePythonMCP()' },
                                 { name: 'pixel_mcp.json', type: 'file', desc: 'GENERATED by MakePixelMCP()' },

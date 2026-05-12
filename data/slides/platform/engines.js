@@ -1,10 +1,10 @@
-// Topic: Engines — The Data Layer
+// Topic: Engines  -  The Data Layer
 const slides_platform_engines = [
         {
             id: "engines-title",
-            title: "Engines — The Data Layer",
+            title: "Engines  -  The Data Layer",
             content: C.titleSlide(
-                "Engines — The Data Layer",
+                "Engines  -  The Data Layer",
                 `The pluggable abstraction that connects ${CONFIG.productName} to everything`,
                 "35 minutes"
             )
@@ -14,14 +14,14 @@ const slides_platform_engines = [
             title: "What is an Engine?",
             content: `
                 <h2>What is an Engine?</h2>
-                <p class="lead">An <span class="highlight">Engine</span> is ${CONFIG.productName}'s uniform connector to any external system — database, AI model, file store, or custom API.</p>
+                <p class="lead">An <span class="highlight">Engine</span> is ${CONFIG.productName}'s uniform connector to any external system  -  database, AI model, file store, or custom API.</p>
                 ${C.flow([
-                    { title: 'Your Data, Models & Storage', desc: 'Databases, LLMs, vector stores, files — anything external', accent: true },
+                    { title: 'Your Data, Models & Storage', desc: 'Databases, LLMs, vector stores, files  -  anything external' },
                     { title: 'Engine Abstraction (IEngine)', desc: 'A uniform interface wrapping every connection', arrow: '↓ plugs in here' },
                     { title: 'Pixel Commands', desc: 'You interact with every engine the same way, regardless of what\'s underneath', arrow: '↓ talk through' },
-                    { title: 'Your App', desc: 'Queries, AI answers, stored files — delivered to the user' }
+                    { title: 'Your App', desc: 'Queries, AI answers, stored files  -  delivered to the user' }
                 ])}
-                ${C.callout('Everything in ' + CONFIG.productName + ' talks through engines. This uniform abstraction is what makes the platform extensible — swap out a database or switch AI providers without rewriting your app.', 'info')}
+                ${C.callout('Everything in ' + CONFIG.productName + ' talks through engines. This uniform abstraction is what makes the platform extensible  -  swap out a database or switch AI providers without rewriting your app.', 'info')}
             `
         },
         {
@@ -39,7 +39,7 @@ const slides_platform_engines = [
                     {
                         badge: 'AI',
                         title: 'Model',
-                        desc: 'Call large language models — OpenAI, Claude, Gemini, Bedrock, Azure OpenAI, or locally-hosted models.'
+                        desc: 'Call large language models  -  OpenAI, Claude, Gemini, Bedrock, Azure OpenAI, or locally-hosted models.'
                     },
                     {
                         badge: 'RAG',
@@ -66,10 +66,10 @@ const slides_platform_engines = [
         },
         {
             id: "engines-model-note",
-            title: "Model Engines — Training Note",
+            title: "Model Engines  -  Training Note",
             content: `
                 <h2>Model Engines in This Training</h2>
-                ${C.callout('<strong>Note:</strong> Model engines in this training environment are pre-configured and shared. You will <em>call</em> them but not create them. This is by design — model engine credentials and compute are managed by your ' + CONFIG.productName + ' admin.', 'warning')}
+                ${C.callout('<strong>Note:</strong> Model engines in this training environment are pre-configured and shared. You will <em>call</em> them but not create them. This is by design  -  model engine credentials and compute are managed by your ' + CONFIG.productName + ' admin.', 'warning')}
                 <p>When you use the Q&amp;A tab or build a prompt in the Playground, you are using one of these pre-configured model engines behind the scenes. You will see them listed in the Engine Catalog as read-only.</p>
                 ${C.table(
                     ['What you will do today', 'What your admin handles'],
@@ -93,7 +93,7 @@ const slides_platform_engines = [
                         <li>Select the <strong>Vector</strong> engine type from the list.</li>
                         <li>Choose the vector database type available in your environment.<br>
                             <em>[Presenter will confirm which vector DB type is available in your environment]</em></li>
-                        <li>Give your engine a unique name — for example: <code>MyVectorDB_[YourInitials]</code></li>
+                        <li>Give your engine a unique name  -  for example: <code>MyVectorDB_[YourInitials]</code></li>
                         <li>Fill in any required connection fields as directed by the presenter.</li>
                         <li>Click <strong>Save</strong>. Your engine will appear in the Catalog.</li>
                     </ol>
@@ -111,7 +111,7 @@ const slides_platform_engines = [
                         <li>In the Engine Catalog, find and open the vector engine you just created.</li>
                         <li>Click the <strong>Documents</strong> tab (or <strong>Upload</strong> button).</li>
                         <li>Click <strong>Add Files</strong> and select the sample FDA guidance documents provided by your presenter.</li>
-                        <li>Wait for ingestion to complete — the platform will chunk, embed, and index each document automatically.</li>
+                        <li>Wait for ingestion to complete  -  the platform will chunk, embed, and index each document automatically.</li>
                         <li>When finished, the document list will show your files with a green status indicator.</li>
                     </ol>
                     <p><strong>What just happened under the hood?</strong></p>
@@ -119,7 +119,7 @@ const slides_platform_engines = [
                         { title: '1. Upload', desc: 'Document stored in the platform' },
                         { title: '2. Chunk', desc: 'Text split into overlapping passages', arrow: '↓' },
                         { title: '3. Embed', desc: 'Each chunk converted to a vector via the configured model engine', arrow: '↓' },
-                        { title: '4. Index', desc: 'Vectors written to your vector database — ready to search', arrow: '↓', accent: true }
+                        { title: '4. Index', desc: 'Vectors written to your vector database  -  ready to search', arrow: '↓' }
                     ])}
                 `)}
                 ${C.callout('Use the sample FDA guidance documents provided by your presenter.', 'tip')}
@@ -127,17 +127,17 @@ const slides_platform_engines = [
         },
         {
             id: "engines-qa-tab",
-            title: "Zero-Code AI: The Q&A Tab",
+            title: "Vector Search Example",
             content: `
-                <h2>Zero-Code AI — The Q&amp;A Tab</h2>
-                <p>Your vector engine has a built-in Q&amp;A interface. No app building required.</p>
+                <h2>Vector Search Example - The Q&amp;A Tab</h2>
+                <p>Every Knowledge Repository has a built-in Q&amp;A interface. No app building required.</p>
                 ${C.flow([
-                    { title: 'Open your Vector Engine', desc: 'Find it in the Engine Catalog and click to open' },
-                    { title: 'Click the Q&A Tab', desc: 'Built into every vector engine automatically', arrow: '↓' },
-                    { title: 'Type a question', desc: 'Ask about something covered in your uploaded documents', arrow: '↓' },
-                    { title: 'See the AI answer', desc: 'Grounded in your documents — with source citations', accent: true, arrow: '↓' }
+                    { title: 'Open your Knowledge Repository', desc: 'Find it under Vector in the Engine Catalog and click to open' },
+                    { title: 'Click the Q&A Tab', desc: 'Built into every Knowledge Repository automatically', arrow: '↓' },
+                    { title: 'Enter a question and click Generate Answer', desc: 'Ask about anything covered in your uploaded documents', arrow: '↓' },
+                    { title: 'Review the Policy Extraction Response', desc: 'The platform retrieves relevant passages and generates a grounded conclusion', arrow: '↓' }
                 ])}
-                ${C.callout('You just got an AI-powered answer from your own documents with zero code. This is the foundation everything else builds on — every RAG workflow, every document Q&A app, starts here.', 'tip')}
+                ${C.callout('You just got an AI-powered answer from your own documents with zero code. This is the foundation everything else builds on  -  every RAG workflow, every document Q&A app, starts here.', 'tip')}
             `
         },
         {
@@ -150,7 +150,7 @@ const slides_platform_engines = [
                     {
                         badge: 'Demo Step 1',
                         title: 'Navigate to Database Catalog',
-                        desc: 'Shows the same Engine Catalog you used — but filtered to Database engines.'
+                        desc: 'Shows the same Engine Catalog you used  -  but filtered to Database engines.'
                     },
                     {
                         badge: 'Demo Step 2',
@@ -160,12 +160,12 @@ const slides_platform_engines = [
                     {
                         badge: 'Demo Step 3',
                         title: 'Explore What Was Created',
-                        desc: 'The .smss config file, the H2 database file, and the OWL schema metadata — the same pattern as your vector engine.'
+                        desc: 'The .smss config file, the H2 database file, and the OWL schema metadata  -  the same pattern as your vector engine.'
                     },
                     {
                         badge: 'Demo Step 4',
                         title: 'Query the Data',
-                        desc: 'Open the engine\'s Query tab and run a SQL query against the CSV data — now a live database.'
+                        desc: 'Open the engine\'s Query tab and run a SQL query against the CSV data  -  now a live database.'
                     }
                 ])}
                 ${C.callout('Notice the pattern: the same flow (Add Engine → configure → save → use) applies whether you\'re connecting a vector store, a database, or any other engine type.', 'info')}

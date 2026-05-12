@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" viewBox="0 0 680 640" xmlns="http://www.w3.org/2000/svg" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+  <title>AI Core generic architecture reference diagram</title>
+  <desc>Cloud-agnostic AI Core reference architecture. Users connect via Web UI and SDKs through a load balancer into a Kubernetes cluster containing application pods, coordination pods, an optional self-hosted model, and AI Core databases. Cloud infrastructure and model providers are external dependencies.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      .label-sm { font-size: 12px; fill: #5F5E5A; }
+      .label-md { font-size: 14px; font-weight: 500; fill: #2C2C2A; }
+      .label-dim { font-size: 12px; fill: #888780; }
+      .arr { stroke: #888780; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+      .arr-dash { stroke: #888780; stroke-width: 1.5; fill: none; stroke-dasharray: 3 3; marker-end: url(#arrow); }
+      .border-dash { fill: none; stroke: #B4B2A9; stroke-width: 0.8; stroke-dasharray: 6 3; }
+      .border-inner { fill: none; stroke: #B4B2A9; stroke-width: 0.5; stroke-dasharray: 4 2; }
+      .border-opt { fill: none; stroke: #B4B2A9; stroke-width: 0.8; stroke-dasharray: 5 3; }
+      .border-solid { fill: none; stroke: #B4B2A9; stroke-width: 0.5; }
+      .divider { stroke: #D3D1C7; stroke-width: 0.5; }
+
+      /* teal nodes */
+      .n-teal rect { fill: #E1F5EE; stroke: #0F6E56; stroke-width: 0.5; }
+      .n-teal .label-md { fill: #085041; }
+      .n-teal .label-sm { fill: #0F6E56; }
+      /* purple nodes */
+      .n-purple rect { fill: #EEEDFE; stroke: #534AB7; stroke-width: 0.5; }
+      .n-purple .label-md { fill: #3C3489; }
+      .n-purple .label-sm { fill: #534AB7; }
+      /* gray nodes */
+      .n-gray rect { fill: #F1EFE8; stroke: #5F5E5A; stroke-width: 0.5; }
+      .n-gray .label-md { fill: #2C2C2A; }
+      /* coral nodes */
+      .n-coral rect { fill: #FAECE7; stroke: #993C1D; stroke-width: 0.5; }
+      .n-coral .label-md { fill: #712B13; }
+      /* blue nodes */
+      .n-blue rect { fill: #E6F1FB; stroke: #185FA5; stroke-width: 0.5; }
+      .n-blue .label-md { fill: #0C447C; }
+      .n-blue .label-sm { fill: #185FA5; }
+    </style>
+  </defs>
+
+  <!-- VPC boundary -->
+  <rect x="8" y="8" width="664" height="622" rx="16" class="border-dash"/>
+  <text x="24" y="26" class="label-dim">VPC / Virtual Network</text>
+
+  <!-- Web UI users -->
+  <g class="n-gray">
+    <rect x="20" y="60" width="108" height="40" rx="8"/>
+    <text x="74" y="84" text-anchor="middle" class="label-md">Web UI users</text>
+  </g>
+
+  <!-- SDK clients -->
+  <g class="n-gray">
+    <rect x="20" y="174" width="108" height="40" rx="8"/>
+    <text x="74" y="198" text-anchor="middle" class="label-md">SDK clients</text>
+  </g>
+
+  <!-- Load balancer -->
+  <g class="n-teal">
+    <rect x="20" y="288" width="108" height="44" rx="8"/>
+    <text x="74" y="314" text-anchor="middle" class="label-md">Load balancer</text>
+  </g>
+
+  <!-- client → LB arrows -->
+  <line x1="74" y1="100" x2="74" y2="286" class="arr-dash"/>
+  <line x1="74" y1="214" x2="74" y2="286" class="arr-dash"/>
+  <text x="83" y="158" class="label-dim">Web UI</text>
+  <text x="83" y="256" class="label-dim">SDKs</text>
+  <line x1="128" y1="310" x2="150" y2="310" class="arr"/>
+
+  <!-- Kubernetes cluster boundary -->
+  <rect x="150" y="36" width="322" height="580" rx="12" class="border-inner"/>
+  <text x="166" y="52" class="label-dim">Kubernetes cluster</text>
+
+  <!-- Application pods -->
+  <g class="n-teal">
+    <rect x="164" y="62" width="294" height="56" rx="8"/>
+    <text x="311" y="84" text-anchor="middle" class="label-md">Application pods</text>
+    <text x="311" y="102" text-anchor="middle" class="label-sm">API · UI · workers · background jobs</text>
+  </g>
+
+  <!-- Coordination pods -->
+  <g class="n-purple">
+    <rect x="164" y="162" width="294" height="56" rx="8"/>
+    <text x="311" y="184" text-anchor="middle" class="label-md">Coordination pods (Zookeeper)</text>
+    <text x="311" y="202" text-anchor="middle" class="label-sm">Service discovery · config · leader election</text>
+  </g>
+
+  <!-- Self-hosted model (optional) -->
+  <rect x="164" y="262" width="294" height="62" rx="8" class="border-opt"/>
+  <text x="311" y="284" text-anchor="middle" class="label-md" style="fill:#2C2C2A">Self-hosted model (optional)</text>
+  <text x="311" y="302" text-anchor="middle" class="label-sm">GPU node pool · model weights on disk</text>
+
+  <!-- AI Core databases -->
+  <g class="n-coral">
+    <rect x="164" y="370" width="294" height="30" rx="8"/>
+    <text x="311" y="389" text-anchor="middle" class="label-md">AI Core databases</text>
+  </g>
+  <text x="178" y="412" class="label-sm">security</text>
+  <text x="311" y="412" text-anchor="middle" class="label-sm">app data</text>
+  <text x="444" y="412" text-anchor="end" class="label-sm">model logs</text>
+  <line x1="164" y1="420" x2="458" y2="420" class="divider"/>
+  <text x="178" y="436" class="label-sm">audit logs</text>
+  <text x="311" y="436" text-anchor="middle" class="label-sm">prompt library</text>
+  <text x="444" y="436" text-anchor="end" class="label-sm">themes</text>
+  <line x1="258" y1="400" x2="258" y2="446" class="divider"/>
+  <line x1="360" y1="400" x2="360" y2="446" class="divider"/>
+
+  <!-- vertical flow arrows inside cluster -->
+  <line x1="311" y1="118" x2="311" y2="160" class="arr"/>
+  <line x1="311" y1="218" x2="311" y2="260" class="arr"/>
+  <line x1="311" y1="324" x2="311" y2="368" class="arr"/>
+
+  <!-- Cloud infrastructure boundary -->
+  <rect x="490" y="36" width="176" height="220" rx="12" class="border-inner"/>
+  <text x="506" y="52" class="label-dim">Cloud infrastructure</text>
+
+  <!-- Object storage -->
+  <g class="n-blue">
+    <rect x="502" y="62" width="150" height="52" rx="8"/>
+    <text x="577" y="82" text-anchor="middle" class="label-md">Object storage</text>
+    <text x="577" y="100" text-anchor="middle" class="label-sm">Files · exports · assets</text>
+  </g>
+
+  <!-- Secrets manager -->
+  <g class="n-blue">
+    <rect x="502" y="162" width="150" height="52" rx="8"/>
+    <text x="577" y="182" text-anchor="middle" class="label-md">Secrets manager</text>
+    <text x="577" y="200" text-anchor="middle" class="label-sm">API keys · certs · tokens</text>
+  </g>
+
+  <!-- app pods → infra arrows -->
+  <line x1="458" y1="84" x2="500" y2="84" class="arr"/>
+  <line x1="458" y1="184" x2="500" y2="184" class="arr"/>
+
+  <!-- Model providers boundary -->
+  <rect x="490" y="286" width="176" height="330" rx="12" class="border-solid"/>
+  <text x="506" y="302" class="label-dim">Model providers</text>
+
+  <!-- Managed AI services -->
+  <g class="n-purple">
+    <rect x="502" y="312" width="150" height="52" rx="8"/>
+    <text x="577" y="332" text-anchor="middle" class="label-md">Managed AI services</text>
+    <text x="577" y="350" text-anchor="middle" class="label-sm">Foundry · Vertex · Bedrock</text>
+  </g>
+
+  <!-- Hosted model APIs -->
+  <g class="n-gray">
+    <rect x="502" y="400" width="150" height="52" rx="8"/>
+    <text x="577" y="420" text-anchor="middle" class="label-md">Hosted model APIs</text>
+    <text x="577" y="438" text-anchor="middle" class="label-sm">OpenAI · Anthropic · etc.</text>
+  </g>
+
+  <!-- Custom endpoints -->
+  <g class="n-gray">
+    <rect x="502" y="490" width="150" height="52" rx="8"/>
+    <text x="577" y="510" text-anchor="middle" class="label-md">Custom endpoints</text>
+    <text x="577" y="528" text-anchor="middle" class="label-sm">Self-hosted · on-prem</text>
+  </g>
+
+  <!-- app pods → model provider arrows -->
+  <path d="M458 118 L472 118 L472 336 L500 336" class="arr"/>
+  <path d="M458 118 L472 118 L472 424 L500 424" class="arr"/>
+  <path d="M458 118 L472 118 L472 514 L500 514" class="arr"/>
+
+  <!-- legend -->
+  <text x="340" y="626" text-anchor="middle" class="label-dim">Dashed border = optional component</text>
+</svg>

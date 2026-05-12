@@ -7,7 +7,7 @@ const day4_ch03 = {
             title: "App Building & Publishing",
             content: C.titleSlide(
                 "App Building & Publishing",
-                "From development to production — compiling, versioning, and publishing apps",
+                "From development to production  -  compiling, versioning, and publishing apps",
                 "90 minutes"
             )
         },
@@ -19,11 +19,11 @@ const day4_ch03 = {
                 <p class="lead">Building and publishing a ${CONFIG.productName} app involves several stages from local development to production deployment.</p>
                 ${C.flow([
                     { title: 'Develop', desc: 'Write custom reactors (Java), Python functions, and React UI', accent: true, arrow: '↓' },
-                    { title: 'Compile', desc: 'CompileAppReactors — compile Java, generate classes', arrow: '↓ generates bytecode' },
-                    { title: 'Build Blocks', desc: 'SaveAppBlocksJson — save frontend configuration', arrow: '↓ saves blocks.json' },
-                    { title: 'Version', desc: 'Git commit — track changes with version control', arrow: '↓ commits to git' },
-                    { title: 'Publish', desc: 'PublishProject — deploy to public URL', accent: true, arrow: '↓ release=true' },
-                    { title: 'Share', desc: 'Grant permissions — enable catalog discovery', },
+                    { title: 'Compile', desc: 'CompileAppReactors  -  compile Java, generate classes', arrow: '↓ generates bytecode' },
+                    { title: 'Build Blocks', desc: 'SaveAppBlocksJson  -  save frontend configuration', arrow: '↓ saves blocks.json' },
+                    { title: 'Version', desc: 'Git commit  -  track changes with version control', arrow: '↓ commits to git' },
+                    { title: 'Publish', desc: 'PublishProject  -  deploy to public URL', accent: true, arrow: '↓ release=true' },
+                    { title: 'Share', desc: 'Grant permissions  -  enable catalog discovery', },
                 ])}
                 ${C.callout('Each stage has a corresponding Pixel reactor. The UI orchestrates these behind the scenes, but you can call them directly for automation or CI/CD.', 'info')}
             `
@@ -39,7 +39,7 @@ const day4_ch03 = {
                         { name: "<AppName>__<UUID>/", type: "dir", desc: "← unique folder per app", children: [
                             { name: "app_root/", type: "dir", desc: "← Constants.APP_ROOT_FOLDER", children: [
                                 { name: "version/", type: "dir", desc: "← git repo root (Constants.VERSION_FOLDER)", children: [
-                                    { name: "assets/", type: "dir", desc: "← Constants.ASSETS_FOLDER — your workspace", children: [
+                                    { name: "assets/", type: "dir", desc: "← Constants.ASSETS_FOLDER  -  your workspace", children: [
                                         { name: "portals/", type: "dir", desc: "← published UI + blocks.json" },
                                         { name: "java/", type: "dir", desc: "← custom reactor source" },
                                         { name: "classes/", type: "dir", desc: "← compiled .class files + compileerror.out" },
@@ -59,19 +59,19 @@ const day4_ch03 = {
             id: "d4-app-building-compile-reactors",
             title: "Compiling Custom Reactors",
             content: `
-                <h2>CompileAppReactors — Compile Java Code</h2>
+                <h2>CompileAppReactors  -  Compile Java Code</h2>
                 <p>When you write custom reactors in <code>assets/java/</code>, they need to be compiled to bytecode before ${CONFIG.productName} can execute them.</p>
                 ${C.code(`CompileAppReactors(project="<projectId>", release=false);`, 'pixel', 'Compile Reactors for Local Testing')}
                 ${C.flow([
-                    { title: 'Clear Class Cache', desc: 'project.clearClassCache() — unload old classes', arrow: '↓' },
-                    { title: 'Compile Source', desc: 'project.compileReactors() — javac on assets/java/', arrow: '↓ generates .class files' },
+                    { title: 'Clear Class Cache', desc: 'project.clearClassCache()  -  unload old classes', arrow: '↓' },
+                    { title: 'Compile Source', desc: 'project.compileReactors()  -  javac on assets/java/', arrow: '↓ generates .class files' },
                     { title: 'Load Compiler Output', desc: 'Read assets/classes/compileerror.out for errors', arrow: '↓ if compilation fails' },
-                    { title: 'Push to Cloud (Optional)', desc: 'ClusterUtil.pushProjectFolder() — sync if release=true', },
+                    { title: 'Push to Cloud (Optional)', desc: 'ClusterUtil.pushProjectFolder()  -  sync if release=true', },
                 ])}
                 <h3>Parameters</h3>
                 <ul>
-                    <li><code>project</code> — project ID to compile</li>
-                    <li><code>release</code> (optional) — if <strong>true</strong>, pushes compiled code to cloud storage and propagates to other containers. Default: false.</li>
+                    <li><code>project</code>  -  project ID to compile</li>
+                    <li><code>release</code> (optional)  -  if <strong>true</strong>, pushes compiled code to cloud storage and propagates to other containers. Default: false.</li>
                 </ul>
                 ${C.callout('<strong>Compiler Output:</strong> Check <code>assets/classes/compileerror.out</code> for compilation errors. If it exists and has content, your Java code failed to compile.', 'warning')}
             `
@@ -123,9 +123,9 @@ const day4_ch03 = {
         },
         {
             id: "d4-app-building-blocks-json",
-            title: "blocks.json — Frontend Configuration",
+            title: "blocks.json  -  Frontend Configuration",
             content: `
-                <h2>blocks.json — The App Manifest</h2>
+                <h2>blocks.json  -  The App Manifest</h2>
                 <p class="lead">The <code>blocks.json</code> file in <code>assets/portals/</code> defines your app's frontend structure, cells, and configuration.</p>
                 <p>This file is generated by the App Builder UI when you add blocks/cells to your app. It's the blueprint for how the frontend renders.</p>
                 ${C.split(
@@ -173,7 +173,7 @@ const day4_ch03 = {
             id: "d4-app-building-save-blocks",
             title: "SaveAppBlocksJson",
             content: `
-                <h2>SaveAppBlocksJson — Persist Frontend Config</h2>
+                <h2>SaveAppBlocksJson  -  Persist Frontend Config</h2>
                 <p>When you modify your app's UI in the App Builder, the changes are saved to <code>blocks.json</code> via the <code>SaveAppBlocksJson</code> reactor.</p>
                 ${C.code(`SaveAppBlocksJson(
     project="<projectId>",
@@ -184,7 +184,7 @@ const day4_ch03 = {
                     { title: 'Validate JSON', desc: 'Ensure blocks JSON is valid and not empty', arrow: '↓' },
                     { title: 'Write blocks.json', desc: 'GsonUtility.writeObjectToJsonFile() to portals/', arrow: '↓ overwrites existing file' },
                     { title: 'Git Commit', desc: 'GitRepoUtils.addSpecificFiles() → commitAddedFiles()', arrow: '↓ version control' },
-                    { title: 'Sync to Cloud', desc: 'ClusterUtil.pushProjectFolder() — if cluster mode', arrow: '↓ cloud backup' },
+                    { title: 'Sync to Cloud', desc: 'ClusterUtil.pushProjectFolder()  -  if cluster mode', arrow: '↓ cloud backup' },
                     { title: 'Update Dependencies', desc: 'SecurityProjectUtils.updateProjectDependenciesWithoutType()', },
                 ])}
                 ${C.callout(`<strong>Git Integration:</strong> Every time you save blocks.json, ${CONFIG.productName} commits it to the local git repo. This gives you full version history of your UI changes.`, 'info')}
@@ -276,7 +276,7 @@ const day4_ch03 = {
             id: "d4-app-building-publishing",
             title: "Publishing to Catalog",
             content: `
-                <h2>PublishProject — Deploy to Production</h2>
+                <h2>PublishProject  -  Deploy to Production</h2>
                 <p class="lead">Once your app is ready, use <code>PublishProject</code> to make it publicly accessible via a web URL.</p>
                 ${C.code(`PublishProject(project="<projectId>", release=false);
 
@@ -289,9 +289,9 @@ const day4_ch03 = {
 // + Syncs to cloud storage
 // + Updates catalog visibility`, 'pixel', 'Publish App (With Cloud Sync)')}
                 ${C.flow([
-                    { title: 'Set Republish Flag', desc: 'project.setRepublish(true) — mark as published', accent: true, arrow: '↓' },
-                    { title: 'Push Portals Folder', desc: 'ClusterUtil.pushProjectFolder() — sync assets/portals/', arrow: '↓ if release=true' },
-                    { title: 'Update Catalog', desc: 'SecurityProjectUtils.setPortalPublish() — enable discovery', arrow: '↓' },
+                    { title: 'Set Republish Flag', desc: 'project.setRepublish(true)  -  mark as published', accent: true, arrow: '↓' },
+                    { title: 'Push Portals Folder', desc: 'ClusterUtil.pushProjectFolder()  -  sync assets/portals/', arrow: '↓ if release=true' },
+                    { title: 'Update Catalog', desc: 'SecurityProjectUtils.setPortalPublish()  -  enable discovery', arrow: '↓' },
                     { title: 'Return Public URL', desc: 'Construct URL: /public/<projectId>/portals/', accent: true },
                 ])}
                 ${C.callout('<strong>release=true vs false:</strong> Use <code>false</code> for preview/staging deployments (local container only). Use <code>true</code> for production (syncs to cloud and updates catalog).', 'info')}
@@ -359,7 +359,7 @@ const day4_ch03 = {
                 ${C.table(
                     ['Permission Level', 'Capabilities'],
                     [
-                        ['Owner', 'Full control — edit, compile, publish, delete, manage permissions'],
+                        ['Owner', 'Full control  -  edit, compile, publish, delete, manage permissions'],
                         ['Editor', 'Edit app code and blocks, compile reactors, cannot publish or delete'],
                         ['Viewer', 'View published app, cannot edit or access source code'],
                         ['Discoverable', 'App appears in catalog for users with viewer+ permissions'],
@@ -518,7 +518,7 @@ SetProjectGlobal(project="<your-project-id>", global=true);`, 'pixel')}
                 <ul>
                     <li>Use <code>release=false</code> for dev/staging, <code>release=true</code> for prod</li>
                     <li>Check <code>assets/classes/compileerror.out</code> for Java compilation errors</li>
-                    <li>Every app change is git-backed — leverage version history!</li>
+                    <li>Every app change is git-backed  -  leverage version history!</li>
                     <li>Only project owners can publish; editors can compile but not release</li>
                     <li>The public URL pattern is <code>/public/&lt;projectId&gt;/portals/</code></li>
                 </ul>

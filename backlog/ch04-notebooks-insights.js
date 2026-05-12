@@ -17,7 +17,7 @@ const day4_ch04 = {
             content: `
                 <h2>What are Notebooks in ${CONFIG.productName}?</h2>
                 <p class="lead">A <span class="highlight">Notebook</span> is a named sequence of Cells that execute in order to process data, call APIs, or orchestrate workflows.</p>
-                <p>Notebooks are the <strong>data pipeline layer</strong> in ${CONFIG.productName} apps — they sit between user interactions (Blocks) and backend execution (Insights).</p>
+                <p>Notebooks are the <strong>data pipeline layer</strong> in ${CONFIG.productName} apps  -  they sit between user interactions (Blocks) and backend execution (Insights).</p>
                 ${C.cards([
                     { badge: 'Purpose', title: 'Orchestration', desc: 'Define multi-step data processing pipelines with clear execution order' },
                     { badge: 'Purpose', title: 'Reusability', desc: 'Save and reuse workflows across apps and insights' },
@@ -91,7 +91,7 @@ const day4_ch04 = {
             id: "d4-notebooks-interaction",
             title: "Notebook Interaction",
             content: `
-                <h2>Notebook Interaction — UI Features</h2>
+                <h2>Notebook Interaction  -  UI Features</h2>
                 <p>The Notebook UI component (React) provides developer tools for building and testing workflows.</p>
                 ${C.table(
                     ['Feature', 'Purpose', 'How It Works'],
@@ -160,7 +160,7 @@ const day4_ch04 = {
             title: "What are Insights?",
             content: `
                 <h2>What are Insights?</h2>
-                <p class="lead">An <span class="highlight">Insight</span> is the backend execution context where Pixel code runs — it holds variables, frames, R/Python environments, and execution history.</p>
+                <p class="lead">An <span class="highlight">Insight</span> is the backend execution context where Pixel code runs  -  it holds variables, frames, R/Python environments, and execution history.</p>
                 <p>Every ${CONFIG.productName} app session is backed by an Insight. When you open an app, ${CONFIG.productName} creates or retrieves an Insight identified by a unique <code>insightId</code> (UUID).</p>
                 ${C.layers([
                     { label: "Frontend", items: [
@@ -220,21 +220,21 @@ const day4_ch04 = {
 }`, 'java', 'prerna/om/Insight.java (simplified)')}
                 <h3>Key Components</h3>
                 <ul>
-                    <li><code>insightId</code> — Unique identifier used in API requests (<code>POST /api/engine/runPixel?insightId=...</code>)</li>
-                    <li><code>VarStore</code> — Stores frames, parameters, and dynamic variables</li>
-                    <li><code>PixelList</code> — Keeps last 500 Pixel commands for history/undo</li>
-                    <li><code>TaskStore</code> — Manages async operations (iterators, long-running tasks)</li>
-                    <li><code>PyTranslator</code> — Manages Python GAAS session for <code>Py()</code> execution</li>
-                    <li><code>insightSheets</code> — UI sheet tabs (multi-sheet apps like Excel)</li>
-                    <li><code>insightPanels</code> — Visual output panels (charts, grids, maps)</li>
+                    <li><code>insightId</code>  -  Unique identifier used in API requests (<code>POST /api/engine/runPixel?insightId=...</code>)</li>
+                    <li><code>VarStore</code>  -  Stores frames, parameters, and dynamic variables</li>
+                    <li><code>PixelList</code>  -  Keeps last 500 Pixel commands for history/undo</li>
+                    <li><code>TaskStore</code>  -  Manages async operations (iterators, long-running tasks)</li>
+                    <li><code>PyTranslator</code>  -  Manages Python GAAS session for <code>Py()</code> execution</li>
+                    <li><code>insightSheets</code>  -  UI sheet tabs (multi-sheet apps like Excel)</li>
+                    <li><code>insightPanels</code>  -  Visual output panels (charts, grids, maps)</li>
                 </ul>
             `
         },
         {
             id: "d4-insights-varstore",
-            title: "VarStore — Variable Management",
+            title: "VarStore  -  Variable Management",
             content: `
-                <h2>VarStore — Variable Management in Insights</h2>
+                <h2>VarStore  -  Variable Management in Insights</h2>
                 <p>The <code>VarStore</code> is the backend variable store within an Insight, holding all data created during execution.</p>
                 ${C.code(`public class VarStore implements InMemStore<String, NounMetadata> {
     // Main storage
@@ -259,15 +259,15 @@ const day4_ch04 = {
                         content: `
                             <p>Variables are stored as <code>NounMetadata</code> with a <code>PixelDataType</code>:</p>
                             <ul>
-                                <li><code>CONST_STRING</code> — Text values</li>
-                                <li><code>CONST_INT</code> — Numbers</li>
-                                <li><code>CONST_DATE</code> — Dates</li>
-                                <li><code>VECTOR</code> — Arrays/lists</li>
-                                <li><code>MAP</code> — JSON objects</li>
-                                <li><code>FRAME</code> — Data frames</li>
-                                <li><code>FORMATTED_DATA_SET</code> — Query results</li>
-                                <li><code>LAMBDA</code> — Functions</li>
-                                <li><code>CUSTOM_DATA_STRUCTURE</code> — Custom types</li>
+                                <li><code>CONST_STRING</code>  -  Text values</li>
+                                <li><code>CONST_INT</code>  -  Numbers</li>
+                                <li><code>CONST_DATE</code>  -  Dates</li>
+                                <li><code>VECTOR</code>  -  Arrays/lists</li>
+                                <li><code>MAP</code>  -  JSON objects</li>
+                                <li><code>FRAME</code>  -  Data frames</li>
+                                <li><code>FORMATTED_DATA_SET</code>  -  Query results</li>
+                                <li><code>LAMBDA</code>  -  Functions</li>
+                                <li><code>CUSTOM_DATA_STRUCTURE</code>  -  Custom types</li>
                             </ul>
                         `
                     },
@@ -388,7 +388,7 @@ Frame(frame=["salesFrame"])
             id: "d4-notebooks-variables-ui",
             title: "Variables Panel",
             content: `
-                <h2>Variables Panel — Inspecting State</h2>
+                <h2>Variables Panel  -  Inspecting State</h2>
                 <p>The <strong>Variables</strong> panel in the App Designer shows all StateStore variables with type indicators and preview values.</p>
                 ${C.table(
                     ['Type', 'Description'],
@@ -407,7 +407,7 @@ Frame(frame=["salesFrame"])
                         ['<code>Brain</code>', 'AI/LLM context']
                     ]
                 )}
-                ${C.callout('Use the Variables panel to debug state issues — if a block isn\'t rendering, check if the variable it binds to exists and has the expected value.', 'tip')}
+                ${C.callout('Use the Variables panel to debug state issues  -  if a block isn\'t rendering, check if the variable it binds to exists and has the expected value.', 'tip')}
                 ${C.code(`// Variables panel actions
 // - Create: Add new variable with initial value
 // - Edit: Change variable value (triggers re-render)
@@ -445,7 +445,7 @@ Frame(frame=["salesFrame"])
                                 <li><strong>Frame:</strong> <code>salesFrame</code></li>
                             </ul>
                         </li>
-                        <li>Click <strong>Run Cell</strong> to test — verify data loads in cell console</li>
+                        <li>Click <strong>Run Cell</strong> to test  -  verify data loads in cell console</li>
                     </ol>
 
                     <h4>Step 3: Add Code Cell for KPI Calculation</h4>
@@ -462,7 +462,7 @@ avgOrderValue = <salesFrame> | Select(revenue) | Average();
 // Count unique customers
 uniqueCustomers = <salesFrame> | Select(customer_id) | Unique() | Count();`, 'pixel')}
                         </li>
-                        <li>Run cell — check Variables panel for new variables</li>
+                        <li>Run cell  -  check Variables panel for new variables</li>
                     </ol>
 
                     <h4>Step 4: Add Filter Transformation Cell</h4>
@@ -491,7 +491,7 @@ Frame(frame=["salesFrame"])
     | SetPanelView(panel=["0"], view=["visualization"])
     | Visualize();`, 'pixel')}
                         </li>
-                        <li>Run cell — panel 0 created in Insight</li>
+                        <li>Run cell  -  panel 0 created in Insight</li>
                     </ol>
 
                     <h4>Step 6: Create UI with Blocks</h4>
@@ -543,7 +543,7 @@ Frame(frame=["salesFrame"])
                         <li>Test: Click button to re-run notebook without changing region</li>
                     </ol>
 
-                    ${C.callout(`This pattern — <strong>Notebook for logic + Blocks for UI</strong> — is how most production ${CONFIG.productName} apps are built. Notebooks handle data, Blocks handle presentation.`, 'tip')}
+                    ${C.callout(`This pattern  -  <strong>Notebook for logic + Blocks for UI</strong>  -  is how most production ${CONFIG.productName} apps are built. Notebooks handle data, Blocks handle presentation.`, 'tip')}
                 `)}
             `
         },
@@ -599,16 +599,16 @@ Frame(frame=["salesFrame"])
                     <li><strong>Insights</strong> are the backend execution context where Pixel code runs on VarStore</li>
                     <li><strong>StateStore</strong> (frontend) and <strong>VarStore</strong> (backend) sync via API calls</li>
                     <li><strong>Cells</strong> in notebooks convert to Pixel via <code>toPixel()</code>, then execute on Insight</li>
-                    <li><strong>Variables</strong> bind notebooks and blocks together — notebooks write, blocks read</li>
+                    <li><strong>Variables</strong> bind notebooks and blocks together  -  notebooks write, blocks read</li>
                     <li><strong>Panels</strong> are visual output containers created by <code>Panel()</code> and rendered by blocks</li>
                     <li><strong>Variables Panel</strong> shows all StateStore variables for debugging</li>
                     <li><strong>Drag-and-drop</strong> cell reordering enables fast prototyping</li>
-                    <li><strong>Run All vs Run Cell</strong> — use Run Cell for debugging, Run All for production</li>
+                    <li><strong>Run All vs Run Cell</strong>  -  use Run Cell for debugging, Run All for production</li>
                     <li>Notebooks persist across sessions when saved with the app</li>
                     <li><strong>InsightId</strong> is the key that links frontend actions to backend execution</li>
                     <li>The <strong>workflow pattern</strong>: Input → ModifyVariable → RunNotebook → Update VarStore → Sync StateStore → Re-render Blocks</li>
                 </ul>
-                ${C.callout(`Mastering Notebooks and Insights unlocks the full power of ${CONFIG.productName} — you can build complex, stateful, data-driven applications with minimal code.`, 'tip')}
+                ${C.callout(`Mastering Notebooks and Insights unlocks the full power of ${CONFIG.productName}  -  you can build complex, stateful, data-driven applications with minimal code.`, 'tip')}
             `
         }
     ]
