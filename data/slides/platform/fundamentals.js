@@ -14,49 +14,39 @@ const slides_platform_fundamentals = [
     // ── ORIGIN & OBJECTIVES ───────────────────────────────────────────────────
     {
         id: "platform-origin",
-        title: "Why ELSA Exists",
+        title: "What ELSA Delivers",
         content: `
-            <h2>Why ${CONFIG.productName} Exists</h2>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:0.75rem;align-items:start;">
-
-                <!-- LEFT: Barriers -->
-                <div>
-                    <div style="font-size:0.7rem;font-weight:700;letter-spacing:.09em;color:#888;margin-bottom:.75rem;">TECHNICAL BARRIERS TO AI ADOPTION</div>
-                    ${['Beginner\'s anxiety',
-                       'Exponentially increasing technological complexity',
-                       'Data science notebooks but no enterprise apps',
-                       'High cost of infrastructure and development',
-                       'Absence of centralized governance and security controls'
-                      ].map(b => `
-                        <div style="display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.6rem;">
-                            <div style="flex-shrink:0;width:1.2rem;height:1.2rem;border-radius:50%;border:2px solid #e53e3e;display:flex;align-items:center;justify-content:center;margin-top:.1rem;">
-                                <span style="color:#e53e3e;font-size:.8rem;font-weight:700;line-height:1;">−</span>
-                            </div>
-                            <span style="font-size:.85rem;color:#444;">${b}</span>
-                        </div>`).join('')}
-                    <p style="font-size:.85rem;font-weight:700;font-style:italic;color:#c53030;margin-top:.75rem;">But you don't have to do it alone.</p>
-                </div>
-
-                <!-- RIGHT: What ELSA delivers -->
-                <div style="background:#f0faf5;border-radius:12px;padding:1rem;">
-                    <div style="font-size:0.7rem;font-weight:700;letter-spacing:.09em;color:#276749;margin-bottom:.75rem;">${CONFIG.productName.toUpperCase()} DELIVERS A SECURE AI SANDBOX ON DAY 1</div>
-
-                    ${[
-                        { text: '<strong>Quickly prototype AI applications</strong> without deep technical expertise using the catalog &amp; building block ecosystem', badges: ['AI Playground','App Marketplace','Model Zoo'] },
-                        { text: '<strong>Clear abstraction layer</strong> to curtail incremental complexity with open source, multi-model, and multi-cloud integration', badges: ['AI for Anyone','Vendor Agnostic','Adaptive'] },
-                        { text: 'Enable secure, flexible deployment methods to <strong>simplify DevOps</strong> and <strong>scale data science workflows</strong> from notebooks to business applications', badges: ['Private Cloud Deployment','Optimize Workflow'] },
-                        { text: 'Ensure apps are built with <strong>TrustworthyAI™ guardrails</strong> and <strong>role-based access control</strong> to protect data', badges: ['Governance','Monitor Cost'] },
-                    ].map(item => `
-                        <div style="display:flex;gap:.6rem;margin-bottom:.75rem;align-items:flex-start;">
-                            <div style="flex-shrink:0;width:1rem;height:1rem;border-radius:50%;background:#276749;margin-top:.2rem;"></div>
-                            <div>
-                                <p style="font-size:.82rem;color:#333;margin:0 0 .3rem;">${item.text}</p>
-                                <div style="display:flex;flex-wrap:wrap;gap:.3rem;">
-                                    ${item.badges.map(b => `<span style="background:#fff;border:1px solid #9ae6b4;border-radius:4px;padding:.15rem .45rem;font-size:.68rem;color:#276749;font-weight:600;">${b}</span>`).join('')}
-                                </div>
-                            </div>
-                        </div>`).join('')}
-                </div>
+            <h2>${CONFIG.productName} Delivers a Secure AI Sandbox on Day 1</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem;">
+                ${[
+                    {
+                        title: 'Quickly prototype AI applications',
+                        desc: 'Without deep technical expertise — the catalog and building block ecosystem handles the complexity so you focus on the problem.',
+                        badges: ['AI Playground','App Marketplace','Model Zoo']
+                    },
+                    {
+                        title: 'Clear abstraction layer',
+                        desc: 'Curtail incremental complexity with open source, multi-model, and multi-cloud integration. The platform adapts as models and providers evolve.',
+                        badges: ['AI for Anyone','Vendor Agnostic','Adaptive']
+                    },
+                    {
+                        title: 'Simplify DevOps & scale data science',
+                        desc: 'Secure, flexible deployment methods move workflows from notebooks to production business applications without a re-architecture.',
+                        badges: ['Private Cloud Deployment','Optimize Workflow']
+                    },
+                    {
+                        title: 'TrustworthyAI™ guardrails built in',
+                        desc: 'Every app is governed by role-based access control, audit logging, and usage metering — protecting data and meeting compliance requirements.',
+                        badges: ['Governance','Monitor Cost','RBAC']
+                    },
+                ].map(item => `
+                    <div style="background:#f0faf5;border:1.5px solid #9ae6b4;border-radius:10px;padding:1rem;">
+                        <div style="font-weight:700;font-size:.9rem;color:#1a4731;margin-bottom:.4rem;">${item.title}</div>
+                        <p style="font-size:.82rem;color:#444;margin:0 0 .6rem;line-height:1.5;">${item.desc}</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:.3rem;">
+                            ${item.badges.map(b => `<span style="background:#fff;border:1px solid #68d391;border-radius:4px;padding:.15rem .5rem;font-size:.7rem;color:#276749;font-weight:600;">${b}</span>`).join('')}
+                        </div>
+                    </div>`).join('')}
             </div>
         `
     },
