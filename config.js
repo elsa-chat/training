@@ -11,5 +11,24 @@ const CONFIG = {
   // Day locking configuration
   // Set to empty array [] to unlock all days
   // Day numbers are 1-indexed (Day 1, Day 2, etc.)
-  lockedDays: []
+  lockedDays: [],
+
+  // ── PRESENTER CONFIG ────────────────────────────────────────────────────────
+  // Fill these in before training day. They appear live in code examples and
+  // callouts throughout the slides — one change here updates everywhere.
+  //
+  // elsaUrl          — platform base URL, no trailing slash
+  //                    e.g. https://elsa.example.gov/Monolith
+  // openaiEndpoint   — OpenAI-compatible API endpoint (for Python/OpenAI SDK)
+  //                    typically: <elsaUrl>/api/engine/openai/v1
+  // anthropicEndpoint — Anthropic-compatible endpoint (for Claude Code settings.json)
+  //                    typically: <elsaUrl>/api/engine/anthropic/v1
+  // templateRepoUrl  — git clone URL attendees use in the Vibe Coding exercise
+  // sharedModelEngineId — model engine ID shown in Pixel and API code examples
+  // ─────────────────────────────────────────────────────────────────────────────
+  elsaUrl:             'SET_BEFORE_TRAINING',
+  openaiEndpoint:      'SET_BEFORE_TRAINING/api/engine/openai/v1',
+  anthropicEndpoint:   'SET_BEFORE_TRAINING/api/engine/anthropic/v1',
+  templateRepoUrl:     'https://github.com/SET_BEFORE_TRAINING',
+  sharedModelEngineId: 'SET_BEFORE_TRAINING',
 };

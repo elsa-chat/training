@@ -109,7 +109,7 @@ VectorDatabaseQuery(
                 <p><strong>Goal:</strong> Send a plain prompt to the shared LLM and observe the response.</p>
                 <p>Add a new Pixel cell and run:</p>
                 ${C.code(`LLM(
-    engine=["<shared-model-engine-id>"],
+    engine=["${CONFIG.sharedModelEngineId}"],
     command=["<encode>In one paragraph, what is retrieval-augmented generation?</encode>"]
 );`, "pixel")}
                 <h4>What to observe</h4>
@@ -117,7 +117,7 @@ VectorDatabaseQuery(
                     <li>The full text response returned inline in the Notebook</li>
                     <li>Response time — notice it's a direct model call with no context injection</li>
                 </ul>
-                ${C.callout("The presenter will share the shared model engine ID on the screen now.", "info")}
+                ${C.callout(`Shared model engine ID: <code>${CONFIG.sharedModelEngineId}</code> — copy this into the Pixel cell above.`, "info")}
             `)}
         `
     },
@@ -138,7 +138,7 @@ context = VectorDatabaseQuery(
 
 ## Step 2: pass the retrieved chunks as system prompt, question as command ##
 LLM(
-    engine=["<shared-model-engine-id>"],
+    engine=["${CONFIG.sharedModelEngineId}"],
     context=[context],
     command=["<encode>Using only the provided context, answer: YOUR QUESTION</encode>"]
 );`, "pixel")}

@@ -52,7 +52,7 @@ const slides_vibe_coding = [
             <h2>Setup Step 1: Clone the Template App</h2>
             ${C.handson("Setup Step 1: Clone the Template App", `
                 <h4>Run these commands in your terminal:</h4>
-                ${C.code(`git clone <presenter will share URL>`, 'bash', 'Clone the template')}
+                ${C.code(`git clone ${CONFIG.templateRepoUrl}`, 'bash', 'Clone the template')}
                 ${C.code(`cd <project-folder>`, 'bash', 'Enter the project')}
                 ${C.code(`ls`, 'bash', 'Confirm the structure')}
 
@@ -95,7 +95,7 @@ const slides_vibe_coding = [
 
                 ${C.code(`{
   "env": {
-    "ANTHROPIC_BASE_URL": "<presenter will share the ELSA endpoint URL>",
+    "ANTHROPIC_BASE_URL": "${CONFIG.anthropicEndpoint}",
     "ANTHROPIC_API_KEY": "<your-access-key>:<your-secret-key>"
   }
 }`, 'json', '.claude/settings.json')}
