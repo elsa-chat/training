@@ -224,7 +224,8 @@ Requirements:
                     desc: "Build something real for your team — combine engines, tools, and agents into a complete workflow"
                 },
             ])}
-            ${C.callout(`Keep your ${CONFIG.productName} session active overnight — your vector engine, access keys, and published app will all be there tomorrow.`, 'info')}
+            ${C.callout(`Your vector engine, access keys, and published app are all persisted server-side — everything will be exactly where you left it tomorrow.`, 'info')}
+            ${C.callout(`When you reopen Claude Code tomorrow, run <code>/resume</code> to pick up your conversation exactly where you left off.`, 'tip')}
         `
     }
 ];

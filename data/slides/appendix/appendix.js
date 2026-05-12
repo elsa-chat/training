@@ -31,7 +31,7 @@ const slides_appendix = [
                         <ul>
                             <li>The file is extracted and passed as text context alongside your message</li>
                             <li>The model can summarize, answer questions about, or extract data from it</li>
-                            <li>Each message attachment is scoped to that turn  -  re-attach if you want it in a follow-up</li>
+                            <li>Once attached, the file remains in context for the rest of the conversation</li>
                         </ul>
                     `
                 },
@@ -39,15 +39,15 @@ const slides_appendix = [
                     title: 'What It Does Not Do',
                     content: `
                         <ul>
-                            <li>Does not permanently store the file in the platform</li>
                             <li>Does not index or embed the file into a Knowledge Repository</li>
+                            <li>Does not make the file searchable via semantic search</li>
                             <li>Does not make the file available to other rooms or users</li>
                         </ul>
-                        <p class="muted">For persistent, searchable storage use a Vector Engine instead.</p>
+                        <p class="muted">For searchable, reusable storage use a Vector Engine instead.</p>
                     `
                 }
             )}
-            ${C.callout('File attachments in the Playground are session-scoped. If you need the document available across multiple sessions or apps, upload it to your Vector Engine instead.', 'info')}
+            ${C.callout('Files attached in a Playground room are persisted to the platform  -  they will still be there if you return to that room later. They are not, however, indexed for search.', 'info')}
         `
     },
 
@@ -98,13 +98,13 @@ const slides_appendix = [
                 ['Action', 'How', 'Notes'],
                 [
                     ['View past rooms', 'Left sidebar in Playground → Rooms list', 'Sorted by last activity'],
-                    ['Rename a room', 'Click the room name → edit inline', 'Helps organize long-running projects'],
-                    ['Delete a room', 'Room context menu → Delete', 'Permanent  -  deletes all message history'],
-                    ['Share a room', 'Room context menu → Share Link', 'Recipient must have platform access'],
+                    ['Rename a room', 'Three dots menu on the room → Rename', 'Helps organize long-running projects'],
+                    ['Delete a room', 'Three dots menu on the room → Delete', 'Permanent  -  deletes all message history'],
+                    ['Favorite a room', 'Three dots menu on the room → Favorite', 'Pins the room for quick access'],
                     ['Search history', 'Search bar at top of Rooms list', 'Full-text search across all your rooms']
                 ]
             )}
-            ${C.callout(`Rooms belong to the user who created them. Admins can query room and message history via the <strong>ModelInferenceLogsUtils</strong> database.`, 'info')}
+            ${C.callout(`Rooms belong to the user who created them. Admins can query room and message history via the <strong>ModelInferenceLogs</strong> db.`, 'info')}
             <h3 style="margin-top: 1.5rem;">Room vs. New Chat</h3>
             ${C.split(
                 {

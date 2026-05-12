@@ -26,7 +26,7 @@ const CONFIG = {
   // templateRepoUrl   -  git clone URL attendees use in the Vibe Coding exercise
   // sharedModelEngineId  -  model engine ID shown in Pixel and API code examples
   // ─────────────────────────────────────────────────────────────────────────────
-  elsaUrl:             'https://elsa.dev.fda.gov/Monolith',
+  elsaUrl:             'https://elsa.dev.fda.gov/SemossWeb/packages/client/dist/',
   openaiEndpoint:      'https://elsa.dev.fda.gov/Monolith/api/model/openai',
   anthropicEndpoint:   'https://elsa.dev.fda.gov/Monolith/api/model/anthropic',
   templateRepoUrl:     'https://github.com/elsa-chat/vibe-setup.git',

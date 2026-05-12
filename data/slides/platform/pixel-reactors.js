@@ -15,7 +15,7 @@ const slides_platform_pixel_reactors = [
         content: `
             <h2>Pixel  -  The Expression Language</h2>
             <ul>
-                <li><strong>Expression language</strong>  -  not a general-purpose programming language, purpose-built for ${CONFIG.productName}</li>
+                <li><strong>Expression language</strong>  -  a domain-specific language that expresses functional calls on the ${CONFIG.productName} platform</li>
                 <li><strong>Everything chains</strong>  -  the output of one command flows into the next</li>
                 <li><strong>Human-readable</strong>  -  commands read like plain English verbs</li>
                 <li><strong>Runs server-side</strong>  -  executes on the ${CONFIG.productName} backend, not in your browser</li>
@@ -75,6 +75,7 @@ VectorDatabaseQuery(
                 <li><strong>Pixel cells</strong>  -  run Pixel expressions against ${CONFIG.productName} engines and reactors</li>
                 <li><strong>Python cells</strong>  -  run Python directly; useful for processing, formatting, or calling libraries</li>
             </ul>
+            ${C.callout(`To execute a cell: <kbd>Ctrl+Enter</kbd> (Windows/Linux) or <kbd>Cmd+Enter</kbd> (Mac).`, "tip")}
             ${C.callout(`Open your Notebook now. We'll run four exercises together.`, "info")}
         `
     },
@@ -97,7 +98,7 @@ VectorDatabaseQuery(
                     <li>How the <code>limit</code> parameter controls how many chunks come back</li>
                     <li>Which chunks score highest for your question</li>
                 </ul>
-                ${C.callout("Find your engine ID in the Engines catalog  -  it's the UUID shown on the engine card.", "tip")}
+                ${C.callout("Find your engine ID in the Vector catalog  -  it's the UUID shown on the engine card.", "tip")}
             `)}
         `
     },
