@@ -16,7 +16,7 @@ const slides_platform_engines = [
                 <h2>What is an Engine?</h2>
                 <p class="lead">An <span class="highlight">Engine</span> is ${CONFIG.productName}'s uniform connector to any external system — database, AI model, file store, or custom API.</p>
                 ${C.flow([
-                    { title: 'Your Data, Models & Storage', desc: 'Databases, LLMs, vector stores, files — anything external', accent: true },
+                    { title: 'Your Data, Models & Storage', desc: 'Databases, LLMs, vector stores, files — anything external' },
                     { title: 'Engine Abstraction (IEngine)', desc: 'A uniform interface wrapping every connection', arrow: '↓ plugs in here' },
                     { title: 'Pixel Commands', desc: 'You interact with every engine the same way, regardless of what\'s underneath', arrow: '↓ talk through' },
                     { title: 'Your App', desc: 'Queries, AI answers, stored files — delivered to the user' }
@@ -119,7 +119,7 @@ const slides_platform_engines = [
                         { title: '1. Upload', desc: 'Document stored in the platform' },
                         { title: '2. Chunk', desc: 'Text split into overlapping passages', arrow: '↓' },
                         { title: '3. Embed', desc: 'Each chunk converted to a vector via the configured model engine', arrow: '↓' },
-                        { title: '4. Index', desc: 'Vectors written to your vector database — ready to search', arrow: '↓', accent: true }
+                        { title: '4. Index', desc: 'Vectors written to your vector database — ready to search', arrow: '↓' }
                     ])}
                 `)}
                 ${C.callout('Use the sample FDA guidance documents provided by your presenter.', 'tip')}
@@ -135,7 +135,7 @@ const slides_platform_engines = [
                     { title: 'Open your Vector Engine', desc: 'Find it in the Engine Catalog and click to open' },
                     { title: 'Click the Q&A Tab', desc: 'Built into every vector engine automatically', arrow: '↓' },
                     { title: 'Type a question', desc: 'Ask about something covered in your uploaded documents', arrow: '↓' },
-                    { title: 'See the AI answer', desc: 'Grounded in your documents — with source citations', accent: true, arrow: '↓' }
+                    { title: 'See the AI answer', desc: 'Grounded in your documents — with source citations', arrow: '↓' }
                 ])}
                 ${C.callout('You just got an AI-powered answer from your own documents with zero code. This is the foundation everything else builds on — every RAG workflow, every document Q&A app, starts here.', 'tip')}
             `

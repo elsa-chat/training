@@ -16,12 +16,12 @@ const slides_mcp_building_consuming = [
                 <h2>MCP Development Workflow</h2>
                 <p class="lead">Building production MCP tools involves a <span class="highlight">development → build → publish → test</span> cycle.</p>
                 ${C.flow([
-                    { title: '1. Develop Backend', desc: 'Write Python functions or Java reactors', accent: true, arrow: '↓' },
+                    { title: '1. Develop Backend', desc: 'Write Python functions or Java reactors', arrow: '↓' },
                     { title: '2. Generate MCP JSON', desc: 'Run MakePythonMCP or MakePixelMCP', arrow: '↓' },
                     { title: '3. (Optional) Build Portal UI', desc: 'React client → pnpm run build → portals/', arrow: '↓' },
-                    { title: '4. Publish', desc: 'Publish files to public_home', accent: true, arrow: '↓' },
+                    { title: '4. Publish', desc: 'Publish files to public_home', arrow: '↓' },
                     { title: '5. Test in Playground', desc: 'Configure MCP server and test tools', arrow: '↓' },
-                    { title: '6. Deploy', desc: 'Make available to users or external apps', accent: true },
+                    { title: '6. Deploy', desc: 'Make available to users or external apps' },
                 ])}
                 ${C.callout(`${CONFIG.productName} MCP tools can be consumed in two ways: <strong>internally</strong> via Playground/Rooms, or <strong>externally</strong> via MCP-compatible clients like Claude Code CLI.`, 'info')}
             `
@@ -233,12 +233,12 @@ MakeEngineMCP(engine="my-vector-db-name");
                 <h2>MCP with Custom Portal UI</h2>
                 <p>For tools that need rich interactions (forms, editors, visualizations), add a React portal UI.</p>
                 ${C.flow([
-                    { title: 'Create client/', desc: 'React + Vite + Tailwind', accent: true, arrow: '↓' },
+                    { title: 'Create client/', desc: 'React + Vite + Tailwind', arrow: '↓' },
                     { title: 'Map routes', desc: 'routes.constants.tsx: MCP tool → React component', arrow: '↓' },
                     { title: 'Build UI', desc: 'components/mcp/YourTool.tsx', arrow: '↓' },
-                    { title: 'Link MCP tool', desc: 'resourceURI: "/" in @mcp_metadata or pixel_mcp.json', accent: true, arrow: '↓' },
+                    { title: 'Link MCP tool', desc: 'resourceURI: "/" in @mcp_metadata or pixel_mcp.json', arrow: '↓' },
                     { title: 'Build portals/', desc: 'pnpm run build → portals/', arrow: '↓' },
-                    { title: 'Publish', desc: `${CONFIG.productName} publishes portals/ to public_home`, accent: true },
+                    { title: 'Publish', desc: `${CONFIG.productName} publishes portals/ to public_home` },
                 ])}
                 ${C.split(
                     {

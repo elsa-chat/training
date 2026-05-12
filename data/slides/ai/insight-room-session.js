@@ -34,9 +34,9 @@ const slides_insight_room_session = [
                         { title: "Browser", desc: "Holds sessionId cookie" },
                         { title: "REST API", desc: "Receives insightId in requests" },
                     ]},
-                    { label: "Session Management", accent: true, items: [
-                        { title: "InsightStore", desc: "Singleton map: insightId → Insight", accent: true },
-                        { title: "RoomUtils", desc: "Manages Room persistence", accent: true },
+                    { label: "Session Management", items: [
+                        { title: "InsightStore", desc: "Singleton map: insightId → Insight" },
+                        { title: "RoomUtils", desc: "Manages Room persistence" },
                     ]},
                     { label: "Execution Context", items: [
                         { title: "Insight", desc: "VarStore, PixelList, TaskStore, Frames" },
@@ -347,13 +347,13 @@ public PixelRunner runPixel(PixelRunner runner, List<String> pixelList) {
                 <h2>Room ↔ Insight Connection</h2>
                 <p>Rooms and Insights are complementary: <strong>Rooms</strong> manage LLM conversation history, while <strong>Insights</strong> provide execution context for tools.</p>
                 ${C.flow([
-                    { title: 'User sends message to Room', desc: 'InputMessage with prompt text', accent: true, arrow: '↓' },
+                    { title: 'User sends message to Room', desc: 'InputMessage with prompt text', arrow: '↓' },
                     { title: 'Room calls LLM with history', desc: 'room.ask(message, modelEngine)', arrow: '↓ LLM decides to use a tool' },
                     { title: 'LLM returns tool_calls[]', desc: 'ResponseMessage with tool_calls metadata', arrow: '↓' },
-                    { title: 'Room uses Insight to execute tool', desc: 'insight.runPixel(toolPixel) — runs in Insight context', accent: true, arrow: '↓' },
+                    { title: 'Room uses Insight to execute tool', desc: 'insight.runPixel(toolPixel) — runs in Insight context', arrow: '↓' },
                     { title: 'Tool result added as InputMessage', desc: 'toolExecution message with result', arrow: '↓' },
                     { title: 'Room calls LLM again with result', desc: 'Full history including tool execution', arrow: '↓' },
-                    { title: 'LLM generates final response', desc: 'ResponseMessage with final answer', accent: true },
+                    { title: 'LLM generates final response', desc: 'ResponseMessage with final answer' },
                 ])}
                 ${C.callout('The <code>Insight</code> attached to a Room provides variable persistence, frame storage, and access to engines — essential for tool execution.', 'tip')}
             `

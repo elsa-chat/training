@@ -74,10 +74,10 @@ const slides_security_auth = [
             <h2>Groups — Team-Based Access Control</h2>
             <p>Instead of assigning permissions to each person individually, you assign them to a group. Everyone in the group inherits those permissions automatically.</p>
             ${C.flow([
-                { title: 'Create a Group', desc: 'e.g., "FDA-DevTeam"', accent: true },
+                { title: 'Create a Group', desc: 'e.g., "FDA-DevTeam"' },
                 { title: 'Add Users to the Group', desc: 'Any user can belong to multiple groups', arrow: '↓' },
                 { title: 'Assign Group Permissions to an Engine or App', desc: 'e.g., Edit on the shared model engine', arrow: '↓' },
-                { title: 'All Group Members Inherit Those Permissions', desc: 'New users added to the group get access immediately', accent: true }
+                { title: 'All Group Members Inherit Those Permissions', desc: 'New users added to the group get access immediately' }
             ])}
             ${C.callout('Use groups for team-based access. "FDA-DevTeam" with Edit on shared engines is easier to manage than individual assignments.', 'tip')}
         `

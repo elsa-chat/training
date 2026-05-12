@@ -42,16 +42,15 @@ const slides_model_logs = [
                     },
                     {
                         label: 'Application Layer',
-                        accent: true,
                         items: [
-                            { title: 'Model Engine', desc: 'AbstractModelEngine', accent: true },
-                            { title: 'Logging Utils', desc: 'ModelInferenceLogsUtils', accent: true },
+                            { title: 'Model Engine', desc: 'AbstractModelEngine' },
+                            { title: 'Logging Utils', desc: 'ModelInferenceLogsUtils' },
                         ]
                     },
                     {
                         label: 'Storage Layer',
                         items: [
-                            { title: 'Logs Database', desc: 'MODEL_INFERENCE_LOGS_DB', accent: true },
+                            { title: 'Logs Database', desc: 'MODEL_INFERENCE_LOGS_DB' },
                             { title: 'Tables', desc: 'MESSAGE, ROOM, AGENT, FEEDBACK' },
                         ]
                     },
@@ -62,7 +61,7 @@ const slides_model_logs = [
                     { title: 'Pre-Logging', desc: 'Create ROOM (conversation) and log initial MESSAGE', arrow: '↓ before API call' },
                     { title: 'LLM Call', desc: 'Forward request to OpenAI/Anthropic/etc.', arrow: '↓ to external API' },
                     { title: 'Response Received', desc: 'LLM returns completion', arrow: '↓' },
-                    { title: 'Post-Logging', desc: 'Update MESSAGE with tokens, response time, content', accent: true, arrow: '↓' },
+                    { title: 'Post-Logging', desc: 'Update MESSAGE with tokens, response time, content', arrow: '↓' },
                     { title: 'Feedback', desc: 'User thumbs up/down → FEEDBACK table' },
                 ])}
             `
@@ -294,11 +293,11 @@ ORDER BY HOUR_OF_DAY;`, 'sql', 'Performance analytics')}
                 <h2>Log Retention and Management</h2>
                 <p>Model logs grow rapidly — a busy ${CONFIG.productName} instance can generate millions of records per month.</p>
                 ${C.flow([
-                    { title: 'Monitor Size', desc: 'Check database size regularly', accent: true },
+                    { title: 'Monitor Size', desc: 'Check database size regularly' },
                     { title: 'Define Policy', desc: 'Decide retention period (30 days? 90 days? 1 year?)', arrow: '↓' },
                     { title: 'Archive Old Logs', desc: 'Export to S3/data lake for long-term storage', arrow: '↓ export' },
                     { title: 'Delete Stale Data', desc: 'Remove logs beyond retention period', arrow: '↓ purge' },
-                    { title: 'Vacuum/Optimize', desc: 'Reclaim space and rebuild indexes', accent: true },
+                    { title: 'Vacuum/Optimize', desc: 'Reclaim space and rebuild indexes' },
                 ])}
                 <h3>Retention Query Examples</h3>
                 ${C.code(`// Check database size

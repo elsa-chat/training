@@ -23,10 +23,10 @@ const slides_playground = [
                     { title: "Conversation Thread", desc: "Message history, tool call history" },
                     { title: "Model Responses", desc: "What the agent says and does" },
                 ]},
-                { label: "Room Folder / Workspace", accent: true, items: [
-                    { title: "System Prompt", desc: "Agent persona and constraints", accent: true },
-                    { title: "Model Selection", desc: "Which LLM powers this room", accent: true },
-                    { title: "MCP Tools Available", desc: "Which of your apps the agent can call", accent: true },
+                { label: "Room Folder / Workspace", items: [
+                    { title: "System Prompt", desc: "Agent persona and constraints" },
+                    { title: "Model Selection", desc: "Which LLM powers this room" },
+                    { title: "MCP Tools Available", desc: "Which of your apps the agent can call" },
                 ]},
                 { label: "MCP Apps + Engines", items: [
                     { title: "Your App's Tools", desc: "search_documents and anything else in mcp_driver.py" },
@@ -151,10 +151,10 @@ Always cite the document passage you found before giving your answer.`, 'propert
                 ${C.callout('If the agent answers without calling the tool, refine your system prompt to be more directive: <em>"Always use the search_documents tool before answering any question about FDA regulations."</em>', 'tip')}
                 <h4>What Success Looks Like</h4>
                 ${C.flow([
-                    { title: 'You ask a question', desc: 'In plain English — no Pixel, no code', accent: true, arrow: '↓' },
+                    { title: 'You ask a question', desc: 'In plain English — no Pixel, no code', arrow: '↓' },
                     { title: 'Agent calls search_documents', desc: 'You see the tool call in the conversation log', arrow: '↓' },
                     { title: 'Vector engine returns passages', desc: 'Your Day 1 work doing its job', arrow: '↓' },
-                    { title: 'Agent synthesizes an answer', desc: 'Grounded in real FDA documents', accent: true },
+                    { title: 'Agent synthesizes an answer', desc: 'Grounded in real FDA documents' },
                 ])}
             `)}
         `

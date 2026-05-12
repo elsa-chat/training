@@ -44,10 +44,10 @@ const slides_app_fundamentals = [
                 {
                     title: "How the pieces connect",
                     content: C.flow([
-                        { title: "Engines (data)", desc: "Vector DB, LLM model, relational database", accent: true },
+                        { title: "Engines (data)", desc: "Vector DB, LLM model, relational database" },
                         { title: "Pixel / Python (logic)", desc: "Commands that query engines, transform data, call models", arrow: "↓" },
                         { title: "Portal / Blocks (UI)", desc: "The web interface users interact with", arrow: "↓" },
-                        { title: "Published URL", desc: "Live, shareable link — one click away", accent: true, arrow: "↓" },
+                        { title: "Published URL", desc: "Live, shareable link — one click away", arrow: "↓" },
                     ])
                 }
             )}
@@ -68,10 +68,9 @@ const slides_app_fundamentals = [
                 },
                 {
                     label: "Logic",
-                    accent: true,
                     items: [
-                        { title: "Pixel commands", desc: "Orchestration and queries", accent: true },
-                        { title: "Python GAAS", desc: "Custom functions and ML logic", accent: true }
+                        { title: "Pixel commands", desc: "Orchestration and queries" },
+                        { title: "Python GAAS", desc: "Custom functions and ML logic" }
                     ]
                 },
                 {
@@ -90,10 +89,10 @@ const slides_app_fundamentals = [
         content: `
             <h2>Publishing Workflow</h2>
             ${C.flow([
-                { title: "Draft", desc: "Edit your app in the ${CONFIG.productName} editor", accent: true },
+                { title: "Draft", desc: "Edit your app in the ${CONFIG.productName} editor" },
                 { title: "Save", desc: "Persists changes to your workspace — only you see them", arrow: "↓" },
                 { title: "Publish", desc: "Makes the current version live for anyone with access", arrow: "↓" },
-                { title: "Versioned URL", desc: "Every publish creates a version — you can roll back to any of them", accent: true, arrow: "↓" },
+                { title: "Versioned URL", desc: "Every publish creates a version — you can roll back to any of them", arrow: "↓" },
             ])}
             ${C.table(
                 ['Action', 'Who sees the change', 'When to use it'],

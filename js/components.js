@@ -15,7 +15,7 @@ const C = {
     // steps: [{ title, desc?, arrow? }]  arrow is label on the arrow AFTER this step
     flow(steps) {
         return `<div class="c-flow">${steps.map((s, i) => {
-            let html = `<div class="c-flow-step${s.accent ? ' accent' : ''}">
+            let html = `<div class="c-flow-step">
                 <div class="c-flow-title">${s.title}</div>
                 ${s.desc ? `<div class="c-flow-desc">${s.desc}</div>` : ''}
             </div>`;

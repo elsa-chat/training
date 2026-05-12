@@ -113,7 +113,7 @@ public class MyCustomReactor extends AbstractReactor {
                     { title: 'Pixel Call', desc: 'MyCustom(inputText=["hello"], maxLength=[50])' },
                     { title: 'NounStore', desc: 'Key → GenRowStruct map populated by parser', arrow: '→' },
                     { title: 'organizeKeys()', desc: 'Maps first value of each key into keyValue map', arrow: '→' },
-                    { title: 'Typed Getters', desc: 'getString(), getInt(), getList(), getMap()...', accent: true },
+                    { title: 'Typed Getters', desc: 'getString(), getInt(), getList(), getMap()...' },
                 ])}
                 <h3>Accessing Inputs</h3>
                 ${C.code(`// SIMPLE: Use typed getters (preferred)
@@ -196,7 +196,7 @@ return NounMetadata.getWarningNounMessage("3 rows skipped");`, 'java', 'Return p
                     { title: '2. Compile', desc: 'Build the .class file (javac or IDE build)', arrow: '↓' },
                     { title: '3. Deploy', desc: 'Copy .class into project/version/assets/java/<package>/', arrow: '↓' },
                     { title: '4. Reload', desc: 'Run ReloadInsightClasses("<project-id>") in Pixel', arrow: '↓' },
-                    { title: '5. Invoke & Test', desc: 'Call your reactor from Pixel or the console', accent: true },
+                    { title: '5. Invoke & Test', desc: 'Call your reactor from Pixel or the console' },
                 ])}
                 <h3>File Placement</h3>
                 ${C.code(`# Project directory structure

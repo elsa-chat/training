@@ -39,7 +39,7 @@ cpu = [
                     { title: '1. Navigate', desc: 'cd into the py/install_config/ directory' },
                     { title: '2. Create venv', desc: 'Run uv venv to create a virtual environment', arrow: '→' },
                     { title: '3. Install deps', desc: 'Run uv pip install with your target extra', arrow: '→' },
-                    { title: '4. Develop', desc: 'Activate the venv and start building', accent: true },
+                    { title: '4. Develop', desc: 'Activate the venv and start building' },
                 ])}
                 ${C.code(`# Navigate to the install_config directory
 cd py/install_config/
@@ -110,7 +110,7 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                     { title: 'User / Agent Request', desc: 'A request arrives via the UI or an API call' },
                     { title: 'Orchestration Layer', desc: 'The agent determines which GAAS tool(s) to invoke', arrow: '→' },
                     { title: 'GAAS Tool', desc: 'The appropriate proxy (DB, Model, Vector, etc.) executes the operation', arrow: '→' },
-                    { title: `${CONFIG.productName} Backend`, desc: 'Results flow back through the Server Proxy / TCP layer', accent: true },
+                    { title: `${CONFIG.productName} Backend`, desc: 'Results flow back through the Server Proxy / TCP layer' },
                 ])}
                 ${C.callout(`<strong>Key takeaway:</strong> GAAS tools are the bridge between Python-based AI agents and the ${CONFIG.productName} Java backend. Understanding these tools is essential for extending agent capabilities or building custom agent workflows.`, 'info')}
             `
@@ -154,7 +154,7 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                     { title: '1. Java Backend', desc: 'Sends raw message dicts with type, content, mediaInputs, tool_responses, paramMap' },
                     { title: '2. SEMOSSMessageBuilder', desc: 'Normalizes into SEMOSSMessage objects with typed fields (parts, media_content, tool_calls)', arrow: '→' },
                     { title: '3. Provider MessageBuilder', desc: 'Transforms SEMOSSMessages into provider-specific format (e.g., AnthropicMessage, OpenAIMessage)', arrow: '→' },
-                    { title: '4. API Call', desc: 'Provider client sends the formatted request and handles streaming/non-streaming responses', accent: true },
+                    { title: '4. API Call', desc: 'Provider client sends the formatted request and handles streaming/non-streaming responses' },
                 ])}
                 <h3>SEMOSSMessage — The Universal Format</h3>
                 <p>The <code>SEMOSSMessage</code> is the intermediate representation that all providers consume. It supports two schema versions.</p>
@@ -214,7 +214,7 @@ uv pip install .[cpu]`, 'bash', 'Setting up your local Python environment')}
                     { title: '1. Set FORCE_PORT', desc: 'Add FORCE_PORT=9999 to the model\'s SMSS file so the TCP server starts on a predictable port' },
                     { title: '2. Create launch.json', desc: 'Add a VS Code debug configuration in py/.vscode/launch.json', arrow: '→' },
                     { title: '3. Launch in VS Code', desc: 'Start the socket server from the VS Code debug panel', arrow: '→' },
-                    { title: '4. Set Breakpoints', desc: 'Place breakpoints anywhere in the Python codebase and trigger a model call', accent: true },
+                    { title: '4. Set Breakpoints', desc: 'Place breakpoints anywhere in the Python codebase and trigger a model call' },
                 ])}
                 <h3>Step 1 — Configure FORCE_PORT in the SMSS</h3>
                 <p>In the model's <code>.smss</code> configuration file, set <code>FORCE_PORT</code> to a fixed port number. This tells ${CONFIG.productName} to start the Python TCP server on that specific port instead of a random one, so your debugger can connect reliably.</p>

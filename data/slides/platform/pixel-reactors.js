@@ -63,10 +63,10 @@ VectorDatabaseQuery(
         content: `
             <h2>The Notebook — Your Pixel + Python Workspace</h2>
             ${C.flow([
-                { title: "Open Notebook", desc: "From the left nav, open a Notebook in your project", accent: true },
+                { title: "Open Notebook", desc: "From the left nav, open a Notebook in your project" },
                 { title: "Add a Pixel cell", desc: "Click + and choose Pixel cell type" },
                 { title: "Write your expression", desc: "Type any Pixel command — e.g. VectorDatabaseQuery(...)" },
-                { title: "Run", desc: "Press Run or Shift+Enter to execute", accent: true },
+                { title: "Run", desc: "Press Run or Shift+Enter to execute" },
                 { title: "See the result", desc: "Output appears inline below the cell" }
             ])}
             <h3 style="margin-top: 1.2rem;">Two cell types</h3>

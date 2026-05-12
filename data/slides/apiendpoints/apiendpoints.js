@@ -16,11 +16,11 @@ const slides_api_endpoints = [
             <h2>You Already Did This</h2>
             ${C.callout('You already did this. When you configured settings.json yesterday to point Claude Code at ${CONFIG.productName} — that was exactly this pattern. Claude Code uses the OpenAI SDK; you pointed it at ${CONFIG.productName}\'s OpenAI-compatible endpoint.', 'tip')}
             ${C.flow([
-                { title: 'Your Tool or Script', desc: 'Claude Code, a Python script, a CI job, anything that uses the OpenAI format', accent: true },
+                { title: 'Your Tool or Script', desc: 'Claude Code, a Python script, a CI job, anything that uses the OpenAI format' },
                 { title: 'OpenAI SDK', desc: 'The same library you\'d use to call OpenAI', arrow: '↓' },
                 { title: '${CONFIG.productName} OpenAI-Compatible Endpoint', desc: 'Accepts requests in standard OpenAI format', arrow: '↓' },
                 { title: '${CONFIG.productName} Model Engine', desc: 'Routes to whichever model is configured — GPT-4, Claude, a local model, anything', arrow: '↓' },
-                { title: 'Response Back', desc: 'Formatted exactly as OpenAI would return it', accent: true }
+                { title: 'Response Back', desc: 'Formatted exactly as OpenAI would return it' }
             ])}
             <p>Any tool that uses the OpenAI API format can be redirected to use ${CONFIG.productName}'s models instead — no code changes required except the base URL and key.</p>
         `

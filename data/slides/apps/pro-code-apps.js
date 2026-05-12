@@ -440,7 +440,7 @@ function App() {
 	//             { title: 'Block System', desc: 'JSON-driven UI components (grids, charts, forms)' },
 	//             { title: 'Renderer Component', desc: 'React component that loads and displays blocks', arrow: '↓ GetAppBlocksJson()' },
 	//             { title: 'User Interaction', desc: 'Blocks emit Pixel commands on user actions', arrow: '↓ user clicks button' },
-	//             { title: 'Backend Processing', desc: 'Pixel runs → updates state → re-renders blocks', accent: true },
+	//             { title: 'Backend Processing', desc: 'Pixel runs → updates state → re-renders blocks' },
 	//         ])}
 	//         ${C.callout('The Renderer is a full no-code/low-code UI system. You can embed it in pro-code apps to give users a visual builder experience.', 'tip')}
 	//     \`
@@ -585,7 +585,6 @@ export default {
 									{
 										title: "Deploy",
 										desc: "portals/ copied to public_home/<projectId>/",
-										accent: true,
 										arrow: "↓ copy operation",
 									},
 									{ title: "Live", desc: "App available at published URL" },

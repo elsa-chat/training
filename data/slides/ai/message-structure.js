@@ -8,7 +8,7 @@ const slides_message_structure = [
                 <p class="lead">${CONFIG.productName} uses <span class="highlight">AbstractMessage</span> (package <code>prerna.engine.impl.model.message</code>) as the core abstraction for LLM communication.</p>
                 <p>This chapter covers the message implementation used for conversational AI, model logs, and persistent chat history.</p>
                 ${C.flow([
-                    { title: 'AbstractMessage', desc: 'Base class with messageId (UUID v7), modelId, tokens, ornaments', accent: true },
+                    { title: 'AbstractMessage', desc: 'Base class with messageId (UUID v7), modelId, tokens, ornaments' },
                     { title: 'MessageType Enum', desc: 'INPUT_TEXT, INPUT_MEDIA, INPUT_TOOL_EXEC, RESPONSE_TEXT, RESPONSE_TOOL, RESPONSE_MEDIA', arrow: '↓' },
                     { title: 'InputMessage', desc: 'User/system prompts, tool executions, media inputs', arrow: 'extends AbstractMessage' },
                     { title: 'ResponseMessage', desc: 'LLM responses (text, tools, media) with Builder pattern', arrow: 'extends AbstractMessage' },
@@ -271,7 +271,7 @@ ResponseMessage fromLLM = ResponseMessage.Builder
                 ${C.flow([
                     { title: 'User sends prompt', desc: 'InputMessage created with messageId (UUID v7)' },
                     { title: 'Saved to model_logs table', desc: 'Row inserted with all fields serialized to JSON', arrow: '↓ INSERT' },
-                    { title: 'LLM responds', desc: 'ResponseMessage created, linked via transactionId', accent: true },
+                    { title: 'LLM responds', desc: 'ResponseMessage created, linked via transactionId' },
                     { title: 'Saved to model_logs table', desc: 'Another row inserted', arrow: '↓ INSERT' },
                     { title: 'Conversation continues', desc: 'Each message = one row in model_logs' },
                 ])}

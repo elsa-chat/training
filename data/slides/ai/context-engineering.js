@@ -311,7 +311,6 @@ const slides_context_engineering = [
                 {
                     title: 'Step 1: Identify Your Context Type',
                     desc: 'Is this Instructions, Knowledge, or Tools? Different types need different strategies.',
-                    accent: true,
                     arrow: '↓'
                 },
                 {
@@ -327,7 +326,6 @@ const slides_context_engineering = [
                 {
                     title: 'Step 4: Layer Additional Strategies',
                     desc: 'Combine strategies for production robustness (e.g., Write + Select + Compress).',
-                    accent: true
                 },
             ])}
 

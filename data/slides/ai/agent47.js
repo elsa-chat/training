@@ -119,7 +119,6 @@ const slides_agent47 = [
                 {
                     title: 'Engines',
                     desc: 'Vector, LLM, and data engines you built are directly connectable — no config file, just pick from the Engines tab.',
-                    accent: true
                 },
                 {
                     title: 'MCP Tools',
@@ -132,7 +131,6 @@ const slides_agent47 = [
                 {
                     title: 'You Stay in Control',
                     desc: 'History tab, Issues tab, model selection, assistant selection — full observability and configurability without leaving the platform.',
-                    accent: true
                 },
             ])}
             ${C.callout(`The paradigm shift we talked about on Day 1 — this is the platform experience that makes it real.`, 'tip')}

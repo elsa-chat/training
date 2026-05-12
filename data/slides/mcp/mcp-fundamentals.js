@@ -9,9 +9,9 @@ const slides_mcp_fundamentals = [
             <h2>Day 1 Recap — Where We Left Off</h2>
             <p class="lead">Here is the thread we built yesterday. Today we wire it into an AI agent.</p>
             ${C.flow([
-                { title: 'Vector Engine', desc: 'Ingested FDA guidance documents — chunked, embedded, indexed', accent: true, arrow: '↓' },
+                { title: 'Vector Engine', desc: 'Ingested FDA guidance documents — chunked, embedded, indexed', arrow: '↓' },
                 { title: 'Notebook RAG', desc: 'Pixel + Python queries: search the vector engine, pass results to a model', arrow: '↓' },
-                { title: 'Published App', desc: 'Claude Code generated the UI template; you published a live URL', accent: true },
+                { title: 'Published App', desc: 'Claude Code generated the UI template; you published a live URL' },
             ])}
             ${C.callout('Open your app now and confirm it\'s still working before we move on. Your vector engine and published URL should be exactly where you left them.', 'tip')}
             <p class="muted">Open Q&amp;A — 10 minutes. Ask anything that didn\'t click yesterday.</p>
@@ -96,9 +96,9 @@ const slides_mcp_fundamentals = [
                     { title: "AI Agent Chat", desc: "Conversation thread, model responses" },
                     { title: "Tool Discovery", desc: "Agent sees available MCP tools automatically" },
                 ]},
-                { label: "MCP Layer", accent: true, items: [
-                    { title: "JSON Schemas", desc: "Tool definitions (what the agent reads)", accent: true },
-                    { title: "Python / Java Handlers", desc: "Execution (what actually runs)", accent: true },
+                { label: "MCP Layer", items: [
+                    { title: "JSON Schemas", desc: "Tool definitions (what the agent reads)" },
+                    { title: "Python / Java Handlers", desc: "Execution (what actually runs)" },
                 ]},
                 { label: "Your App Backend", items: [
                     { title: "Vector Engine", desc: "FDA document search" },
@@ -174,11 +174,11 @@ const slides_mcp_fundamentals = [
             <h2>From Python Function to Callable Tool</h2>
             <p>You write a function with a docstring. ${CONFIG.productName} does the rest.</p>
             ${C.flow([
-                { title: 'Write Python function', desc: 'Include a clear docstring — the agent reads it', accent: true, arrow: '↓' },
+                { title: 'Write Python function', desc: 'Include a clear docstring — the agent reads it', arrow: '↓' },
                 { title: 'Run MakePythonMCP(project=["..."])', desc: 'One Pixel command in the Notebook or console', arrow: '↓' },
                 { title: '${CONFIG.productName} reads function signatures and docstrings', desc: 'Introspects your mcp_driver.py automatically', arrow: '↓' },
-                { title: 'Generates mcp/py_mcp.json automatically', desc: 'Produces the JSON schema the agent will see', accent: true, arrow: '↓' },
-                { title: 'Agent can discover and call it', desc: 'Tool is live in Playground immediately', accent: true },
+                { title: 'Generates mcp/py_mcp.json automatically', desc: 'Produces the JSON schema the agent will see', arrow: '↓' },
+                { title: 'Agent can discover and call it', desc: 'Tool is live in Playground immediately' },
             ])}
             ${C.code(`def search_documents(question: str) -> str:
     """
