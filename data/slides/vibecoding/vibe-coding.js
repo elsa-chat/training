@@ -121,14 +121,15 @@ const slides_vibe_coding = [
                         ${C.code(`claude`, 'bash')}
                     </li>
                     <li>Type this message and press Enter:
-                        ${C.code(`What model are you running on? Reply with just the model name.`, 'text')}
+                        ${C.code(`what model are you running`, 'text')}
                     </li>
-                    <li><strong>Expected:</strong> a short reply naming the model your ${CONFIG.productName} engine is configured with (e.g. <code>claude-sonnet-4-5</code>)</li>
-                    <li><strong>If you get an error:</strong>
+                    <li><strong>Expected:</strong> a short reply with the model engine ID from your ${CONFIG.productName} catalog — it will look like a UUID, e.g. <code>${CONFIG.sharedModelEngineId}</code></li>
+                    <li><strong>If you get an auth error or connection refused:</strong>
                         <ul>
-                            <li>Check that <code>ANTHROPIC_BASE_URL</code> matches exactly what the presenter shared (no trailing slash)</li>
-                            <li>Check that <code>ANTHROPIC_API_KEY</code> is formatted as <code>access-key:secret-key</code></li>
+                            <li>Check that <code>ANTHROPIC_BASE_URL</code> is <code>${CONFIG.anthropicEndpoint}</code> — no trailing slash</li>
+                            <li>Check that <code>ANTHROPIC_AUTH_TOKEN</code> is formatted as <code>access-key:secret-key</code> (the two values joined with a colon)</li>
                             <li>Check that your model engine in ${CONFIG.productName} is enabled and you have access to it</li>
+                            <li>Re-run <code>claude</code> after fixing — changes to <code>settings.json</code> take effect on next launch</li>
                         </ul>
                     </li>
                 </ol>
