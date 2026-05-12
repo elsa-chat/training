@@ -32,6 +32,7 @@ VectorDatabaseQuery(
     command=["<your question>"],
     limit=[3]
 );`, "pixel")}
+            ${C.callout(`In Pixel, <code>## your comment ##</code> is the comment syntax  -  anything between double hashes is ignored by the engine. Use them to label blocks of code as you saw above.`, "tip")}
             ${C.callout(`You already ran Pixel when you used the Q&A tab on your vector engine. Now you'll write it yourself.`, "info")}
         `
     },

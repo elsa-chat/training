@@ -17,8 +17,8 @@ const slides_platform_engines = [
                 <p class="lead">An <span class="highlight">Engine</span> is ${CONFIG.productName}'s uniform connector to any external system  -  database, AI model, file store, or custom API.</p>
                 ${C.flow([
                     { title: 'Your Data, Models & Storage', desc: 'Databases, LLMs, vector stores, files  -  anything external' },
-                    { title: 'Engine Abstraction (IEngine)', desc: 'A uniform interface wrapping every connection', arrow: '↓ plugs in here' },
-                    { title: 'Pixel Commands', desc: 'You interact with every engine the same way, regardless of what\'s underneath', arrow: '↓ talk through' },
+                    { title: 'Engine Abstraction (IEngine)', desc: 'A uniform interface wrapping every connection', arrow: '↓' },
+                    { title: 'Pixel Commands', desc: 'You interact with every engine the same way, regardless of what\'s underneath', arrow: '↓' },
                     { title: 'Your App', desc: 'Queries, AI answers, stored files  -  delivered to the user' }
                 ])}
                 ${C.callout('Everything in ' + CONFIG.productName + ' talks through engines. This uniform abstraction is what makes the platform extensible  -  swap out a database or switch AI providers without rewriting your app.', 'info')}
