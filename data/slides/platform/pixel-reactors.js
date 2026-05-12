@@ -123,7 +123,12 @@ VectorDatabaseQuery(
     },
     {
         id: "pixel-handson-3",
+<<<<<<< Updated upstream
         title: "Hands-on: Exercise 3  -  Full RAG Chain",
+=======
+<<<<<<< Updated upstream
+        title: "Hands-on: Exercise 3 — Full RAG Chain",
+>>>>>>> Stashed changes
         content: `
             <h2>Hands-on: Exercise 3  -  Your First RAG Pipeline</h2>
             ${C.handson("Exercise 3: Your First RAG Pipeline", `
@@ -135,15 +140,34 @@ context = VectorDatabaseQuery(
     command=["YOUR QUESTION"],
     limit=[3]
 );
+=======
+        title: "Hands-on: Exercise 3  -  Full RAG Chain in Python",
+        content: `
+            <h2>Hands-on: Exercise 3  -  Your First RAG Pipeline in Python</h2>
+            ${C.handson("Exercise 3: RAG Pipeline in a Python Cell", `
+                <p><strong>Goal:</strong> Run the full RAG chain in a Python cell  -  fetch context from your vector engine and pass it inline to the LLM.</p>
+                <p>Add a <strong>Python cell</strong> and run  -  fill in your engine IDs and question:</p>
+                ${C.code(`VECTOR_ENGINE_ID = "<your-vector-engine-id>"
+MODEL_ENGINE_ID = "${CONFIG.sharedModelEngineId}"
+QUESTION = "<your question about the documents>"
+>>>>>>> Stashed changes
 
-## Step 2: pass the retrieved chunks as system prompt, question as command ##
-LLM(
-    engine=["${CONFIG.sharedModelEngineId}"],
-    context=[context],
-    command=["<encode>Using only the provided context, answer: YOUR QUESTION</encode>"]
-);`, "pixel")}
+# Step 1: retrieve relevant chunks from the vector engine
+pixel = f'VectorDatabaseQuery(engine=["{VECTOR_ENGINE_ID}"], command=["{QUESTION}"], limit=[3]);'
+result = insight.run_pixel(pixel=pixel, insight_id=insight.insight_id)
+chunks = result['pixelReturn'][0]['output']
+
+# Step 2: build the prompt by appending context inline as a string
+context_text = "\\n".join(chunk.get("content", "") for chunk in chunks)
+prompt = f"Context:\\n{context_text}\\n\\nUsing only the context above, answer: {QUESTION}"
+
+# Step 3: call the LLM with the full prompt in the command - no separate context param
+pixel = f'LLM(engine=["{MODEL_ENGINE_ID}"], command=["<encode>{prompt}</encode>"]);'
+answer = insight.run_pixel(pixel=pixel, insight_id=insight.insight_id)
+print(answer['pixelReturn'][0]['output']['response'])`, "python")}
                 <h4>What to observe</h4>
                 <ul>
+<<<<<<< Updated upstream
                     <li>The <code>context</code> parameter sends the retrieved chunks to the model as its system prompt</li>
                     <li>The <code>command</code> parameter is your question  -  the model sees context first, then the question</li>
                     <li>Compare the answer quality to Exercise 2  -  the model now has your documents</li>
@@ -172,6 +196,13 @@ print(f"First 100 chars: {result[:100]}")`, "python")}
                     <li>You can use any standard Python library for post-processing</li>
                 </ul>
                 ${C.callout("Python cells are useful for data processing, formatting, or calling libraries. Pixel and Python can pass data between each other.", "tip")}
+=======
+                    <li>The context is string-appended directly into the prompt  -  no separate <code>context=</code> parameter</li>
+                    <li>Python gives you full control over how chunks are formatted before the model sees them</li>
+                    <li>Compare the answer to Exercise 2  -  the model now has your documents as grounding</li>
+                </ul>
+                ${C.callout(`This is exactly what the Q&A tab does under the hood  -  now you're driving it directly from Python.`, "info")}
+>>>>>>> Stashed changes
             `)}
         `
     },

@@ -96,6 +96,7 @@ const slides_platform_engines = [
                         <li>Give your engine a unique name  -  for example: <code>MyVectorDB_[YourInitials]</code></li>
                         <li>Fill in any required connection fields as directed by the presenter.</li>
                         <li>Click <strong>Save</strong>. Your engine will appear in the Catalog.</li>
+                        <li>Open your engine from the Catalog, go to <strong>Settings</strong>, and copy the <strong>Engine ID</strong>  -  you will need it in later exercises.</li>
                     </ol>
                     <p><strong>What just happened?</strong> ${CONFIG.productName} wrote a <code>.smss</code> config file for your engine, registered it in the platform's metadata database, and it is now available to any app or workflow you build.</p>
                 `)}
