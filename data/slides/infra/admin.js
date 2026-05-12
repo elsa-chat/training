@@ -179,9 +179,9 @@ DeleteEngine(engine="bd1dea64-ec6b-49af-9308-94b05551c83d");`, 'pixel', 'Engine 
                 <h2>${CONFIG.productName} Logging: Multi-Appender Strategy</h2>
                 <p>${CONFIG.productName} uses Log4j2 with multiple appenders for comprehensive logging and auditing.</p>
                 ${C.layers([
-                    { label: "Application Loggers", accent: true, items: [
-                        { title: "EngineLogger", desc: "Engine operations, query execution", accent: true },
-                        { title: "prerna.*", desc: `All ${CONFIG.productName} packages`, accent: true },
+                    { label: "Application Loggers", items: [
+                        { title: "EngineLogger", desc: "Engine operations, query execution" },
+                        { title: "prerna.*", desc: `All ${CONFIG.productName} packages` },
                         { title: "AsyncRoot", desc: "Third-party libraries (WARN+)", },
                     ]},
                     { label: "Appenders", items: [
@@ -381,10 +381,10 @@ HIKARI_MAX_POOL_SIZE 100`, 'properties', 'HikariCP Connection Pool Settings')
             content: `
                 <h2>Backup & Recovery Strategies</h2>
                 ${C.flow([
-                    { title: 'Database Backups', desc: 'Backup Security DB, LocalMaster, Model Logs (Postgres pg_dump)', accent: true, arrow: '↓' },
+                    { title: 'Database Backups', desc: 'Backup Security DB, LocalMaster, Model Logs (Postgres pg_dump)', arrow: '↓' },
                     { title: 'File Storage Backups', desc: 'Backup /opt/semosshome (engines, projects, uploads)', arrow: '↓' },
                     { title: 'Cloud Sync', desc: 'SEMOSS_IS_CLUSTER=true → auto-sync to MinIO/S3', arrow: '↓' },
-                    { title: 'Git Version Control', desc: 'App source code auto-committed to app_root/version/.git', accent: true },
+                    { title: 'Git Version Control', desc: 'App source code auto-committed to app_root/version/.git' },
                 ])}
                 ${C.split(
                     {

@@ -16,11 +16,11 @@ const slides_docker = [
                 <h2>Continuous Integration & Deployment</h2>
                 <p class="lead">Automated build pipeline using GitHub Actions</p>
                 ${C.flow([
-                    { title: 'GitHub Push', desc: 'Code pushed to repository', accent: true, arrow: '↓ triggers' },
+                    { title: 'GitHub Push', desc: 'Code pushed to repository', arrow: '↓ triggers' },
                     { title: `Build ${CONFIG.productName} Core`, desc: 'Compile Java libraries, run tests', arrow: '↓ publish' },
                     { title: 'Build Monolith WAR', desc: 'Package servlet application', arrow: '↓ publish' },
                     { title: 'Build SemossWeb', desc: 'Build React frontend', arrow: '↓ publish' },
-                    { title: 'Publish to Maven', desc: 'Opensource Maven repository', accent: true },
+                    { title: 'Publish to Maven', desc: 'Opensource Maven repository' },
                 ])}
                 ${C.callout('All artifacts are published to <strong>opensource Maven repository</strong> for downstream consumption by Docker builds.', 'info')}
             `
@@ -90,8 +90,8 @@ jobs:
                 <h2>${CONFIG.productName} Container Architecture</h2>
                 <p>A ${CONFIG.productName} container packages all runtime dependencies into a single deployable unit.</p>
                 ${C.layers([
-                    { label: "Application Layer", accent: true, items: [
-                        { title: "Tomcat 9", desc: "Servlet container serving Monolith WAR", accent: true },
+                    { label: "Application Layer", items: [
+                        { title: "Tomcat 9", desc: "Servlet container serving Monolith WAR" },
                         { title: "${CONFIG.productName} Core", desc: "Java libraries (semoss-5.0.0-SNAPSHOT.jar)" },
                         { title: "SemossWeb", desc: "React frontend + Node.js assets" },
                     ]},
@@ -143,9 +143,9 @@ jobs:
                 <h2>Multi-Stage Build Strategy</h2>
                 <p>${CONFIG.productName} uses a multi-stage Dockerfile to minimize final image size and separate build tools from runtime.</p>
                 ${C.flow([
-                    { title: 'Stage 1: tomcat_builder', desc: 'Install Java, Tomcat, Maven, Codex CLI', accent: true, arrow: '↓ built artifacts' },
+                    { title: 'Stage 1: tomcat_builder', desc: 'Install Java, Tomcat, Maven, Codex CLI', arrow: '↓ built artifacts' },
                     { title: 'Stage 2: mavenpuller', desc: `Clone semoss-artifacts, download latest ${CONFIG.productName} build`, arrow: `↓ ${CONFIG.productName} app files` },
-                    { title: 'Stage 3: final', desc: 'Copy runtime binaries + app, install Python + Playwright', accent: true },
+                    { title: 'Stage 3: final', desc: 'Copy runtime binaries + app, install Python + Playwright' },
                 ])}
                 ${C.code(`# Stage 1: Build tooling (tomcat-builder)
 FROM quay.io/semoss/tomcat-builder:9.0.112 AS tomcat_builder
@@ -176,7 +176,7 @@ CMD ["bash", "-c", "exec $TOMCAT_HOME/bin/start.sh"]`, 'dockerfile', 'docker/Doc
             id: "docker-local-testing",
             title: "Local Development with Docker Compose",
             content: `
-                <h2>Docker Compose — For Local Testing Only</h2>
+                <h2>Docker Compose  -  For Local Testing Only</h2>
                 <p class="lead"><code>docker-compose.yml</code> provides a quick way to run ${CONFIG.productName} locally for development and testing.</p>
                 ${C.split(
                     {
@@ -630,7 +630,7 @@ spec:
                     <li>150+ environment variables provide fine-grained control over all ${CONFIG.productName} features</li>
                     <li>runCS.sh startup script processes env vars and configures Tomcat, RDF_Map.prop, and web.xml</li>
                     <li>Always use Kubernetes secrets for sensitive values (passwords, API keys, connection strings)</li>
-                    <li>Docker Compose is for local development only — use Kubernetes for production</li>
+                    <li>Docker Compose is for local development only  -  use Kubernetes for production</li>
                 </ul>
             `
         },

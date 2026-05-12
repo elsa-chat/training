@@ -373,7 +373,7 @@ function expandDay(dayIdx, single = false) {
     });
 }
 
-// Parse a label like "Day 4 — Thursday, Feb 27" and return a Date (year from today)
+// Parse a label like "Day 4  -  Thursday, Feb 27" and return a Date (year from today)
 function parseDayLabelDate(label) {
     if (!label) return null;
     const m = label.match(/\b([A-Za-z]{3,9})\s+(\d{1,2})\b/);

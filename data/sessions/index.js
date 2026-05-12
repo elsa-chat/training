@@ -1,4 +1,4 @@
-// Session plan — 2-day ELSA training (10 AM – 3 PM each day)
+// Session plan  -  2-day ELSA training (10 AM – 3 PM each day)
 function idsFrom(...groups) {
     const ids = [];
     groups.forEach(slides => {
@@ -13,11 +13,11 @@ function idsFrom(...groups) {
 const SESSION_PLAN = {
     days: [
         // ─────────────────────────────────────────────────────────────────────
-        // DAY 1 — Wednesday, May 13  |  10:00 AM – 3:00 PM
+        // DAY 1  -  Wednesday, May 13  |  10:00 AM – 3:00 PM
         // ─────────────────────────────────────────────────────────────────────
         {
             id: '1',
-            label: 'Day 1 — Wed, May 13',
+            label: 'Day 1  -  Wed, May 13',
             chapters: [
                 {
                     title: 'Welcome & Introduction',
@@ -34,19 +34,19 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: '— BREAK —',
+                    title: ' -  BREAK  - ',
                     time: '11:15 – 11:30 AM',
                     slideIds: []
                 },
                 {
-                    title: 'Engines — The Data Layer',
+                    title: 'Engines  -  The Data Layer',
                     time: '11:30 AM – 12:15 PM',
                     slideIds: idsFrom(
                         typeof slides_platform_engines !== 'undefined' ? slides_platform_engines : null,
                     )
                 },
                 {
-                    title: '— LUNCH —',
+                    title: ' -  LUNCH  - ',
                     time: '12:15 – 1:00 PM',
                     slideIds: []
                 },
@@ -65,7 +65,7 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: 'Vibe Coding — Build Your First App',
+                    title: 'Vibe Coding  -  Build Your First App',
                     time: '2:10 – 2:55 PM',
                     slideIds: idsFrom(
                         typeof slides_vibe_coding !== 'undefined' ? slides_vibe_coding : null,
@@ -80,11 +80,11 @@ const SESSION_PLAN = {
         },
 
         // ─────────────────────────────────────────────────────────────────────
-        // DAY 2 — Thursday, May 14  |  10:00 AM – 3:00 PM
+        // DAY 2  -  Thursday, May 14  |  10:00 AM – 3:00 PM
         // ─────────────────────────────────────────────────────────────────────
         {
             id: '2',
-            label: 'Day 2 — Thu, May 14',
+            label: 'Day 2  -  Thu, May 14',
             chapters: [
                 {
                     title: 'MCP Fundamentals',
@@ -101,12 +101,12 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: '— BREAK —',
+                    title: ' -  BREAK  - ',
                     time: '11:30 – 11:45 AM',
                     slideIds: []
                 },
                 {
-                    title: '— LUNCH —',
+                    title: ' -  LUNCH  - ',
                     time: '11:45 AM – 12:30 PM',
                     slideIds: []
                 },
@@ -140,14 +140,45 @@ const SESSION_PLAN = {
         },
 
         // ─────────────────────────────────────────────────────────────────────
-        // BACKUP / OPTIONAL — Pull in if either day runs ahead of schedule
+        // BACKUP / OPTIONAL  -  Pull in if either day runs ahead of schedule
         // ─────────────────────────────────────────────────────────────────────
         {
             id: '3',
+            label: 'Appendix',
+            chapters: [
+                {
+                    title: 'Files  -  Where They Go & How to Add Them',
+                    slideIds: idsFrom(
+                        typeof slides_appendix !== 'undefined'
+                            ? slides_appendix.filter(s => s.id === 'appendix-title' || s.id.startsWith('appendix-files'))
+                            : null,
+                    )
+                },
+                {
+                    title: 'Rooms & Chat Session History',
+                    slideIds: idsFrom(
+                        typeof slides_appendix !== 'undefined'
+                            ? slides_appendix.filter(s => s.id.startsWith('appendix-rooms'))
+                            : null,
+                    )
+                },
+                {
+                    title: 'Developer Troubleshooting',
+                    slideIds: idsFrom(
+                        typeof slides_appendix !== 'undefined'
+                            ? slides_appendix.filter(s => s.id.startsWith('appendix-dev'))
+                            : null,
+                    )
+                },
+            ]
+        },
+
+        {
+            id: '4',
             label: 'Backup / Optional Sections',
             chapters: [
                 {
-                    title: 'Python SDK (30 min) — best after App Fundamentals, Day 1',
+                    title: 'Python SDK (30 min)  -  best after App Fundamentals, Day 1',
                     slideIds: idsFrom(
                         typeof slides_python_sdk !== 'undefined' ? slides_python_sdk : null,
                     )
@@ -165,7 +196,7 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: 'Model Logs (15 min) — fold into Engines or Security',
+                    title: 'Model Logs (15 min)  -  fold into Engines or Security',
                     slideIds: idsFrom(
                         typeof slides_model_logs !== 'undefined' ? slides_model_logs : null,
                     )
@@ -177,7 +208,7 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: 'Agentic App Builder — What\'s Next (Day 2 closer, 15 min)',
+                    title: 'Agentic App Builder  -  What\'s Next (Day 2 closer, 15 min)',
                     slideIds: idsFrom(
                         typeof slides_agent47 !== 'undefined' ? slides_agent47 : null,
                     )

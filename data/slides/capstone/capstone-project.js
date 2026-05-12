@@ -1,4 +1,4 @@
-// Topic: Capstone — Open Build
+// Topic: Capstone  -  Open Build
 const slides_capstone_project = [
     {
         id: "capstone-title",
@@ -14,7 +14,7 @@ const slides_capstone_project = [
         title: "Three Starting Points",
         content: `
             <h2>Pick Your Starting Point</h2>
-            <p>No assigned project. No teams. Build something you'd actually use — or go deeper on something from the training that you want to understand better.</p>
+            <p>No assigned project. No teams. Build something you'd actually use  -  or go deeper on something from the training that you want to understand better.</p>
             ${C.cards([
                 {
                     badge: 'Starting Point A',
@@ -24,12 +24,12 @@ const slides_capstone_project = [
                 {
                     badge: 'Starting Point B',
                     title: 'Start Something New',
-                    desc: 'Pick a real workflow from your team and build a ${CONFIG.productName} app for it — use your vector engine, the shared model, MCP, whatever fits the problem.'
+                    desc: 'Pick a real workflow from your team and build a ${CONFIG.productName} app for it  -  use your vector engine, the shared model, MCP, whatever fits the problem.'
                 },
                 {
                     badge: 'Starting Point C',
                     title: 'Go Deeper',
-                    desc: 'Dive into something specific from the training — Pixel chains, MCP patterns, API consumption from an existing script. Depth over breadth.'
+                    desc: 'Dive into something specific from the training  -  Pixel chains, MCP patterns, API consumption from an existing script. Depth over breadth.'
                 }
             ])}
             ${C.callout('The best apps come from real pain points. What do you or your team do today that\'s slow, repetitive, or requires searching through documents?', 'tip')}
@@ -61,7 +61,7 @@ const slides_capstone_project = [
                     ]
                 ]
             )}
-            ${C.callout('These are starting points — iterate from there. The goal is something you\'d use on Monday.', 'info')}
+            ${C.callout('These are starting points  -  iterate from there. The goal is something you\'d use on Monday.', 'info')}
         `
     },
     {
@@ -75,14 +75,14 @@ const slides_capstone_project = [
     },
     {
         id: "capstone-shareout",
-        title: "Show & Tell — Optional",
+        title: "Show & Tell  -  Optional",
         content: `
-            <h2>Show & Tell — Optional</h2>
+            <h2>Show & Tell  -  Optional</h2>
             <p>Anyone who wants to share: you have 60 seconds and one screen.</p>
             <ul>
                 <li>Show what you built</li>
                 <li>Say what problem it solves</li>
-                <li>That's it — no polish required</li>
+                <li>That's it  -  no polish required</li>
             </ul>
             ${C.callout('Completely optional. If you\'d rather keep building, keep building.', 'tip')}
         `
