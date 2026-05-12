@@ -30,5 +30,5 @@ const CONFIG = {
   openaiEndpoint:      'SET_BEFORE_TRAINING/api/engine/openai/v1',
   anthropicEndpoint:   'SET_BEFORE_TRAINING/api/engine/anthropic/v1',
   templateRepoUrl:     'https://github.com/SET_BEFORE_TRAINING',
-  sharedModelEngineId: 'SET_BEFORE_TRAINING',
+  sharedModelEngineId: '8405ac40-89c6-4613-848c-3d89986fbc01',
 };

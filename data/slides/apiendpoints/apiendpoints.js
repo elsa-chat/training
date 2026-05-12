@@ -94,7 +94,7 @@ client = ServerClient(
 )
 
 # Run any Pixel expression
-result = client.run_pixel('AskModelEngine(engine=["<id>"], command=["Hello"]);')`, 'python', 'ai-server-sdk basic connection')}
+result = client.run_pixel('AskModelEngine(engine=["${CONFIG.sharedModelEngineId}"], command=["Hello"]);')`, 'python', 'ai-server-sdk basic connection')}
             ${C.callout('Use the PyPI SDK when you need more than just chat — running Pixel, querying engines, managing insights programmatically.', 'tip')}
         `
     },
