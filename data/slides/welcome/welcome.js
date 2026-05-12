@@ -172,32 +172,4 @@ const slides_welcome = [
             ${C.callout('Backup sections (Python SDK, structured output, image processing, model logs) are ready if either day moves faster than planned.', 'tip')}
         `
     },
-    {
-        id: "welcome-sandbox-notice",
-        title: "Sandbox & Access Notice",
-        content: `
-            <h2>This is a Sandbox & Training Environment</h2>
-            <p class="lead">Everything you build this week is real — but the environment is temporary.</p>
-            ${C.callout('<strong>⚠️ Access to this instance may be removed after training ends.</strong> If you want to keep anything you built — apps, agents, notebooks — please export or download them before the end of Day 2.', 'warning')}
-            <h3 style="margin-top:1.25rem;">What you can take with you</h3>
-            ${C.cards([
-                {
-                    badge: 'Apps',
-                    title: 'Export your app',
-                    desc: 'From the App workspace, use the export option to download your app as a portable file. It can be re-imported into any ${CONFIG.productName} instance.'
-                },
-                {
-                    badge: 'Code',
-                    title: 'Save your Pixel notebooks',
-                    desc: 'Copy Pixel cells and Python code out of your Notebook into a local file. These run against any ${CONFIG.productName} instance with the same engines.'
-                },
-                {
-                    badge: 'Config',
-                    title: 'Note your engine IDs',
-                    desc: 'If your team gets access to a production instance, your engine configurations can be recreated. Write down the types and settings you used.'
-                },
-            ])}
-            ${C.callout('This sandbox is here so you can experiment freely without risk. Break things, try things, rebuild things — that\'s what it\'s for.', 'tip')}
-        `
-    }
 ];
