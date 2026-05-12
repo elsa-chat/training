@@ -23,7 +23,7 @@ const slides_platform_pixel_reactors = [
             ${C.code(`## Ask a question to a model ##
 LLM(
     engine=["<model-id>"],
-    command=["<encode>What is ELSA?</encode>"]
+    command=["What is ELSA?"]
 );
 
 ## Search a vector database for relevant document chunks ##
@@ -110,7 +110,7 @@ VectorDatabaseQuery(
                 <p>Add a new Pixel cell and run:</p>
                 ${C.code(`LLM(
     engine=["${CONFIG.sharedModelEngineId}"],
-    command=["<encode>In one paragraph, what is retrieval-augmented generation?</encode>"]
+    command=["In one paragraph, what is retrieval-augmented generation?"]
 );`, "pixel")}
                 <h4>What to observe</h4>
                 <ul>
@@ -123,86 +123,38 @@ VectorDatabaseQuery(
     },
     {
         id: "pixel-handson-3",
-<<<<<<< Updated upstream
-        title: "Hands-on: Exercise 3  -  Full RAG Chain",
-=======
-<<<<<<< Updated upstream
-        title: "Hands-on: Exercise 3 — Full RAG Chain",
->>>>>>> Stashed changes
-        content: `
-            <h2>Hands-on: Exercise 3  -  Your First RAG Pipeline</h2>
-            ${C.handson("Exercise 3: Your First RAG Pipeline", `
-                <p><strong>Goal:</strong> Chain vector search into a model call  -  this is the core pattern behind every AI Q&A app.</p>
-                <p>Add a Pixel cell and run  -  replace <strong>both</strong> instances of <code>YOUR QUESTION</code> with the same question:</p>
-                ${C.code(`## Step 1: get relevant context from your vector engine ##
-context = VectorDatabaseQuery(
-    engine=["<your-vector-engine-id>"],
-    command=["YOUR QUESTION"],
-    limit=[3]
-);
-=======
         title: "Hands-on: Exercise 3  -  Full RAG Chain in Python",
         content: `
             <h2>Hands-on: Exercise 3  -  Your First RAG Pipeline in Python</h2>
-            ${C.handson("Exercise 3: RAG Pipeline in a Python Cell", `
-                <p><strong>Goal:</strong> Run the full RAG chain in a Python cell  -  fetch context from your vector engine and pass it inline to the LLM.</p>
-                <p>Add a <strong>Python cell</strong> and run  -  fill in your engine IDs and question:</p>
-                ${C.code(`VECTOR_ENGINE_ID = "<your-vector-engine-id>"
+            ${C.handson("Exercise 3: RAG Pipeline across Python Cells", `
+                <p><strong>Goal:</strong> Run the full RAG chain across three Python cells  -  fetch context from your vector engine and pass it inline to the LLM.</p>
+                <p><strong>Cell 1 - Setup</strong><br><small>Import the Insight client, set your engine IDs and question, then instantiate the connection to the platform.</small></p>
+                ${C.code(`from semoss import Insight
+
+VECTOR_ENGINE_ID = "<your-vector-engine-id>"
 MODEL_ENGINE_ID = "${CONFIG.sharedModelEngineId}"
 QUESTION = "<your question about the documents>"
->>>>>>> Stashed changes
 
-# Step 1: retrieve relevant chunks from the vector engine
-pixel = f'VectorDatabaseQuery(engine=["{VECTOR_ENGINE_ID}"], command=["{QUESTION}"], limit=[3]);'
+insight = Insight()`, "python")}
+                <p><strong>Cell 2 - Vector Search</strong><br><small>Run a semantic search against your Knowledge Repository. The platform returns the top 3 document chunks most relevant to your question.</small></p>
+                ${C.code(`pixel = f'VectorDatabaseQuery(engine=["{VECTOR_ENGINE_ID}"], command=["{QUESTION}"], limit=[3]);'
 result = insight.run_pixel(pixel=pixel, insight_id=insight.insight_id)
-chunks = result['pixelReturn'][0]['output']
-
-# Step 2: build the prompt by appending context inline as a string
-context_text = "\\n".join(chunk.get("content", "") for chunk in chunks)
+chunks = result[0]['pixelReturn'][0]['output']
+print(f"Retrieved {len(chunks)} chunks")`, "python")}
+                <p><strong>Cell 3 - Build Prompt &amp; Call LLM</strong><br><small>Concatenate the retrieved chunks into a single context string, inject it directly into the prompt, then call the model. The answer is grounded in your documents.</small></p>
+                ${C.code(`context_text = "\\n".join([chunk['Content'] for chunk in chunks])
 prompt = f"Context:\\n{context_text}\\n\\nUsing only the context above, answer: {QUESTION}"
 
-# Step 3: call the LLM with the full prompt in the command - no separate context param
-pixel = f'LLM(engine=["{MODEL_ENGINE_ID}"], command=["<encode>{prompt}</encode>"]);'
+pixel = f'LLM(engine=["{MODEL_ENGINE_ID}"], command=["{prompt}"]);'
 answer = insight.run_pixel(pixel=pixel, insight_id=insight.insight_id)
-print(answer['pixelReturn'][0]['output']['response'])`, "python")}
+print(answer[0]['pixelReturn'][0]['output']['response'])`, "python")}
                 <h4>What to observe</h4>
                 <ul>
-<<<<<<< Updated upstream
-                    <li>The <code>context</code> parameter sends the retrieved chunks to the model as its system prompt</li>
-                    <li>The <code>command</code> parameter is your question  -  the model sees context first, then the question</li>
-                    <li>Compare the answer quality to Exercise 2  -  the model now has your documents</li>
-                </ul>
-                ${C.callout(`This is exactly what the Q&A tab does under the hood  -  now you're driving it directly.`, "info")}
-            `)}
-        `
-    },
-    {
-        id: "pixel-handson-4",
-        title: "Hands-on: Exercise 4  -  Python Cell",
-        content: `
-            <h2>Hands-on: Exercise 4  -  Python Cell in Notebook</h2>
-            ${C.handson("Exercise 4: Python Cell in Notebook", `
-                <p><strong>Goal:</strong> Show that Python and Pixel cells coexist  -  process the RAG result with Python.</p>
-                <p>After running Exercise 3, add a <strong>Python cell</strong> below it:</p>
-                ${C.code(`# The result from the previous Pixel cell is available as a string
-# Use Python to reformat or extract from it
-result = "paste your RAG result here"
-words = len(result.split())
-print(f"Response length: {words} words")
-print(f"First 100 chars: {result[:100]}")`, "python")}
-                <h4>What to observe</h4>
-                <ul>
-                    <li>Python executes in the same Notebook session as your Pixel cells</li>
-                    <li>You can use any standard Python library for post-processing</li>
-                </ul>
-                ${C.callout("Python cells are useful for data processing, formatting, or calling libraries. Pixel and Python can pass data between each other.", "tip")}
-=======
+                    <li>Cell 2 prints the number of chunks retrieved  -  inspect them before passing to the model</li>
                     <li>The context is string-appended directly into the prompt  -  no separate <code>context=</code> parameter</li>
-                    <li>Python gives you full control over how chunks are formatted before the model sees them</li>
                     <li>Compare the answer to Exercise 2  -  the model now has your documents as grounding</li>
                 </ul>
                 ${C.callout(`This is exactly what the Q&A tab does under the hood  -  now you're driving it directly from Python.`, "info")}
->>>>>>> Stashed changes
             `)}
         `
     },
