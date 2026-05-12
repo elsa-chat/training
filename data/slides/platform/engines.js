@@ -99,6 +99,7 @@ const slides_platform_engines = [
                             </ul>
                         </li>
                         <li>Click <strong>Save</strong>. Your vector engine will appear in the Vector Catalog.</li>
+                        <li>Open your engine from the Catalog, go to <strong>Settings</strong>, and copy the <strong>Engine ID</strong>  -  you will need it in later exercises.</li>
                     </ol>
                     <p><strong>What just happened?</strong> ${CONFIG.productName} created a FAISS index backed by your chosen embedding model. Any documents you add will be chunked, embedded, and stored here  -  ready for semantic search across your apps.</p>
                 `)}
