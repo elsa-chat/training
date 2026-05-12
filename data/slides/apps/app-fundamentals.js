@@ -19,17 +19,19 @@ const slides_app_fundamentals = [
                 {
                     title: "What it gives users",
                     content: `
-                        <ul>
-                            <li>A live URL — no install required</li>
-                            <li>Access to your data and models through a built UI</li>
-                            <li>Versioned — you can iterate and roll back safely</li>
-                            <li>Shareable with anyone you grant access</li>
-                        </ul>
+                        <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+                            <span style="padding:8px 16px;border:1px solid var(--border);border-radius:6px;font-size:.9rem;text-align:left;">A live URL — no install required</span>
+                            <span style="padding:8px 16px;border:1px solid var(--border);border-radius:6px;font-size:.9rem;text-align:left;">Access to your data and models through a built UI</span>
+                            <span style="padding:8px 16px;border:1px solid var(--border);border-radius:6px;font-size:.9rem;text-align:left;">Versioned — you can iterate and roll back safely</span>
+                            <span style="padding:8px 16px;border:1px solid var(--border);border-radius:6px;font-size:.9rem;text-align:left;">Shareable with anyone you grant access</span>
+                        </div>
                     `
                 },
                 {
                     title: "Where it lives on disk",
-                    content: C.code(`assets/
+                    content: `<div class="c-code">
+                        <div class="c-code-header"><span class="c-code-title">Folder Structure</span></div>
+                        <pre><code>assets/
   portals/           ← HTML, CSS, JS served to users
     index.html
   java/              ← custom Java reactors
@@ -37,7 +39,8 @@ const slides_app_fundamentals = [
   classes/           ← compiled reactor output
   mcp/               ← MCP tool definitions
     pixel_mcp.json
-    py_mcp.json`, "", "Folder Structure")
+    py_mcp.json</code></pre>
+                    </div>`
                 }
             )}
             ${C.callout(`The training site you've been using all morning is itself an ${CONFIG.productName} app — built, published, and shared using exactly this structure.`, 'tip')}
