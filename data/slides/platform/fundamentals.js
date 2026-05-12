@@ -17,7 +17,7 @@ const slides_platform_fundamentals = [
         title: "What ELSA Delivers",
         content: `
             <h2>${CONFIG.productName} Delivers a Secure AI Sandbox on Day 1</h2>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1rem;">
                 ${[
                     {
                         title: 'Quickly prototype AI applications',
@@ -40,11 +40,11 @@ const slides_platform_fundamentals = [
                         badges: ['Governance','Monitor Cost','RBAC']
                     },
                 ].map(item => `
-                    <div style="background:#f0faf5;border:1.5px solid #9ae6b4;border-radius:10px;padding:1rem;">
-                        <div style="font-weight:700;font-size:.9rem;color:#1a4731;margin-bottom:.4rem;">${item.title}</div>
-                        <p style="font-size:.82rem;color:#444;margin:0 0 .6rem;line-height:1.5;">${item.desc}</p>
-                        <div style="display:flex;flex-wrap:wrap;gap:.3rem;">
-                            ${item.badges.map(b => `<span style="background:#fff;border:1px solid #68d391;border-radius:4px;padding:.15rem .5rem;font-size:.7rem;color:#276749;font-weight:600;">${b}</span>`).join('')}
+                    <div style="background:#f0faf5;border:1.5px solid #9ae6b4;border-radius:12px;padding:1.4rem 1.5rem;">
+                        <div style="font-weight:700;font-size:1.05rem;color:#1a4731;margin-bottom:.55rem;">${item.title}</div>
+                        <p style="font-size:.95rem;color:#444;margin:0 0 .85rem;line-height:1.55;">${item.desc}</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+                            ${item.badges.map(b => `<span style="background:#fff;border:1px solid #68d391;border-radius:5px;padding:.2rem .6rem;font-size:.78rem;color:#276749;font-weight:600;">${b}</span>`).join('')}
                         </div>
                     </div>`).join('')}
             </div>
