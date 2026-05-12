@@ -172,4 +172,13 @@ const slides_welcome = [
             ${C.callout('Backup sections (Python SDK, structured output, image processing, model logs) are ready if either day moves faster than planned.', 'tip')}
         `
     },
+    {
+        id: "elsa-demo-divider",
+        title: "ELSA 4.0 Demo",
+        content: C.titleSlide(
+            `${CONFIG.productName} 4.0  —  Live Demo`,
+            "Walkthrough",
+            ""
+        )
+    }
 ];

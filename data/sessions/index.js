@@ -24,7 +24,12 @@ const SESSION_PLAN = {
                     time: '10:00 – 10:30 AM',
                     slideIds: idsFrom(
                         typeof slides_welcome !== 'undefined' ? slides_welcome : null,
-                    )
+                    ).filter(id => id !== 'elsa-demo-divider')
+                },
+                {
+                    title: `${CONFIG.productName} 4.0 Demo`,
+                    time: '10:30 AM',
+                    slideIds: ['elsa-demo-divider']
                 },
                 {
                     title: 'Platform Fundamentals',
