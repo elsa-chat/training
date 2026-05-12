@@ -35,7 +35,7 @@ const slides_platform_fundamentals = [
                         badges: ['Private Cloud Deployment','Optimize Workflow']
                     },
                     {
-                        title: 'TrustworthyAI™ guardrails built in',
+                        title: 'Controls & guardrails built in',
                         desc: 'Every app is governed by role-based access control, audit logging, and usage metering — protecting data and meeting compliance requirements.',
                         badges: ['Governance','Monitor Cost','RBAC']
                     },
