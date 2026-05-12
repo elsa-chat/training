@@ -113,40 +113,6 @@ const slides_welcome = [
         `
     },
     {
-        id: "welcome-overview",
-        title: "Two-Day Overview",
-        content: `
-            <h2>Training Overview</h2>
-            ${C.table(
-                ['Day', 'Date', 'Focus', 'Key Outcome'],
-                [
-                    [
-                        '<strong>Day 1</strong>',
-                        'Wed, May 13',
-                        'Platform Foundations + Your First App',
-                        'Understand ELSA end-to-end; publish a working app using Vibe Coding'
-                    ],
-                    [
-                        '<strong>Day 2</strong>',
-                        'Thu, May 14',
-                        'MCP, Playground & Production',
-                        'Turn your app into an AI agent; connect APIs; apply security; capstone build'
-                    ],
-                ]
-            )}
-            <h3>Daily Schedule</h3>
-            ${C.table(
-                ['Block', 'Time'],
-                [
-                    ['Morning session', '10:00 AM – 12:15 PM'],
-                    ['Lunch', '12:15 – 1:00 PM'],
-                    ['Afternoon session', '1:00 – 3:00 PM'],
-                ]
-            )}
-            ${C.callout('One 15-minute break each morning. All hands-on exercises are tiered  -  do as much or as little as fits your background.', 'info')}
-        `
-    },
-    {
         id: "welcome-goals",
         title: "Training Goals",
         content: `
@@ -165,10 +131,9 @@ const slides_welcome = [
     },
     {
         id: "welcome-logistics",
-        title: "Logistics",
+        title: "Day 1 Logistics",
         content: `
-            <h2>Logistics</h2>
-            <h3>Today's Agenda  -  Day 1 (Wed, May 13)</h3>
+            <h2>Day 1 Logistics — Wed, May 13</h2>
             ${C.table(
                 ['Time', 'Topic'],
                 [
@@ -188,9 +153,9 @@ const slides_welcome = [
     },
     {
         id: "welcome-day2-logistics",
-        title: "Day 2 Agenda",
+        title: "Day 2 Logistics",
         content: `
-            <h2>Day 2 Agenda  -  Thu, May 14</h2>
+            <h2>Day 2 Logistics — Thu, May 14</h2>
             ${C.table(
                 ['Time', 'Topic'],
                 [
