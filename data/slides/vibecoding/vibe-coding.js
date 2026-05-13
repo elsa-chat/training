@@ -122,9 +122,9 @@ const slides_vibe_coding = [
                         ${C.code(`claude`, 'bash')}
                     </li>
                     <li>Type this message and press Enter:
-                        ${C.code(`what model are you running`, 'text')}
+                        ${C.code(`say hello`, 'text')}
                     </li>
-                    <li><strong>Expected:</strong> a short reply with the model engine ID from your ${CONFIG.productName} catalog — it will look like a UUID, e.g. <code>${CONFIG.sharedModelEngineId}</code></li>
+                    <li><strong>Expected:</strong> any response back — if you get a reply, the connection is working</li>
                     <li><strong>If you get an auth error or connection refused:</strong>
                         <ul>
                             <li>Check that <code>ANTHROPIC_BASE_URL</code> is <code>${CONFIG.anthropicEndpoint}</code> — no trailing slash</li>
