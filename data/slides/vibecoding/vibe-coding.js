@@ -143,18 +143,38 @@ const slides_vibe_coding = [
         id: "vibe-presenter-demo",
         title: "Follow Along: Build a Q&A App",
         content: `
-            <h2>Follow Along: Build a Q&A App</h2>
-            <p>The presenter will run this prompt live. Watch how the app comes together, then you'll do the same with your own variation.</p>
-            ${C.code(`Build a single-page Q&A app on top of my ${CONFIG.productName} vector engine.
+            <h2>Follow Along: Build a Vector Search Viewer</h2>
+            <p>The presenter will run this prompt live in Claude Code. Watch how the app comes together — you'll use the same prompt with your own engine ID.</p>
+            ${C.code(`Build an app to visualize vector database search results from ELSA.
 
-Requirements:
-- A text input where the user types a question
-- A "Search" button that calls VectorDatabaseQuery against the vector engine to get the top 3 chunks
-- Pass those chunks as context into an LLM call against my shared model engine
-- Display the answer prominently, and list the source document names below it
-- Use the @semoss/sdk to run the Pixel commands
-- Keep the UI clean and minimal — single column, generous spacing`, 'text', 'Presenter Prompt — copy from chat if you want to follow exactly')}
-            ${C.callout('Specificity matters. A clear description of the data source, the inputs, and the expected output gets you a working app on the first try. Vague prompts get vague apps.', 'tip')}
+The user enters a search term, hits Run, and sees the results displayed as clean cards.
+Each card should show:
+- Source document name
+- Page range (from the "Divider" field)
+- Relevance score
+- The full content passage
+
+Make the vector engine ID and result limit configurable at the top of the file so it's easy to swap in a different engine.
+
+The app calls this Pixel to get results:
+
+VectorDatabaseQuery(engine=["<YOUR-VECTOR-ENGINE-ID>"], command="<search term>", limit=5, filters=[], metaFilters=[]);
+
+Here is one example result to build against:
+
+{
+  "Score": 1.7820971012115479,
+  "idx": 6,
+  "Source": "ai_use.pdf",
+  "Modality": "text",
+  "Divider": "7, 8",
+  "Part": "0",
+  "Tokens": 512,
+  "Content": "Agencies must remove barriers to innovation and provide the best value for the taxpayer."
+}
+
+The results come back inside pixelReturn[0].output as an array. Parse that array and render one card per result. Show a loading state while the query runs and an empty state if no results come back.`, 'text', 'Presenter Prompt')}
+            ${C.callout('Watch how the presenter swaps in their engine ID and what the first generated draft looks like — then you will do the same.', 'tip')}
         `
     },
     {
