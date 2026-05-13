@@ -146,10 +146,10 @@ const slides_platform_engines = [
         },
         {
             id: "engines-demo-database",
-            title: "Presenter Demo: Database Engine from CSV",
+            title: "Presenter Demo: Database Engine from an Excel File",
             content: `
                 <h2>Presenter Demo</h2>
-                <p class="lead">Creating a Database Engine from a CSV file</p>
+                <p class="lead">Creating a Database Engine from an Excel file</p>
                 ${C.cards([
                     {
                         badge: 'Demo Step 1',
@@ -158,8 +158,8 @@ const slides_platform_engines = [
                     },
                     {
                         badge: 'Demo Step 2',
-                        title: 'Add Engine → File Upload',
-                        desc: 'Select H2 as the database type and upload a CSV. The platform creates a relational database automatically.'
+                        title: 'Add Database → File Upload',
+                        desc: 'Select H2 as the database type and upload an Excel file. The platform creates a relational database automatically.'
                     },
                     {
                         badge: 'Demo Step 3',
@@ -169,7 +169,7 @@ const slides_platform_engines = [
                     {
                         badge: 'Demo Step 4',
                         title: 'Query the Data',
-                        desc: 'Open the engine\'s Query tab and run a SQL query against the CSV data  -  now a live database.'
+                        desc: 'Open the engine\'s Query tab and run a SQL query against the Excel data  -  now a live database.'
                     }
                 ])}
                 ${C.callout('Notice the pattern: the same flow (Add Engine → configure → save → use) applies whether you\'re connecting a vector store, a database, or any other engine type.', 'info')}
