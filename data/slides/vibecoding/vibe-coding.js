@@ -92,7 +92,8 @@ const slides_vibe_coding = [
   "env": {
     "ANTHROPIC_AUTH_TOKEN": "<your-access-key>:<your-secret-key>",
     "ANTHROPIC_BASE_URL": "${CONFIG.anthropicEndpoint}",
-    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "true"
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "true",
+    "NODE_TLS_REJECT_UNAUTHORIZED": "0"
   },
   "model": "${CONFIG.claudeCodeModelId}",
   "effortLevel": "medium"
@@ -102,7 +103,7 @@ const slides_vibe_coding = [
                     <li><code>ANTHROPIC_AUTH_TOKEN</code> — your access key + secret, separated by a colon</li>
                     <li><code>ANTHROPIC_BASE_URL</code> — routes all model calls to ${CONFIG.productName}</li>
                     <li><code>CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC</code> — turns off telemetry and other non-essential outbound calls</li>
-                    <li><code>model</code> — the model engine ID from your ${CONFIG.productName} catalog (ask your presenter)</li>
+<li><code>model</code> — the model engine ID from your ${CONFIG.productName} catalog (ask your presenter)</li>
                     <li><code>effortLevel</code> — how hard Claude Code thinks before responding (<code>low</code> / <code>medium</code> / <code>high</code>)</li>
                 </ul>
 
