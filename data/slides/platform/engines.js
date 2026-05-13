@@ -112,7 +112,7 @@ const slides_platform_engines = [
                 <h2>Hands-on: Upload Documents into Your Vector Engine</h2>
                 ${C.handson('Upload FDA guidance documents into your vector engine', `
                     <ol>
-                        <li>In the Engine Catalog, find and open the vector engine you just created.</li>
+                        <li>In the Vector Catalog, find and open the vector engine you just created.</li>
                         <li>Click <strong>Add Files</strong> and select the sample FDA guidance documents provided by your presenter.</li>
                         <li>Click <strong>Embed New Document</strong> to start ingestion.</li>
                         <li>Wait for ingestion to complete  -  the platform will chunk, embed, and index each document automatically.</li>
