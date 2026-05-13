@@ -21,7 +21,7 @@ const slides_platform_engines = [
                     { title: 'Pixel Commands', desc: 'You interact with every engine the same way, regardless of what\'s underneath', arrow: '↓' },
                     { title: 'Your App', desc: 'Queries, AI answers, stored files  -  delivered to the user' }
                 ])}
-                ${C.callout('Everything in ' + CONFIG.productName + ' talks through engines. This uniform abstraction is what makes the platform extensible  -  swap out a database or switch AI providers without rewriting your app.', 'info')}
+                ${C.callout('Engines are how ' + CONFIG.productName + ' connects to everything external  -  databases, models, storage, all of it. Swap providers or change what\'s underneath without touching your app.', 'info')}
             `
         },
         {

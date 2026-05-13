@@ -104,12 +104,14 @@ const slides_welcome = [
         id: "welcome-paradigm-img",
         title: "The Paradigm Shift (cont.)",
         content: `
-            <img
-                src="assets/paradigm-shift.png"
-                alt="Old vs New Paradigm"
-                style="position:absolute;top:3rem;left:0;width:100%;height:auto;border-radius:6px;"
-                onerror="this.replaceWith(Object.assign(document.createElement('div'),{innerHTML:'<div style=\'padding:3rem;border:2px dashed #ddd;border-radius:8px;text-align:center;color:#aaa\'><p style=\'font-size:1rem;margin:0\'>📁 Drop <code>paradigm-shift.png</code> in <code>training/assets/</code></p></div>'}));"
-            >
+            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+                <img
+                    src="assets/paradigm-shift.png"
+                    alt="Old vs New Paradigm"
+                    style="width:100%;height:auto;max-height:85vh;object-fit:contain;border-radius:6px;display:block;"
+                    onerror="this.replaceWith(Object.assign(document.createElement('div'),{innerHTML:'<div style=&quot;padding:3rem;border:2px dashed #ddd;border-radius:8px;text-align:center;color:#aaa&quot;><p style=&quot;font-size:1rem;margin:0&quot;>📁 Drop paradigm-shift.png in training/assets/</p></div>'}));"
+                >
+            </div>
         `
     },
     {

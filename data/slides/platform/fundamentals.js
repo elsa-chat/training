@@ -136,41 +136,4 @@ const slides_platform_fundamentals = [
         `
     },
 
-    // ── LIVE WALKTHROUGH ──────────────────────────────────────────────────────
-    {
-        id: "platform-live-walkthrough",
-        title: "Live Walkthrough",
-        content: `
-            <h2>Live Walkthrough — Follow Along</h2>
-            <p class="lead">The presenter will navigate the platform live. Open ${CONFIG.productName} in your browser and follow along.</p>
-            ${C.callout(`Open <strong>${CONFIG.elsaUrl}</strong> now if you haven't already.`, 'info')}
-            ${C.cards([
-                {
-                    badge: 'Stop 1',
-                    title: 'Catalog',
-                    desc: 'Browse engines, apps, and projects shared with you. Your starting point for finding what already exists.'
-                },
-                {
-                    badge: 'Stop 2',
-                    title: 'Engines',
-                    desc: 'Connect databases, AI models, vector stores, and storage. The data layer lives here — you\'ll build one today.'
-                },
-                {
-                    badge: 'Stop 3',
-                    title: 'Apps',
-                    desc: 'Create and publish applications. Drag-and-drop, vibe coding, or pro-code — all deploy to the same platform.'
-                },
-                {
-                    badge: 'Stop 4',
-                    title: 'Playground',
-                    desc: 'Test models, run ad-hoc queries, and wire up agents interactively. You\'ll spend time here on Day 2.'
-                },
-                {
-                    badge: 'Stop 5',
-                    title: 'Settings',
-                    desc: 'User profile, API keys, and admin config. You\'ll need Settings today to generate your access key.'
-                }
-            ])}
-        `
-    }
 ];
