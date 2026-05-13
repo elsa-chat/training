@@ -4,53 +4,81 @@ const slides_api_endpoints = [
         id: "api-title",
         title: "Consuming ELSA from Your Existing Workflows",
         content: C.titleSlide(
-            `Consuming ${CONFIG.productName} from Your Existing Workflows`,
-            `If it speaks OpenAI, it can speak ${CONFIG.productName}`,
+            `External API Calls`,
+            `REST API · OpenAI SDK · Python SDK`,
             "30 minutes"
         )
     },
     {
-        id: "api-big-idea",
-        title: "The Big Idea",
+        id: "api-curl-postman",
+        title: "REST API",
         content: `
-            <h2>You Already Did This</h2>
-            ${C.callout(`You already did this. When you configured settings.json yesterday to point Claude Code at ${CONFIG.productName}  -  that was exactly this pattern. Claude Code uses the OpenAI SDK; you pointed it at ${CONFIG.productName}'s OpenAI-compatible endpoint.`, 'tip')}
-            ${C.flow([
-                { title: 'Your Tool or Script', desc: 'Claude Code, a Python script, a CI job, anything that uses the OpenAI format' },
-                { title: 'OpenAI SDK', desc: 'The same library you\'d use to call OpenAI', arrow: '↓' },
-                { title: `${CONFIG.productName} OpenAI-Compatible Endpoint`, desc: 'Accepts requests in standard OpenAI format', arrow: '↓' },
-                { title: `${CONFIG.productName} Model Engine`, desc: 'Routes to whichever model is configured  -  GPT-4, Claude, a local model, anything', arrow: '↓' },
-                { title: 'Response Back', desc: 'Formatted exactly as OpenAI would return it' }
-            ])}
-            <p>Any tool that uses the OpenAI API format can be redirected to use ${CONFIG.productName}'s models instead  -  no code changes required except the base URL and key.</p>
+            <h2>REST API  —  The Simplest Possible Test</h2>
+            <p>Before writing any code, confirm the endpoint is reachable and your key works. Any HTTP client will do — CURL, Postman, Insomnia, or a browser extension.</p>
+            ${C.code(`curl ${CONFIG.openaiEndpoint}/chat/completions \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer <access-key>:<secret-key>" \\
+  -d '{
+    "model": "${CONFIG.sharedModelEngineId}",
+    "messages": [
+      { "role": "user", "content": "Summarize FDA 21 CFR Part 11 in one sentence." }
+    ]
+  }'`, 'bash', 'CURL  —  OpenAI-compatible endpoint')}
+            ${C.split(
+                {
+                    title: 'What to check in the response',
+                    content: `
+                        <ul>
+                            <li><code>choices[0].message.content</code>  —  the model's reply</li>
+                            <li><code>model</code>  —  confirms which engine responded</li>
+                            <li><code>usage.total_tokens</code>  —  input + output token count</li>
+                        </ul>
+                        <p class="muted">A <code>401</code> means bad key. A <code>404</code> means bad URL or engine ID.</p>
+                    `
+                },
+                {
+                    title: 'Postman',
+                    content: `
+                        <p>Postman is the same request with a GUI. Set:</p>
+                        <ul>
+                            <li><strong>Method:</strong> <code>POST</code></li>
+                            <li><strong>URL:</strong> <code>${CONFIG.openaiEndpoint}/chat/completions</code></li>
+                            <li><strong>Auth:</strong> Bearer token → <code>access-key:secret-key</code></li>
+                            <li><strong>Body:</strong> JSON with <code>model</code> and <code>messages</code></li>
+                        </ul>
+                        <p class="muted">Useful for sharing test cases with teammates who don't use the CLI.</p>
+                    `
+                }
+            )}
         `
     },
+
     {
         id: "api-consumption-patterns",
-        title: "Three Ways to Consume",
+        title: "Three Ways to Call ELSA Externally",
         content: `
-            <h2>Three Consumption Patterns</h2>
+            <h2>Three Ways to Call ${CONFIG.productName} from Outside the Platform</h2>
             ${C.table(
-                ['Pattern', 'When to Use', 'What You Need'],
+                ['Method', 'When to Use', 'What You Need'],
                 [
                     [
-                        '<strong>OpenAI-compatible endpoint</strong>',
-                        'Existing tools or scripts, Claude Code, any OpenAI SDK client',
-                        'Base URL + <code>access:secret</code> key'
+                        '<strong>REST API</strong>',
+                        'Verify connectivity, one-off tests, share requests with teammates (CURL, Postman, Insomnia, etc.)',
+                        '<code>access:secret</code> key + any HTTP client'
+                    ],
+                    [
+                        '<strong>OpenAI SDK (Python / JS)</strong>',
+                        'Scripts, CI jobs, or any existing tool already using the OpenAI client',
+                        '<code>pip install openai</code> — swap <code>base_url</code> and <code>api_key</code>, nothing else changes'
                     ],
                     [
                         '<strong>PyPI SDK (<code>ai-server-sdk</code>)</strong>',
-                        `Python scripts that need full ${CONFIG.productName} access  -  engines, Pixel, streaming`,
-                        '<code>pip install ai-server-sdk</code>'
-                    ],
-                    [
-                        '<strong>LLM Pixel reactor (<code>AskModelEngine</code>)</strong>',
-                        `Inside ${CONFIG.productName} Notebooks and apps  -  you're already authenticated`,
-                        'Engine ID only'
+                        `Python scripts that need more than chat  —  run Pixel, query engines, manage insights`,
+                        '<code>pip install ai-server-sdk</code> + base URL + access/secret keys'
                     ]
                 ]
             )}
-            ${C.callout('Start with the OpenAI-compatible endpoint. It works with the widest range of tools and requires the least code.', 'tip')}
+            ${C.callout('All three use the same credentials: <code>access-key:secret-key</code> in the Authorization header. Generate them in ${CONFIG.productName} → Settings → My Profile → Personal Access Tokens.', 'info')}
         `
     },
     {

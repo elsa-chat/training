@@ -92,18 +92,42 @@ const SESSION_PLAN = {
             label: 'Day 2  -  Thu, May 14',
             chapters: [
                 {
-                    title: 'MCP Fundamentals',
-                    time: '10:15 – 11:15 AM',
+                    title: 'Finish Up & Deploy',
+                    time: '10:00 – 10:30 AM',
                     slideIds: idsFrom(
-                        typeof slides_mcp_fundamentals !== 'undefined' ? slides_mcp_fundamentals : null,
+                        typeof slides_day2_opener !== 'undefined' ? slides_day2_opener : null,
                     )
                 },
                 {
                     title: 'Playground Deep Dive',
+                    time: '10:30 – 11:00 AM',
+                    slideIds: [
+                        'playground-title',
+                        'playground-what-is',
+                        'playground-what-is-room',
+                        'playground-room-utilities',
+                        'playground-ui-tabs',
+                        'appendix-files-overview',
+                        'appendix-rooms-history',
+                        'appendix-rooms-management',
+                    ]
+                },
+                {
+                    title: '— BREAK —',
+                    time: '11:00 – 11:15 AM',
+                    slideIds: []
+                },
+                {
+                    title: 'MCP Fundamentals',
                     time: '11:15 AM – 12:00 PM',
-                    slideIds: idsFrom(
-                        typeof slides_playground !== 'undefined' ? slides_playground : null,
-                    )
+                    slideIds: [
+                        'mcp-title',
+                        'mcp-what-is',
+                        'mcp-why-matters',
+                        'mcp-architecture',
+                        'mcp-contract',
+                        'mcp-human-in-the-loop',
+                    ]
                 },
                 {
                     title: '— LUNCH —',
@@ -111,36 +135,64 @@ const SESSION_PLAN = {
                     slideIds: []
                 },
                 {
-                    title: 'API Endpoints',
-                    time: '1:00 – 1:30 PM',
+                    title: 'MCP in Action',
+                    time: '1:00 – 2:00 PM',
+                    slideIds: [
+                        'mcp-in-action-title',
+                        'mcp-in-action-overview',
+                        'mcp-demo-driver',
+                        'mcp-make-python',
+                        'mcp-generated-json',
+                        'mcp-metadata-deep-dive',
+                        'mcp-file-persistence',
+                        'mcp-js-ts-sdk',
+                        'mcp-playground-wire',
+                        'mcp-sharing',
+                        'mcp-handson-convert',
+                    ]
+                },
+                {
+                    title: 'Agents in Playground',
+                    time: '2:00 – 2:30 PM',
+                    slideIds: [
+                        'agents-title',
+                        'agents-what-is',
+                        'playground-architecture',
+                        'playground-agent-config',
+                        'agents-compose',
+                        'agents-handson',
+                        'agents-share',
+                    ]
+                },
+                {
+                    title: 'External API Calls',
+                    time: '2:30 – 3:00 PM',
+                    slideIds: [
+                        'api-title',
+                        'api-consumption-patterns',
+                        'api-curl-postman',
+                        'api-openai-example',
+                        'api-pypi-sdk',
+                        'api-token-limits',
+                    ]
+                },
+                {
+                    title: 'Agent 47  —  What\'s Next',
+                    time: '3:00 – 3:15 PM',
                     slideIds: idsFrom(
-                        typeof slides_api_endpoints !== 'undefined' ? slides_api_endpoints : null,
+                        typeof slides_agent47 !== 'undefined' ? slides_agent47 : null,
                     )
                 },
                 {
-                    title: 'Security & RBAC',
-                    time: '1:30 – 2:00 PM',
-                    slideIds: idsFrom(
-                        typeof slides_security_auth !== 'undefined' ? slides_security_auth : null,
-                    )
-                },
-                {
-                    title: 'Capstone: End-to-End App Build',
-                    time: '2:00 – 2:45 PM',
-                    slideIds: idsFrom(
-                        typeof slides_capstone_project !== 'undefined' ? slides_capstone_project : null,
-                    )
-                },
-                {
-                    title: 'Wrap-up, Q&A & Feedback',
-                    time: '2:45 – 3:00 PM',
+                    title: 'Day 2 Wrap-up',
+                    time: '3:15 – 3:20 PM',
                     slideIds: []
                 },
             ]
         },
 
         // ─────────────────────────────────────────────────────────────────────
-        // BACKUP / OPTIONAL  -  Pull in if either day runs ahead of schedule
+        // APPENDIX  -  Reference material & content not covered in main sessions
         // ─────────────────────────────────────────────────────────────────────
         {
             id: '3',
@@ -152,21 +204,32 @@ const SESSION_PLAN = {
                         typeof slides_appendix !== 'undefined' ? slides_appendix : null,
                     )
                 },
+                {
+                    title: 'Security & Auth',
+                    slideIds: idsFrom(typeof slides_security_auth !== 'undefined' ? slides_security_auth : null)
+                },
+                {
+                    title: 'Python SDK',
+                    slideIds: idsFrom(typeof slides_python_sdk !== 'undefined' ? slides_python_sdk : null)
+                },
+                {
+                    title: 'MCP Building & Consuming (deep-dive)',
+                    slideIds: idsFrom(typeof slides_mcp_building_consuming !== 'undefined' ? slides_mcp_building_consuming : null)
+                },
+                {
+                    title: 'MCP UI & Premade Tools',
+                    slideIds: idsFrom(typeof slides_mcp_ui_premade !== 'undefined' ? slides_mcp_ui_premade : null)
+                },
+                {
+                    title: 'Context Engineering for Agents',
+                    slideIds: idsFrom(typeof slides_context_engineering !== 'undefined' ? slides_context_engineering : null)
+                },
+                {
+                    title: 'Model Logs',
+                    slideIds: idsFrom(typeof slides_model_logs !== 'undefined' ? slides_model_logs : null)
+                },
             ]
         },
-
-        {
-            id: '4',
-            label: 'Backup / Optional Sections',
-            chapters: [
-                { title: 'Python SDK (30 min)  -  best after App Fundamentals, Day 1', slideIds: idsFrom(typeof slides_python_sdk !== 'undefined' ? slides_python_sdk : null) },
-                { title: 'MCP Building & Consuming (Day 2 deep-dive)', slideIds: idsFrom(typeof slides_mcp_building_consuming !== 'undefined' ? slides_mcp_building_consuming : null) },
-                { title: 'Context Engineering for Agents (Day 2)', slideIds: idsFrom(typeof slides_context_engineering !== 'undefined' ? slides_context_engineering : null) },
-                { title: 'Model Logs (15 min)  -  fold into Engines or Security', slideIds: idsFrom(typeof slides_model_logs !== 'undefined' ? slides_model_logs : null) },
-                { title: 'MCP UI & Premade Tools', slideIds: idsFrom(typeof slides_mcp_ui_premade !== 'undefined' ? slides_mcp_ui_premade : null) },
-                { title: 'Agentic App Builder  -  What\'s Next (Day 2 closer, 15 min)', slideIds: idsFrom(typeof slides_agent47 !== 'undefined' ? slides_agent47 : null) },
-            ]
-        }
     ]
 };
 
