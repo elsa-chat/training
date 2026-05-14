@@ -95,7 +95,7 @@ const slides_vibe_coding = [
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "true",
     "NODE_TLS_REJECT_UNAUTHORIZED": "0"
   },
-  "model": "${CONFIG.claudeCodeModelId}",
+  "model": "${CONFIG.sharedModelEngineId}",
   "effortLevel": "medium"
 }`, 'json', '.claude/settings.json')}
 
