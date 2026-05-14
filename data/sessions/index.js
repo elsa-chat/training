@@ -92,6 +92,11 @@ const SESSION_PLAN = {
             label: 'Day 2  -  Thu, May 14',
             chapters: [
                 {
+                    title: 'Day 2 Logistics',
+                    time: '10:00 AM',
+                    slideIds: ['welcome-day2-logistics']
+                },
+                {
                     title: 'Finish Up & Deploy',
                     time: '10:00 – 10:30 AM',
                     slideIds: idsFrom(

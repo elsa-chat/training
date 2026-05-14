@@ -161,17 +161,18 @@ const slides_welcome = [
             ${C.table(
                 ['Time', 'Topic'],
                 [
-                    ['10:00 – 10:15', 'Day 1 Recap & Q&A'],
-                    ['10:15 – 11:15', 'MCP Fundamentals'],
-                    ['11:15 – 12:00', `${CONFIG.aiName} Deep Dive + Hands-on`],
-                    ['12:00 – 1:00',  '🍽 Lunch'],
-                    ['1:00 – 1:30',   'OpenAI / Anthropic API Endpoints'],
-                    ['1:30 – 2:00',   'Security & RBAC'],
-                    ['2:00 – 2:45',   'Capstone: End-to-End App Build'],
-                    ['2:45 – 3:00',   'Wrap-up, Q&A & Feedback'],
+                    ['10:00 – 11:00', 'Finish Up & Deploy'],
+                    ['11:00 – 11:15', 'MCP Fundamentals'],
+                    ['11:15 – 12:00', 'MCP in Action'],
+                    ['12:00 – 12:30', 'Converting Your App into an MCP'],
+                    ['12:30 – 1:30',  '🍽 Lunch'],
+                    ['1:30 – 2:00',   'Agents'],
+                    ['2:00 – 2:15',   'External API Calls'],
+                    ['2:15 – 2:30',   '☕ Break'],
+                    ['2:30 – 3:00',   'Agent 47'],
                 ]
             )}
-            ${C.callout('Backup sections (Python SDK, structured output, image processing, model logs) are ready if either day moves faster than planned.', 'tip')}
+            ${C.callout(`Your apps, engines, and access keys from Day 1 are all still there — pick up exactly where you left off.`, 'info')}
         `
     },
     {
