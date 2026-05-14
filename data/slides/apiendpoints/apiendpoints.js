@@ -123,19 +123,19 @@ print(response.choices[0].message.content)`, 'python', `Call ${CONFIG.productNam
             ${C.code(`import os
 import ai_server
 
-# Point requests at your org's certificate chain
-# Export it from your browser: click the padlock icon → Certificate Details → export full chain as PEM
-os.environ['REQUESTS_CA_BUNDLE'] = '/path/to/your-org-chain.pem'
+# Point requests at your org's certificate chain (.crt)
+# Export from your browser: click the padlock icon → Certificate Details → export full chain as CRT
+os.environ['REQUESTS_CA_BUNDLE'] = r'C:\path\to\your-org-chain.crt'
 
-# 1. Authenticate — creates a session and sets the singleton used by ModelEngine
+# 1. Authenticate — must run first; registers the session singleton that ModelEngine picks up automatically
 client = ai_server.ServerClient(
     base="${CONFIG.elsaUrl}",
     access_key="<your-access-key>",
     secret_key="<your-secret-key>"
 )
 
-# 2. Get a handle on the shared model engine
-model = ai_server.ModelEngine(engine_id="${CONFIG.sharedModelEngineId}")
+# 2. Get a handle on the shared model engine — no need to pass client directly
+model = ai_server.ModelEngine(engine_id="${CONFIG.sharedModelEngineId}", insight_id=client.cur_insight)
 
 # 3. One-shot query
 response = model.ask(
@@ -148,7 +148,7 @@ print(response["response"])
 # 4. Streaming query
 for chunk in model.stream_ask(command="What are the key principles of 21 CFR Part 11?"):
     print(chunk, end="", flush=True)`, 'python', 'ai-server-sdk — connect and query a ModelEngine')}
-            ${C.callout('Set <code>REQUESTS_CA_BUNDLE</code> to your org\'s certificate chain before instantiating <code>ServerClient</code> — the SDK authenticates immediately on construction. To export the cert: click the padlock in your browser → Certificate Details → download the full chain as a <code>.pem</code> file.', 'warning')}
+            ${C.callout('Set <code>REQUESTS_CA_BUNDLE</code> to your org\'s certificate chain before instantiating <code>ServerClient</code> — the SDK authenticates immediately on construction. To export the cert: click the padlock in your browser → Certificate Details → download the full chain as a <code>.crt</code> file.', 'warning')}
             ${C.callout('Use the PyPI SDK when you need more than just chat  -  running Pixel, querying engines, managing insights programmatically.', 'tip')}
         `
     },
