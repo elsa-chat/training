@@ -25,16 +25,6 @@ const slides_day2_opener = [
     },
 
     {
-        id: "d2-title",
-        title: "Day 2",
-        content: C.titleSlide(
-            `Day 2  —  Ship It, Then Wire It`,
-            `Finish your app · ${CONFIG.aiName} · MCP · Agents · External APIs`,
-            "Thursday, May 14"
-        )
-    },
-
-    {
         id: "d2-deploy-hardcoded",
         title: "Still Building? Use Yesterday's Prompt",
         content: `
