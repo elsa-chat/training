@@ -75,7 +75,7 @@ const slides_playground = [
                     desc: 'Configure system prompts, pick models, and compose tools into a full agent  —  then test it live in the same view.'
                 },
             ])}
-            ${C.callout(`Everything you built in Day 1  —  your vector engine, your app  —  can be wired into ${CONFIG.aiName} as agent tools. That\`s what the rest of today is about.', 'info')}
+            ${C.callout(`Everything you built in Day 1  —  your vector engine, your app  —  can be wired into ${CONFIG.aiName} as agent tools. That's what the rest of today is about.`, 'info')}
         `
     },
 
