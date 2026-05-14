@@ -1,12 +1,12 @@
-// Topic: Playground  -  Day 2 Morning (11:00 AM)
+// Topic: ${CONFIG.aiName}  -  Day 2 Morning (11:00 AM)
 const slides_playground = [
 
     // ─── SECTION 2: PLAYGROUND DEEP DIVE ────────────────────────────────────
     {
         id: "playground-title",
-        title: "Playground",
+        title: "${CONFIG.aiName}",
         content: C.titleSlide(
-            "Playground  -  Wiring Your App into an AI Agent",
+            "${CONFIG.aiName}  -  Wiring Your App into an AI Agent",
             "Where MCP tools become agent capabilities",
             "45 minutes"
         )
@@ -14,9 +14,9 @@ const slides_playground = [
 
     {
         id: "playground-architecture",
-        title: "Playground Architecture",
+        title: "${CONFIG.aiName} Architecture",
         content: `
-            <h2>Playground Architecture  -  Three Layers</h2>
+            <h2>${CONFIG.aiName} Architecture  -  Three Layers</h2>
             <p>Understanding what a Room is versus a Room Folder saves you debugging time later.</p>
             ${C.layers([
                 { label: "Room", items: [
@@ -106,12 +106,12 @@ const slides_playground = [
 
     {
         id: "playground-handson-2",
-        title: "Hands-on: Wire into Playground",
+        title: "Hands-on: Wire into ${CONFIG.aiName}",
         content: `
-            <h2>Hands-on: Step 2  -  Add Your Tool to a Playground Room</h2>
-            ${C.handson("Step 2: Add Your Tool to a Playground Room", `
+            <h2>Hands-on: Step 2  -  Add Your Tool to a ${CONFIG.aiName} Room</h2>
+            ${C.handson("Step 2: Add Your Tool to a ${CONFIG.aiName} Room", `
                 <ol>
-                    <li>Open <strong>Playground</strong> in ${CONFIG.productName}</li>
+                    <li>Open <strong>${CONFIG.aiName}</strong> in ${CONFIG.productName}</li>
                     <li>Create a new Room Folder (or open an existing one)</li>
                     <li>In <strong>Settings</strong>: add your project as an MCP server
                         <ul>
@@ -168,7 +168,7 @@ Always cite the document passage you found before giving your answer.`, 'propert
             ${C.cards([
                 { badge: 'Day 1', title: 'The App', desc: 'Vector engine ingesting FDA docs + published app with RAG notebook' },
                 { badge: 'Step 1', title: 'MCP Exposed', desc: 'Python function + MakePythonMCP() = discoverable tool with a JSON schema' },
-                { badge: 'Step 2', title: 'Playground Wired', desc: 'Room Folder connects your tool to an AI agent with a targeted system prompt' },
+                { badge: 'Step 2', title: '${CONFIG.aiName} Wired', desc: 'Room Folder connects your tool to an AI agent with a targeted system prompt' },
                 { badge: 'Step 3', title: 'Agent Works', desc: 'Ask a question in plain English  -  agent calls your tool, gets results, answers correctly' },
             ])}
             ${C.callout('After lunch: <strong>Security</strong> (who can use this), <strong>API Endpoints</strong> (how to call it from outside ${CONFIG.productName}), then open build time.', 'info')}

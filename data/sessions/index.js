@@ -94,7 +94,7 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: 'Playground Deep Dive',
+                    title: `${CONFIG.aiName} Deep Dive`,
                     time: '10:45 – 11:30 AM',
                     slideIds: idsFrom(
                         typeof slides_playground !== 'undefined' ? slides_playground : null,

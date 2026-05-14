@@ -268,7 +268,7 @@ const slides_context_engineering = [
                         "<strong>Select Context</strong>",
                         "MCP Tool Filtering",
                         "Dynamically filter available tools based on conversation context",
-                        "Playground with 100+ MCP tools  -  only show relevant 10-15"
+                        "${CONFIG.aiName} with 100+ MCP tools  -  only show relevant 10-15"
                     ],
                     [
                         "<strong>Select Context</strong>",
@@ -377,7 +377,7 @@ const slides_context_engineering = [
                 <li><strong>Iterate on trade-offs</strong>  -  Balance token cost vs accuracy vs latency for your specific use case</li>
             </ol>
 
-            ${C.callout(`Next Steps: In the following sessions, you'll apply these context engineering principles to ${CONFIG.productName} Playground (system prompts, tool filtering) and MCP integration (tool description retrieval, multi-agent isolation).`, 'tip')}
+            ${C.callout(`Next Steps: In the following sessions, you'll apply these context engineering principles to ${CONFIG.productName} ${CONFIG.aiName} (system prompts, tool filtering) and MCP integration (tool description retrieval, multi-agent isolation).`, 'tip')}
         `
     }
 ];

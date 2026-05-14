@@ -14,7 +14,7 @@ const slides_mcp_ui_premade = [
             title: "MCP Display Locations",
             content: `
                 <h2>MCP Display Locations</h2>
-                <p class="lead">The <code class="highlight">displayLocation</code> parameter controls where MCP tool UIs render in Playground.</p>
+                <p class="lead">The <code class="highlight">displayLocation</code> parameter controls where MCP tool UIs render in ${CONFIG.aiName}.</p>
                 ${C.table(
                     ["displayLocation", "Behavior", "Use Case"],
                     [
@@ -130,7 +130,7 @@ def search_large_corpus(query: str):
     # Long-running search operation
     # ...
 
-# Playground shows:
+# ${CONFIG.aiName} shows:
 # 🔄 Searching 1,000,000 documents...
 # [Loading spinner]
 # ... (after completion)
@@ -156,7 +156,7 @@ def search_large_corpus(query: str):
                         [
                             "Auto-acknowledge",
                             "<code>sendMCPResponseToPlayground()</code>",
-                            "Portal tells Playground tool is ready (no waiting)"
+                            "Portal tells ${CONFIG.aiName} tool is ready (no waiting)"
                         ]
                     ]
                 )}
@@ -297,7 +297,7 @@ def fetch_data():
                     { title: '4. Build Portal', desc: 'cd client/ && pnpm run build', arrow: '↓' },
                     { title: '5. Verify Output', desc: 'Check portals/ folder has index.html', arrow: '↓' },
                     { title: `6. Publish in ${CONFIG.productName}`, desc: 'Publish → Refresh Files', arrow: '↓' },
-                    { title: '7. Test in Playground', desc: 'Add MCP server, test tools', arrow: '↓' },
+                    { title: '7. Test in ${CONFIG.aiName}', desc: 'Add MCP server, test tools', arrow: '↓' },
                     { title: '8. Deploy', desc: 'Publish to production environment' },
                 ])}
                 ${C.code(`# Complete build script (run from assets/)
@@ -318,7 +318,7 @@ pnpm run build
 # - Portal now served from public_home/<projectId>/portals/
 
 # 5. Test
-# - Open Playground
+# - Open ${CONFIG.aiName}
 # - Settings → MCP Servers → Add your app
 # - Tools should appear in sidebar
 # - Call tool → Portal should render`, 'bash', 'MCP build workflow')}
@@ -406,7 +406,7 @@ def execute_python_code(code_b64: str = None):
                     <h4>Part 5: Publish & Test</h4>
                     <ol>
                         <li>In ${CONFIG.productName} UI: Click "Publish" → "Refresh Files"</li>
-                        <li>Open Playground → Settings → MCP Servers → Add "Code Execution MCP"</li>
+                        <li>Open ${CONFIG.aiName} → Settings → MCP Servers → Add "Code Execution MCP"</li>
                         <li>Ask model: <em>"Open the code editor"</em></li>
                         <li>Model calls <code>execute_python_code()</code> → Portal opens in sidebar</li>
                         <li>Type code in editor, click "Run Code"</li>
@@ -453,7 +453,7 @@ def execute_python_code(code_b64: str = None):
                     <li>Generate MCP JSON (MakePythonMCP/MakePixelMCP)</li>
                     <li>Build portal UI (pnpm run build)</li>
                     <li>Publish in ${CONFIG.productName}</li>
-                    <li>Test in Playground</li>
+                    <li>Test in ${CONFIG.aiName}</li>
                 </ol>
                 ${C.callout(`MCP enables ${CONFIG.productName} to become an AI platform with unlimited extensibility through tools, resources, and custom UIs.`, 'tip')}
             `

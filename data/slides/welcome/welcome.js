@@ -119,9 +119,9 @@ const slides_welcome = [
             <h2>Training Goals</h2>
             <h3>By the end of Day 2 you will be able to:</h3>
             ${C.cards([
-                { badge: 'Everyone', title: 'Navigate ELSA', desc: 'Understand the platform, find engines, open Playground, and use pre-built apps' },
+                { badge: 'Everyone', title: 'Navigate ELSA', desc: 'Understand the platform, find engines, open ${CONFIG.aiName}, and use pre-built apps' },
                 { badge: 'Everyone', title: 'Vibe Code an App', desc: 'Use AI-assisted generation to describe and publish a working app  -  no coding required' },
-                { badge: 'Everyone', title: 'Use MCP in Playground', desc: 'Connect tools to an AI agent and run a multi-step workflow' },
+                { badge: 'Everyone', title: 'Use MCP in ${CONFIG.aiName}', desc: 'Connect tools to an AI agent and run a multi-step workflow' },
                 { badge: 'Technical', title: 'Write Pixel', desc: 'Chain Pixel commands to query engines, call LLMs, and drive app logic' },
                 { badge: 'Technical', title: 'Build MCP Tools', desc: 'Expose Python functions as tools an agent can call via the MCP pattern' },
                 { badge: 'Technical', title: 'Integrate APIs', desc: 'Configure OpenAI/Anthropic endpoints and hit them from your app' },
@@ -161,7 +161,7 @@ const slides_welcome = [
                 [
                     ['10:00 – 10:15', 'Day 1 Recap & Q&A'],
                     ['10:15 – 11:00', 'MCP Fundamentals'],
-                    ['11:00 – 11:45', 'Playground Deep Dive + Hands-on'],
+                    ['11:00 – 11:45', '${CONFIG.aiName} Deep Dive + Hands-on'],
                     ['11:45 – 12:00', '☕ Break'],
                     ['12:00 – 12:45', '🍽 Lunch'],
                     ['12:45 – 1:15',  'OpenAI / Anthropic API Endpoints'],

@@ -19,7 +19,7 @@ const slides_capstone_project = [
                 {
                     badge: 'Starting Point A',
                     title: 'Extend Yesterday\'s App',
-                    desc: 'Add a Playground agent with your MCP tool, apply a guardrail, or add a second search capability. Build on what you already have.'
+                    desc: 'Add a ${CONFIG.aiName} agent with your MCP tool, apply a guardrail, or add a second search capability. Build on what you already have.'
                 },
                 {
                     badge: 'Starting Point B',

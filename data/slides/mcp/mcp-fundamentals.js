@@ -69,7 +69,7 @@ const slides_mcp_fundamentals = [
             <h2>Why It Matters in ${CONFIG.productName}</h2>
             <p class="lead">Without MCP, an agent has no idea your app exists. With MCP, it becomes a tool the agent can reach for automatically.</p>
             ${C.sequence(
-                ["User in Playground", "AI Agent", "MCP Layer", "Your App Backend"],
+                ["User in ${CONFIG.aiName}", "AI Agent", "MCP Layer", "Your App Backend"],
                 [
                     { from: 0, to: 1, label: "Asks a question about FDA regulations" },
                     { from: 1, to: 2, label: "Discovers available MCP tools" },
@@ -92,7 +92,7 @@ const slides_mcp_fundamentals = [
             <h2>How the Layers Connect</h2>
             <p>You own the bottom two layers. The MCP JSON schema is the contract between them and the agent.</p>
             ${C.layers([
-                { label: "Playground / Room", items: [
+                { label: "${CONFIG.aiName} / Room", items: [
                     { title: "AI Agent Chat", desc: "Conversation thread, model responses" },
                     { title: "Tool Discovery", desc: "Agent sees available MCP tools automatically" },
                 ]},
@@ -178,7 +178,7 @@ const slides_mcp_fundamentals = [
                 { title: 'Run MakePythonMCP(project=["..."])', desc: 'One Pixel command in the Notebook or console', arrow: '↓' },
                 { title: '${CONFIG.productName} reads function signatures and docstrings', desc: 'Introspects your mcp_driver.py automatically', arrow: '↓' },
                 { title: 'Generates mcp/py_mcp.json automatically', desc: 'Produces the JSON schema the agent will see', arrow: '↓' },
-                { title: 'Agent can discover and call it', desc: 'Tool is live in Playground immediately' },
+                { title: 'Agent can discover and call it', desc: 'Tool is live in ${CONFIG.aiName} immediately' },
             ])}
             ${C.code(`def search_documents(question: str) -> str:
     """
@@ -196,7 +196,7 @@ const slides_mcp_fundamentals = [
         title: "Meta Variables",
         content: `
             <h2>Controlling Agent Behavior  -  Meta Variables</h2>
-            <p>Two meta variables control how the agent and Playground UI interact with your tool.</p>
+            <p>Two meta variables control how the agent and ${CONFIG.aiName} UI interact with your tool.</p>
             ${C.table(
                 ["Variable", "What it controls"],
                 [
@@ -206,7 +206,7 @@ const slides_mcp_fundamentals = [
                     ],
                     [
                         "<code>SMSS_MCP_UI</code>",
-                        "Where the tool's portal UI appears in Playground  -  <code>sidebar</code>, <code>inline</code>, or <code>hidden</code>"
+                        "Where the tool's portal UI appears in ${CONFIG.aiName}  -  <code>sidebar</code>, <code>inline</code>, or <code>hidden</code>"
                     ]
                 ]
             )}

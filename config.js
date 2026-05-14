@@ -33,4 +33,5 @@ const CONFIG = {
   templateFolderName:  'vibe-setup',
   sharedModelEngineId: '8405ac40-89c6-4613-848c-3d89986fbc01',
   claudeCodeModelId:   'SET_BEFORE_TRAINING',
+  aiName:              'Elsa Chat',
 };

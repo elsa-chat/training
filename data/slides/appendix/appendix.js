@@ -86,7 +86,7 @@ const slides_appendix = [
                     desc: 'Navigate to <strong>Engines</strong> in the left sidebar → select your engine → click <strong>Add Files</strong> or drag-and-drop. Works for any engine type.'
                 },
                 {
-                    title: '2 · Pixel Command (in Playground)',
+                    title: '2 · Pixel Command (in ${CONFIG.aiName})',
                     desc: 'Use <code>UploadFile</code> reactor to upload programmatically from a Pixel script.'
                 },
                 {
@@ -143,7 +143,7 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel  - 
                 }
             )}
             ${C.flow([
-                { title: 'Open Playground', desc: 'Left sidebar shows your Room list  -  most recent at top' },
+                { title: 'Open ${CONFIG.aiName}', desc: 'Left sidebar shows your Room list  -  most recent at top' },
                 { title: 'Select a Past Room', desc: 'Full message history reloads. A new Insight is created for continued execution.' },
                 { title: 'Continue the Conversation', desc: 'New messages append to the existing thread. History is always preserved.' }
             ])}
@@ -159,7 +159,7 @@ VectorDatabaseIndexDocuments(engine=["my-vector-engine"]);`, 'pixel', 'Pixel  - 
             ${C.table(
                 ['Action', 'How', 'Notes'],
                 [
-                    ['View past rooms', 'Left sidebar in Playground → Rooms list', 'Sorted by last activity'],
+                    ['View past rooms', 'Left sidebar in ${CONFIG.aiName} → Rooms list', 'Sorted by last activity'],
                     ['Rename a room', 'Click the room name → edit inline', 'Helps organize long-running projects'],
                     ['Delete a room', 'Room context menu → Delete', 'Permanent  -  deletes all message history'],
                     ['Share a room', 'Room context menu → Share Link', 'Recipient must have platform access'],
