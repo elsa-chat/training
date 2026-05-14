@@ -6,7 +6,7 @@ const slides_mcp_in_action = [
         title: "MCP in Action",
         content: C.titleSlide(
             "MCP in Action",
-            "SDK deep-dive, live demo, then your turn",
+            "@semoss/sdk deep-dive, live demo, then your turn",
             "45 minutes"
         )
     },
@@ -16,13 +16,13 @@ const slides_mcp_in_action = [
         title: "What We're Doing",
         content: `
             <h2>What We're Doing</h2>
-            <p class="lead">This section gets into the code. We're going to look at the ${CONFIG.productName} SDK and how your React app wires into ${CONFIG.aiName} — what the model passes in, how you return results, and how to handle the different contexts your UI runs in.</p>
+            <p class="lead">This section gets into the code. We're going to look at <code>@semoss/sdk</code> and how your React app wires into ${CONFIG.aiName} — what the model passes in, how you return results, and how to handle the different contexts your UI runs in.</p>
             ${C.flow([
                 { title: 'SDK deep-dive', desc: 'Open real code and walk through useInsight(), tool.parameters, and sendMCPResponseToPlayground', arrow: '↓' },
                 { title: 'Demo: convert an app', desc: 'See the full conversion — tag, manifest, deploy — live', arrow: '↓' },
                 { title: 'Your turn', desc: 'One prompt to your agent — it handles the rest' },
             ])}
-            ${C.callout('You don\'t need to memorize the SDK. The pattern is always the same — read in from <code>tool.parameters</code>, do work, send back via <code>sendMCPResponseToPlayground</code>.', 'info')}
+            ${C.callout('The SDK is how your UI speaks to the platform — and to Elsa Chat. Once the pattern clicks, the same hooks show up in every tool you build.', 'info')}
         `
     },
 
@@ -31,29 +31,22 @@ const slides_mcp_in_action = [
         title: "Setting Up Your UI to Handle Elsa Calls",
         content: `
             <h2>Setting Up Your UI to Handle Elsa Calls</h2>
-            <p class="lead">We're opening <code>client/src/components/ExampleComponent.tsx</code>. This is the reference pattern — every tool UI is a variation of this.</p>
+            <p class="lead">We're opening <code>client/src/components/ExampleComponent.tsx</code>. Two things do most of the work:</p>
+            ${C.table(
+                ['', 'What it does'],
+                [
+                    ['<code>tool</code>', 'The invocation context from Elsa — <code>tool.parameters</code> is what the model passed in'],
+                    ['<code>actions.run(pixel)</code>', 'Execute any Pixel expression and get the result back'],
+                    ['<code>actions.sendMCPResponseToPlayground(result, status, params)</code>', 'Returns the final value to Elsa Chat — call this when the work is done. <code>result</code> must be a string.'],
+                ]
+            )}
             ${C.code(`import { useInsight } from '@semoss/sdk/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export const WeatherPortal = () => {
-  // actions = run Pixel, send results back; tool = what Elsa passed in
   const { actions, tool } = useInsight();
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState((tool?.parameters?.city as string) || '');
   const [forecast, setForecast] = useState('');
-
-  useEffect(() => {
-    if (!tool) return; // opened standalone, not from Elsa
-
-    if (tool.tool_response) {
-      // viewing a past execution — restore what actually ran
-      setForecast(String(tool.tool_response));
-      setCity((tool.executedParameters?.city as string) || '');
-      return;
-    }
-
-    // fresh call from Elsa — prefill with the model's proposed city
-    setCity((tool.parameters?.city as string) || '');
-  }, [tool]);
 
   const run = async () => {
     const { pixelReturn } = await actions.run(
@@ -61,21 +54,11 @@ export const WeatherPortal = () => {
     );
     const result = String(pixelReturn[0].output);
     setForecast(result);
-    // send result back to Elsa Chat
     actions.sendMCPResponseToPlayground(result, 'success', { city });
   };
 
   return <div>...</div>;
 };`, 'typescript', 'ExampleComponent.tsx (placeholder)')}
-            ${C.table(
-                ['', 'What it does'],
-                [
-                    ['<code>const { actions, tool } = useInsight()</code>', 'The primary SDK hook — run API and tool invocation context'],
-                    ['<code>tool.parameters</code>', 'Inputs the model proposed when it called the tool'],
-                    ['<code>actions.run(pixel)</code>', 'Execute any Pixel expression and get the result back'],
-                    ['<code>actions.sendMCPResponseToPlayground(result, status, params)</code>', 'Return the final value to Elsa Chat — <code>result</code> must be a string'],
-                ]
-            )}
         `
     },
 
@@ -84,7 +67,7 @@ export const WeatherPortal = () => {
         title: "The Three Contexts Your UI Runs In",
         content: `
             <h2>The Three Contexts Your UI Runs In</h2>
-            <p>Your UI can be opened three ways. Getting the <code>useEffect</code> branching right is what makes it feel correct in all three.</p>
+            <p>Your UI can be opened three ways. Branch on these to make it feel correct in all three.</p>
             ${C.table(
                 ['Context', 'How to detect', 'What to do'],
                 [
@@ -93,19 +76,33 @@ export const WeatherPortal = () => {
                     ['Viewing a past execution', '<code>tool.tool_response</code> truthy', 'Restore result; prefill inputs from <code>tool.executedParameters</code>'],
                 ]
             )}
-            ${C.code(`useEffect(() => {
-  if (!tool) return;                      // standalone — nothing to prefill
+            ${C.code(`// when tool context loads
+if (!tool) return;                      // standalone — nothing to prefill
 
-  if (tool.tool_response) {              // past execution — restore previous result
-    setResult(String(tool.tool_response));
-    setCity((tool.executedParameters?.city as string) || '');
-    return;
-  }
+if (tool.tool_response) {              // past execution — restore what actually ran
+  restoreResult(tool.tool_response);
+  prefillInputs(tool.executedParameters);
+  return;
+}
 
-  // fresh call — prefill with the model's proposed city
-  setCity((tool.parameters?.city as string) || '');
-}, [tool]);`, 'typescript', 'The canonical useEffect pattern')}
+// fresh call — prefill with the model's proposed values
+prefillInputs(tool.parameters);`, 'typescript', 'The branching pattern')}
             ${C.callout('<code>tool.parameters</code> is what the model proposed. <code>tool.executedParameters</code> is what the user actually submitted (the third argument you pass to <code>sendMCPResponseToPlayground</code>). Always restore past executions from <code>executedParameters</code> — not <code>parameters</code>.', 'tip')}
+        `
+    },
+
+    {
+        id: "mcp-demo-convert",
+        title: "Demo — Converting and Testing Live",
+        content: `
+            <h2>Demo  —  Wiring Up the UI Live</h2>
+            <p class="lead">We have an app. We're going to hook it up so it responds to calls from Elsa Chat.</p>
+            ${C.flow([
+                { title: 'Open the component', desc: 'Wire tool.parameters into local state so the UI reflects what Elsa passed in', arrow: '↓' },
+                { title: 'Send the result back', desc: 'Call sendMCPResponseToPlayground when the work is done', arrow: '↓' },
+                { title: 'Rebuild and deploy', desc: 'pnpm build → sync script uploads and publishes', arrow: '↓' },
+                { title: 'Test in Elsa Chat', desc: 'Add the toolbox, ask a question, watch the tool run' },
+            ])}
         `
     },
 

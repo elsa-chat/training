@@ -135,6 +135,7 @@ const SESSION_PLAN = {
                         'mcp-in-action-overview',
                         'mcp-demo-useinsight',
                         'mcp-demo-states',
+                        'mcp-demo-convert',
                         'mcp-sharing',
                         'mcp-handson-intro',
                         'mcp-handson-convert',
