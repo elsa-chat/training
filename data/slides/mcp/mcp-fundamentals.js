@@ -110,10 +110,23 @@ const slides_mcp_fundamentals = [
           }
         },
         "required": ["question"]
+      },
+      "_metadata": {
+        "execution":       "auto",
+        "loadingMessage":  "Searching FDA documents...",
+        "displayLocation": "hidden"
       }
     }
   ]
 }`, 'json', 'assets/mcp/py_mcp.json')}
+            ${C.table(
+                ['Field', 'What it controls', 'Options'],
+                [
+                    ['<code>execution</code>', 'Whether the agent runs the tool automatically or asks you first', '<code>auto</code> · <code>ask</code> · <code>disabled</code>'],
+                    ['<code>loadingMessage</code>', `Text ${CONFIG.productName} shows in the chat while the tool is running`, 'Any string'],
+                    ['<code>displayLocation</code>', 'Where the tool\'s UI renders if it has one', '<code>hidden</code> · <code>inline</code> · <code>sidebar</code>'],
+                ]
+            )}
             ${C.callout('The <code>description</code> field is critical  —  it\'s how the agent decides <em>when</em> to call this tool. Write it as if you\'re instructing a person, not documenting an API.', 'info')}
         `
     },
