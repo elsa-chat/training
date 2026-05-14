@@ -8,7 +8,7 @@
     --bg-slide: #ffffff;
     --text-primary: #1a202c;
     --text-secondary: #4a5568;
-    --text-muted: #a0aec0;
+    --text-muted: #718096;
     --text-heading: #0f1419;
     --text-accent: #C8860A;
     --accent: #C8860A;
@@ -445,6 +445,12 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     font-weight: 400;
+}
+
+.slide-content .muted {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
 }
 
 .slide-content .subtitle {

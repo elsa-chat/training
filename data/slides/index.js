@@ -32,6 +32,7 @@ registerSlideCollection('Python', typeof slides_base_python !== 'undefined' ? sl
 registerSlideCollection('Pro-Code Apps', typeof slides_apps_pro_code !== 'undefined' ? slides_apps_pro_code : null);
 registerSlideCollection('Custom Reactors', typeof slides_custom_reactors !== 'undefined' ? slides_custom_reactors : null);
 registerSlideCollection('Vibe Coding', typeof slides_vibe_coding !== 'undefined' ? slides_vibe_coding : null);
+registerSlideCollection('Day 2 Opener', typeof slides_day2_opener !== 'undefined' ? slides_day2_opener : null);
 registerSlideCollection('Python SDK', typeof slides_python_sdk !== 'undefined' ? slides_python_sdk : null);
 registerSlideCollection('Day 1 Activity', typeof slides_day1_activity !== 'undefined' ? slides_day1_activity : null);
 
@@ -42,15 +43,15 @@ registerSlideCollection('Message Structure', typeof slides_message_structure !==
 registerSlideCollection('Model Logs', typeof slides_model_logs !== 'undefined' ? slides_model_logs : null);
 registerSlideCollection('API Endpoints', typeof slides_api_endpoints !== 'undefined' ? slides_api_endpoints : null);
 
-registerSlideCollection('${CONFIG.aiName}', typeof slides_playground !== 'undefined' ? slides_playground : null);
+registerSlideCollection(`${CONFIG.aiName}`, typeof slides_playground !== 'undefined' ? slides_playground : null);
+registerSlideCollection('Agents', typeof slides_agents !== 'undefined' ? slides_agents : null);
 registerSlideCollection('MCP Fundamentals', typeof slides_mcp_fundamentals !== 'undefined' ? slides_mcp_fundamentals : null);
+registerSlideCollection('MCP in Action', typeof slides_mcp_in_action !== 'undefined' ? slides_mcp_in_action : null);
 registerSlideCollection('MCP Building & Consuming', typeof slides_mcp_building_consuming !== 'undefined' ? slides_mcp_building_consuming : null);
 registerSlideCollection('MCP UI & Premade', typeof slides_mcp_ui_premade !== 'undefined' ? slides_mcp_ui_premade : null);
 
 registerSlideCollection('Docker', typeof slides_docker !== 'undefined' ? slides_docker : null);
-registerSlideCollection('Security & Auth', typeof slides_security_auth !== 'undefined' ? slides_security_auth : null);
 registerSlideCollection('Admin', typeof slides_admin !== 'undefined' ? slides_admin : null);
-registerSlideCollection('Capstone Project', typeof slides_capstone_project !== 'undefined' ? slides_capstone_project : null);
 
 registerSlideCollection('Appendix', typeof slides_appendix !== 'undefined' ? slides_appendix : null);
 

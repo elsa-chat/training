@@ -5,7 +5,7 @@ const slides_python_sdk = [
             title: "Python SDK  -  ai-server-sdk",
             content: C.titleSlide(
                 "Python SDK  -  ai-server-sdk",
-                "Interacting with ${CONFIG.productName} programmatically from Python",
+                `Interacting with ${CONFIG.productName} programmatically from Python`,
                 "60 minutes"
             )
         },

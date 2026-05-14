@@ -92,7 +92,8 @@ const slides_vibe_coding = [
   "env": {
     "ANTHROPIC_AUTH_TOKEN": "<your-access-key>:<your-secret-key>",
     "ANTHROPIC_BASE_URL": "${CONFIG.anthropicEndpoint}",
-    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "true"
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "true",
+    "NODE_TLS_REJECT_UNAUTHORIZED": "0"
   },
   "model": "${CONFIG.claudeCodeModelId}",
   "effortLevel": "medium"
@@ -102,7 +103,7 @@ const slides_vibe_coding = [
                     <li><code>ANTHROPIC_AUTH_TOKEN</code> — your access key + secret, separated by a colon</li>
                     <li><code>ANTHROPIC_BASE_URL</code> — routes all model calls to ${CONFIG.productName}</li>
                     <li><code>CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC</code> — turns off telemetry and other non-essential outbound calls</li>
-                    <li><code>model</code> — the model engine ID from your ${CONFIG.productName} catalog (ask your presenter)</li>
+<li><code>model</code> — the model engine ID from your ${CONFIG.productName} catalog (ask your presenter)</li>
                     <li><code>effortLevel</code> — how hard Claude Code thinks before responding (<code>low</code> / <code>medium</code> / <code>high</code>)</li>
                 </ul>
 
@@ -121,9 +122,9 @@ const slides_vibe_coding = [
                         ${C.code(`claude`, 'bash')}
                     </li>
                     <li>Type this message and press Enter:
-                        ${C.code(`what model are you running`, 'text')}
+                        ${C.code(`say hello`, 'text')}
                     </li>
-                    <li><strong>Expected:</strong> a short reply with the model engine ID from your ${CONFIG.productName} catalog — it will look like a UUID, e.g. <code>${CONFIG.sharedModelEngineId}</code></li>
+                    <li><strong>Expected:</strong> any response back — if you get a reply, the connection is working</li>
                     <li><strong>If you get an auth error or connection refused:</strong>
                         <ul>
                             <li>Check that <code>ANTHROPIC_BASE_URL</code> is <code>${CONFIG.anthropicEndpoint}</code> — no trailing slash</li>
@@ -139,21 +140,43 @@ const slides_vibe_coding = [
         `
     },
     {
-        id: "vibe-presenter-demo",
-        title: "Follow Along: Build a Q&A App",
+        id: "vibe-run-dev",
+        title: "Run the Dev Server",
         content: `
-            <h2>Follow Along: Build a Q&A App</h2>
-            <p>The presenter will run this prompt live. Watch how the app comes together, then you'll do the same with your own variation.</p>
-            ${C.code(`Build a single-page Q&A app on top of my ${CONFIG.productName} vector engine.
+            <h2>Run the Dev Server</h2>
+            <p class="lead">Before we prompt Claude Code, get the app running locally so you can see your changes in real time.</p>
+            ${C.handson("Start the local dev server", `
+                <p>From the project root you cloned in Setup Step 1:</p>
+                ${C.code(`cd client
+pnpm install
+pnpm dev`, 'bash', 'Two commands, then leave it running')}
+                <p>Open the URL it prints (usually <code>http://localhost:5173</code>). You should see the template's default Home page.</p>
+                <p class="muted">Leave this terminal running. When Claude Code edits files, the page hot-reloads automatically.</p>
+                ${C.callout('If <code>pnpm</code> is not installed: <code>npm install -g pnpm</code>. Or use <code>npm install &amp;&amp; npm run dev</code> as a fallback.', 'tip')}
+            `)}
+        `
+    },
+    {
+        id: "vibe-presenter-demo",
+        title: "Follow Along: Build a Fitness Log",
+        content: `
+            <h2>Follow Along: Build a Fitness Log</h2>
+            <p>The presenter will run this prompt live in Claude Code. It edits one file. Watch how fast it lands.</p>
+            ${C.code(`Build a fitness log dashboard in client/src/pages/HomePage.tsx.
 
-Requirements:
-- A text input where the user types a question
-- A "Search" button that calls VectorDatabaseQuery against the vector engine to get the top 3 chunks
-- Pass those chunks as context into an LLM call against my shared model engine
-- Display the answer prominently, and list the source document names below it
-- Use the @semoss/sdk to run the Pixel commands
-- Keep the UI clean and minimal — single column, generous spacing`, 'text', 'Presenter Prompt — copy from chat if you want to follow exactly')}
-            ${C.callout('Specificity matters. A clear description of the data source, the inputs, and the expected output gets you a working app on the first try. Vague prompts get vague apps.', 'tip')}
+Rules:
+- Edit ONLY client/src/pages/HomePage.tsx. Do not modify any other file. Do not create new files. Do not add a new route.
+- Do NOT run the Startup Checklist in CLAUDE.md. This is a frontend-only demo — no platform connectivity, no credentials, no MCP servers.
+- Use hardcoded mock data. No API calls, no useInsight(), no actions.run().
+
+UI:
+- Header row: 3 stat cards — This Week's Workouts, Total Minutes, Calories Burned
+- Recent Workouts list — date, workout type (Run / Lift / Yoga / etc.), duration, calories
+- Weekly Activity chart — last 7 days as plain Tailwind div bars, no chart library
+- Personal Records section — exercise name, current PR, last updated date
+
+Use Tailwind for styling. Existing components in client/src/components/ are available if useful, otherwise plain divs. Modern, clean look — dark mode optional, your call.`, 'text', 'Presenter Prompt — paste into Claude Code')}
+            ${C.callout('No vector engines, no Pixel, no credentials. Pure frontend. Expect a first-draft UI in under a minute.', 'tip')}
         `
     },
     {
@@ -162,20 +185,17 @@ Requirements:
         content: `
             <h2>Hands-on: Build Your App</h2>
             ${C.handson("Build Your App", `
-                <ol>
-                    <li>Open Claude Code in the project folder you cloned</li>
-                    <li>Write a prompt describing your app — include the vector engine ID, the question users will ask, and what the output should look like</li>
-                    <li>Let Claude Code generate the app, then run it locally and confirm it works</li>
-                    <li>Publish it from ${CONFIG.productName} and share the live URL in the chat</li>
-                </ol>
+                <p>Paste this prompt into Claude Code. Tweak the app idea if you want.</p>
+                ${C.code(`Edit ONLY client/src/pages/HomePage.tsx. Do not read other files. Skip the Startup Checklist.
 
-                ${C.callout(`Stuck on the prompt? Start with the presenter's prompt from the previous slide and tweak the requirements for your own data.`, 'tip')}
+Build a todo list with hardcoded mock data. Tailwind, FE-only. Add a clean header, an input to add items, and check-off behavior.`, 'text', 'Quick prompt')}
+                <p>Watch your browser at <code>localhost:5173</code> — it hot-reloads as Claude Code writes. Drop a screenshot in the chat when it works.</p>
 
                 <h4>Troubleshooting</h4>
                 <ul>
-                    <li><strong>Updated <code>.mcp.json</code> or <code>settings.json</code>?</strong> Quit Claude Code (<code>/exit</code> or Ctrl+C) and re-run <code>claude</code> — config changes only load on launch</li>
-                    <li><strong>Auth error after pasting keys?</strong> Make sure your token is formatted <code>access-key:secret-key</code> — single colon, no spaces</li>
-                    <li><strong>Tools not appearing?</strong> Use <code>/mcp</code> inside Claude Code to list connected MCP servers and confirm they're loaded</li>
+                    <li><strong>Page didn't update?</strong> Make sure <code>pnpm dev</code> is still running</li>
+                    <li><strong>Claude Code is exploring the whole repo?</strong> Re-prompt: <code>Edit ONLY client/src/pages/HomePage.tsx. Do not read other files.</code></li>
+                    <li><strong>Settings change?</strong> Quit Claude Code and re-launch — settings load only at startup</li>
                 </ul>
             `)}
         `
@@ -224,7 +244,8 @@ Requirements:
                     desc: "Build something real for your team — combine engines, tools, and agents into a complete workflow"
                 },
             ])}
-            ${C.callout(`Keep your ${CONFIG.productName} session active overnight — your vector engine, access keys, and published app will all be there tomorrow.`, 'info')}
+            ${C.callout(`Your vector engine, access keys, and published app are all persisted server-side — everything will be exactly where you left it tomorrow.`, 'info')}
+            ${C.callout(`When you reopen Claude Code tomorrow, run <code>/resume</code> to pick up your conversation exactly where you left off.`, 'tip')}
         `
     }
 ];

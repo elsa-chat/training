@@ -22,7 +22,7 @@ const slides_platform_fundamentals = [
                     {
                         title: 'Quickly prototype AI applications',
                         desc: 'Without deep technical expertise — the catalog and building block ecosystem handles the complexity so you focus on the problem.',
-                        badges: ['AI ' + CONFIG.aiName,'App Marketplace','Model Zoo']
+                        badges: [`AI ${CONFIG.aiName}`,'App Marketplace','Model Zoo']
                     },
                     {
                         title: 'Clear abstraction layer',
@@ -136,72 +136,4 @@ const slides_platform_fundamentals = [
         `
     },
 
-    // ── NAVIGATION ────────────────────────────────────────────────────────────
-    {
-        id: "platform-navigation",
-        title: "Navigation Walkthrough",
-        content: `
-            <h2>The Five Main Areas</h2>
-            <p>Before we dive in, let's orient ourselves. ${CONFIG.productName} is organized around five navigation areas  -  each with a distinct purpose.</p>
-            ${C.cards([
-                {
-                    badge: 'Discover',
-                    title: 'Catalog',
-                    desc: 'Browse and search all engines, apps, and projects shared with you. Your starting point for finding what already exists.'
-                },
-                {
-                    badge: 'Connect',
-                    title: 'Engines',
-                    desc: 'Create and manage connections to databases, AI models, vector stores, storage, and more. The data layer lives here.'
-                },
-                {
-                    badge: 'Build',
-                    title: 'Apps',
-                    desc: `Create, edit, and run applications. Choose from drag-and-drop, vibe coding, or pro-code  -  all publishing to the same platform.`
-                },
-                {
-                    badge: 'Experiment',
-                    title: CONFIG.aiName,
-                    desc: 'Interactive sandbox for testing AI models, running ad-hoc queries, and exploring data before building a full app.'
-                },
-                {
-                    badge: 'Admin',
-                    title: 'Settings',
-                    desc: `Manage users, permissions, and platform configuration. Typically handled by your ${CONFIG.productName} admin.`
-                }
-            ])}
-            ${C.callout('Follow along in your browser as the presenter navigates each area.', 'tip')}
-        `
-    },
-
-    // ── RBAC ──────────────────────────────────────────────────────────────────
-    {
-        id: "platform-rbac",
-        title: "Access & Permissions",
-        content: `
-            <h2>Role-Based Access Control</h2>
-            <p>${CONFIG.productName} uses three permission levels that apply consistently to both <strong>Engines</strong> and <strong>Apps</strong>.</p>
-            ${C.table(
-                ['Role', 'Engines', 'Apps'],
-                [
-                    [
-                        '<strong>Owner</strong>',
-                        'Create, edit config, delete, share with others',
-                        'Create, edit layout & logic, publish, delete, share'
-                    ],
-                    [
-                        '<strong>Edit</strong>',
-                        'View details, upload documents, run queries',
-                        'Edit content and cells, run, save changes'
-                    ],
-                    [
-                        '<strong>Read-Only</strong>',
-                        'Run queries and inference  -  no config changes',
-                        'View and interact with the app  -  no editing'
-                    ]
-                ]
-            )}
-            ${C.callout('If you cannot find an engine or app, you may not have been granted access  -  ask your admin. Full permission management is covered on Day 2.', 'warning')}
-        `
-    }
 ];

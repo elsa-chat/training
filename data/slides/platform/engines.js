@@ -17,11 +17,11 @@ const slides_platform_engines = [
                 <p class="lead">An <span class="highlight">Engine</span> is ${CONFIG.productName}'s uniform connector to any external system  -  database, AI model, file store, or custom API.</p>
                 ${C.flow([
                     { title: 'Your Data, Models & Storage', desc: 'Databases, LLMs, vector stores, files  -  anything external' },
-                    { title: 'Engine Abstraction (IEngine)', desc: 'A uniform interface wrapping every connection', arrow: '↓ plugs in here' },
-                    { title: 'Pixel Commands', desc: 'You interact with every engine the same way, regardless of what\'s underneath', arrow: '↓ talk through' },
+                    { title: 'Engine Abstraction (IEngine)', desc: 'A uniform interface wrapping every connection', arrow: '↓' },
+                    { title: 'Pixel Commands', desc: 'You interact with every engine the same way, regardless of what\'s underneath', arrow: '↓' },
                     { title: 'Your App', desc: 'Queries, AI answers, stored files  -  delivered to the user' }
                 ])}
-                ${C.callout('Everything in ' + CONFIG.productName + ' talks through engines. This uniform abstraction is what makes the platform extensible  -  swap out a database or switch AI providers without rewriting your app.', 'info')}
+                ${C.callout('Engines are how ' + CONFIG.productName + ' connects to everything external  -  databases, models, storage, all of it. Swap providers or change what\'s underneath without touching your app.', 'info')}
             `
         },
         {
@@ -70,12 +70,12 @@ const slides_platform_engines = [
             content: `
                 <h2>Model Engines in This Training</h2>
                 ${C.callout('<strong>Note:</strong> Model engines in this training environment are pre-configured and shared. You will <em>call</em> them but not create them. This is by design  -  model engine credentials and compute are managed by your ' + CONFIG.productName + ' admin.', 'warning')}
-                <p>When you use the Q&amp;A tab or build a prompt in the ${CONFIG.aiName}, you are using one of these pre-configured model engines behind the scenes. You will see them listed in the Engine Catalog as read-only.</p>
+                <p>Any time you are chatting inside ${CONFIG.productName}, you are using a model engine. They also power the Q&amp;A tab, the ${CONFIG.aiName}, and any app that calls a model.</p>
                 ${C.table(
                     ['What you will do today', 'What your admin handles'],
                     [
-                        ['Call model engines from the Q&A tab and ' + CONFIG.aiName, 'Create model engine records and store API credentials'],
-                        ['Select a model when building apps', 'Manage compute quotas and provider billing'],
+                        ['Chat inside ' + CONFIG.productName + ` (Q&A, ${CONFIG.aiName})`, 'Create model engine records and store API credentials'],
+                        ['Call models via API from your apps', 'Manage compute quotas and provider billing'],
                         ['View model engine details in the Catalog', 'Rotate keys and upgrade model versions']
                     ]
                 )}
@@ -86,18 +86,22 @@ const slides_platform_engines = [
             title: "Hands-on: Create Your Vector Engine",
             content: `
                 <h2>Hands-on: Create Your Vector Engine</h2>
-                ${C.handson('Navigate to Engine Catalog and add a Vector Engine', `
+                ${C.handson('Create a FAISS Vector Engine', `
                     <ol>
-                        <li>Open ${CONFIG.productName} in your browser and click <strong>Engines</strong> in the left navigation.</li>
-                        <li>Click <strong>Add Engine</strong> (top-right button).</li>
-                        <li>Select the <strong>Vector</strong> engine type from the list.</li>
-                        <li>Choose the vector database type available in your environment.<br>
-                            <em>[Presenter will confirm which vector DB type is available in your environment]</em></li>
-                        <li>Give your engine a unique name  -  for example: <code>MyVectorDB_[YourInitials]</code></li>
-                        <li>Fill in any required connection fields as directed by the presenter.</li>
-                        <li>Click <strong>Save</strong>. Your engine will appear in the Catalog.</li>
+                        <li>In the left sidebar, click <strong>Vector</strong>.</li>
+                        <li>Click <strong>Add Vector</strong> (top-right button).</li>
+                        <li>On the "Connect to Vector Database" page, select <strong>FAISS</strong>.</li>
+                        <li>Fill in the form:
+                            <ul>
+                                <li><strong>Catalog Name</strong>  -  use something unique, e.g. <code>FDA_Docs_[YourInitials]</code></li>
+                                <li><strong>Embedder</strong>  -  select the embedding model from the dropdown (there should be one available)</li>
+                                <li>Leave <strong>Chunking Strategy</strong>, <strong>Content Length</strong>, and <strong>Content Overlap</strong> at their defaults</li>
+                            </ul>
+                        </li>
+                        <li>Click <strong>Save</strong>. Your vector engine will appear in the Vector Catalog.</li>
+                        <li>Open your engine from the Catalog, go to <strong>Settings</strong>, and copy the <strong>Engine ID</strong>  -  you will need it in later exercises.</li>
                     </ol>
-                    <p><strong>What just happened?</strong> ${CONFIG.productName} wrote a <code>.smss</code> config file for your engine, registered it in the platform's metadata database, and it is now available to any app or workflow you build.</p>
+                    <p><strong>What just happened?</strong> ${CONFIG.productName} created a FAISS index backed by your chosen embedding model. Any documents you add will be chunked, embedded, and stored here  -  ready for semantic search across your apps.</p>
                 `)}
             `
         },
@@ -108,9 +112,9 @@ const slides_platform_engines = [
                 <h2>Hands-on: Upload Documents into Your Vector Engine</h2>
                 ${C.handson('Upload FDA guidance documents into your vector engine', `
                     <ol>
-                        <li>In the Engine Catalog, find and open the vector engine you just created.</li>
-                        <li>Click the <strong>Documents</strong> tab (or <strong>Upload</strong> button).</li>
+                        <li>In the Vector Catalog, find and open the vector engine you just created.</li>
                         <li>Click <strong>Add Files</strong> and select the sample FDA guidance documents provided by your presenter.</li>
+                        <li>Click <strong>Embed New Document</strong> to start ingestion.</li>
                         <li>Wait for ingestion to complete  -  the platform will chunk, embed, and index each document automatically.</li>
                         <li>When finished, the document list will show your files with a green status indicator.</li>
                     </ol>
@@ -142,10 +146,10 @@ const slides_platform_engines = [
         },
         {
             id: "engines-demo-database",
-            title: "Presenter Demo: Database Engine from CSV",
+            title: "Presenter Demo: Database Engine from an Excel File",
             content: `
                 <h2>Presenter Demo</h2>
-                <p class="lead">Creating a Database Engine from a CSV file</p>
+                <p class="lead">Creating a Database Engine from an Excel file</p>
                 ${C.cards([
                     {
                         badge: 'Demo Step 1',
@@ -154,8 +158,8 @@ const slides_platform_engines = [
                     },
                     {
                         badge: 'Demo Step 2',
-                        title: 'Add Engine → File Upload',
-                        desc: 'Select H2 as the database type and upload a CSV. The platform creates a relational database automatically.'
+                        title: 'Add Database → File Upload',
+                        desc: 'Select H2 as the database type and upload an Excel file. The platform creates a relational database automatically.'
                     },
                     {
                         badge: 'Demo Step 3',
@@ -165,7 +169,7 @@ const slides_platform_engines = [
                     {
                         badge: 'Demo Step 4',
                         title: 'Query the Data',
-                        desc: 'Open the engine\'s Query tab and run a SQL query against the CSV data  -  now a live database.'
+                        desc: 'Open the engine\'s Query tab and run a SQL query against the Excel data  -  now a live database.'
                     }
                 ])}
                 ${C.callout('Notice the pattern: the same flow (Add Engine → configure → save → use) applies whether you\'re connecting a vector store, a database, or any other engine type.', 'info')}

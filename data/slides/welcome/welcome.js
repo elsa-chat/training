@@ -104,12 +104,14 @@ const slides_welcome = [
         id: "welcome-paradigm-img",
         title: "The Paradigm Shift (cont.)",
         content: `
-            <img
-                src="assets/paradigm-shift.png"
-                alt="Old vs New Paradigm"
-                style="position:absolute;top:3rem;left:0;width:100%;height:auto;border-radius:6px;"
-                onerror="this.replaceWith(Object.assign(document.createElement('div'),{innerHTML:'<div style=\'padding:3rem;border:2px dashed #ddd;border-radius:8px;text-align:center;color:#aaa\'><p style=\'font-size:1rem;margin:0\'>📁 Drop <code>paradigm-shift.png</code> in <code>training/assets/</code></p></div>'}));"
-            >
+            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+                <img
+                    src="assets/paradigm-shift.png"
+                    alt="Old vs New Paradigm"
+                    style="width:100%;height:auto;max-height:85vh;object-fit:contain;border-radius:6px;display:block;"
+                    onerror="this.replaceWith(Object.assign(document.createElement('div'),{innerHTML:'<div style=&quot;padding:3rem;border:2px dashed #ddd;border-radius:8px;text-align:center;color:#aaa&quot;><p style=&quot;font-size:1rem;margin:0&quot;>📁 Drop paradigm-shift.png in training/assets/</p></div>'}));"
+                >
+            </div>
         `
     },
     {
@@ -160,17 +162,25 @@ const slides_welcome = [
                 ['Time', 'Topic'],
                 [
                     ['10:00 – 10:15', 'Day 1 Recap & Q&A'],
-                    ['10:15 – 11:00', 'MCP Fundamentals'],
-                    ['11:00 – 11:45', `${CONFIG.aiName} Deep Dive + Hands-on`],
-                    ['11:45 – 12:00', '☕ Break'],
-                    ['12:00 – 12:45', '🍽 Lunch'],
-                    ['12:45 – 1:15',  'OpenAI / Anthropic API Endpoints'],
-                    ['1:15 – 1:45',   'Security & RBAC'],
-                    ['1:45 – 2:45',   'Capstone: End-to-End App Build'],
+                    ['10:15 – 11:15', 'MCP Fundamentals'],
+                    ['11:15 – 12:00', `${CONFIG.aiName} Deep Dive + Hands-on`],
+                    ['12:00 – 1:00',  '🍽 Lunch'],
+                    ['1:00 – 1:30',   'OpenAI / Anthropic API Endpoints'],
+                    ['1:30 – 2:00',   'Security & RBAC'],
+                    ['2:00 – 2:45',   'Capstone: End-to-End App Build'],
                     ['2:45 – 3:00',   'Wrap-up, Q&A & Feedback'],
                 ]
             )}
             ${C.callout('Backup sections (Python SDK, structured output, image processing, model logs) are ready if either day moves faster than planned.', 'tip')}
         `
+    },
+    {
+        id: "elsa-demo-divider",
+        title: "ELSA 4.0 Demo",
+        content: C.titleSlide(
+            `${CONFIG.productName} 4.0  —  Live Demo`,
+            "Walkthrough",
+            ""
+        )
     }
 ];
