@@ -14,6 +14,40 @@ const slides_playground = [
     },
 
     {
+        id: "elsa-chat-overview",
+        title: `${CONFIG.aiName}  —  The Interface`,
+        content: `
+            <h2>${CONFIG.aiName}  —  The Interface</h2>
+            ${C.split(
+                {
+                    title: 'Getting Started',
+                    content: `
+                        <ul>
+                            <li>When you open ${CONFIG.aiName} you land on a <strong>chat interface</strong></li>
+                            <li>The first message you send <strong>creates a Room</strong>  —  a persistent space for that conversation</li>
+                            <li>Every subsequent message is added to that room, building up a shared context the LLM reasons over</li>
+                            <li>The <strong>room navigator on the left</strong> lists all your rooms  —  click any to switch back to it</li>
+                        </ul>
+                    `
+                },
+                {
+                    title: 'Configuring a Room',
+                    content: `
+                        <ul>
+                            <li><strong>System prompt</strong>  —  set a standing instruction for the LLM in this room</li>
+                            <li><strong>Model</strong>  —  choose which LLM the agent uses</li>
+                            <li><strong>Vectors & tools</strong>  —  attach engines or MCP toolboxes the agent can call</li>
+                            <li><strong>Agents</strong>  —  wire in a pre-built agent (we'll cover this later today)</li>
+                            <li><strong>Documents</strong>  —  upload files for the agent to read in this room</li>
+                        </ul>
+                    `
+                }
+            )}
+            ${C.callout(`<strong>Prompt Optimizer</strong>  —  paste a rough system prompt and ${CONFIG.aiName} will rewrite it into a cleaner, more effective instruction for the model.`, 'tip')}
+        `
+    },
+
+    {
         id: "playground-what-is",
         title: `What is ${CONFIG.aiName}?`,
         content: `
@@ -41,7 +75,7 @@ const slides_playground = [
                     desc: 'Configure system prompts, pick models, and compose tools into a full agent  —  then test it live in the same view.'
                 },
             ])}
-            ${C.callout(`Everything you built in Day 1  —  your vector engine, your app  —  can be wired into ${CONFIG.aiName} as agent tools. That\`s what the rest of today is about.', 'info')}
+            ${C.callout(`Everything you built in Day 1  —  your vector engine, your app  —  can be wired into ${CONFIG.aiName} as agent tools. That's what the rest of today is about.`, 'info')}
         `
     },
 
