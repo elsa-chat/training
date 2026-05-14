@@ -102,15 +102,7 @@ const SESSION_PLAN = {
                     title: `${CONFIG.aiName} Deep Dive`,
                     time: '10:30 – 11:00 AM',
                     slideIds: [
-                        'playground-title',
                         'elsa-chat-overview',
-                        'playground-what-is',
-                        'playground-what-is-room',
-                        'room-message-json',
-                        'playground-room-utilities',
-                        'playground-ui-tabs',
-                        'appendix-files-overview',
-                        'appendix-rooms-history',
                     ]
                 },
                 {
