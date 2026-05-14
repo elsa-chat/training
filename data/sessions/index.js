@@ -146,11 +146,8 @@ const SESSION_PLAN = {
                     slideIds: [
                         'agents-title',
                         'agents-what-is',
-                        'playground-architecture',
-                        'playground-agent-config',
-                        'agents-compose',
+                        'agents-configure',
                         'agents-handson',
-                        'agents-share',
                     ]
                 },
                 {
