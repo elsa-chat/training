@@ -24,7 +24,7 @@ const slides_mcp_in_action = [
                 { title: 'Write mcp_driver.py', desc: 'One Python function  —  same logic, just wrapped', arrow: '↓' },
                 { title: 'Add @mcp_metadata', desc: 'Tell the platform: execution mode, loading message, display', arrow: '↓' },
                 { title: 'Run MakePythonMCP()', desc: 'Platform reads your function and generates the JSON schema', arrow: '↓' },
-                { title: 'Add to Playground', desc: 'Agent can now discover and call your tool', arrow: '↓' },
+                { title: `Add to ${CONFIG.aiName}`, desc: 'Agent can now discover and call your tool', arrow: '↓' },
                 { title: 'Test it live', desc: 'Ask the agent a question  —  watch it call your tool' },
             ])}
         `
@@ -87,7 +87,7 @@ def search_documents(question: str) -> str:
                     ['<code>execution</code>', '<code>"auto"</code>', 'Agent calls silently  —  no user confirmation needed'],
                     ['<code>execution</code>', '<code>"ask"</code>', 'Agent shows what it wants to do and waits for approval  —  <strong>default if omitted</strong>'],
                     ['<code>execution</code>', '<code>"disabled"</code>', 'Tool is hidden from the agent entirely'],
-                    ['<code>loadingMessage</code>', 'Any string', 'Text shown in Playground while the tool runs'],
+                    ['<code>loadingMessage</code>', 'Any string', `Text shown in ${CONFIG.aiName} while the tool runs`],
                     ['<code>displayLocation</code>', '<code>"hidden"</code>', 'No UI panel  —  tool runs silently and returns data to the model'],
                     ['<code>displayLocation</code>', '<code>"inline"</code>', 'UI panel renders inside the chat thread'],
                     ['<code>displayLocation</code>', '<code>"sidebar"</code>', 'UI panel opens in the right sidebar (persistent)'],
@@ -163,7 +163,7 @@ def search_documents(question: str) -> str:
         title: "JS/TS SDK  —  Portal UIs",
         content: `
             <h2>JS/TS SDK  —  Building Portal UIs for Your Tools</h2>
-            <p>If your MCP tool needs a rich UI, build one in React using <code>@semoss/sdk</code>. The portal renders inside Playground when the tool is called.</p>
+            <p>If your MCP tool needs a rich UI, build one in React using <code>@semoss/sdk</code>. The portal renders inside ${CONFIG.aiName} when the tool is called.</p>
             ${C.code(`import { useInsight } from '@semoss/sdk/react';
 
 export function SearchPortal() {
@@ -197,13 +197,13 @@ export function SearchPortal() {
 
     {
         id: "mcp-playground-wire",
-        title: "Wire Your MCP into Playground",
+        title: `Wire Your MCP into ${CONFIG.aiName}`,
         content: `
-            <h2>Step 5  —  Add Your Tool to Playground and Test It</h2>
-            ${C.handson("Wire Your MCP into Playground", `
+            <h2>Step 5  —  Add Your Tool to ${CONFIG.aiName} and Test It</h2>
+            ${C.handson(`Wire Your MCP into ${CONFIG.aiName}`, `
                 <h4>Add the MCP server:</h4>
                 <ol>
-                    <li>Open <strong>Playground</strong> → open or create a Room Folder</li>
+                    <li>Open <strong>${CONFIG.aiName}</strong> → open or create a Room Folder</li>
                     <li>Go to the <strong>Toolbox</strong> tab → <strong>Add MCP Server</strong></li>
                     <li>Select your project  —  ${CONFIG.productName} auto-loads <code>assets/mcp/py_mcp.json</code></li>
                     <li>Your <code>search_documents</code> tool should appear in the tool list</li>
@@ -230,12 +230,12 @@ Always cite the source document and page range before giving your answer.`, 'pro
         title: "Sharing Your MCP",
         content: `
             <h2>Sharing Your MCP  —  Who Can Use It</h2>
-            <p class="lead">Once your MCP is published, other users can add it to their own Playground rooms  —  or call it from outside ${CONFIG.productName} entirely.</p>
+            <p class="lead">Once your MCP is published, other users can add it to their own ${CONFIG.aiName} rooms  —  or call it from outside ${CONFIG.productName} entirely.</p>
             ${C.table(
                 ['How', 'Who', 'What they need'],
                 [
                     [
-                        'Add as MCP server in Playground',
+                        `Add as MCP server in ${CONFIG.aiName}`,
                         'Any ${CONFIG.productName} user with access to your project',
                         'Your project ID  —  they add it in their Toolbox tab'
                     ],
@@ -307,12 +307,12 @@ def search_documents(question: str) -> str:
                 ${C.code(`MakePythonMCP(project=["<your-project-id>"]);`, 'pixel', 'Run in ${CONFIG.productName} Notebook or console')}
                 <p>Open <code>assets/mcp/py_mcp.json</code> and verify your function appears as a tool.</p>
 
-                <h4>Step 3  —  Add to Playground and test</h4>
+                <h4>Step 3  —  Add to ${CONFIG.aiName} and test</h4>
                 <ol>
-                    <li>Playground → Room Folder → Toolbox → Add MCP Server → your project</li>
+                    <li>${CONFIG.aiName} → Room Folder → Toolbox → Add MCP Server → your project</li>
                     <li>Set a system prompt instructing the agent to use your tool</li>
                     <li>Ask a question  —  confirm the agent calls <code>search_documents</code></li>
-                    <li>Share your project ID with a neighbor and add theirs to your Playground</li>
+                    <li>Share your project ID with a neighbor and add theirs to your ${CONFIG.aiName}</li>
                 </ol>
                 ${C.callout('Stuck? The most common issue is a vague docstring. Make it say exactly when to call the tool.', 'tip')}
             `)}

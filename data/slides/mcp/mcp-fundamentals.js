@@ -72,7 +72,7 @@ const slides_mcp_fundamentals = [
             <h2>How the Layers Connect</h2>
             <p>You own the bottom two layers. The MCP JSON schema is the contract between them and the agent.</p>
             ${C.layers([
-                { label: "Playground / Room", items: [
+                { label: `${CONFIG.aiName} / Room`, items: [
                     { title: "AI Agent Chat", desc: "Conversation thread, model responses" },
                     { title: "Tool Discovery", desc: "Agent sees available MCP tools automatically" },
                 ]},
@@ -197,7 +197,7 @@ const slides_mcp_fundamentals = [
                 { title: 'Run MakePythonMCP(project=["..."])', desc: 'One Pixel command in the Notebook or console', arrow: '↓' },
                 { title: `${CONFIG.productName} introspects your mcp_driver.py`, desc: 'Reads function signatures and docstrings automatically', arrow: '↓' },
                 { title: 'Generates assets/mcp/py_mcp.json', desc: 'Produces the JSON schema the agent will read', arrow: '↓' },
-                { title: 'Agent can discover and call it', desc: 'Tool is live in Playground immediately' },
+                { title: 'Agent can discover and call it', desc: `Tool is live in ${CONFIG.aiName} immediately` },
             ])}
             ${C.code(`def search_documents(question: str) -> str:
     """

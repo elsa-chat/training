@@ -1,13 +1,13 @@
-// Topic: Agents in Playground  —  Day 2 Section 5
+// Topic: Agents in ${CONFIG.aiName}  —  Day 2 Section 5
 const slides_agents = [
 
     // ─── SECTION 5: AGENTS IN PLAYGROUND ─────────────────────────────────────
 
     {
         id: "agents-title",
-        title: "Agents in Playground",
+        title: `Agents in ${CONFIG.aiName}`,
         content: C.titleSlide(
-            "Agents in Playground",
+            `Agents in ${CONFIG.aiName}`,
             "Composing tools into a working AI agent",
             "30 minutes"
         )
@@ -93,7 +93,7 @@ const slides_agents = [
             ${C.handson("Build Your Agent", `
                 <h4>Step 1  —  Set up the Room Folder</h4>
                 <ol>
-                    <li>Open Playground → <strong>New Room Folder</strong> (or reuse the one from Section 4)</li>
+                    <li>Open ${CONFIG.aiName} → <strong>New Room Folder</strong> (or reuse the one from Section 4)</li>
                     <li>In the <strong>Instructions</strong> tab, set a system prompt:
                         ${C.code(`You are an FDA regulatory assistant.
 You have access to a search tool that queries official FDA guidance documents.
@@ -146,7 +146,7 @@ Cite the source document and page range in every answer.`, 'properties', 'System
                     [
                         'Your full agent (public)',
                         'Publish the app → anyone with access can use the live URL',
-                        'A deployed agent they can chat with  —  no Playground setup needed'
+                        `A deployed agent they can chat with  —  no ${CONFIG.aiName} setup needed`
                     ],
                 ]
             )}

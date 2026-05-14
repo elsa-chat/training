@@ -22,7 +22,7 @@ const slides_platform_fundamentals = [
                     {
                         title: 'Quickly prototype AI applications',
                         desc: 'Without deep technical expertise — the catalog and building block ecosystem handles the complexity so you focus on the problem.',
-                        badges: ['AI Playground','App Marketplace','Model Zoo']
+                        badges: [`AI ${CONFIG.aiName}`,'App Marketplace','Model Zoo']
                     },
                     {
                         title: 'Clear abstraction layer',
@@ -110,7 +110,7 @@ const slides_platform_fundamentals = [
                 <div style="background:#f7fafc;border:1px solid #e2e8f0;border-radius:8px;padding:.75rem;">
                     <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:#4a5568;margin-bottom:.3rem;">APP LIBRARY</div>
                     <p style="font-size:.75rem;color:#555;margin:0 0 .3rem;">Test models and access pre-built apps. Customize templates to accelerate delivery.</p>
-                    <p style="font-size:.72rem;color:#718096;font-weight:600;margin:0;">Playground, Policy Vector Engine</p>
+                    <p style="font-size:.72rem;color:#718096;font-weight:600;margin:0;">${CONFIG.aiName}, Policy Vector Engine</p>
                 </div>
             </div>
         `

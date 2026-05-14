@@ -1,13 +1,13 @@
-// Topic: Playground  —  Day 2 Section 2
+// Topic: ${CONFIG.aiName}  —  Day 2 Section 2
 const slides_playground = [
 
     // ─── SECTION 2: PLAYGROUND OVERVIEW ──────────────────────────────────────
 
     {
         id: "playground-title",
-        title: "Playground",
+        title: `${CONFIG.aiName}`,
         content: C.titleSlide(
-            "Playground  —  Your AI Workspace",
+            `${CONFIG.aiName}  —  Your AI Workspace`,
             "Rooms · Tools · Agents · Files",
             "30 minutes"
         )
@@ -15,9 +15,9 @@ const slides_playground = [
 
     {
         id: "playground-what-is",
-        title: "What is Playground?",
+        title: `What is ${CONFIG.aiName}?`,
         content: `
-            <h2>What is Playground?</h2>
+            <h2>What is ${CONFIG.aiName}?</h2>
             <p class="lead">${CONFIG.productName}'s built-in workspace for talking to AI models, connecting tools, and building agents  —  all in one place.</p>
             ${C.cards([
                 {
@@ -41,7 +41,7 @@ const slides_playground = [
                     desc: 'Configure system prompts, pick models, and compose tools into a full agent  —  then test it live in the same view.'
                 },
             ])}
-            ${C.callout('Everything you built in Day 1  —  your vector engine, your app  —  can be wired into Playground as agent tools. That\'s what the rest of today is about.', 'info')}
+            ${C.callout(`Everything you built in Day 1  —  your vector engine, your app  —  can be wired into ${CONFIG.aiName} as agent tools. That\`s what the rest of today is about.', 'info')}
         `
     },
 
@@ -151,10 +151,10 @@ const slides_playground = [
 
     {
         id: "playground-ui-tabs",
-        title: "Playground UI Tabs",
+        title: `${CONFIG.aiName} UI Tabs`,
         content: `
-            <h2>The Playground Tabs  —  What Each One Does</h2>
-            <p class="lead">Everything in Playground lives in one of these tabs. We'll cover the Agent tab separately when we get to agents.</p>
+            <h2>The ${CONFIG.aiName} Tabs  —  What Each One Does</h2>
+            <p class="lead">Everything in ${CONFIG.aiName} lives in one of these tabs. We'll cover the Agent tab separately when we get to agents.</p>
             ${C.table(
                 ['Tab', 'What It Does', 'When You Use It'],
                 [
@@ -190,10 +190,10 @@ const slides_playground = [
         id: "appendix-files-overview",
         title: "Adding Files to a Chat",
         content: `
-            <h2>Adding Files to a Playground Chat</h2>
+            <h2>Adding Files to a ${CONFIG.aiName} Chat</h2>
             <p class="lead">You can attach files directly to a conversation. The file is sent as context for that message  —  the model can read and reason over it inline.</p>
             ${C.flow([
-                { title: 'Open Playground', desc: 'Go to Playground from the left sidebar and open or start a Room.' },
+                { title: `Open ${CONFIG.aiName}`, desc: `Go to ${CONFIG.aiName} from the left sidebar and open or start a Room.` },
                 { title: 'Click the Attachment Icon', desc: 'In the chat input bar, click the paperclip icon next to the message box.', arrow: '↓' },
                 { title: 'Select Your File', desc: 'Choose a file from your computer. Supported types include PDF, DOCX, TXT, CSV, and images.', arrow: '↓' },
                 { title: 'Send with Your Message', desc: 'Type your question and hit Send. The file contents are included as context in that turn.', arrow: '↓' }
@@ -260,9 +260,9 @@ const slides_playground = [
 
     {
         id: "playground-architecture",
-        title: "Playground Architecture",
+        title: `${CONFIG.aiName} Architecture`,
         content: `
-            <h2>Playground Architecture  —  Three Layers</h2>
+            <h2>${CONFIG.aiName} Architecture  —  Three Layers</h2>
             ${C.layers([
                 { label: "Room", items: [
                     { title: "Conversation Thread", desc: "Message history, tool call history" },

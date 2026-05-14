@@ -70,11 +70,11 @@ const slides_platform_engines = [
             content: `
                 <h2>Model Engines in This Training</h2>
                 ${C.callout('<strong>Note:</strong> Model engines in this training environment are pre-configured and shared. You will <em>call</em> them but not create them. This is by design  -  model engine credentials and compute are managed by your ' + CONFIG.productName + ' admin.', 'warning')}
-                <p>Any time you are chatting inside ${CONFIG.productName}, you are using a model engine. They also power the Q&amp;A tab, the Playground, and any app that calls a model.</p>
+                <p>Any time you are chatting inside ${CONFIG.productName}, you are using a model engine. They also power the Q&amp;A tab, the ${CONFIG.aiName}, and any app that calls a model.</p>
                 ${C.table(
                     ['What you will do today', 'What your admin handles'],
                     [
-                        ['Chat inside ' + CONFIG.productName + ' (Q&A, Playground)', 'Create model engine records and store API credentials'],
+                        ['Chat inside ' + CONFIG.productName + ` (Q&A, ${CONFIG.aiName})`, 'Create model engine records and store API credentials'],
                         ['Call models via API from your apps', 'Manage compute quotas and provider billing'],
                         ['View model engine details in the Catalog', 'Rotate keys and upgrade model versions']
                     ]

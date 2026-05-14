@@ -43,7 +43,7 @@ registerSlideCollection('Message Structure', typeof slides_message_structure !==
 registerSlideCollection('Model Logs', typeof slides_model_logs !== 'undefined' ? slides_model_logs : null);
 registerSlideCollection('API Endpoints', typeof slides_api_endpoints !== 'undefined' ? slides_api_endpoints : null);
 
-registerSlideCollection('Playground', typeof slides_playground !== 'undefined' ? slides_playground : null);
+registerSlideCollection(`${CONFIG.aiName}`, typeof slides_playground !== 'undefined' ? slides_playground : null);
 registerSlideCollection('Agents', typeof slides_agents !== 'undefined' ? slides_agents : null);
 registerSlideCollection('MCP Fundamentals', typeof slides_mcp_fundamentals !== 'undefined' ? slides_mcp_fundamentals : null);
 registerSlideCollection('MCP in Action', typeof slides_mcp_in_action !== 'undefined' ? slides_mcp_in_action : null);

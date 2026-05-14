@@ -99,7 +99,7 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: 'Playground Deep Dive',
+                    title: `${CONFIG.aiName} Deep Dive`,
                     time: '10:30 – 11:00 AM',
                     slideIds: [
                         'playground-title',
@@ -152,7 +152,7 @@ const SESSION_PLAN = {
                     ]
                 },
                 {
-                    title: 'Agents in Playground',
+                    title: `Agents in ${CONFIG.aiName}`,
                     time: '2:00 – 2:30 PM',
                     slideIds: [
                         'agents-title',

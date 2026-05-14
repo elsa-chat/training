@@ -6,7 +6,7 @@ const slides_day2_opener = [
         title: "Day 2",
         content: C.titleSlide(
             `Day 2  —  Ship It, Then Wire It`,
-            `Finish your app · Playground · MCP · Agents · External APIs`,
+            `Finish your app · ${CONFIG.aiName} · MCP · Agents · External APIs`,
             "Thursday, May 14"
         )
     },

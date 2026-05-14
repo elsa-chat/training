@@ -39,7 +39,7 @@ const slides_agent47 = [
                     desc: 'Your MCP tools are first-class citizens. Connect engines, APIs, and custom reactors with a settings panel  -  not config files.'
                 },
             ])}
-            ${C.callout(`This is the next evolution of what you practiced in Playground today  -  structured, native, and deployable.`, 'tip')}
+            ${C.callout(`This is the next evolution of what you practiced in ${CONFIG.aiName} today  -  structured, native, and deployable.`, 'tip')}
         `
     },
 
