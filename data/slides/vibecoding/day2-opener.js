@@ -92,7 +92,7 @@ The results come back inside pixelReturn[0].output as an array. Parse that array
                 </ul>
 
                 <h4>Verify deployment:</h4>
-                <p>Your app is already deployed — click the link ${CONFIG.productName} generated for your app and confirm it loads and runs correctly. Share the link in the group chat.</p>
+                <p>Your app is already deployed — click the link ${CONFIG.productName} generated for your app and confirm it loads and runs correctly.</p>
                 ${C.callout('Stuck? Ask Claude Code to explain what it built, then describe the problem. Let it iterate.', 'tip')}
             `)}
         `
