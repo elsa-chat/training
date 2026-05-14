@@ -103,6 +103,7 @@ const SESSION_PLAN = {
                     time: '10:30 – 11:00 AM',
                     slideIds: [
                         'playground-title',
+                        'elsa-chat-overview',
                         'playground-what-is',
                         'playground-what-is-room',
                         'room-message-json',
