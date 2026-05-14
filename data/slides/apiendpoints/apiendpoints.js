@@ -120,7 +120,18 @@ print(response.choices[0].message.content)`, 'python', `Call ${CONFIG.productNam
         content: `
             <h2>PyPI SDK  -  When You Need More Than Chat</h2>
             <p>The <code>ai-server-sdk</code> gives you full access to ${CONFIG.productName} from Python  -  not just chat completions, but Pixel expressions, engine management, and streaming.</p>
-            ${C.code(`from ai_server import ServerClient
+            ${C.code(`import requests
+import urllib3
+
+# Bypass SSL verification for corporate self-signed certs
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+_orig = requests.Session.request
+def _patched(self, method, url, **kwargs):
+    kwargs.setdefault('verify', False)
+    return _orig(self, method, url, **kwargs)
+requests.Session.request = _patched
+
+from ai_server import ServerClient
 
 client = ServerClient(
     base="${CONFIG.elsaUrl}",
@@ -130,6 +141,7 @@ client = ServerClient(
 
 # Run any Pixel expression
 result = client.run_pixel('AskModelEngine(engine=["${CONFIG.sharedModelEngineId}"], command=["Tell me about the FDA CDER office and its role."]);')`, 'python', 'ai-server-sdk basic connection')}
+            ${C.callout('The SSL patch must be applied <strong>before</strong> importing <code>ServerClient</code> — the SDK connects to the server immediately on instantiation, so patching after the import is too late.', 'warning')}
             ${C.callout('Use the PyPI SDK when you need more than just chat  -  running Pixel, querying engines, managing insights programmatically.', 'tip')}
         `
     },
