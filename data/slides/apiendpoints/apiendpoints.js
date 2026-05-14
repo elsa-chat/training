@@ -135,7 +135,7 @@ client = ai_server.ServerClient(
 )
 
 # 2. Get a handle on the shared model engine — no need to pass client directly
-model = ai_server.ModelEngine(engine_id="<your-engine-id>", insight_id=client.cur_insight)
+model = ai_server.ModelEngine(engine_id="${CONFIG.sharedModelEngineId}", insight_id=client.cur_insight)
 
 # 3. One-shot query
 response = model.ask(
