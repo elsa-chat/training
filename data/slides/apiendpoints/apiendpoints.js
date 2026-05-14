@@ -120,16 +120,36 @@ print(response.choices[0].message.content)`, 'python', `Call ${CONFIG.productNam
         content: `
             <h2>PyPI SDK  -  When You Need More Than Chat</h2>
             <p>The <code>ai-server-sdk</code> gives you full access to ${CONFIG.productName} from Python  -  not just chat completions, but Pixel expressions, engine management, and streaming.</p>
-            ${C.code(`from ai_server import ServerClient
+            ${C.code(`import os
+import ai_server
 
-client = ServerClient(
-    base="${CONFIG.elsaUrl}",
+# Point requests at your org's certificate chain (.crt)
+# Export from your browser: click the padlock icon → Certificate Details → export full chain as CRT
+os.environ["REQUESTS_CA_BUNDLE"] = r"C:\\path\\to\\your-org-chain.crt"
+
+# 1. Authenticate — must run first; registers the session singleton that ModelEngine picks up automatically
+client = ai_server.ServerClient(
+    base="https://<your-server>/Monolith/api",
     access_key="<your-access-key>",
     secret_key="<your-secret-key>"
 )
 
-# Run any Pixel expression
-result = client.run_pixel('AskModelEngine(engine=["${CONFIG.sharedModelEngineId}"], command=["Tell me about the FDA CDER office and its role."]);')`, 'python', 'ai-server-sdk basic connection')}
+# 2. Get a handle on the shared model engine — no need to pass client directly
+model = ai_server.ModelEngine(engine_id="<your-engine-id>", insight_id=client.cur_insight)
+
+# 3. One-shot query
+response = model.ask(
+    command="Tell me about the FDA CDER office and its role.",
+    context="You are an expert in FDA regulatory affairs.",
+    param_dict={"temperature": 0.3}
+)
+print(response["response"])
+
+# 4. Streaming query
+for chunk in model.stream_ask(command="What are the key principles of 21 CFR Part 11?"):
+    print(chunk, end="", flush=True)
+`, 'python', 'ai-server-sdk — connect and query a ModelEngine')}
+            ${C.callout('Set <code>REQUESTS_CA_BUNDLE</code> to your org\'s certificate chain before instantiating <code>ServerClient</code> — the SDK authenticates immediately on construction. To export the cert: click the padlock in your browser → Certificate Details → download the full chain as a <code>.crt</code> file.', 'warning')}
             ${C.callout('Use the PyPI SDK when you need more than just chat  -  running Pixel, querying engines, managing insights programmatically.', 'tip')}
         `
     },
