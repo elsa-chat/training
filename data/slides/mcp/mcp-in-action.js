@@ -31,7 +31,7 @@ const slides_mcp_in_action = [
         title: "Setting Up Your UI to Handle Elsa Calls",
         content: `
             <h2>Setting Up Your UI to Handle Elsa Calls</h2>
-            <p class="lead">We're opening <code>client/src/components/ExampleComponent.tsx</code>. Two things do most of the work:</p>
+            <p class="lead">We're going to add SDK wiring to a live app. Here are the key pieces:</p>
             ${C.table(
                 ['', 'What it does'],
                 [
@@ -67,7 +67,7 @@ export const WeatherPortal = () => {
         title: "The Three Contexts Your UI Runs In",
         content: `
             <h2>The Three Contexts Your UI Runs In</h2>
-            <p>Your UI can be opened three ways. Branch on these to make it feel correct in all three.</p>
+            <p>A fully wired tool UI accounts for all three of these — here's how to detect which context you're in and what to do in each.</p>
             ${C.table(
                 ['Context', 'How to detect', 'What to do'],
                 [
