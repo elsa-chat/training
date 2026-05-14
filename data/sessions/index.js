@@ -171,8 +171,15 @@ const SESSION_PLAN = {
                     )
                 },
                 {
-                    title: 'Day 2 Wrap-up',
+                    title: 'Exporting Your App',
                     time: '3:15 – 3:20 PM',
+                    slideIds: idsFrom(
+                        typeof slides_app_export !== 'undefined' ? slides_app_export : null,
+                    )
+                },
+                {
+                    title: 'Day 2 Wrap-up',
+                    time: '3:20 – 3:25 PM',
                     slideIds: []
                 },
             ]

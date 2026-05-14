@@ -89,3 +89,20 @@ const slides_app_fundamentals = [
         `
     }
 ];
+
+const slides_app_export = [
+    {
+        id: "app-export",
+        title: "Exporting Your App",
+        content: `
+            <h2>Exporting Your App</h2>
+            <p>Export packages your entire app into a zip you can share or import into any other ${CONFIG.productName} instance.</p>
+            ${C.flow([
+                { title: "Click your app", desc: "Open the app from the App Catalog", accent: true },
+                { title: "Click the settings gear", desc: "Top-right corner of the app — opens the app settings panel", arrow: "↓" },
+                { title: "Click Export", desc: "Downloads a .zip with all your blocks, Pixel logic, and assets", accent: true, arrow: "↓" },
+            ])}
+            ${C.callout('The <strong>Export</strong> button only appears if you have Owner-level access on the app.', 'info')}
+        `
+    }
+];
