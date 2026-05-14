@@ -27,8 +27,8 @@ const slides_agents = [
 
                     <div style="font-size: 1.4rem; color: var(--accent); align-self: center;">→</div>
 
-                    <!-- MCPs -->
-                    <div style="flex: 1; display: flex; flex-direction: column; gap: .75rem;">
+                    <!-- MCPs → Tools -->
+                    <div style="flex: 0 0 auto; display: flex; flex-direction: column; gap: .75rem;">
                         ${[
                             { mcp: 'MCP Server A', tools: ['search_documents', 'get_metadata'] },
                             { mcp: 'MCP Server B', tools: ['summarize_report'] },
@@ -44,6 +44,11 @@ const slides_agents = [
                                 </div>
                             </div>
                         `).join('')}
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: .5rem; align-self: center; padding-left: .5rem; border-left: 2px dashed var(--border);">
+                        <div style="font-size: 1rem; color: #aaa;">+</div>
+                        <div style="background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: .4rem .85rem; font-size: .82rem; font-weight: 600; white-space: nowrap;">Instructions</div>
                     </div>
 
                 </div>
