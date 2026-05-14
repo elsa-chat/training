@@ -82,7 +82,7 @@ const slides_api_endpoints = [
                 <p>Before the next slides, install both client libraries in your Python environment:</p>
                 ${C.code(`pip install openai ai-server-sdk`, 'bash', 'Install packages')}
             `)}
-            ${C.callout('All three use the same credentials: <code>access-key:secret-key</code> in the Authorization header. Generate them in ${CONFIG.productName} → Settings → My Profile → Personal Access Tokens.', 'info')}
+            ${C.callout(`All three use the same credentials: <code>access-key:secret-key</code> in the Authorization header. Generate them in ${CONFIG.productName} → Settings → My Profile → Personal Access Tokens.`, 'info')}
         `
     },
     {
