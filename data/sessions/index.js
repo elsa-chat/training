@@ -141,19 +141,14 @@ const SESSION_PLAN = {
                 },
                 {
                     title: 'MCP in Action',
-                    time: '1:00 – 2:00 PM',
+                    time: '11:15 AM – 12:00 PM',
                     slideIds: [
                         'mcp-in-action-title',
                         'mcp-in-action-overview',
-                        'mcp-demo-driver',
-                        'mcp-make-python',
+                        'mcp-sample-app',
+                        'mcp-convert-agent',
                         'mcp-generated-json',
-                        'mcp-metadata-deep-dive',
-                        'mcp-file-persistence',
-                        'mcp-js-ts-sdk',
                         'mcp-playground-wire',
-                        'mcp-sharing',
-                        'mcp-handson-convert',
                     ]
                 },
                 {
