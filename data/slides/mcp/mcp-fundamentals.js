@@ -42,7 +42,7 @@ const slides_mcp_fundamentals = [
                     `
                 }
             )}
-            ${C.callout('Think of MCP like a job listing for AI agents. It describes what a tool does, what inputs it needs, and what it returns  —  so any agent can use it without custom wiring.', 'info')}
+            ${C.callout('Think of MCP like giving an AI a toolbox. Without it, the model can only talk. With it, it can search your documents, query your database, run your workflows  —  on its own.', 'info')}
         `
     },
 
