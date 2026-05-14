@@ -75,10 +75,10 @@ The results come back inside pixelReturn[0].output as an array. Parse that array
 
     {
         id: "d2-finish-app",
-        title: "Finish & Publish Your App",
+        title: "Finish & Deploy Your App",
         content: `
-            <h2>Finish and Publish Your App</h2>
-            ${C.handson("Finish Your App", `
+            <h2>Finish and Deploy Your App</h2>
+            ${C.handson("Finish & Deploy", `
                 <p>Open Claude Code in your project folder and pick up where you left off.</p>
                 <h4>Resume your session:</h4>
                 ${C.code(`/resume`, 'text', 'In Claude Code — opens a list of past conversations to select from')}
@@ -91,12 +91,8 @@ The results come back inside pixelReturn[0].output as an array. Parse that array
                     <li>Results display in a readable layout</li>
                 </ul>
 
-                <h4>Publish to ${CONFIG.productName}:</h4>
-                <ol>
-                    <li>In ${CONFIG.productName}: open your App in the Catalog</li>
-                    <li>Click <strong>Publish</strong> → <strong>Refresh Files</strong></li>
-                    <li>Copy the live URL and share it in the group chat</li>
-                </ol>
+                <h4>Verify deployment:</h4>
+                <p>Your app is already deployed — click the link ${CONFIG.productName} generated for your app and confirm it loads and runs correctly. Share the link in the group chat.</p>
                 ${C.callout('Stuck? Ask Claude Code to explain what it built, then describe the problem. Let it iterate.', 'tip')}
             `)}
         `
