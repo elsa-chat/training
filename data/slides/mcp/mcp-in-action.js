@@ -156,4 +156,135 @@ const slides_mcp_in_action = [
         `
     },
 
+    {
+        id: "mcp-js-ts-sdk",
+        title: "JS/TS SDK  —  Portal UIs",
+        content: `
+            <h2>JS/TS SDK  —  Building Portal UIs for Your Tools</h2>
+            <p>If your MCP tool needs a rich UI, build one in React using <code>@semoss/sdk</code>. The portal renders inside ${CONFIG.aiName} when the tool is called.</p>
+            ${C.code(`import { useInsight } from '@semoss/sdk/react';
+
+export function SearchPortal() {
+  const { actions, tool } = useInsight();
+
+  const runSearch = async (q) => {
+    const { pixelReturn } = await actions.run(
+      \`VectorDatabaseQuery(engine=["..."], command=["<encode>\${q}</encode>"], limit=[5]);\`
+    );
+    return pixelReturn[0].output;
+  };
+
+  const done = (result) => {
+    actions.sendMCPResponseToPlayground(result);  // returns value to the model
+  };
+
+  return <div>...</div>;
+}`, 'typescript', 'Key hook: useInsight()')}
+            ${C.table(
+                ['Method', 'What it does'],
+                [
+                    ['<code>actions.run(pixel)</code>', 'Execute any Pixel expression and get the result back'],
+                    ['<code>actions.runMCPTool(name, params)</code>', 'Call another MCP tool from inside your portal'],
+                    ['<code>actions.sendMCPResponseToPlayground(result)</code>', 'Return a value to the model from the portal'],
+                    ['<code>tool</code>', "The tool's metadata  —  name, description, inputSchema"],
+                ]
+            )}
+            ${C.callout('You don\'t need a portal for most tools. <code>displayLocation: "hidden"</code> is fine for anything that just returns data to the model.', 'info')}
+        `
+    },
+
+    {
+        id: "mcp-sharing",
+        title: "Sharing Your MCP",
+        content: `
+            <h2>Sharing Your MCP  —  Who Can Use It</h2>
+            <p class="lead">Once your MCP is published, other users can add it to their own ${CONFIG.aiName} rooms  —  or call it from outside ${CONFIG.productName} entirely.</p>
+            ${C.table(
+                ['How', 'Who', 'What they need'],
+                [
+                    [
+                        `Add as MCP server in ${CONFIG.aiName}`,
+                        'Any ' + CONFIG.productName + ' user with access to your project',
+                        'Your project ID  —  they add it in their Toolbox tab'
+                    ],
+                    [
+                        'External MCP client (Claude Code, custom app)',
+                        'Anyone with an API key',
+                        'Endpoint: <code>/ext/mcp/&lt;projectId&gt;/comms</code> + Authorization header'
+                    ],
+                ]
+            )}
+            ${C.split(
+                {
+                    title: 'Make it discoverable inside ' + CONFIG.productName,
+                    content: `
+                        <ol>
+                            <li>Publish your app in the Catalog</li>
+                            <li>Set appropriate permissions (who can see/use it)</li>
+                            <li>Share your project ID in your team</li>
+                        </ol>
+                    `
+                },
+                {
+                    title: 'Use from Claude Code (external)',
+                    content: C.code(`// .mcp.json  —  same Monolith base as your OpenAI/Anthropic endpoint
+{
+  "mcpServers": {
+    "fda-search": {
+      "type": "sse",
+      "url": "https://<your-elsa-host>/Monolith/ext/mcp/<projectId>/comms",
+      "headers": {
+        "Authorization": "Bearer <access-key>:<secret-key>"
+      }
+    }
+  }
+}`, 'json')
+                }
+            )}
+        `
+    },
+
+    {
+        id: "mcp-handson-convert",
+        title: "Hands-on: Convert Your App",
+        content: `
+            <h2>Hands-on  —  Convert Your Vibe-Coded App into an MCP Tool</h2>
+            ${C.handson("Convert Your App to MCP", `
+                <h4>Step 1  —  Create mcp_driver.py</h4>
+                <p>In your project, create <code>assets/py/mcp_driver.py</code> and write a function that wraps your Pixel search query.</p>
+                ${C.code(`from semoss import Insight
+import smssutil
+
+@smssutil.mcp_metadata({
+    "execution": "auto",
+    "loadingMessage": "Searching...",
+    "displayLocation": "hidden"
+})
+def search_documents(question: str) -> str:
+    """
+    [Describe what your tool does and WHEN the agent should call it.
+     Be specific — this is how the agent decides to use your tool.]
+    """
+    insight = Insight()
+    # paste your Pixel query here, replacing the hardcoded search term
+    # with the 'question' parameter
+    result = insight.run_pixel(pixel=..., insight_id=insight.insight_id)
+    return str(result[0].get("output", "No results found"))`, 'python', 'assets/py/mcp_driver.py')}
+
+                <h4>Step 2  —  Generate the MCP JSON</h4>
+                ${C.code(`MakePythonMCP(project=["<your-project-id>"]);`, 'pixel', 'Run in ${CONFIG.productName} Notebook or console')}
+                <p>Open <code>assets/mcp/py_mcp.json</code> and verify your function appears as a tool.</p>
+
+                <h4>Step 3  —  Add to ${CONFIG.aiName} and test</h4>
+                <ol>
+                    <li>${CONFIG.aiName} → click + → Add Toolbox → search for your project</li>
+                    <li>Set a system prompt instructing the agent to use your tool</li>
+                    <li>Ask a question  —  confirm the agent calls <code>search_documents</code></li>
+                    <li>Share your project ID with a neighbor and add theirs to your ${CONFIG.aiName}</li>
+                </ol>
+                ${C.callout('Stuck? The most common issue is a vague docstring. Make it say exactly when to call the tool.', 'tip')}
+            `)}
+        `
+    },
+
 ];

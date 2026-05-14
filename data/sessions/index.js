@@ -149,6 +149,9 @@ const SESSION_PLAN = {
                         'mcp-convert-agent',
                         'mcp-generated-json',
                         'mcp-playground-wire',
+                        'mcp-js-ts-sdk',
+                        'mcp-sharing',
+                        'mcp-handson-convert',
                     ]
                 },
                 {
