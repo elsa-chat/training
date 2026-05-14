@@ -24,8 +24,8 @@ const slides_playground = [
                     content: `
                         <ul>
                             <li>When you open ${CONFIG.aiName} you land on a <strong>chat interface</strong></li>
-                            <li>The first message you send <strong>creates a Room</strong>  —  a persistent workspace for that conversation</li>
-                            <li>Every subsequent message is added to that room, building up a shared context the agent reasons over</li>
+                            <li>The first message you send <strong>creates a Room</strong>  —  a persistent space for that conversation</li>
+                            <li>Every subsequent message is added to that room, building up a shared context the LLM reasons over</li>
                             <li>The <strong>room navigator on the left</strong> lists all your rooms  —  click any to switch back to it</li>
                         </ul>
                     `
@@ -34,7 +34,7 @@ const slides_playground = [
                     title: 'Configuring a Room',
                     content: `
                         <ul>
-                            <li><strong>System prompt</strong>  —  set a standing instruction for the agent in this room</li>
+                            <li><strong>System prompt</strong>  —  set a standing instruction for the LLM in this room</li>
                             <li><strong>Model</strong>  —  choose which LLM the agent uses</li>
                             <li><strong>Vectors & tools</strong>  —  attach engines or MCP toolboxes the agent can call</li>
                             <li><strong>Agents</strong>  —  wire in a pre-built agent (we'll cover this later today)</li>

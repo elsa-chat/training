@@ -9,7 +9,8 @@ const slides_day2_opener = [
             ${C.table(
                 ['Time', 'Topic'],
                 [
-                    ['10:00 – 11:00', 'Finish Up & Deploy'],
+                    ['10:00 – 10:45', 'Finish Up & Deploy'],
+                    ['10:45 – 11:00', 'Elsa Chat Deep Dive'],
                     ['11:00 – 11:15', 'MCP Fundamentals'],
                     ['11:15 – 12:00', 'MCP in Action'],
                     ['12:00 – 12:30', 'Converting Your App into an MCP'],
