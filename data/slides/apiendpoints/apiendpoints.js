@@ -125,7 +125,7 @@ import ai_server
 
 # Point requests at your org's certificate chain (.crt)
 # Export from your browser: click the padlock icon → Certificate Details → export full chain as CRT
-os.environ['REQUESTS_CA_BUNDLE'] = r'C:\path\to\your-org-chain.crt'
+os.environ['REQUESTS_CA_BUNDLE'] = r'C:\\path\\to\\your-org-chain.crt'
 
 # 1. Authenticate — must run first; registers the session singleton that ModelEngine picks up automatically
 client = ai_server.ServerClient(
