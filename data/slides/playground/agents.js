@@ -16,7 +16,7 @@ const slides_agents = [
         title: "What is an Agent?",
         content: `
             <h2>What is an Agent?</h2>
-            <p class="lead">An agent is the combined set of instructions and MCPs that allow a model to interact with the resources it needs. Configure it once  —  anyone with access clicks <strong>+ New Chat</strong> and gets a room pre-loaded with all of it.</p>
+            <p class="lead">An agent is a reusable configuration: a set of <strong>instructions</strong> that tell the model how to behave, and a set of <strong>MCPs</strong> that give it access to the tools and data it needs to act.</p>
             <div style="margin: 1.5rem 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
                 <div style="display: flex; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap;">
 
@@ -102,7 +102,7 @@ const slides_agents = [
                     <li>Ask a question that should trigger your tool</li>
                     <li>Confirm the agent calls it and uses the result</li>
                 </ol>
-                ${C.callout('Share your agent with a neighbor using the Members tab  —  they can open a New Chat and immediately use everything you configured.', 'tip')}
+                ${C.callout('Share your agent with a neighbor using the Members tab  —  they can open a New Chat and immediately use everything you configured after you\'ve shared the resources.', 'tip')}
             `)}
         `
     },
