@@ -156,7 +156,7 @@ def search_large_corpus(query: str):
                         [
                             "Auto-acknowledge",
                             "<code>sendMCPResponseToPlayground()</code>",
-                            "Portal tells ${CONFIG.aiName} tool is ready (no waiting)"
+                            `Portal tells ${CONFIG.aiName} tool is ready (no waiting)`
                         ]
                     ]
                 )}
@@ -297,7 +297,7 @@ def fetch_data():
                     { title: '4. Build Portal', desc: 'cd client/ && pnpm run build', arrow: '↓' },
                     { title: '5. Verify Output', desc: 'Check portals/ folder has index.html', arrow: '↓' },
                     { title: `6. Publish in ${CONFIG.productName}`, desc: 'Publish → Refresh Files', arrow: '↓' },
-                    { title: '7. Test in ${CONFIG.aiName}', desc: 'Add MCP server, test tools', arrow: '↓' },
+                    { title: `7. Test in ${CONFIG.aiName}`, desc: 'Add MCP server, test tools', arrow: '↓' },
                     { title: '8. Deploy', desc: 'Publish to production environment' },
                 ])}
                 ${C.code(`# Complete build script (run from assets/)

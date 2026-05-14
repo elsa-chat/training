@@ -215,8 +215,8 @@ Requirements:
                 },
                 {
                     badge: "Tomorrow",
-                    title: "${CONFIG.aiName}",
-                    desc: `Wire your MCP tool into an AI agent in the ${CONFIG.productName} ${CONFIG.aiName} and watch it reason`
+                    title: `${CONFIG.aiName}`,
+                    desc: `Wire your MCP tool into an AI agent in ${CONFIG.aiName} and watch it reason`
                 },
                 {
                     badge: "Tomorrow",

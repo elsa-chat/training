@@ -24,7 +24,7 @@ const slides_mcp_in_action = [
                 { title: 'Write mcp_driver.py', desc: 'One Python function  —  same logic, just wrapped', arrow: '↓' },
                 { title: 'Add @mcp_metadata', desc: 'Tell the platform: execution mode, loading message, display', arrow: '↓' },
                 { title: 'Run MakePythonMCP()', desc: 'Platform reads your function and generates the JSON schema', arrow: '↓' },
-                { title: 'Add to ${CONFIG.aiName}', desc: 'Agent can now discover and call your tool', arrow: '↓' },
+                { title: `Add to ${CONFIG.aiName}`, desc: 'Agent can now discover and call your tool', arrow: '↓' },
                 { title: 'Test it live', desc: 'Ask the agent a question  —  watch it call your tool' },
             ])}
         `
@@ -87,7 +87,7 @@ def search_documents(question: str) -> str:
                     ['<code>execution</code>', '<code>"auto"</code>', 'Agent calls silently  —  no user confirmation needed'],
                     ['<code>execution</code>', '<code>"ask"</code>', 'Agent shows what it wants to do and waits for approval  —  <strong>default if omitted</strong>'],
                     ['<code>execution</code>', '<code>"disabled"</code>', 'Tool is hidden from the agent entirely'],
-                    ['<code>loadingMessage</code>', 'Any string', 'Text shown in ${CONFIG.aiName} while the tool runs'],
+                    ['<code>loadingMessage</code>', 'Any string', `Text shown in ${CONFIG.aiName} while the tool runs`],
                     ['<code>displayLocation</code>', '<code>"hidden"</code>', 'No UI panel  —  tool runs silently and returns data to the model'],
                     ['<code>displayLocation</code>', '<code>"inline"</code>', 'UI panel renders inside the chat thread'],
                     ['<code>displayLocation</code>', '<code>"sidebar"</code>', 'UI panel opens in the right sidebar (persistent)'],
@@ -197,10 +197,10 @@ export function SearchPortal() {
 
     {
         id: "mcp-playground-wire",
-        title: "Wire Your MCP into ${CONFIG.aiName}",
+        title: `Wire Your MCP into ${CONFIG.aiName}`,
         content: `
             <h2>Step 5  —  Add Your Tool to ${CONFIG.aiName} and Test It</h2>
-            ${C.handson("Wire Your MCP into ${CONFIG.aiName}", `
+            ${C.handson(`Wire Your MCP into ${CONFIG.aiName}`, `
                 <h4>Add the MCP server:</h4>
                 <ol>
                     <li>Open <strong>${CONFIG.aiName}</strong> → open or create a Room Folder</li>
@@ -235,7 +235,7 @@ Always cite the source document and page range before giving your answer.`, 'pro
                 ['How', 'Who', 'What they need'],
                 [
                     [
-                        'Add as MCP server in ${CONFIG.aiName}',
+                        `Add as MCP server in ${CONFIG.aiName}`,
                         'Any ${CONFIG.productName} user with access to your project',
                         'Your project ID  —  they add it in their Toolbox tab'
                     ],

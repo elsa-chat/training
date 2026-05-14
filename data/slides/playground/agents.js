@@ -5,9 +5,9 @@ const slides_agents = [
 
     {
         id: "agents-title",
-        title: "Agents in ${CONFIG.aiName}",
+        title: `Agents in ${CONFIG.aiName}`,
         content: C.titleSlide(
-            "Agents in ${CONFIG.aiName}",
+            `Agents in ${CONFIG.aiName}`,
             "Composing tools into a working AI agent",
             "30 minutes"
         )
@@ -146,7 +146,7 @@ Cite the source document and page range in every answer.`, 'properties', 'System
                     [
                         'Your full agent (public)',
                         'Publish the app → anyone with access can use the live URL',
-                        'A deployed agent they can chat with  —  no ${CONFIG.aiName} setup needed'
+                        `A deployed agent they can chat with  —  no ${CONFIG.aiName} setup needed`
                     ],
                 ]
             )}

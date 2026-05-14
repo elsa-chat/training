@@ -20,7 +20,7 @@ const slides_mcp_building_consuming = [
                     { title: '2. Generate MCP JSON', desc: 'Run MakePythonMCP or MakePixelMCP', arrow: '↓' },
                     { title: '3. (Optional) Build Portal UI', desc: 'React client → pnpm run build → portals/', arrow: '↓' },
                     { title: '4. Publish', desc: 'Publish files to public_home', arrow: '↓' },
-                    { title: '5. Test in ${CONFIG.aiName}', desc: 'Configure MCP server and test tools', arrow: '↓' },
+                    { title: `5. Test in ${CONFIG.aiName}`, desc: 'Configure MCP server and test tools', arrow: '↓' },
                     { title: '6. Deploy', desc: 'Make available to users or external apps' },
                 ])}
                 ${C.callout(`${CONFIG.productName} MCP tools can be consumed in two ways: <strong>internally</strong> via ${CONFIG.aiName}/Rooms, or <strong>externally</strong> via MCP-compatible clients like Claude Code CLI.`, 'info')}
@@ -223,7 +223,7 @@ MakeEngineMCP(engine="my-vector-db-name");
 
 // User: "Search for information about authentication"
 // Model calls: VectorDatabaseQuery(engine="my-vector-db-name", query="authentication", limit=5)`, 'pixel', 'Exposing vector database as MCP')}
-                ${C.callout('Engine MCP is the fastest way to add data access capabilities to ${CONFIG.aiName} without writing custom code.', 'tip')}
+                ${C.callout(`Engine MCP is the fastest way to add data access capabilities to ${CONFIG.aiName} without writing custom code.`, 'tip')}
             `
         },
         {
@@ -286,12 +286,12 @@ export function CodeEditor() {
         },
         {
             id: "consume-playground",
-            title: "Consuming MCP in ${CONFIG.aiName}",
+            title: `Consuming MCP in ${CONFIG.aiName}`,
             content: `
                 <h2>Consuming MCP in ${CONFIG.productName} ${CONFIG.aiName}</h2>
                 <p>Once an MCP is published, configure it in ${CONFIG.aiName} to make tools available to the model.</p>
                 ${C.sequence(
-                    ["User", "${CONFIG.aiName} UI", "MCP App", "Model"],
+                    ["User", `${CONFIG.aiName} UI`, "MCP App", "Model"],
                     [
                         { from: 0, to: 1, label: "Configure MCP server" },
                         { from: 1, to: 2, label: "Load mcp/*.json schemas" },
@@ -325,7 +325,7 @@ Model sees tools:
 Model calls: execute_python_code(code_b64="cHJpbnQoJ0hlbGxvIGZyb20gTUNQJyk=")
 SEMOSS executes: py/mcp_driver.py execute_python_code() function
 Result: "Hello from MCP"
-Model incorporates result into response`, 'plaintext', '${CONFIG.aiName} MCP workflow')}
+Model incorporates result into response`, 'plaintext', `${CONFIG.aiName} MCP workflow`)}
             `
         },
         {
