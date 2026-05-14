@@ -120,28 +120,35 @@ print(response.choices[0].message.content)`, 'python', `Call ${CONFIG.productNam
         content: `
             <h2>PyPI SDK  -  When You Need More Than Chat</h2>
             <p>The <code>ai-server-sdk</code> gives you full access to ${CONFIG.productName} from Python  -  not just chat completions, but Pixel expressions, engine management, and streaming.</p>
-            ${C.code(`import requests
-import urllib3
+            ${C.code(`import os
+import ai_server
 
-# Bypass SSL verification for corporate self-signed certs
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-_orig = requests.Session.request
-def _patched(self, method, url, **kwargs):
-    kwargs.setdefault('verify', False)
-    return _orig(self, method, url, **kwargs)
-requests.Session.request = _patched
+# Point requests at your org's certificate chain
+# Export it from your browser: click the padlock icon → Certificate Details → export full chain as PEM
+os.environ['REQUESTS_CA_BUNDLE'] = '/path/to/your-org-chain.pem'
 
-from ai_server import ServerClient
-
-client = ServerClient(
+# 1. Authenticate — creates a session and sets the singleton used by ModelEngine
+client = ai_server.ServerClient(
     base="${CONFIG.elsaUrl}",
     access_key="<your-access-key>",
     secret_key="<your-secret-key>"
 )
 
-# Run any Pixel expression
-result = client.run_pixel('AskModelEngine(engine=["${CONFIG.sharedModelEngineId}"], command=["Tell me about the FDA CDER office and its role."]);')`, 'python', 'ai-server-sdk basic connection')}
-            ${C.callout('The SSL patch must be applied <strong>before</strong> importing <code>ServerClient</code> — the SDK connects to the server immediately on instantiation, so patching after the import is too late.', 'warning')}
+# 2. Get a handle on the shared model engine
+model = ai_server.ModelEngine(engine_id="${CONFIG.sharedModelEngineId}")
+
+# 3. One-shot query
+response = model.ask(
+    command="Tell me about the FDA CDER office and its role.",
+    context="You are an expert in FDA regulatory affairs.",
+    param_dict={"temperature": 0.3}
+)
+print(response["response"])
+
+# 4. Streaming query
+for chunk in model.stream_ask(command="What are the key principles of 21 CFR Part 11?"):
+    print(chunk, end="", flush=True)`, 'python', 'ai-server-sdk — connect and query a ModelEngine')}
+            ${C.callout('Set <code>REQUESTS_CA_BUNDLE</code> to your org\'s certificate chain before instantiating <code>ServerClient</code> — the SDK authenticates immediately on construction. To export the cert: click the padlock in your browser → Certificate Details → download the full chain as a <code>.pem</code> file.', 'warning')}
             ${C.callout('Use the PyPI SDK when you need more than just chat  -  running Pixel, querying engines, managing insights programmatically.', 'tip')}
         `
     },
