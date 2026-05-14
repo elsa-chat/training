@@ -42,7 +42,7 @@ const slides_mcp_fundamentals = [
                     `
                 }
             )}
-            ${C.callout('Think of MCP like a USB standard. Any tool built to the spec works with any agent that speaks MCP  —  no custom wiring per connection.', 'info')}
+            ${C.callout('Think of MCP like giving an AI a toolbox. Without it, the model can only talk. With it, it can search your documents, query your database, run your workflows  —  on its own.', 'info')}
         `
     },
 
