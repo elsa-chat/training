@@ -56,9 +56,10 @@ const slides_mcp_fundamentals = [
             <p><strong>This is how we build going forward.</strong> Every meaningful app should ship both surfaces: a UI for the people who use it, and an MCP contract for the agents that act on their behalf.</p>
             <div style="margin-top:1.25rem;text-align:center;background:#fff;border:1px solid var(--border);border-radius:8px;padding:1rem;">
                 <img
-                    src="https://mintcdn.com/mcp/bEUxYpZqie0DsluH/images/mcp-simple-diagram.png"
+                    src="assets/mcp-simple-diagram.png"
                     alt="MCP simple diagram — Host with MCP client connecting to MCP servers and their resources"
                     style="max-width:100%;height:auto;display:block;margin:0 auto;"
+                    onerror="this.replaceWith(Object.assign(document.createElement('div'),{innerHTML:'<div style=&quot;padding:2rem;border:2px dashed #ddd;border-radius:8px;color:#aaa;text-align:center;&quot;>📁 MCP diagram missing from training/assets/mcp-simple-diagram.png</div>'}));"
                 >
                 <p class="muted" style="margin:.5rem 0 0;font-size:.8rem;">Source: modelcontextprotocol.io  —  MCP server speaks one contract; any compatible host can consume it.</p>
             </div>
