@@ -21,7 +21,7 @@ const slides_api_endpoints = [
   -d '{
     "model": "${CONFIG.sharedModelEngineId}",
     "messages": [
-      { "role": "user", "content": "Summarize FDA 21 CFR Part 11 in one sentence." }
+      { "role": "user", "content": "Tell me about the FDA CDER office and its role." }
     ]
   }'`, 'bash', 'CURL  —  OpenAI-compatible endpoint')}
             ${C.split(
