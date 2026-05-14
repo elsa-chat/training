@@ -169,9 +169,9 @@ export function SearchPortal() {
                 ['How', 'Who', 'What they need'],
                 [
                     [
-                        `Add as MCP server in ${CONFIG.aiName}`,
+                        `Add as toolbox in ${CONFIG.aiName}`,
                         'Any ' + CONFIG.productName + ' user with access to your project',
-                        'Your project ID  —  they add it in their Toolbox tab'
+                        'Access to the project where the tools are defined in the MCP JSON'
                     ],
                     [
                         'External MCP client (Claude Code, custom app)',
@@ -187,24 +187,24 @@ export function SearchPortal() {
                         <ol>
                             <li>Publish your app in the Catalog</li>
                             <li>Set appropriate permissions (who can see/use it)</li>
-                            <li>Share your project ID in your team</li>
                         </ol>
                     `
                 },
                 {
                     title: 'Use from Claude Code (external)',
-                    content: C.code(`// .mcp.json  —  same Monolith base as your OpenAI/Anthropic endpoint
-{
+                    content: C.code(`{
   "mcpServers": {
-    "fda-search": {
-      "type": "sse",
-      "url": "https://<your-elsa-host>/Monolith/ext/mcp/<projectId>/comms",
-      "headers": {
-        "Authorization": "Bearer <access-key>:<secret-key>"
-      }
+    "your-app": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "${CONFIG.elsaUrl}/api/ext/mcp/<projectId>/comms",
+        "--header",
+        "Authorization:Bearer <ACCESS_KEY>:<SECRET_KEY>"
+      ]
     }
   }
-}`, 'json')
+}`, 'json', '.mcp.json')
                 }
             )}
         `
