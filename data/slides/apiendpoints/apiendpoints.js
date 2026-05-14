@@ -21,7 +21,7 @@ const slides_api_endpoints = [
   -d '{
     "model": "${CONFIG.sharedModelEngineId}",
     "messages": [
-      { "role": "user", "content": "Summarize FDA 21 CFR Part 11 in one sentence." }
+      { "role": "user", "content": "Tell me about the FDA CDER office and its role." }
     ]
   }'`, 'bash', 'CURL  —  OpenAI-compatible endpoint')}
             ${C.split(
@@ -78,6 +78,10 @@ const slides_api_endpoints = [
                     ]
                 ]
             )}
+            ${C.handson('Follow Along — Install Required Packages', `
+                <p>Before the next slides, install both client libraries in your Python environment:</p>
+                ${C.code(`pip install openai ai-server-sdk`, 'bash', 'Install packages')}
+            `)}
             ${C.callout('All three use the same credentials: <code>access-key:secret-key</code> in the Authorization header. Generate them in ${CONFIG.productName} → Settings → My Profile → Personal Access Tokens.', 'info')}
         `
     },
@@ -89,21 +93,24 @@ const slides_api_endpoints = [
             ${C.handson(`Live Example: Call ${CONFIG.productName} from Python`, `
                 <p>This is the same code you'd write to call OpenAI. The only differences are <code>base_url</code> and <code>api_key</code>.</p>
                 ${C.code(`from openai import OpenAI
+import httpx
 
 client = OpenAI(
     api_key="<your-access-key>:<your-secret-key>",
-    base_url="${CONFIG.openaiEndpoint}"
+    base_url="${CONFIG.openaiEndpoint}",
+    http_client=httpx.Client(verify=False)  # bypass self-signed cert
 )
 
 response = client.chat.completions.create(
     model="${CONFIG.sharedModelEngineId}",
     messages=[
-        {"role": "user", "content": "Summarize the key points of FDA 21 CFR Part 11"}
+        {"role": "user", "content": "Tell me about the FDA CDER office and its role."}
     ]
 )
 print(response.choices[0].message.content)`, 'python', `Call ${CONFIG.productName} with the OpenAI SDK`)}
                 <p>That's it. No special library. No ${CONFIG.productName}-specific code.</p>
             `)}
+            ${C.callout('On corporate networks, internal servers often use TLS certificates signed by a private CA that your machine does not trust by default. When the OpenAI SDK cannot verify the certificate chain, it throws an SSL error and refuses to connect — even if the server is reachable. Passing <code>http_client=httpx.Client(verify=False)</code> bypasses this check. The alternative is to install your organization\'s root CA certificate into your system trust store, but <code>verify=False</code> is the quickest workaround during hands-on exercises. Do not use it in production code.', 'warning')}
             ${C.callout('Same code you\'d write for OpenAI. Just swap the base_url and api_key.', 'info')}
         `
     },
@@ -122,7 +129,7 @@ client = ServerClient(
 )
 
 # Run any Pixel expression
-result = client.run_pixel('AskModelEngine(engine=["${CONFIG.sharedModelEngineId}"], command=["Hello"]);')`, 'python', 'ai-server-sdk basic connection')}
+result = client.run_pixel('AskModelEngine(engine=["${CONFIG.sharedModelEngineId}"], command=["Tell me about the FDA CDER office and its role."]);')`, 'python', 'ai-server-sdk basic connection')}
             ${C.callout('Use the PyPI SDK when you need more than just chat  -  running Pixel, querying engines, managing insights programmatically.', 'tip')}
         `
     },
