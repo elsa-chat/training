@@ -154,28 +154,6 @@ const slides_welcome = [
         `
     },
     {
-        id: "welcome-day2-logistics",
-        title: "Day 2 Logistics",
-        content: `
-            <h2>Day 2 Logistics — Thu, May 14</h2>
-            ${C.table(
-                ['Time', 'Topic'],
-                [
-                    ['10:00 – 11:00', 'Finish Up & Deploy'],
-                    ['11:00 – 11:15', 'MCP Fundamentals'],
-                    ['11:15 – 12:00', 'MCP in Action'],
-                    ['12:00 – 12:30', 'Converting Your App into an MCP'],
-                    ['12:30 – 1:30',  '🍽 Lunch'],
-                    ['1:30 – 2:00',   'Agents'],
-                    ['2:00 – 2:15',   'External API Calls'],
-                    ['2:15 – 2:30',   '☕ Break'],
-                    ['2:30 – 3:00',   'Agent 47'],
-                ]
-            )}
-            ${C.callout(`Your apps, engines, and access keys from Day 1 are all still there — pick up exactly where you left off.`, 'info')}
-        `
-    },
-    {
         id: "elsa-demo-divider",
         title: "ELSA 4.0 Demo",
         content: C.titleSlide(

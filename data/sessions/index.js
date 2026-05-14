@@ -94,7 +94,7 @@ const SESSION_PLAN = {
                 {
                     title: 'Day 2 Logistics',
                     time: '10:00 AM',
-                    slideIds: ['welcome-day2-logistics']
+                    slideIds: ['d2-logistics']
                 },
                 {
                     title: 'Finish Up & Deploy',
