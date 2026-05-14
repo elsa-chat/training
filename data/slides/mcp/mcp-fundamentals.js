@@ -95,7 +95,7 @@ const slides_mcp_fundamentals = [
         title: "The MCP Contract",
         content: `
             <h2>The MCP Contract  —  What the JSON Looks Like</h2>
-            <p>This is what the agent reads when it discovers your tool. Every field matters.</p>
+            <p>This is what the agent reads when it discovers your tool.</p>
             ${C.code(`{
   "tools": [
     {
@@ -115,7 +115,7 @@ const slides_mcp_fundamentals = [
         "SMSS_MCP_EXECUTION": "auto",
         "SMSS_MCP_UI": {
           "loadingMessage":  "Searching FDA documents...",
-          "displayLocation": "hidden"
+          "displayLocation": "inline"
         }
       }
     }
