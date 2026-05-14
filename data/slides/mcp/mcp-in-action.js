@@ -6,7 +6,7 @@ const slides_mcp_in_action = [
         title: "MCP in Action",
         content: C.titleSlide(
             "MCP in Action",
-            "SDK deep-dive, live demo, then your turn",
+            "@semoss/sdk deep-dive, live demo, then your turn",
             "45 minutes"
         )
     },
@@ -16,13 +16,13 @@ const slides_mcp_in_action = [
         title: "What We're Doing",
         content: `
             <h2>What We're Doing</h2>
-            <p class="lead">This section gets into the code. We're going to look at the ${CONFIG.productName} SDK and how your React app wires into ${CONFIG.aiName} — what the model passes in, how you return results, and how to handle the different contexts your UI runs in.</p>
+            <p class="lead">This section gets into the code. We're going to look at <code>@semoss/sdk</code> and how your React app wires into ${CONFIG.aiName} — what the model passes in, how you return results, and how to handle the different contexts your UI runs in.</p>
             ${C.flow([
                 { title: 'SDK deep-dive', desc: 'Open real code and walk through useInsight(), tool.parameters, and sendMCPResponseToPlayground', arrow: '↓' },
                 { title: 'Demo: convert an app', desc: 'See the full conversion — tag, manifest, deploy — live', arrow: '↓' },
                 { title: 'Your turn', desc: 'One prompt to your agent — it handles the rest' },
             ])}
-            ${C.callout('You don\'t need to memorize the SDK. The pattern is always the same — read in from <code>tool.parameters</code>, do work, send back via <code>sendMCPResponseToPlayground</code>.', 'info')}
+            ${C.callout('The SDK is how your UI speaks to the platform — and to Elsa Chat. Once the pattern clicks, the same hooks show up in every tool you build.', 'info')}
         `
     },
 
@@ -84,7 +84,7 @@ export const WeatherPortal = () => {
         title: "The Three Contexts Your UI Runs In",
         content: `
             <h2>The Three Contexts Your UI Runs In</h2>
-            <p>Your UI can be opened three ways. Getting the <code>useEffect</code> branching right is what makes it feel correct in all three.</p>
+            <p>Your UI can be opened three ways. Branch on these to make it feel correct in all three.</p>
             ${C.table(
                 ['Context', 'How to detect', 'What to do'],
                 [
@@ -93,18 +93,17 @@ export const WeatherPortal = () => {
                     ['Viewing a past execution', '<code>tool.tool_response</code> truthy', 'Restore result; prefill inputs from <code>tool.executedParameters</code>'],
                 ]
             )}
-            ${C.code(`useEffect(() => {
-  if (!tool) return;                      // standalone — nothing to prefill
+            ${C.code(`// when tool context loads
+if (!tool) return;                      // standalone — nothing to prefill
 
-  if (tool.tool_response) {              // past execution — restore previous result
-    setResult(String(tool.tool_response));
-    setCity((tool.executedParameters?.city as string) || '');
-    return;
-  }
+if (tool.tool_response) {              // past execution — restore what actually ran
+  restoreResult(tool.tool_response);
+  prefillInputs(tool.executedParameters);
+  return;
+}
 
-  // fresh call — prefill with the model's proposed city
-  setCity((tool.parameters?.city as string) || '');
-}, [tool]);`, 'typescript', 'The canonical useEffect pattern')}
+// fresh call — prefill with the model's proposed values
+prefillInputs(tool.parameters);`, 'typescript', 'The branching pattern')}
             ${C.callout('<code>tool.parameters</code> is what the model proposed. <code>tool.executedParameters</code> is what the user actually submitted (the third argument you pass to <code>sendMCPResponseToPlayground</code>). Always restore past executions from <code>executedParameters</code> — not <code>parameters</code>.', 'tip')}
         `
     },
