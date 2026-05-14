@@ -104,7 +104,7 @@ client = OpenAI(
 response = client.chat.completions.create(
     model="${CONFIG.sharedModelEngineId}",
     messages=[
-        {"role": "user", "content": "Summarize the key points of FDA 21 CFR Part 11"}
+        {"role": "user", "content": "Tell me about the FDA CDER office and its role."}
     ]
 )
 print(response.choices[0].message.content)`, 'python', `Call ${CONFIG.productName} with the OpenAI SDK`)}
