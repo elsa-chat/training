@@ -16,7 +16,7 @@ const slides_agents = [
         title: "What is an Agent?",
         content: `
             <h2>What is an Agent?</h2>
-            <p class="lead">An agent is a named workspace you configure once  —  a collection of MCP servers, each exposing tools the model can call. Anyone with access clicks <strong>+ New Chat</strong> and gets a room pre-loaded with all of it.</p>
+            <p class="lead">An agent is the combined set of instructions and MCPs that allow a model to interact with the resources it needs. Configure it once  —  anyone with access clicks <strong>+ New Chat</strong> and gets a room pre-loaded with all of it.</p>
             <div style="margin: 1.5rem 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
                 <div style="display: flex; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap;">
 
