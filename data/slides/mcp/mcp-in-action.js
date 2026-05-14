@@ -31,29 +31,22 @@ const slides_mcp_in_action = [
         title: "Setting Up Your UI to Handle Elsa Calls",
         content: `
             <h2>Setting Up Your UI to Handle Elsa Calls</h2>
-            <p class="lead">We're opening <code>client/src/components/ExampleComponent.tsx</code>. This is the reference pattern — every tool UI is a variation of this.</p>
+            <p class="lead">We're opening <code>client/src/components/ExampleComponent.tsx</code>. Two things do most of the work:</p>
+            ${C.table(
+                ['', 'What it does'],
+                [
+                    ['<code>tool</code>', 'The invocation context from Elsa — <code>tool.parameters</code> is what the model passed in'],
+                    ['<code>actions.run(pixel)</code>', 'Execute any Pixel expression and get the result back'],
+                    ['<code>actions.sendMCPResponseToPlayground(result, status, params)</code>', 'Returns the final value to Elsa Chat — call this when the work is done. <code>result</code> must be a string.'],
+                ]
+            )}
             ${C.code(`import { useInsight } from '@semoss/sdk/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export const WeatherPortal = () => {
-  // actions = run Pixel, send results back; tool = what Elsa passed in
   const { actions, tool } = useInsight();
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState((tool?.parameters?.city as string) || '');
   const [forecast, setForecast] = useState('');
-
-  useEffect(() => {
-    if (!tool) return; // opened standalone, not from Elsa
-
-    if (tool.tool_response) {
-      // viewing a past execution — restore what actually ran
-      setForecast(String(tool.tool_response));
-      setCity((tool.executedParameters?.city as string) || '');
-      return;
-    }
-
-    // fresh call from Elsa — prefill with the model's proposed city
-    setCity((tool.parameters?.city as string) || '');
-  }, [tool]);
 
   const run = async () => {
     const { pixelReturn } = await actions.run(
@@ -61,21 +54,11 @@ export const WeatherPortal = () => {
     );
     const result = String(pixelReturn[0].output);
     setForecast(result);
-    // send result back to Elsa Chat
     actions.sendMCPResponseToPlayground(result, 'success', { city });
   };
 
   return <div>...</div>;
 };`, 'typescript', 'ExampleComponent.tsx (placeholder)')}
-            ${C.table(
-                ['', 'What it does'],
-                [
-                    ['<code>const { actions, tool } = useInsight()</code>', 'The primary SDK hook — run API and tool invocation context'],
-                    ['<code>tool.parameters</code>', 'Inputs the model proposed when it called the tool'],
-                    ['<code>actions.run(pixel)</code>', 'Execute any Pixel expression and get the result back'],
-                    ['<code>actions.sendMCPResponseToPlayground(result, status, params)</code>', 'Return the final value to Elsa Chat — <code>result</code> must be a string'],
-                ]
-            )}
         `
     },
 
@@ -105,6 +88,21 @@ if (tool.tool_response) {              // past execution — restore what actual
 // fresh call — prefill with the model's proposed values
 prefillInputs(tool.parameters);`, 'typescript', 'The branching pattern')}
             ${C.callout('<code>tool.parameters</code> is what the model proposed. <code>tool.executedParameters</code> is what the user actually submitted (the third argument you pass to <code>sendMCPResponseToPlayground</code>). Always restore past executions from <code>executedParameters</code> — not <code>parameters</code>.', 'tip')}
+        `
+    },
+
+    {
+        id: "mcp-demo-convert",
+        title: "Demo — Converting and Testing Live",
+        content: `
+            <h2>Demo  —  Wiring Up the UI Live</h2>
+            <p class="lead">We have an app. We're going to hook it up so it responds to calls from Elsa Chat.</p>
+            ${C.flow([
+                { title: 'Open the component', desc: 'Wire tool.parameters into local state so the UI reflects what Elsa passed in', arrow: '↓' },
+                { title: 'Send the result back', desc: 'Call sendMCPResponseToPlayground when the work is done', arrow: '↓' },
+                { title: 'Rebuild and deploy', desc: 'pnpm build → sync script uploads and publishes', arrow: '↓' },
+                { title: 'Test in Elsa Chat', desc: 'Add the toolbox, ask a question, watch the tool run' },
+            ])}
         `
     },
 
