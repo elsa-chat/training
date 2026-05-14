@@ -89,4 +89,51 @@ The results come back inside pixelReturn[0].output as an array. Parse that array
         `
     },
 
+    {
+        id: "d2-build-mortgage",
+        title: "Option: Build the Mortgage Calculator",
+        content: `
+            <h2>Build the Mortgage Calculator (we will MCP-enable it after lunch)</h2>
+            <p>If you would rather follow along with the same app the presenter is using later today, paste this prompt into Claude Code. You will build a frontend-only mortgage calculator now — and in <strong>MCP in Action</strong> after lunch, you will convert that exact app into a callable agent tool.</p>
+
+            ${C.code(`Edit two files only: client/src/pages/HomePage.tsx and py/mcp_driver.py. Do not read or modify any other file. Skip the Startup Checklist.
+
+=== FILE 1: client/src/pages/HomePage.tsx ===
+Build a Mortgage Calculator UI.
+
+Inputs (one row at the top):
+- Home Price ($) — number input, default 500000
+- Down Payment (%) — slider 0 to 50, default 20
+- Interest Rate (%) — number input with step 0.05, default 7.0
+- Term (years) — select with options 15, 20, 30, default 30
+
+Outputs below the inputs:
+- Big monthly payment number (text-5xl, formatted as $X,XXX)
+- Three stat cards side by side: Principal, Total Interest, Total Paid
+- Amortization bar chart: one row per year, each row shows the year label on the left, a horizontal bar split into principal (filled) and interest (faded), and the ending balance on the right
+
+Recompute live on every input change using the standard amortization formula:
+  M = P * (r(1+r)^n) / ((1+r)^n - 1)
+where P = principal, r = monthly rate, n = total payments.
+
+Tailwind, clean and modern. Hardcoded math, no API calls, no useInsight.
+
+=== FILE 2: py/mcp_driver.py ===
+Replace the contents with one function: calculate_mortgage(home_price, down_payment_pct, annual_rate_pct, years). It does the same math as the UI and we will turn it into an MCP tool after lunch.
+
+Requirements:
+- Decorate with @mcp_metadata from smssutil. Include: execution "auto", displayLocation "inline", loadingMessage "Calculating mortgage...", resourceURI "/".
+- Type hints on all args. Defaults: down_payment_pct=20.0, annual_rate_pct=7.0, years=30.
+- Write a docstring that tells the agent when to use it — something like "Use this whenever a user asks about home affordability, monthly payments, or wants to compare loan scenarios. The math is annoying to do in your head — always call this tool for accurate numbers." Document each arg.
+- Compute principal, monthly payment (standard amortization formula above), total interest, total paid, total number of payments.
+- Return json.dumps of a dict with: home_price, down_payment_pct, annual_rate_pct, years, principal, monthly_payment, total_interest, total_paid, n_payments. Round dollar amounts to 2 decimals.
+
+Look at any existing Python tool already in py/mcp_driver.py for the import + decorator pattern.`, 'text', 'Claude Code Prompt — builds both UI and Python tool')}
+
+            <p>Once it renders locally, push it up to ${CONFIG.productName} the same way as your Day 1 app and share a screenshot in the chat.</p>
+
+            ${C.callout('You will return to this app in the <strong>MCP in Action</strong> section after lunch. Same UI — but you will add a Python function, run <code>MakePythonMCP</code>, and the agent will be able to call it from Playground.', 'tip')}
+        `
+    },
+
 ];

@@ -113,7 +113,7 @@ const slides_agent47 = [
         id: "agent47-closes-loop",
         title: "Why It Matters",
         content: `
-            <h2>Why It Matters  -  Closing the Loop</h2>
+            <h2>Why It Matters</h2>
             <p class="lead">This week you built each layer separately. The Agentic App Builder is where they converge.</p>
             ${C.flow([
                 {
@@ -133,7 +133,6 @@ const slides_agent47 = [
                     desc: 'History tab, Issues tab, model selection, assistant selection  -  full observability and configurability without leaving the platform.',
                 },
             ])}
-            ${C.callout(`The paradigm shift we talked about on Day 1  -  this is the platform experience that makes it real.`, 'tip')}
         `
     },
 
