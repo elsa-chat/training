@@ -51,7 +51,6 @@ registerSlideCollection('MCP Building & Consuming', typeof slides_mcp_building_c
 registerSlideCollection('MCP UI & Premade', typeof slides_mcp_ui_premade !== 'undefined' ? slides_mcp_ui_premade : null);
 
 registerSlideCollection('Docker', typeof slides_docker !== 'undefined' ? slides_docker : null);
-registerSlideCollection('Security & Auth', typeof slides_security_auth !== 'undefined' ? slides_security_auth : null);
 registerSlideCollection('Admin', typeof slides_admin !== 'undefined' ? slides_admin : null);
 
 registerSlideCollection('Appendix', typeof slides_appendix !== 'undefined' ? slides_appendix : null);

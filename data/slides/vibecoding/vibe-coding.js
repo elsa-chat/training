@@ -140,41 +140,43 @@ const slides_vibe_coding = [
         `
     },
     {
-        id: "vibe-presenter-demo",
-        title: "Follow Along: Build a Q&A App",
+        id: "vibe-run-dev",
+        title: "Run the Dev Server",
         content: `
-            <h2>Follow Along: Build a Vector Search Viewer</h2>
-            <p>The presenter will run this prompt live in Claude Code. Watch how the app comes together — you'll use the same prompt with your own engine ID.</p>
-            ${C.code(`Build an app to visualize vector database search results from ELSA.
+            <h2>Run the Dev Server</h2>
+            <p class="lead">Before we prompt Claude Code, get the app running locally so you can see your changes in real time.</p>
+            ${C.handson("Start the local dev server", `
+                <p>From the project root you cloned in Setup Step 1:</p>
+                ${C.code(`cd client
+pnpm install
+pnpm dev`, 'bash', 'Two commands, then leave it running')}
+                <p>Open the URL it prints (usually <code>http://localhost:5173</code>). You should see the template's default Home page.</p>
+                <p class="muted">Leave this terminal running. When Claude Code edits files, the page hot-reloads automatically.</p>
+                ${C.callout('If <code>pnpm</code> is not installed: <code>npm install -g pnpm</code>. Or use <code>npm install &amp;&amp; npm run dev</code> as a fallback.', 'tip')}
+            `)}
+        `
+    },
+    {
+        id: "vibe-presenter-demo",
+        title: "Follow Along: Build a Fitness Log",
+        content: `
+            <h2>Follow Along: Build a Fitness Log</h2>
+            <p>The presenter will run this prompt live in Claude Code. It edits one file. Watch how fast it lands.</p>
+            ${C.code(`Build a fitness log dashboard in client/src/pages/HomePage.tsx.
 
-The user enters a search term, hits Run, and sees the results displayed as clean cards.
-Each card should show:
-- Source document name
-- Page range (from the "Divider" field)
-- Relevance score
-- The full content passage
+Rules:
+- Edit ONLY client/src/pages/HomePage.tsx. Do not modify any other file. Do not create new files. Do not add a new route.
+- Do NOT run the Startup Checklist in CLAUDE.md. This is a frontend-only demo — no platform connectivity, no credentials, no MCP servers.
+- Use hardcoded mock data. No API calls, no useInsight(), no actions.run().
 
-Make the vector engine ID and result limit configurable at the top of the file so it's easy to swap in a different engine.
+UI:
+- Header row: 3 stat cards — This Week's Workouts, Total Minutes, Calories Burned
+- Recent Workouts list — date, workout type (Run / Lift / Yoga / etc.), duration, calories
+- Weekly Activity chart — last 7 days as plain Tailwind div bars, no chart library
+- Personal Records section — exercise name, current PR, last updated date
 
-The app calls this Pixel to get results:
-
-VectorDatabaseQuery(engine=["<YOUR-VECTOR-ENGINE-ID>"], command="<search term>", limit=5, filters=[], metaFilters=[]);
-
-Here is one example result to build against:
-
-{
-  "Score": 1.7820971012115479,
-  "idx": 6,
-  "Source": "ai_use.pdf",
-  "Modality": "text",
-  "Divider": "7, 8",
-  "Part": "0",
-  "Tokens": 512,
-  "Content": "Agencies must remove barriers to innovation and provide the best value for the taxpayer."
-}
-
-The results come back inside pixelReturn[0].output as an array. Parse that array and render one card per result. Show a loading state while the query runs and an empty state if no results come back.`, 'text', 'Presenter Prompt')}
-            ${C.callout('Watch how the presenter swaps in their engine ID and what the first generated draft looks like — then you will do the same.', 'tip')}
+Use Tailwind for styling. Existing components in client/src/components/ are available if useful, otherwise plain divs. Modern, clean look — dark mode optional, your call.`, 'text', 'Presenter Prompt — paste into Claude Code')}
+            ${C.callout('No vector engines, no Pixel, no credentials. Pure frontend. Expect a first-draft UI in under a minute.', 'tip')}
         `
     },
     {
@@ -183,20 +185,17 @@ The results come back inside pixelReturn[0].output as an array. Parse that array
         content: `
             <h2>Hands-on: Build Your App</h2>
             ${C.handson("Build Your App", `
-                <ol>
-                    <li>Open Claude Code in the project folder you cloned</li>
-                    <li>Write a prompt describing your app — include the vector engine ID, the question users will ask, and what the output should look like</li>
-                    <li>Let Claude Code generate the app, then run it locally and confirm it works</li>
-                    <li>Publish it from ${CONFIG.productName} and share the live URL in the chat</li>
-                </ol>
+                <p>Paste this prompt into Claude Code. Tweak the app idea if you want.</p>
+                ${C.code(`Edit ONLY client/src/pages/HomePage.tsx. Do not read other files. Skip the Startup Checklist.
 
-                ${C.callout(`Stuck on the prompt? Start with the presenter's prompt from the previous slide and tweak the requirements for your own data.`, 'tip')}
+Build a todo list with hardcoded mock data. Tailwind, FE-only. Add a clean header, an input to add items, and check-off behavior.`, 'text', 'Quick prompt')}
+                <p>Watch your browser at <code>localhost:5173</code> — it hot-reloads as Claude Code writes. Drop a screenshot in the chat when it works.</p>
 
                 <h4>Troubleshooting</h4>
                 <ul>
-                    <li><strong>Updated <code>.mcp.json</code> or <code>settings.json</code>?</strong> Quit Claude Code (<code>/exit</code> or Ctrl+C) and re-run <code>claude</code> — config changes only load on launch</li>
-                    <li><strong>Auth error after pasting keys?</strong> Make sure your token is formatted <code>access-key:secret-key</code> — single colon, no spaces</li>
-                    <li><strong>Tools not appearing?</strong> Use <code>/mcp</code> inside Claude Code to list connected MCP servers and confirm they're loaded</li>
+                    <li><strong>Page didn't update?</strong> Make sure <code>pnpm dev</code> is still running</li>
+                    <li><strong>Claude Code is exploring the whole repo?</strong> Re-prompt: <code>Edit ONLY client/src/pages/HomePage.tsx. Do not read other files.</code></li>
+                    <li><strong>Settings change?</strong> Quit Claude Code and re-launch — settings load only at startup</li>
                 </ul>
             `)}
         `

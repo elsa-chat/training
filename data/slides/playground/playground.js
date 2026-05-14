@@ -49,37 +49,73 @@ const slides_playground = [
         id: "playground-what-is-room",
         title: "What is a Room?",
         content: `
-            <h2>Rooms  —  What They Are and How They're Organized</h2>
+            <h2>A Room Has Two Pieces</h2>
+            <p class="lead">When you open a Room, two things spin up: a conversation record in the database, and a working directory on disk.</p>
             ${C.split(
                 {
-                    title: 'Room',
+                    title: 'Message History (in the DB)',
                     content: `
-                        <p>A <strong>Room</strong> is a single conversation thread.</p>
+                        <p>Every message in the conversation is persisted in <code>ModelInferenceLogsDatabase</code>.</p>
                         <ul>
-                            <li>Every message you send and every AI response lives here</li>
-                            <li>Tool calls and their results are recorded inline</li>
-                            <li>History is saved automatically  —  you can always return</li>
-                            <li>Room name is auto-generated from your first message</li>
+                            <li>User prompts, assistant responses, tool calls, tool results  —  all in order</li>
+                            <li>Token counts, response time, and model used  —  per message</li>
+                            <li>Stored in a structured <strong>parts schema</strong> so the same conversation can be replayed to any model provider</li>
+                            <li>Survives logout, browser switch, device switch  —  it is server-side</li>
                         </ul>
+                        <p class="muted">Tables: <code>ROOM</code> (room metadata + full message JSON) and <code>MESSAGE</code> (per-message ledger with token counts).</p>
                     `
                 },
                 {
-                    title: 'Room Folder (Workspace)',
+                    title: 'Room Folder (on disk)',
                     content: `
-                        <p>A <strong>Room Folder</strong> is the configuration wrapper around one or more Rooms.</p>
+                        <p>Every room gets its own working directory at <code>&lt;baseFolder&gt;/room/&lt;roomId&gt;/</code>.</p>
                         <ul>
-                            <li>System prompt  —  the agent's persona and instructions</li>
-                            <li>Model selection  —  which LLM powers the conversation</li>
-                            <li>MCP tools  —  which apps the agent can call</li>
-                            <li>Knowledge  —  files and engines attached to the workspace</li>
+                            <li>MCP tool scratch space  —  files written by tools the agent calls</li>
+                            <li>User uploads attached to the conversation</li>
+                            <li>Session state for Copilot CLI runs (<code>events.jsonl</code>, <code>session.db</code>)</li>
+                            <li>Synced to cluster storage via rclone  —  pulled on open, pushed when the agent finishes</li>
                         </ul>
-                        <p class="muted">Set up the folder once; every Room inside it inherits the settings.</p>
+                        <p class="muted">Walk away, come back tomorrow  —  the folder is rehydrated from cloud storage automatically.</p>
                     `
                 }
             )}
-            ${C.callout('Think of it like a project folder on your computer. The folder holds the config; the files inside are the individual conversations.', 'info')}
+            ${C.callout('The DB row is the conversation; the folder is the workspace. Together they make a Room portable across sessions and across nodes in a cluster.', 'info')}
         `
     },
+
+    {
+        id: "room-message-json",
+        title: "Room Message JSON  —  Parts Schema",
+        content: `
+            <h2>How One Conversation Talks to Every Model</h2>
+            <p class="lead">${CONFIG.productName} stores every message in a model-agnostic <strong>parts</strong> schema. When you swap from Claude to GPT to Bedrock, the platform translates the same parts into each provider's wire format  —  you do not rewrite anything.</p>
+            ${C.code(`{
+  "schemaVersion": 2,
+  "io": "input",            // input | response
+  "messageId": "abc123",
+  "modelId": "claude-3-7-sonnet",
+  "parts": [
+    { "type": "TEXT",        "text": "Find FDA guidance on AI use" },
+    { "type": "TOOL_CALL",   "toolCall":   { "name": "search_documents", "args": { "question": "AI use" } } },
+    { "type": "TOOL_RESULT", "toolResult": { "callId": "tc_1", "content": "..." } },
+    { "type": "THINKING",    "text": "The user is asking about..." }
+  ],
+  "tokens": 312,
+  "cacheReadTokens": 0,
+  "cacheCreationTokens": 0
+}`, 'json', 'One message in the parts schema')}
+            ${C.cards([
+                { badge: 'Part', title: 'TEXT', desc: 'Plain text from user or assistant.' },
+                { badge: 'Part', title: 'TOOL_CALL', desc: 'Agent invokes a tool. Includes name and arguments.' },
+                { badge: 'Part', title: 'TOOL_RESULT', desc: 'Tool returns. Linked to its call by id.' },
+                { badge: 'Part', title: 'THINKING', desc: 'Reasoning trace (Claude extended thinking, o1 reasoning, etc.).' },
+                { badge: 'Part', title: 'MEDIA', desc: 'Images, audio, attached files.' },
+                { badge: 'Part', title: 'SYSTEM', desc: 'System instructions threaded into the conversation.' },
+            ])}
+            ${C.callout('Because parts are typed and ordered, the platform can reshape one history into the Anthropic, OpenAI, or Bedrock wire format on the fly. The Room does not care which model you swap to.', 'tip')}
+        `
+    },
+
 
     {
         id: "playground-room-utilities",
@@ -219,45 +255,6 @@ const slides_playground = [
         `
     },
 
-    {
-        id: "appendix-rooms-management",
-        title: "Managing Rooms",
-        content: `
-            <h2>Managing Rooms</h2>
-            ${C.table(
-                ['Action', 'How', 'Notes'],
-                [
-                    ['View past rooms', 'Left sidebar → Rooms list', 'Sorted by last activity'],
-                    ['Rename a room', 'Three-dots menu on the room → Rename', 'Helps organize long-running projects'],
-                    ['Delete a room', 'Three-dots menu on the room → Delete', 'Permanent  —  deletes all message history'],
-                    ['Favorite a room', 'Three-dots menu on the room → Favorite', 'Pins the room for quick access'],
-                    ['Search history', 'Search bar at top of Rooms list', 'Full-text search across all your rooms']
-                ]
-            )}
-            ${C.split(
-                {
-                    title: '+ New Chat (fresh Room)',
-                    content: `
-                        <ul>
-                            <li>Blank context  —  LLM starts with no conversation history</li>
-                            <li>Use when starting a completely different task</li>
-                            <li>Good for performance: shorter context = faster responses</li>
-                        </ul>
-                    `
-                },
-                {
-                    title: 'Continue Existing Room',
-                    content: `
-                        <ul>
-                            <li>Full history sent as context to the LLM</li>
-                            <li>Use when continuing a multi-turn workflow</li>
-                            <li>Watch for context window limits on very long rooms</li>
-                        </ul>
-                    `
-                }
-            )}
-        `
-    },
 
     // ─── Agent config  —  parked here, referenced in Section 5 (Agents) ──────
 

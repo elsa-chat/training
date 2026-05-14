@@ -50,21 +50,18 @@ const slides_mcp_fundamentals = [
         id: "mcp-why-matters",
         title: `Why MCP Matters`,
         content: `
-            <h2>Why It Matters  —  Before and After</h2>
-            <p class="lead">Without MCP, an agent has no idea your app exists. With MCP, it becomes a tool the agent can reach for automatically.</p>
-            ${C.sequence(
-                ["You (in Playground)", "AI Agent", "MCP Layer", "Your App"],
-                [
-                    { from: 0, to: 1, label: "Ask a question about FDA regulations" },
-                    { from: 1, to: 2, label: "Discover available tools" },
-                    { from: 2, to: 1, label: "Here are the tool schemas", type: "response" },
-                    { from: 1, to: 2, label: "Call search_documents(question=...)" },
-                    { from: 2, to: 3, label: "Route call to your app" },
-                    { from: 3, to: 2, label: "Return matching passages", type: "response" },
-                    { from: 2, to: 1, label: "Structured result", type: "response" },
-                    { from: 1, to: 0, label: "Answer grounded in your documents", type: "response" },
-                ]
-            )}
+            <h2>Apps Are for Humans. MCP Is for Agents.</h2>
+            <p class="lead">Until now, every app you built lived behind a UI. A human had to open it, click buttons, and copy results into the next system.</p>
+            <p>MCP changes the audience. The <em>same</em> app  —  same logic, same data, same Pixel calls  —  exposes itself as a tool the agent can reach for automatically. The UI stays for humans. The MCP contract opens it to every agent in ${CONFIG.productName}.</p>
+            <p><strong>This is how we build going forward.</strong> Every meaningful app should ship both surfaces: a UI for the people who use it, and an MCP contract for the agents that act on their behalf.</p>
+            <div style="margin-top:1.25rem;text-align:center;background:#fff;border:1px solid var(--border);border-radius:8px;padding:1rem;">
+                <img
+                    src="https://mintcdn.com/mcp/bEUxYpZqie0DsluH/images/mcp-simple-diagram.png"
+                    alt="MCP simple diagram — Host with MCP client connecting to MCP servers and their resources"
+                    style="max-width:100%;height:auto;display:block;margin:0 auto;"
+                >
+                <p class="muted" style="margin:.5rem 0 0;font-size:.8rem;">Source: modelcontextprotocol.io  —  MCP server speaks one contract; any compatible host can consume it.</p>
+            </div>
         `
     },
 
@@ -154,8 +151,7 @@ const slides_mcp_fundamentals = [
                     `
                 }
             )}
-            ${C.callout('There is also <code>disabled</code>  —  the tool exists in your code but is hidden from the agent entirely. Useful for admin-only functions you never want the model to call.', 'info')}
-            <p style="margin-top:1rem;">These modes are set in your Python decorator when you build the tool  —  we\'ll see how in the next section.</p>
+            <p style="margin-top:1rem;">These modes are set in your Python <code>@mcp_metadata</code> decorator <em>or</em> directly in the MCP JSON via <code>SMSS_MCP_EXECUTION</code> (values: <code>auto</code> / <code>ask</code>). The JSON is the source of truth the agent reads  —  the decorator just generates it.</p>
         `
     },
 

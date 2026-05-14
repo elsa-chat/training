@@ -12,26 +12,6 @@ const slides_day2_opener = [
     },
 
     {
-        id: "d2-cc-setup-check",
-        title: "Claude Code: Quick Setup Check",
-        content: `
-            <h2>Claude Code Quick Setup Check</h2>
-            <p class="lead">If you finished setup yesterday, you're good to go. If anything is still broken, fix it now before hands-on time starts.</p>
-            ${C.table(
-                ["If you see this…", "Fix"],
-                [
-                    ["<code>401 Unauthorized</code>", "Check <code>ANTHROPIC_AUTH_TOKEN</code> is <code>access-key:secret-key</code> — colon-separated, no spaces"],
-                    ["<code>ECONNREFUSED</code> / connection refused", "Check <code>ANTHROPIC_BASE_URL</code> is exactly <code>${CONFIG.anthropicEndpoint}</code> — no trailing slash"],
-                    ["Claude replies but uses the wrong model", "Check the <code>model</code> field in <code>settings.json</code> matches your engine ID"],
-                    ["TLS / SSL certificate errors", "<code>NODE_TLS_REJECT_UNAUTHORIZED: '0'</code> must be inside the <code>env</code> block in <code>.claude/settings.json</code>"],
-                ]
-            )}
-            ${C.callout('Quit and re-launch <code>claude</code> after any change to <code>.claude/settings.json</code> — settings only load at startup.', 'warning')}
-            ${C.callout('Quick smoke test: run <code>claude</code> → type <code>say hello</code> → any reply means the connection works.', 'tip')}
-        `
-    },
-
-    {
         id: "d2-finish-app",
         title: "Finish & Publish Your App",
         content: `

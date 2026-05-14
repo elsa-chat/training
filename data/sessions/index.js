@@ -105,11 +105,11 @@ const SESSION_PLAN = {
                         'playground-title',
                         'playground-what-is',
                         'playground-what-is-room',
+                        'room-message-json',
                         'playground-room-utilities',
                         'playground-ui-tabs',
                         'appendix-files-overview',
                         'appendix-rooms-history',
-                        'appendix-rooms-management',
                     ]
                 },
                 {
@@ -203,10 +203,6 @@ const SESSION_PLAN = {
                     slideIds: idsFrom(
                         typeof slides_appendix !== 'undefined' ? slides_appendix : null,
                     )
-                },
-                {
-                    title: 'Security & Auth',
-                    slideIds: idsFrom(typeof slides_security_auth !== 'undefined' ? slides_security_auth : null)
                 },
                 {
                     title: 'Python SDK',
