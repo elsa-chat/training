@@ -145,11 +145,10 @@ const SESSION_PLAN = {
                     slideIds: [
                         'mcp-in-action-title',
                         'mcp-in-action-overview',
-                        'mcp-sample-app',
                         'mcp-convert-agent',
                         'mcp-generated-json',
-                        'mcp-playground-wire',
                         'mcp-js-ts-sdk',
+                        'mcp-playground-wire',
                         'mcp-sharing',
                         'mcp-handson-convert',
                     ]

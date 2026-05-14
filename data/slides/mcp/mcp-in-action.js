@@ -18,45 +18,11 @@ const slides_mcp_in_action = [
             <h2>What We're Going to Do</h2>
             <p class="lead">We have a sample app already built. We're going to convert it into an MCP tool so an agent can call it directly.</p>
             ${C.flow([
-                { title: 'Look at the Sample App', desc: 'Understand what we\'re converting and what it does', arrow: '↓' },
-                { title: 'Ask the Agent to Convert It', desc: 'We\'ll ask the agent to generate the MCP JSON for us', arrow: '↓' },
+                { title: 'Ask the Agent to Convert It', desc: 'We\'ll ask the agent to generate the MCP JSON for our sample app', arrow: '↓' },
                 { title: 'Review the Generated JSON', desc: 'See the <code>mcp</code> folder and what was created', arrow: '↓' },
                 { title: `Add to ${CONFIG.aiName}`, desc: 'Wire the toolbox into a room via the + button', arrow: '↓' },
                 { title: 'Test It Live', desc: 'Ask the agent a question — watch it call your tool' },
             ])}
-        `
-    },
-
-    {
-        id: "mcp-sample-app",
-        title: "The Sample App",
-        content: `
-            <h2>The Sample App</h2>
-            <p class="lead">This is a simple app you have access to in ${CONFIG.productName}. Take a minute to open it and see what it does.</p>
-            ${C.split(
-                {
-                    title: 'What it does',
-                    content: `
-                        <ul>
-                            <li>Takes a user input</li>
-                            <li>Runs a Pixel query against a data source</li>
-                            <li>Returns and displays results</li>
-                        </ul>
-                        <p class="muted">Simple by design — the point is the conversion, not the app.</p>
-                    `
-                },
-                {
-                    title: 'What we want',
-                    content: `
-                        <ul>
-                            <li>An agent that can call this app's logic as a tool</li>
-                            <li>No manual JSON writing</li>
-                            <li>We're going to ask the agent to do the conversion for us</li>
-                        </ul>
-                    `
-                }
-            )}
-            ${C.callout('Open the sample app in your catalog now and run it once so you understand what it does before we convert it.', 'tip')}
         `
     },
 
@@ -68,7 +34,7 @@ const slides_mcp_in_action = [
             <p class="lead">We're going to ask the agent to convert our app into an MCP — it will generate the JSON schema for us.</p>
             ${C.handson("Ask the Agent to Convert", `
                 <ol>
-                    <li>Open ${CONFIG.aiName} and start a new conversation</li>
+                    <li>Open Claude and start a new conversation</li>
                     <li>Ask the agent to convert your app into an MCP tool — describe what the app does and what input it takes</li>
                     <li>The agent will generate the MCP JSON and place it in the <code>assets/mcp/</code> folder of your project</li>
                     <li>Open the generated file and review it</li>
@@ -81,7 +47,7 @@ const slides_mcp_in_action = [
                         <p>If you prefer to generate the JSON yourself, run one of these Pixel reactors:</p>
                         <ul>
                             <li><code>MakePythonMCP(project=["&lt;id&gt;"])</code> — for Python-based tools</li>
-                            <li><code>MakePixelMCP(project=["&lt;id&gt;"])</code> — for Pixel-based tools</li>
+                            <li><code>MakePixelMCP(project=["&lt;id&gt;"], reactor = ["SampleReactor"])</code> — for Pixel-based tools</li>
                         </ul>
                     `
                 },
@@ -132,31 +98,6 @@ const slides_mcp_in_action = [
     },
 
     {
-        id: "mcp-playground-wire",
-        title: `Add Your Tool to ${CONFIG.aiName}`,
-        content: `
-            <h2>Add Your Tool to ${CONFIG.aiName} and Test It</h2>
-            ${C.handson(`Wire into ${CONFIG.aiName}`, `
-                <h4>Add the toolbox:</h4>
-                <ol>
-                    <li>Open <strong>${CONFIG.aiName}</strong> and start or open a room</li>
-                    <li>Click the <strong>+</strong> button in the room</li>
-                    <li>Click <strong>Add Toolbox</strong></li>
-                    <li>Search for your toolbox — this is the set of tools generated when you converted the app</li>
-                    <li>Select it — your tools are now available to the agent in this room</li>
-                </ol>
-
-                <h4>Test it:</h4>
-                <ol>
-                    <li>Ask the agent a question that should trigger your tool</li>
-                    <li>Watch it call the tool, receive the result, and incorporate it into its answer</li>
-                </ol>
-                ${C.callout('If the agent isn\'t calling the tool, check the <code>description</code> field in your JSON — make it explicit about when the tool should be used.', 'tip')}
-            `)}
-        `
-    },
-
-    {
         id: "mcp-js-ts-sdk",
         title: "JS/TS SDK  —  Portal UIs",
         content: `
@@ -190,6 +131,31 @@ export function SearchPortal() {
                 ]
             )}
             ${C.callout('You don\'t need a portal for most tools. <code>displayLocation: "hidden"</code> is fine for anything that just returns data to the model.', 'info')}
+        `
+    },
+
+    {
+        id: "mcp-playground-wire",
+        title: `Add Your Tool to ${CONFIG.aiName}`,
+        content: `
+            <h2>Add Your Tool to ${CONFIG.aiName} and Test It</h2>
+            ${C.handson(`Wire into ${CONFIG.aiName}`, `
+                <h4>Add the toolbox:</h4>
+                <ol>
+                    <li>Open <strong>${CONFIG.aiName}</strong> and start or open a room</li>
+                    <li>Click the <strong>+</strong> button in the room</li>
+                    <li>Click <strong>Add Toolbox</strong></li>
+                    <li>Search for your toolbox — this is the set of tools generated when you converted the app</li>
+                    <li>Select it — your tools are now available to the agent in this room</li>
+                </ol>
+
+                <h4>Test it:</h4>
+                <ol>
+                    <li>Ask the agent a question that should trigger your tool</li>
+                    <li>Watch it call the tool, receive the result, and incorporate it into its answer</li>
+                </ol>
+                ${C.callout('If the agent isn\'t calling the tool, check the <code>description</code> field in your JSON — make it explicit about when the tool should be used.', 'tip')}
+            `)}
         `
     },
 
